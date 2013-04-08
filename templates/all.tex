@@ -1,0 +1,44 @@
+\title{Unit Notes}
+\date{Weeks 1 to 14}
+
+\begin{document}
+
+%\articletitle
+
+\newcounter{week}
+
+\setcounter{week}{1}
+
+%% Week 1
+
+\newcommand{\includelecture}[2]{%
+  \setcounter{week}{#1}
+  \addtocounter{week}{-1}
+  \setweek{\arabic{week}}
+  \graphicspath{{lectures/week#2/}}
+  \newpage
+  \input{lectures/week#2/week#2.beamer.tex}
+}
+
+\maketitle
+
+\begin{multicols}{2}
+\tableofcontents
+\end{multicols}
+
+\includelecture{1}{1}
+\includelecture{2}{2}
+\includelecture{3}{3}
+\includelecture{4}{4}
+\includelecture{5}{5}
+\includelecture{6}{6}
+\includelecture{7}{7}
+\includelecture{9}{8}
+\includelecture{10}{9}
+\includelecture{11}{10}
+\includelecture{12}{11}
+\includelecture{13}{12}
+\includelecture{14}{13}
+
+
+\end{document}

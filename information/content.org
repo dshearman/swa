@@ -1,0 +1,42 @@
+#+TITLE: Social Network Analysis Content
+#+AUTHOR: Glenn Stone and Laurence Park
+#+EMAIL: g.stone@uws.edu.au, lapark@scm.uws.edu.au
+#+LANGUAGE:  en
+#+TEXT:      A description of the content for Social Network Analysis.
+#+OPTIONS:   H:3 num:nil toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t TeX:nil LaTeX:t skip:nil d:t tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:t ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+STYLE:    <link rel="stylesheet" type="text/css" href="./worg.css" />
+
+
+* Learning Outcomes
+
+- To understand how we can store and manipulate graphs from social
+  networks.
+
+
+* Topics
+- What is a network/social network (nodes, edges, directed, undirected, in degree, out degree)
+- Representing networks as a relational matrix
+
+- Measuring similarity between objects (weighted edges)
+- Examining the distribution of edges (power law model)
+
+- Storing network data (XML, JSON, YAML  markup)
+
+- Identifying outliers (Items that seem out of place in the network)
+
+- Visualisation of social networks (multi-dimensional scaling?)
+
+- Measuring popularity (Random walk on a graph)
+- Identifying hubs (connected to many) and authorities (many connected to).
+
+- Privacy issues.
+
+
+* Assessment
+
+- Create a family tree in JSON format.
+- Write a python script to compute the in-degree, out-degree of a
+  network and plot the distribution.
+- Compute the popularity of each node by implementing a random walk.
+

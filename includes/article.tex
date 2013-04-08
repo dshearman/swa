@@ -1,0 +1,57 @@
+%%\documentclass[a4paper]{article}
+%\documentclass[twocolumn,a4paper,10pt]{report}
+%\documentclass[twocolumn,a4paper,10pt]{article}
+\documentclass[a4paper,10pt,twoside]{article}
+%\documentclass[handout]{beamer}
+%\documentclass[a4paper,10pt,twoside]{report}
+
+\usepackage{hyperref}
+\usepackage{beamerarticle}
+
+%\mode<article>{\usepackage{fullpage}} 
+\mode<article>{\usepackage[left=2cm,top=3cm,right=2cm]{geometry}}
+
+\usepackage{includes/includes}
+
+
+\usepackage{graphicx}
+
+\usepackage{sectsty}
+\allsectionsfont{\sffamily}
+
+% included for future use
+\newcommand\weekpart[1]{}
+
+\let\Oldpart\part
+\newcommand{\parttitle}{}
+\renewcommand\part[1]{\Oldpart{#1}\renewcommand{\parttitle}{#1}}
+
+
+\usepackage{fancyhdr}
+%\usepackage{titlesec}
+
+\pagestyle{fancy}
+
+%\renewcommand{\chaptermark}[1]{\markboth{#1}{}} 
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}} 
+% \fancyhf{} 
+% \fancyhead[LE,RO]{\@subjectname} 
+% \fancyhead[LO]{\bfseries\rightmark} 
+% \fancyhead[RE]{\bfseries\leftmark} 
+
+\newcommand{\bookmark}[1]{\hfill\S #1}
+
+
+\fancyhead{} % clear all header fields 
+\fancyhead[LE,RO]{\parttitle} 
+\fancyhead[LO,RE]{\printsubjectname}
+\fancyfoot{} % clear all footer fields 
+\fancyfoot[LE,RO]{\thepage} 
+%\fancyfoot[LO,CE]{From: K. Grant} 
+%\fancyfoot[CO,RE]{To: Dean A. Smith} 
+%\renewcommand{\headrulewidth}{0.4pt} 
+%\renewcommand{\footrulewidth}{0.4pt} 
+
+\setjobnamebeamerversion{beamer} 
+
+

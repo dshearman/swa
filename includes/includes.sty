@@ -1,0 +1,163 @@
+\newcommand{\subjectname}[1]{\gdef\@subjectname{#1}}%
+\newcommand{\printsubjectname}{\@subjectname}%
+
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{enumerate}
+
+\setlength\premulticols{7\baselineskip}
+
+
+\subjectname{300700 Statistical Decision Making}
+
+
+%\author{\@subjectname}
+
+\author{300700 Statistical Decision Making}
+
+\institute[UWS]{School of Computing, Engineering and Mathematics\\
+  University of Western Sydney}
+
+\AtBeginLecture{
+%\part{\insertlecture}
+%  \frame{\partpage}
+
+  \mode<article>{\title{\insertlecture}}
+  \mode<beamer>{\title{\insertlecture}}
+  \frame[plain]{\titlepage}
+%  \section*{Outline} 
+%  \frame{\tableofcontents} 
+}
+
+\AtBeginSection[] % Do nothing for \section*
+{
+  \begin{frame}<beamer>
+    \logotitle{Outline}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\newcommand{\setweek}[1]{\setcounter{part}{#1}}
+
+\renewcommand\partname{Week}
+%\renewcommand\chaptername{Lecture}
+
+%\usepackage[     
+%     %hideanswers,
+%     %twocolumntute
+%     ]{tutorial}
+
+\usepackage{verbatim}
+\usepackage{pgf}
+\usepackage{tikz}
+\usepackage{booktabs}
+
+%\newcommand{\hligne}{\begin{tabular}{p{\textwidth}}\hline\ \\\end{tabular}}
+\newcommand{\hligne}{\rule{\linewidth}{0.2mm}}
+
+\newcommand{\lecturesection}[1]{\part{#1}}
+
+\newcommand{\lecturepart}[4]{
+  \mode<article>{\begin{multicols}{2}[\lecturesection{#1}\vspace{-.7em}#4\newline\hligne]}
+  \mode<beamer>{\lecturesection{#1}}
+  \mode<beamer>{\date[#2]{#2 - #4}}
+  \lecture{#1}{#3}
+}
+
+
+\newcommand{\lecturepartend}{
+  \mode<article>{\end{multicols}}
+}
+
+
+\newcommand{\largeimage}[1]{
+  \begin{center}
+    \mode<beamer>{\includegraphics[width=11cm]{#1}}
+    \mode<article>{\includegraphics[width=8cm]{#1}}
+  \end{center}
+}
+
+\newcommand{\otherimage}[3]{
+  \begin{center}
+    \mode<beamer>{\includegraphics[height=#2]{#1}}
+    \mode<article>{\includegraphics[height=#3]{#1}}
+  \end{center}
+}
+
+\newcommand{\otherimagew}[3]{
+  \begin{center}
+    \mode<beamer>{\includegraphics[width=#2]{#1}}
+    \mode<article>{\includegraphics[width=#3]{#1}}
+  \end{center}
+}
+  
+\newcommand{\articletitle}{
+  \mode<article>{\maketitle}
+  \mode<article>{\begin{multicols}{2}}
+  \mode<article>{\frame{\tableofcontents}}
+  \mode<article>{\end{multicols}}
+}
+
+\raggedright 
+
+\setcounter{secnumdepth}{1}
+
+
+%\tableofcontents
+
+
+%\part{Course Review}
+
+%\frame[plain]{\titlepage}
+
+% \begin{frame} 
+%   \frametitle{Outline} 
+%   \tableofcontents 
+% \end{frame} 
+
+
+\newcommand{\logotitle}[1]{
+  \mode<beamer>{
+    \frametitle{\begin{tabular}{>{\raggedright}p{0.87\textwidth}p{0.13\textwidth}} 
+        #1 & \pgfuseimage{logo}
+      \end{tabular}}}
+  \mode<article>{\frametitle{#1}}
+}
+
+
+
+%\usepackage{mathpazo}
+\usepackage[mathcal]{euler}
+%\usepackage[utopia]{mathdesign}
+
+%% Use arial math font
+%\usepackage{arev}	
+
+%\usepackage[no-math]{fontspec}
+\usepackage[cm-default]{fontspec}
+\usepackage{xunicode}
+%\usepackage{xltxtra}
+
+% using linux
+%%\setmathrm{MgOpen Cosmetica}
+%\setmainfont{MgOpen Canonica}
+%\setsansfont{MgOpen Cosmetica}
+%\setmonofont{MgOpen Modata}
+
+% using OS X
+%\setmathrm{MgOpen Cosmetica}
+\setmainfont[Mapping=tex-text]{Hoefler Text}
+\setsansfont[Mapping=tex-text]{Optima}
+\setmonofont{Courier New}
+
+%\setmainfont[Mapping=tex-text]{Arial}
+%\setsansfont[Mapping=tex-text]{Arial Black}
+%\setmonofont[Mapping=tex-text]{Courier}
+
+
+\DeclareMathOperator{\var}{Var}
+
+
+
