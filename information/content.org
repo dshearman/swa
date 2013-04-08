@@ -21,6 +21,9 @@
 - Measuring similarity between objects (weighted edges)
 - Examining the distribution of edges (power law model)
 
+
+- Clustering (k-means), choosing the right metric
+
 - Storing network data (XML, JSON, YAML  markup)
 
 - Identifying outliers (Items that seem out of place in the network)
@@ -40,3 +43,112 @@
   network and plot the distribution.
 - Compute the popularity of each node by implementing a random walk.
 
+
+
+* Unit Content
+
+
+** Introduction
+
+*** Week 1: Introduction to Web Social Networks
+
+- About this Unit (go through the learning guide)
+- Web 2.0
+- What are social networks and what can we learn from them?
+- How is data stored in social networks?
+- Twitter
+- Accessing data in Twitter
+- Accessing data with twitteR
+
+
+*** Week 2: Data Structures and Algorithms http://www.cs.princeton.edu/~rs/AlgsDS07/
+- Arrays
+- Trees 
+- Undirected Graphs
+- Directed Graphs
+- Weighted Graphs
+- Shortest Path between nodes (Dijkstra's Algorithm) http://www.cs.princeton.edu/~rs/AlgsDS07/15ShortestPaths.pdf
+
+
+*** Week 3: Distance Functions
+
+- Metric properties http://en.wikipedia.org/wiki/Metric_%28mathematics%29
+- Euclidean Distance
+- Manhattan Distance
+- l_p distance
+- Cosine Distance
+- Hamming Distance
+- Jaccard index
+- Kullback-Leibler Divergence
+- Categorical Features
+- Defining a distance function (metric properties)
+
+
+*** Week 4: Confidence Intervals and Hypothesis Tests
+
+- Review of introductory statistics
+
+
+
+** Tabular data
+
+
+*** Week 5: Text Analysis 
+
+- Storing text for search and retrieval
+- Document weights
+- Term weights
+- Computing relevance of queries
+ 
+*** Week 6: Clustering tabular data
+
+- Euclidean k-means 
+- Cosine k-means 
+
+
+
+** Graph Data
+
+*** Week 7: Clustering graph data
+
+- Min cut algorithm using Laplacian http://en.wikipedia.org/wiki/Graph_partitioning_problem
+- Weighted min cut
+
+*** Week 8 : Network Analysis
+
+- Popularity of nodes in a directed graph
+- PageRank
+- HITS, SALSA
+
+
+
+** Week 9: Break
+
+
+
+** Temporal Data
+
+*** Week 10: Streaming data (time series)
+
+- Twitter data can be considered a stream (time stamps)
+- Markov Chains
+
+
+
+
+
+
+** Social Issues
+
+*** Week 13: Convenience vs. Security
+
+- In the 80's everyone used an avatar, now its personal
+- Identity theft
+- Spam
+- Phishing
+- Viruses
+
+
+** Revision
+
+*** Week 14: Revision
