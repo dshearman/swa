@@ -1,0 +1,95 @@
+% Text Analysis
+% Laurence A. F. Park
+% March 22, 2005
+
+<!-- Setting up R -->
+`ro warning=FALSE, dev="png", fig.cap="", cache=FALSE or`
+
+
+
+
+
+
+# What is text
+
+## This is text
+
+Unstructured Data
+
+### This is a block!
+
+The contents of the block
+
+#### What is this?
+
+> This text should
+> appear in a block.
+
+## Storing Text
+
+  \begin{columns}
+    \begin{column}{.5\linewidth}
+      \begin{block}{Some equation}
+         \begin{align*}
+           a &= b\\
+             &= d\\
+             &= f
+         \end{align*}
+      \end{block}
+    \end{column}
+    \begin{column}{.5\linewidth}
+      \begin{tabular}{cc}\hline
+        some text & some text \\\hline
+      \end{tabular}
+    \end{column}
+  \end{columns}
+
+## Searching through text
+
+<!-- read external r code -->
+```{r reading, echo=FALSE}
+read_chunk("script.r")
+```
+
+## The first part of my R script
+Here I can generate my data
+```{r}
+<<gen-dat>>
+```
+
+## Results
+An now the reults are plotted
+```{r plot-fig, result="asis"}
+<<plot>>
+```
+
+
+## Term Frequency Weighting
+
+
+# In the morning
+
+## Getting up
+
+- Turn off alarm
+- Get out of bed
+
+## Breakfast
+
+- Eat eggs
+- Drink coffee
+
+# In the evening
+
+## Dinner
+
+- Eat spaghetti
+- Drink wine
+
+------------------
+
+
+## Going to sleep
+
+- Get in bed
+- Count sheep

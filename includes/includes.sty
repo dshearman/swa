@@ -34,7 +34,7 @@
 \AtBeginSection[] % Do nothing for \section*
 {
   \begin{frame}<beamer>
-    \logotitle{Outline}
+    \frametitle{Outline}
     \tableofcontents[currentsection]
   \end{frame}
 }
@@ -118,13 +118,13 @@
 % \end{frame} 
 
 
-\newcommand{\logotitle}[1]{
-  \mode<beamer>{
-    \frametitle{\begin{tabular}{>{\raggedright}p{0.87\textwidth}p{0.13\textwidth}} 
-        #1 & \pgfuseimage{logo}
-      \end{tabular}}}
-  \mode<article>{\frametitle{#1}}
-}
+% add logo to frame titles
+\usepackage{textpos}
+
+\addtobeamertemplate{frametitle}{}{%
+\begin{textblock*}{0.13\textwidth}(.91\textwidth,-0.88cm)
+	\pgfuseimage{logo}
+\end{textblock*}}
 
 
 
@@ -142,15 +142,15 @@
 
 % using linux
 %%\setmathrm{MgOpen Cosmetica}
-%\setmainfont{MgOpen Canonica}
-%\setsansfont{MgOpen Cosmetica}
-%\setmonofont{MgOpen Modata}
+\setmainfont{MgOpen Canonica}
+\setsansfont{MgOpen Cosmetica}
+\setmonofont{MgOpen Modata}
 
 % using OS X
 %\setmathrm{MgOpen Cosmetica}
-\setmainfont[Mapping=tex-text]{Hoefler Text}
-\setsansfont[Mapping=tex-text]{Optima}
-\setmonofont{Courier New}
+%\setmainfont[Mapping=tex-text]{Hoefler Text}
+%\setsansfont[Mapping=tex-text]{Optima}
+%\setmonofont{Courier New}
 
 %\setmainfont[Mapping=tex-text]{Arial}
 %\setsansfont[Mapping=tex-text]{Arial Black}
@@ -160,4 +160,25 @@
 \DeclareMathOperator{\var}{Var}
 
 
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\DefineShortVerb[commandchars=\\\{\}]{\|}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\NormalTok}[1]{{#1}}
 
