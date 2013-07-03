@@ -1,0 +1,183 @@
+% Text Analysis
+% Laurence A. F. Park
+% March 22, 2005
+
+<!-- Setting up R -->
+`ro warning=FALSE, dev="png", fig.cap="", cache=FALSE or`
+
+
+# Document Models
+
+## The need for a document model
+
+Given a set of documents, we are usually faced with the problem of
+searching through them, to either:
+
+- Find the document that is most similar to a query (Google)
+- Find the document that is most similar to another document
+
+In both cases, we need to be able to compare documents to documents or
+queries, so we need to define a document similarity (or dissimilarity)
+function: 
+$$
+   s_{i,j} = S(d_i, d_j) 
+$$
+where $s_{i,j}$ is large if $d_i$ and $d_j$ are similar, and 
+$s_{i,j}$ is small if $d_i$ and $d_j$ are dissimilar.
+
+Before we can define a similarity function, we need to define how the
+document will be represented. Hence we need to define a mathematical
+model for a document, also known as a document model.
+
+## Types of Document Models
+
+A document is a sequence of words. In order to apply mathematical
+operations to a set of documents, we must first define a mathematical
+model of a document.
+
+There are three main document models:
+
+- Vector Space Model
+- Probabilistic Model
+- Language Model
+
+Each of these models treats the documents as a *bag of words*, meaning
+that order of the words is lost once the model is computed.
+
+## Vector Space Model
+
+Each document is treated as a vector in an $M$ dimensional vector
+space, where $M$ is the number of unique terms in the document
+collection. Each element of the document vector is associated to a
+particular term, the value of the element is the frequency of the term
+in the document.
+
+\begin{center}
+\begin{tikzpicture}[scale=3]
+\coordinate (A) at (0.,0);
+\coordinate [label=above:\textcolor{blue}{$\vec{d}_1$}] (E) at (0.5,1);
+\coordinate [label=right:\textcolor{blue}{$\vec{d}_2$}] (F) at (1.2,0.9);
+\coordinate [label=right:\textcolor{blue}{$\vec{d}_3$}] (G) at (0.8,0.3);
+
+\draw [arrows=->] (A) -- (E);
+\draw [arrows=->] (A) -- (F);
+\draw [arrows=->] (A) -- (G);
+
+
+\begin{scope}
+  \path[clip] (A) -- (E) -- (G) -- cycle;
+  \draw [green, fill=green!20, opacity=.8] (A) circle (15pt);
+\end{scope}
+
+\begin{scope}
+  \path[clip] (A) -- (E) -- (F) -- cycle;
+  \draw [red, fill=red!20, opacity=.8] (A) circle (10pt);
+\end{scope}
+
+\end{tikzpicture}
+\end{center}
+
+## Document vectors
+
+A document vector $\vec{d}_i$ is an ordered set of term frequencies,
+where the order depends on the words in the document collection.
+
+
+To compare document vectors, we examine the angle between the vectors,
+which is inversely proportional to the cosine of the angle:
+$$
+	s_{i,j} = \cos{(\theta_{i,j})} = \frac{\vec{d}_i \cdot \vec{d}_j}{\|\vec{d}_i\|\|\vec{d}_j\|}
+$$
+where:
+$$
+	\vec{d}_i \cdot \vec{d}_j = {\sum_{k = 1}^M d_{i,k}d_{j,k}}
+	\text{~and~} \|\vec{d}_i\| = \sqrt{{\sum_{k = 1}^M d_{i,k}^2}}
+$$
+Therefore, $s_{i,j} = 1$ if $\vec{d}_i = \vec{d}_j$, otherwise $s_{i,j} < 1$.
+
+
+## Queries
+
+We want to be able to compare queries to documents, in order to find
+documents that are most relevant to the query. Fortunately, a query is
+a set of words, and can be modelled using a document vector.
+
+
+## Probabilistic Model
+
+## Language Model
+
+
+## Example: Constructing a document index
+
+Our document set:
+
+1. Social Web analytics is the best!
+2. Social Web analytics is the greatest unit.
+3. The best Web unit is Social Web analytics.
+
+\pause
+
+Construct the frequency table:
+
+\begin{center}
+\begin{tabular}{lcccccccc}
+\toprule
+& Social & Web & analytics & is & the & best & greatest & unit \\
+\cmidrule(r){1-1}\cmidrule(r){2-9}
+\vec{d}_1 &      1 &   1 &         1 &  1 &   1 &    1 &        0 &    0 \\
+\vec{d}_2 &      1 &   1 &         1 &  1 &   1 &    0 &        1 &    1 \\
+\vec{d}_3 &      1 &   2 &         1 &  1 &   1 &    1 &        0 &    1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Note that each row of the frequency table is an eight dimensional
+vector ($M = 8$).
+
+## Example: Query the document index
+
+If we have the query *best Web unit*, we create the query vector $\vec{q}$ in
+the eight dimensional vector space:
+
+\begin{center}
+\begin{tabular}{cccccccc}
+\toprule
+& Social & Web & analytics & is & the & best & greatest & unit \\
+\midrule
+\vec{q}  &   0 &   1 &         0 &  0 &   0 &    1 &        0 &    1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\pause
+
+then compute the similarity of the query to all documents:
+
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+& \vec{d}\cdot\vec{q} & \|\vec{d}\| & S(\vec{d},\vec{q}) \\
+\vec{d}_1 & 2 & \sqrt{6}  & 2/(\sqrt{6}\sqrt{3}) = 0.47 \\
+\vec{d}_2 & 2 & \sqrt{7}  & 2/(\sqrt{7}\sqrt{3}) = 0.44 \\
+\vec{d}_3 & 4 & \sqrt{10} & 4/(\sqrt{10}\sqrt{3}) = 0.73 \\
+\vec{q}   &   & \sqrt{3}  & \\
+\midrule
+
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+## Problem: Index and Query
+
+Build and index of the documents
+
+1. The dog is on the hill
+2. 
+3.
+
+and compute the similarity of the documents to the query:
+
+
+## Term Weights

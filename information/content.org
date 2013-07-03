@@ -1,8 +1,8 @@
-#+TITLE: Social Network Analysis Content
+#+TITLE: Social Web Analysis Content
 #+AUTHOR: Glenn Stone and Laurence Park
 #+EMAIL: g.stone@uws.edu.au, lapark@scm.uws.edu.au
 #+LANGUAGE:  en
-#+TEXT:      A description of the content for Social Network Analysis.
+#+TEXT:      A description of the content for Social Web Analysis.
 #+OPTIONS:   H:3 num:nil toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t TeX:nil LaTeX:t skip:nil d:t tags:not-in-toc
 #+INFOJS_OPT: view:nil toc:t ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
 #+STYLE:    <link rel="stylesheet" type="text/css" href="./worg.css" />
@@ -10,8 +10,8 @@
 
 * Learning Outcomes
 
-- To understand how we can store and manipulate graphs from social
-  networks.
+- To understand how we can store and analyse data and graphs from the social
+  web.
 
 
 * Topics
@@ -22,7 +22,7 @@
 - Examining the distribution of edges (power law model)
 
 
-- Clustering (k-means, hierarchical), choosing the right metric
+- Clustering (k-means), choosing the right metric
 
 - Storing network data (XML, JSON, YAML  markup)
 
@@ -59,7 +59,7 @@
 - Twitter
 - Accessing data in Twitter
 - Accessing data with twitteR
-
+GS comment: Can we get graphs out of twitter? Followers?
 
 *** Week 2: Data Structures and Algorithms http://www.cs.princeton.edu/~rs/AlgsDS07/
 - Arrays
@@ -70,7 +70,8 @@
 - Shortest Path between nodes (Dijkstra's Algorithm) http://www.cs.princeton.edu/~rs/AlgsDS07/15ShortestPaths.pdf
 
 
-*** Week 3: Distance Functions
+*** Week 3: Distance Functions 
+GS comment: Distance are going to be on what?
 
 - Metric properties http://en.wikipedia.org/wiki/Metric_%28mathematics%29
 - Euclidean Distance
@@ -98,7 +99,7 @@
 - Storing text for search and retrieval
 - Document weights
 - Term weights
-- Computing relevance of queries (precision, recall, average precision)
+- Computing relevance of queries
  
 *** Week 6: Clustering tabular data
 
@@ -132,7 +133,7 @@
 
 - Twitter data can be considered a stream (time stamps)
 - Markov Chains
-
+GS comment: Spatial data here?
 
 
 
@@ -152,3 +153,116 @@
 ** Revision
 
 *** Week 14: Revision
+
+
+** More GS comments
+
+I had the following thoughts on content, but they are not organised
+enough to insert above!
+
+*** JSON, OAUTH
+We will need to discuss these for sure (you have it but not in the
+"weeks" breakdown)
+
+*** Facebook
+- We can get likes and "reach"
+- Potentially look at times series here or maybe "BACI" designs
+- We seem to be able to get summaries of gender and age on the
+  insights page
+- We can export likes/reach by post and or by page.
+- Networks of friends.
+
+*** Twitter
+- Searching twitter using twitteR.
+- Times series/impact of an event. (eg. Death of Thatcher, New ipad
+  release(?))
+- Spatial information - spatial clustering...
+- What information can we  extract about followers etc.
+
+
+By the way I have a copy of the book "Mining the Social Web" now.
+
+
+** GS 30/4/2013 - Suggested organisation of above material
+
+*** Networks 1
+
+- start with an example eg. Facebook friends network (I am willing to
+  donate mine, but a bigger one would be better)
+- network structure, adjacency matrices etc.
+- network features - connectivity, hubs.
+- network algorithms - clusters (mincut?) minimal spanning tree (but
+  what is the application)
+
+*** Networks 2 - Applications
+
+- Facebook friends
+- Twitter followers
+- Linked in?
+
+*** Temporal Data 1
+
+- Facebook likes/reach data 
+- Graphing/Viz
+- Simple linear regression 
+- Regression by age group/gender
+
+*** Temporal Data 2
+
+- Twitter
+- Trends and Seasonality
+- Serial Correlation (auto-regression???)
+
+
+*** Impact assessment
+
+- Before/After designs - Analysis Using t-tests
+- Before/After/Control/Impact designs (BACI) Analysis Using ANOVA.
+
+*** Spatial Data
+
+- I have some vague ideas about spatial clustering
+- At least we can do the spatial mapping stuff of twitter followers.
+
+
+
+Data:
+- Erdos number: https://files.oakland.edu/users/grossman/enp/Erdos1.html
+- http://www.oakland.edu/enp/
+- IMDB (Kevin Bacon): ftp://ftp.fu-berlin.de/pub/misc/movies/database/
+
+
+XML/XSL/XSLT/XSD files
+R graphs: igraph library uses graphML: http://en.wikipedia.org/wiki/GraphML
+
+Assignment ideas:
+- Create an XML file containing a graph, load into R then apply graph clustering. Graph edges show dissimilarity.
+- Convert a set of tweets into text, load into R to obtain tweet-term matrix, apply k-means (using cosine similarity).
+- 
+
+Two lectures on graphs and their properties:
+library("igraph")
+- what is a graph: vertices and edges
+http://en.wikipedia.org/wiki/Graph_%28mathematics%29
+- ecount, vcount, directed, undirected, in/out degree, cycles, complete graphs, 
+- weighted edges
+- Euler characteristic http://en.wikipedia.org/wiki/Euler_characteristic, http://en.wikipedia.org/wiki/Seven_Bridges_of_K%C3%B6nigsberg, http://en.wikipedia.org/wiki/Eulerian_path
+
+- shortest path
+dijkstra for non-negative weights, bellman-ford otherwise
+- average.path.length
+- transitivity
+- random graphs (erdos and barabasi) to model real networks
+http://en.wikipedia.org/wiki/Power_law
+http://en.wikipedia.org/wiki/Scale-free_network
+
+# small world (scale free) graph. Example of Web and social networks.
+
+# Social networks may be undirected (Facebook)
+b = barabasi.game(20, power=2, out.dist=dpois(0:20, lambda=2), directed=TRUE)
+> plot(b)
+
+
+Occurence of terms follows a Zipf distribution:
+http://en.wikipedia.org/wiki/Zipf%27s_law
+

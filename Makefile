@@ -87,6 +87,12 @@ SCRIPTS = $(addprefix ${LECTURE_DIR}/, week1/blood_donors.r \
 	week11/fitting-lines.r)
 
 
+%.md:	%.Rmd
+	Rscript -e "library(knitr); knit('$<', output='$*.md')"
+
+%.tex:	%.md
+	pandoc -f markdown -t beamer $< -o $*.tex
+
 %.notes:	${INCLUDE_DIR}/article.tex ${TEMPLATE_DIR}/%.tex
 	${TEX}  -jobname "${CODE}.$*.notes" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/article.tex}\input{${TEMPLATE_DIR}/$*.tex}"
 
