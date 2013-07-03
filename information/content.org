@@ -22,7 +22,7 @@
 - Examining the distribution of edges (power law model)
 
 
-- Clustering (k-means), choosing the right metric
+- Clustering (k-means, hierarchical), choosing the right metric
 
 - Storing network data (XML, JSON, YAML  markup)
 
@@ -98,7 +98,7 @@
 - Storing text for search and retrieval
 - Document weights
 - Term weights
-- Computing relevance of queries
+- Computing relevance of queries (precision, recall, average precision)
  
 *** Week 6: Clustering tabular data
 

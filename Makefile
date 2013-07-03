@@ -91,7 +91,7 @@ SCRIPTS = $(addprefix ${LECTURE_DIR}/, week1/blood_donors.r \
 	${TEX}  -jobname "${CODE}.$*.notes" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/article.tex}\input{${TEMPLATE_DIR}/$*.tex}"
 
 %.slides:	${INCLUDE_DIR}/beamer.tex ${TEMPLATE_DIR}/%.tex
-	${TEX} -jobname "${CODE}.$*.slides" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/beamer.tex}\input{${TEMPLATE_DIR}/$*.tex}" -output-directory ${OUTPUT_DIR}
+	${TEX} -jobname "${CODE}.$*.slides" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/beamer.tex}\input{${TEMPLATE_DIR}/$*.tex}"
 
 each.notes:	week01.notes week02.notes week03.notes week04.notes week05.notes week06.notes \
 	week07.notes week08.notes week09.notes week10.notes week12.notes
