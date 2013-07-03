@@ -1,0 +1,1228 @@
+\documentclass[a4paper,oneside]{book}
+
+% Use arial math font
+\usepackage{arev}	
+%\usepackage[mathcal]{euler}
+
+%\usepackage[mathcal]{euler}
+%\usepackage{mathpazo}
+\usepackage[cm-default]{fontspec}
+\usepackage{url}
+
+
+\setmainfont[Mapping=tex-text]{Arial}
+\setsansfont[Mapping=tex-text]{Arial Black}
+\setmonofont[Mapping=tex-text]{Courier New}
+
+%\setmainfont[Mapping=tex-text]{Hoefler Text}
+%\setsansfont[Mapping=tex-text]{Optima}
+%\setmonofont{Courier}
+
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{array}
+\usepackage{longtable}
+
+\usepackage{multirow}
+
+\usepackage{graphics}
+
+\DeclareMathOperator{\var}{Var}
+
+% set page margins
+\usepackage[margin=2cm]{geometry} 
+
+\usepackage{color}
+
+%\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{uwsblue}{cmyk}{0.96,0.41,0,0.43}
+
+% set sans font to section headings
+\usepackage{sectsty}
+\allsectionsfont{\sffamily}
+\sectionfont{\color{uwsblue}\sffamily}
+\chapterfont{\raggedleft\color{uwsblue}\sffamily}
+
+\renewcommand{\chaptername}{Section}
+
+\setcounter{secnumdepth}{1}
+
+%\newcommand{\vuws}{\textit{v}UWS}
+\newcommand{\vuws}{vUWS}
+
+\newcommand{\unitcode}{300958}
+\newcommand{\unitname}{Social Web Analytics}
+
+\newcommand{\teachingsession}{Spring}
+\newcommand{\teachingsessiondate}{25th of February}
+\newcommand{\teachingyear}{2013}
+\newcommand{\intersessionbreak}{16th of April}
+
+%\newcommand{\teachingsession}{Spring}
+%\newcommand{\teachingsessiondate}{26th of July}
+%\newcommand{\teachingyear}{2010}
+%\newcommand{\intersessionbreak}{20th of September}
+
+\newcommand{\goodfridaydate}{29th of March}
+\newcommand{\goodfridayweek}{5}
+\newcommand{\eastermondaydate}{1st of April}
+\newcommand{\eastermondayweek}{6}
+\newcommand{\anzacdaydate}{25th of April}
+\newcommand{\anzacdayweek}{9}
+
+\newcommand{\labourdaydate}{4th of October}
+\newcommand{\labourdayweek}{11}
+\newcommand{\publicholidays}{
+There are three public holidays
+this semester Good Friday (\goodfridaydate~\teachingyear, during week
+\goodfridayweek), Easter Monday (\eastermondaydate~\teachingyear,
+during week \eastermondayweek), and Anzac Day
+(\anzacdaydate~\teachingyear, during week \anzacdayweek).}
+%\newcommand{\publicholidays}{
+%There is one public holiday
+%this semester, Labour Day (\labourdaydate~\teachingyear, during week
+%\labourdayweek).}
+
+
+\newcommand{\timetablelink}{\url{http://platformweb.uws.edu.au/pweb_tt/start.asp}}
+
+
+\newcommand{\HRule}{\rule{\linewidth}{0.2mm}}
+
+\setlength{\parindent}{0in}
+\setlength{\parskip}{0.7em plus 0.5em minus 0.2em}
+
+
+\begin{document}
+
+
+
+\begin{titlepage}
+ 
+\begin{flushright}
+\scalebox{0.2}{\includegraphics{uws_cymk.pdf}}
+\end{flushright}
+\vspace{2em}
+{\huge \unitcode~\unitname} \\
+\HRule \\[1em]
+{\Large School of Computing, Engineering and Mathematics}%\\[1em]
+%\scalebox{0.57}{\includegraphics{cover-image}} \\[1em]
+\begin{center}
+%\scalebox{0.55}{\includegraphics{768px-Internet_map_1024}}
+\scalebox{5}{\includegraphics{Koala_Country_BBS_Login_Screen}} %\\[1em]
+\end{center} %\\[1em]
+\vspace{1em}
+\begin{flushright}
+%\fontsize{40}{40}
+\fontspec[Scale=1.5]{Arial Black}
+{\Huge  Learning Guide} \\[1em]
+{\Huge \teachingsession~\teachingyear} \\[1em]
+\end{flushright}
+\vfill
+\noindent
+\HRule
+ 
+\end{titlepage}
+
+~
+\vfill
+\noindent
+Cover image by Warrenlead taken from
+\url{http://en.wikipedia.org/wiki/File:Koala_Country_BBS_Login_Screen.jpg}
+is distributed under the Creative Commons Attribution-Share Alike 3.0 Unported 
+license. Details of the licence can be found at
+\url{http://creativecommons.org/licenses/by-sa/3.0/deed.en}
+
+\newpage
+
+\tableofcontents
+
+\chapter{About \unitname}
+
+\section{An introduction to this unit}
+
+%<Insert information about the unit, for example the objectives of the unit>
+
+This Level 3 unit introduces students to various statistical
+techniques supporting the study of computing and science. Presentation
+of the content will emphasise the correct principles and procedures
+for collecting and analysing scientific data, using information and
+communication technologies. Topics include describing different sets
+of data, probability distributions, statistical inference, and simple
+linear regression and correlation.
+
+
+\unitname~is a core unit within the Bachelor of Information and
+Communications Technology. A condition of enrolment into this unit is
+a score of at least 70\% on the Basic Math Skills Test.
+
+The following units follow on from this unit: 
+\begin{itemize}
+\item 300699 Discrete Structures and Complexity
+\end{itemize}
+
+
+% \section{Approach to teaching}
+% This unit enhances learning through the following means:
+% For example
+% you  might like to state what the learning activities are, and how they contribute to student learning 
+% how is feedback given
+% etc
+
+
+
+
+%This diagram can be deleted/modified to your requirements
+
+\section{Staff details}
+\begin{tabular}{ll}
+  \textbf{Unit Coordinator:}  & Dr Laurence Park (first point of
+  contact) \\
+  & Building EN, Room 1.32, Campus: Parramatta \\
+  & Phone: (02) 9685 9065 \quad
+  Email: \texttt{l.park@uws.edu.au} \\[0.5em]
+
+   \textbf{Teaching Staff:} & Assoc. Prof. Glenn Stone \\
+   & Building EN, Room 1.31, Campus: Parameter \\
+   & Phone: (02) 9685 9253 \quad
+   Email: \texttt{g.stone@uws.edu.au} \\[0.5em]
+
+\end{tabular}
+
+\section{Student consultation arrangements}
+
+Student consultation times will be arranged during the first week of
+lectures and placed in the \unitcode~\unitname~section of \vuws.
+
+\section{Essential Equipment}
+
+\begin{itemize}
+\item Calculator - A business or scientific calculator is essential
+  for completing the exercises, test and exam.
+\item Computer software - When carrying out the team project, you are
+  required to use a computer using appropriate software, e.g. R, Excel to
+  carry out all calculations and statistical analyses.
+\end{itemize}
+  
+\section{Student feedback and improvements to the unit}
+
+The University values student feedback in order to improve the quality
+of its educational programs. If you wish to provide feedback, please
+contact one of the staff listed above.
+
+
+\chapter{You and this unit}
+
+\section{What is expected of you}
+
+
+\subsection*{Unit credit points and Workload}
+This unit is a 10 credit point unit and will require your full and
+continuous attention to maintain the highest possible grades.  It is
+expected that you will spend at least 10 hours each week (on average)
+which includes the four (4) contact hours per week.  Some weeks you
+will spend more time on learning activities and assessments and in
+other weeks the workload will be somewhat less.  It will be essential
+for you to keep up with the assigned reading so that you are properly
+prepared for each session.
+
+\subsection*{Attendance}
+Students are expected to attend the two hour lecture and a two
+hour computer lab each week.
+
+\subsection*{Online learning}
+Students should access \vuws~to obtain lecture notes and information,
+and check their student email account at least twice a week.
+
+\subsection*{General conduct and behaviour}
+
+According to the UWS Teaching and Learning code
+(\url{http://policies.uws.edu.au/view.current.php?id=00139}) you are
+required to:
+\begin{itemize}
+\item obtain the unit outline for this unit, by the end of the second
+  teaching week;
+\item regularly and actively participate in all scheduled educational
+  activities, which includes lectures, tutorial, laboratory sessions,
+  online activities etc;
+\item give honest, helpful and courteous feedback to your lecturer(s);
+\item make every effort to undertake the work required to successfully
+  complete this unit;
+\item submit work that is your own for any assessment task;
+\item not indulge in any behaviour that disrupts the teaching and
+  learning environment, or negatively affects fellow students and
+  university staff, and understand that the University will take
+  action against such behaviour as outlined in the Misconduct -
+  Students Non-Academic Misconduct Policy;
+\item treat university property with due care and report and damaged
+  or broken equipment.
+\end{itemize}
+In addition, you should:
+\begin{itemize}
+\item be on time to lectures, tutorial and laboratory sessions.  If
+  you are late, then please enter the lecture/tutorial room or lab
+  with courtesy and consideration for others;
+\item pay attention in lectures ,tutorials and laboratory sessions as
+  this is where helpful information is given out of the assessment
+  tasks;
+\item switch off your mobile phone
+\item ask questions about the content that you found difficult,
+  immediately after the lecture, tutorial or lab session finishes.  If
+  this cannot be accomplished, then make sure you see your lecturer or
+  tutor as soon as possible to resolve any problems.
+\end{itemize}
+
+\section{What you can expect from the teaching team}
+
+\subsection*{Feedback}
+
+We will provide you with oral and written feedback on class test papers
+immediately following the class in which they were presented.  You
+will also receive feedback before you submit, and after handing in
+your assignment questions.
+
+\subsection*{Consultation}
+
+There will be a weekly consultation time allocated in the first week
+of the semester. Appointments can be made outside of the consultation
+time via email.
+
+
+\subsection*{General conduct and behaviour}
+
+It is our aim to create a learning environment so that you may
+reach your full potential in this unit.  Accordingly, you can expect
+from the lecturing staff in this unit to:
+\begin{itemize}
+\item prepare thoroughly for each teaching session;
+\item be on time for each lecture, tutorial and laboratory session;
+\item ensure that you understand the unit requirements and material;
+\item be available to assist students during the consultation times
+  (as indicated above);
+\item treat you equitably, and with courtesy and respect;
+\item report immediately, any issues or concerns related to student
+  academic and non-academic misconduct to the relevant authority,
+  according to the UWS Misconduct Policy.
+\end{itemize}
+Sometimes the best laid plans do go astray!  In the unlikely
+occurrence of this happening, you will be notified about any changes
+to the scheduled activities, at least 24-hours in advance (if
+possible), via an announcement on \vuws.
+
+\section{How to use this learning guide}
+
+This Learning Guide supplements the Unit Outline and is designed to
+help you navigate through the unit.  It will help you focus on what
+you need to do to prepare for the various assessment tasks throughout
+the unit.  You should consult the Learning Guide on a regular basis,
+as you plan your study, as this guide contains information on how best
+to prepare for each assessment task.
+
+The Learning Guide also offers tips to assist you in developing the
+skills and techniques of an effective, independent learner.  However,
+if you have any particular problems or issues regarding this Unit,
+please take these up with the Unit Coordinator so that they may be
+resolved as soon as possible.  As an adult learner, it is expected
+that you will be responsible for your own learning and take the
+necessary and appropriate steps to ensure your success.
+
+\section{Policy and how it affects you}
+
+The University has a number of policies that relate to teaching and
+learning.  Important policies affecting students include:
+\begin{itemize}
+\item Assessment Policy
+\item Examinations Policy
+\item Special Consideration Policy
+\item Review of Grade Policy
+\item Assessment Practice - Fundamental Code
+\item Misconduct - Student Academic Misconduct Policy (see extract of
+  the policy below under the heading "What is Academic Misconduct?")
+\item Misconduct - Student Non-academic Misconduct Policy
+\item Enrolment Policy (includes a section on the UWS Student Email Account)
+\item Bullying Prevention Policy and Guidelines
+\item Sexual Harassment Prevention Policy
+\end{itemize}
+There are two policies that relate to misconduct - academic and
+non-academic misconduct.  Breaches of these policies can have very
+serious consequences.  It is essential that you are familiar with
+these policies and how to ovoid misconduct of any type.
+
+\subsection*{What is Academic Misconduct?}
+
+Academic Misconduct may involve plagiarism, collusion or cheating.
+Plagiarism involves submitting or presenting work in a unit as if it
+were the student's own work when, in fact, it was not. Collusion
+includes inciting, assisting, facilitating, concealing or being
+involved in plagiarism, cheating or other academic misconduct with
+others.  Cheating includes dishonest conduct (or attempted dishonest
+conduct) in exams.
+
+For the full definition of academic misconduct and the consequences of
+such behaviour, you are advised to read the Misconduct - Student
+Academic Misconduct Policy in its entirety, refer to:
+\url{http://policies.uws.edu.au/view.current.php?id=00051} 
+
+The School of Computing, Engineering and Mathematics definitions of Minor and
+Substantial Breaches of the UWS Academic Misconduct policy are below:
+
+\subsection*{Plagiarism}
+
+Minor breach: A minor breach occurs when the weighting of the
+assessment task is 10\% or less, and 20\% or less of the work
+submitted is taken from another source without reference to the
+original source or author.
+
+Substantial breach definition:  A substantial breach occurs when:
+\begin{enumerate}
+\item Either the weighting of the assessment task is more than 10\%,
+  or 20\% or more of the work submitted is taken from another source,
+  without reference to the original source.
+\item If a student has been found to have already committed an act of
+  plagiarism and warned about it, whether it be a minor or substantial
+  breach, then the next allegation will be treated as a substantial
+  breach.
+\end{enumerate}
+
+\subsection*{Cheating}
+
+\begin{enumerate}
+\item  Dishonest or attempted dishonest conduct during an examination,
+for example speaking to other candidates or otherwise communicating
+with them, leaving answer papers exposed for other students to view
+and/or copy or attempting to view another student's solutions, would
+be deemed as minor.  However, if this behaviour continued after the
+student had been asked to desist, then the breach would be treated as
+substantial.
+
+\item  Bringing into the examination room any textbook, notebook,
+memorandum, other written material or mechanical or electronic device
+(including mobile phones), or any item not authorised by the examiner
+would be treated as minor.  However, if the student does not surrender
+the unauthorised item, then a substantial breach would have occurred.
+
+\item  Writing an examination or part of it, or consulting any person or
+materials outside the confines of the examination room without
+permission to do so, would constitute a substantial breach.
+
+\item  Cheating in take-home examinations, which includes, but it not
+limited to: making notes, papers or answers in connection with the
+examination (in whatever form) to others without the permission of the
+relevant lecturer; receiving answers, notes or papers in connection
+with the examination (in whatever form) from another student, or
+another source without the permission of the relevant lecturer; and
+the unauthorised collaboration with another person or student in the
+formulation of an assessable component of work constitutes a
+substantial breach.
+\end{enumerate}
+
+\subsection*{Other Academic Misconduct}
+
+\begin{enumerate}
+\item Tampering or attempts to tamper with examination scripts, class
+  work, grades or class records, will be regraded as substantial.
+
+\item Failure to abide by the directions of an academic member of
+  staff regarding the individuality of work to be handed in, will, in
+  the first instance be treated as minor.  However, any recurrence
+  of such behaviour will be regarded as substantial.
+
+\item Acquisition, attempted acquisition, possession or distribution
+  of examination materials or information without the authorisation of
+  the academic member of staff will be regarded as substantial.
+
+\item Impersonation of another student in an examination or other class
+assignment will be regarded as substantial.
+
+\item Falsification or fabrication of practical or laboratory reports
+will be regarded as substantial.
+
+\item Non-authorised use of tape recording of lectures will be regarded
+as minor, except where the student/s has been asked to desist and
+refuses to comply.  This continued abuse will be regarded as
+substantial.
+\end{enumerate}
+
+There are many resources to help you ovoid academic misconduct.  The
+library staff (see section \ref{sec:library}) can help you with referencing and the
+Student Learning Unit can assist with academic writing and plagiarism.
+If you are unsure about any of your work you should also ask your
+tutor or lecturer for advice and feedback.
+
+\subsection*{What is Non-academic Misconduct?}
+
+Non-academic misconduct includes unlawful activities and crimes,
+falsifying documents (like a medical certificate or academic records),
+harassing other students (or staff), stealing or damaging university
+property (like library books or computers) and disrupting other
+students or staff.  These are just some of the types of non-academic
+misconduct and while these things are rare they do happen.  If you
+believe you have been the victim of non-academic misconduct or you are
+aware of any academic misconduct it is very important that you report
+it.
+
+You should report all matters of academic misconduct directly to your
+Head of Program.
+
+\section{What to do if you have a problem/concern}
+
+If you have a concern about this unit please contact the unit
+coordinator in the first instance.  If you would prefer to speak to
+someone else you are advised to contact your Head of Program (see the
+online handbook to identify your Head of Program and their contact
+details \url{http://handbook.uws.edu.au/hbook/}).
+
+More information about resolving complaints is available on the UWS
+website. \url{http://uws.clients.squiz.net/opq/planning_and_quality/complaints_management_and_resolution}.
+
+The University also has a confidential Complaints Handling department
+(see link above for contact details).  You may contact this department
+of the University at any time however we would appreciate the
+opportunity to resolve this directly first.
+
+
+
+\chapter{Teaching and Learning Activities}
+
+Details of the teaching resources and learning activities are provided
+in this section of the learning guide.
+
+
+\section{Schedule of Learning and Teaching Activities}
+The \teachingsession~teaching session begins on \teachingsessiondate
+\teachingyear.  The inter-session break begins on
+\intersessionbreak~\teachingyear.  \publicholidays~
+%  (for Autumn
+% session.  Please put in the date for the October long weekend for the
+% Spring session).  
+%These public holidays will affect classes at Penrith. 
+When classes
+fall on public holidays, students are expected to revise the missed
+material in their own time. In the case of a missed lecture, lectures
+online will be available within \vuws.
+
+
+\noindent
+\renewcommand{\arraystretch}{1.3}
+\begin{longtable}{|c|>{\raggedright}p{0.5\textwidth}|>{\raggedright}p{0.2\textwidth}|>{\raggedright\arraybackslash}p{0.15\textwidth}|}
+\hline
+Week & Topic & Text readings & Assessment \\
+\hline
+1 & Introduction to the Social Web  & & \\
+\hline
+2 & Introductory R programming and data structures &  & \\
+\hline
+3 & Simple Exposure Analysis &  & Online Test 1 \\
+\hline
+4 & Text Mining 1 (indexing, weighting, querying, metrics) &  &  \\
+\hline
+5 & Graphs 1 (Definition, Graph statistics, Storage) & &  Online Test 2 \\
+\hline
+6 & Visualisation &  &  \\
+\hline                                            
+7 & Text Mining 2 (Clustering) &  &  Online Test 3 \\
+\hline                                            
+8 & Graphs 2 (PageRank, HITS, Shortest Path) &  & \\
+\hline
+9 & Semester Break & &  \\
+\hline                                             
+10 & Time 1 (trends, trend periodicity)  & & Online Test 4 \\
+\hline                                            
+11 & Time 2 (BACI designs) &  & \\
+\hline
+12 & Text Mining 3 (Sentiment Analysis) &  & Online Test 5  \\
+\hline
+13 & Spatial Analysis &  & Group Project Due \\
+\hline                                            
+14 & Revision &  & \\                
+\hline
+\end{longtable}
+
+
+Each week, students are expected to attend lectures and
+computer labs. For full details about the timetable for this unit, go to
+\timetablelink~and search for \unitcode.
+
+
+\subsection*{Lectures}
+
+Lectures are large classes where students are introduced to new ideas
+and concepts. The notes presented in the lectures will be available in
+the \unitcode~\unitname~section of \vuws.
+
+%\subsection*{Tutorials}
+%
+%Tutorials are small classes where students work through questions and
+%problems related to the lecture content. It is expected that students
+%attempt the tutorial questions before coming to the tutorials.
+
+\subsection*{Computer Labs}
+
+Computer Labs are small interactive classes based in a computer lab where
+the tutor will discuss how to use computers to assist us in
+solving statistical problems. Time will be given in the labs for
+students to work on problems with the assistance of the tutor.
+
+
+\chapter{Assessment Details}
+
+This section provides detailed information about the assessment
+activities in this unit. You are encouraged to use this as a guide
+when you are working on each assessment task.
+
+\section{Assessment summary}
+
+There are seven main assessment activities in this unit:
+\begin{center}
+\begin{tabular}{|l|>{\raggedright}l|>{\raggedright}l|>{\raggedright\arraybackslash}l|}
+  \hline
+  Component & Weighting & Date of Assessment & Content covered in
+  week/s \\
+  \hline
+  Online Test 1 & 5\% & Week 3 & 1 and 2 \\
+  Online Test 2 & 5\% & Week 5 & 3 and 4 \\
+  Online Test 3 & 5\% & Week 7 & 5 and 6 \\
+  Online Test 4 & 5\% & Week 10 & 7 and 8 \\
+  Online Test 5 & 5\% & Week 12 & 10 and 11 \\
+  Project           & 25\% & Week 13         & Various \\
+  Final Examination & 50\% & During the exam period & 1 to 13 \\
+  \hline
+\end{tabular}
+\end{center}
+%\textbf{* The highest 3 marks from the 4 tutorial exercise sets will be taken.}
+
+The compulsory assessment tasks are participation in at least one
+assignment, the project and the final examination. See
+below for further details. Students who do not participate in this
+task and/or do not hand in the solutions to the team project by the
+due date will receive an automatic failing grade (AF or CF).
+\begin{itemize}
+
+\item An \textbf{absent fail}, AF grade is defined as: Student has not
+officially withdrawn from the unit and has failed to complete one or
+more of the compulsory assessment requirements for the unit.
+
+\item A \textbf{compulsory fail}, CF grade is defined as: A student has
+failed a compulsory component of a unit. If a student receives a CF
+grade, they have failed the unit irrespective of the percentage mark
+achieved.
+\end{itemize}
+In order to pass this unit you must obtain a minimum combined overall
+mark of 50/100. No student, regardless of performance throughout the
+session, should expect to attain a passing grade in this unit without
+attaining;
+\begin{enumerate}
+\item at least 40\% in the final examination; and
+\item at least 40\% for the continuous assessment (tests and
+  assignment).
+\end{enumerate}
+The following cut-off marks may act as a guide:
+\begin{itemize}
+\item High Distinction (H):            85/100 or higher
+\item Distinction (D):                 75/100 - 84/100
+\item Credit (C):                      65/100 - 74/100
+\item Pass (P):                        50/100 - 64/100
+\end{itemize}
+In this unit learning and teaching activities include of a two-hour
+lecture and a two-hour workshop weekly. The workshop is designed for
+summarising the lecture, discussing difficulties in tutorial questions
+and learning how to use statistical software for problem
+solving. 
+
+Students are expected to work individually through the set topics,
+receiving assistance as required and attempting specific workshop
+questions on each topic. Students should be aware that in this unit,
+later topics build on the material covered earlier.
+
+
+\section{Learning outcomes and assessment}
+
+
+Students are expected to gain an understanding of basic statistical
+concepts as well as to recognise and use some common statistical
+formulae and more widely used statistical techniques. On successful
+completion of this unit, students should be able to:
+
+\begin{center}
+\begin{tabular}{|>{\raggedright}p{0.4\textwidth}|>{\raggedright\arraybackslash}p{0.5\textwidth}|}
+\hline
+\textbf{Learning Outcomes} & \textbf{Assessment Tasks} \\
+\hline
+Organise and summarise data numerically; &  \multirow{3}{0.5\textwidth}{Assignments, Class Test, Team Project, Final Examination} \\
+\cline{1-1}
+Recognise the foundation behind inferential statistics; & \\
+\cline{1-1}
+Identify the underlying assumptions associated with each statistical
+technique; & \\
+\hline
+Manipulate, analyse and graph data using computer software,
+e.g. R, Excel; & Assignments, Team Project \\
+\hline
+Employ the appropriate statistical methods and techniques in given
+situations. & \multirow{3}{0.5\textwidth}{Assignments, Class Test, Team Project, Final Examination} \\
+\cline{1-1}
+Interpret a given problem and then to analyse and solve it in a
+concise and logical manner & \\
+\cline{1-1}
+Present the full solution to a given problem in a neatly written sequence of logical steps
+  with grammatically correct conclusions. & \\
+\hline
+\end{tabular}
+\end{center}
+
+Each of the assessment tasks has been designed to evaluate the extent
+to which you have achieved these learning outcomes.
+
+\section{Assessment details}
+
+The components of the assessment for this unit are as follows.
+%\renewcommand{\arraystretch}{1.3}
+
+\subsection*{Assignments, 3 @ 5\%, weighting 15\%}
+This is a compulsory assessment task. Students who do not hand in at
+least one of the assignments by the due date will receive
+an automatic failing grade (AF or CF).
+
+The object of the assignments is to assess continuous
+learning throughout the semester and to provide feedback on the
+learning progress to lecturers and students. Students are to hand in
+their solutions to selected questions at give dates (which will be announced on
+\vuws) using the Web submission system.
+The `Assignment Cover Sheet' must be submitted with each
+student's solutions.
+
+\subsection*{Class Test, weighting 15\%}
+
+The object of the class test is to assess continuous learning
+throughout the semester and to provide feedback on the learning
+progress to lecturers and students. The duration of the test is 45
+minutes. The test is \textbf{open book} and will be 50 minutes in
+duration. Writing materials and a non- programmable calculator are
+permitted.
+
+
+
+\subsection*{Team Project, weighting 20\%}
+
+This is a compulsory assessment task. Students who do not participate
+in this task and/or do not hand in the solutions to the team project
+by the due date will receive an automatic failing grade (AF or CF).
+
+The team project is designed to help you study effectively and
+efficiently. To complete the project, it is not necessary to have
+previous experience of statistical software. However, it is most important that you
+start this project as soon as relevant topics have been covered.
+
+More information on this may be found on the \vuws~site.
+
+\subsection*{Final Examination, weighting 50\%}
+
+This is a compulsory assessment item. Students who do not attempt the final (or deferred
+exam, if eligible) will be given an automatic failing grade.
+
+This is an open book examination to determine whether you are able to employ the appropriate
+statistical methods and techniques in given situations. It will be 2 hours in duration.
+
+% The examination consists of three sections, A, B and C. Each section will consist of three
+% questions. You should answer two questions in each section. If you answer three questions in a
+% section only the first two questions will be marked. You must write down your working and
+% answers in the answer books provided.
+
+\subsection*{Calculation of Final Mark and Grade}
+
+
+
+
+Marks and subsequent grades for \unitcode~\unitname~will be
+calculated in one of the following ways:
+\begin{itemize}
+\item[EITHER]
+  Option 1: Asignments (15\%) + Class test (15\%) + Team project (20\%) + Final
+  Examination (50\%)
+\item[OR]
+  Option 2: Assignments (15\%) + Team project (20\%) + Final Examination (65\%)
+\end{itemize}
+Note: Option 2 is only available if the class test is missed for a
+valid reason. Evidence (such as a medical certificate) must be
+supplied to support your case.  If option 2 is available, the higher
+mark will be chosen provided that a student has scored at least 40\%
+in the final examination.
+
+
+
+\subsection*{Examples of typical questions and typical answers that
+  would achieve high, or perfect, scores.}
+
+\subsubsection*{Question (6 marks)}
+
+Many in Britain believe that to spare the rod is to spoil the
+child. An article in the New York Time (August 18, 1985) gives the
+results of a national poll in Britain conducted in February by
+Marketing and Opinion Research International for the Times of
+London. Of 604 parents questioned, 63\% were in favour of corporal
+punishment in schools. Construct a 90\% confidence interval to
+estimate the proportion of the British population in favour of
+corporal punishment in schools.
+
+\subsubsection*{Solution}
+Let $p$ be the proportion of the British population in favour of corporal punishment in
+schools. The required confidence interval of $p$ is given by:
+\begin{align*}
+  & \hat{p} \pm z_{\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}  & \text{(2 marks)}\\
+  & = 0.63\pm 1.645\times \sqrt{(0.63\times (1-0.63)/604}  & \text{(2 marks)}\\
+  & = (0.598,0.662)
+\end{align*}
+The 90\% confidence interval for the population proportion of the British population in favour of
+corporal punishment in schools is from 59.8\% to 66.2\%.\quad (2 marks).
+
+\subsubsection*{Question (10 marks)}
+A firm specialising in agricultural products wants to conduct a market
+trial for one of its new products. A random sample of 600 potential
+customers is chosen to receive advertising material describing the new
+product. It is decided that additional advertising and promotion will
+occur only if the sample results provide strong evidence that the
+actual (population) response rate will exceed
+7\%. What decision will be made if 50 out of the 600 people make a purchase? Test using $\alpha = 0.05$.
+
+\subsubsection*{Solution}
+Let $p$ be the response rate.
+\begin{align*}
+  \text{step 1. } &  H_0 : p = 0.07 \text{ v } H_1 : p > 0.07 & \text{(2
+    marks)} \\
+  \text{step 2. } & \text{Test statistic: } z = (\hat{p} - p)/\sqrt{p(1
+    - p)/n} & \text{(2 marks)} \\
+  \text{step 3. } & \text{Significance level: } \alpha = 0.05 &
+  \text{(0.5 marks)} \\
+  \text{step 4. } & \text{Critical value: } z_{\alpha} = z_{0.05} =
+  1.645. \text{ Reject } H_0 \text{ if } z > 1.645. & \text{(0.5
+    marks)} \\
+  \text{step 5. } & \hat{p} = 50/600 = 0.0833 &  \\
+                 & z = (0.0833 - 0.07)/\sqrt{0.07*(1-0.07)/600} =
+                 1.277 & \text{(2 marks)} \\ 
+  \text{step 6. } & \text{Since } 1.277 < 1.645, H_0 \text{ cannot be
+    rejected at the 5\% level of significance}. & \text{(3 marks)}
+\end{align*}
+We conclude that there is no strong evidence to show that the response
+rate exceeds 7\% and that additional advertising and promotion should
+not take place
+
+
+\subsubsection*{Question (1 mark for each part)}
+
+The annual returns on shareholders' funds of 97 of Australian's top
+100 companies for the years 1990 and 1998 are obtained.
+\begin{center}
+\begin{tabular}{lrrrrrrr}
+  & \multicolumn{7}{c}{Investment Returns (\%)} \\
+  Year 1990 & 7.01 & 13.07 & 2.57 & \ldots & 13.30 & 4.15 & 1.74 \\
+  Year 1998 & 6.49 & 0.53  & 5.33 & \ldots & 20.47 & 3.04 & 14.60 \\
+\end{tabular}
+\end{center}
+\begin{enumerate}
+\item Produce a histogram of the 1990 returns.
+\item Produce a histogram of the 1998 returns.
+\item Find the mean, median, range and standard deviation for the 1990 returns.
+\item Repeat part (iii) for the 1998 returns.
+\item Which was the better year for investors?
+\end{enumerate}
+
+\subsubsection*{Solution}
+
+\begin{enumerate}
+
+% Plots generated in R using these commands:
+%
+% x.1990 <- rpois(100,12.92)
+% x.1998 <- rpois(100,6.36)
+%
+% pdf('question-plot-1990.pdf', width=5, height=4)
+% hist(x.1990, xlab='Investment Returns', main='1990')
+% dev.off()
+%
+% pdf('question-plot-1998.pdf', width=5, height=4)
+% hist(x.1998, xlab='Investment Returns', main='1998')
+% dev.off()
+
+\item ~
+
+\vspace{-4em}
+\begin{center}
+\scalebox{0.6}{\includegraphics{question-plot-1990}}
+\end{center}
+
+\item ~
+
+\vspace{-4em}
+\begin{center}
+\scalebox{0.6}{\includegraphics{question-plot-1998}}
+\end{center}
+
+\item 
+\begin{tabular}{lr}
+\hline
+\multicolumn{2}{c}{Year 1990} \\
+\hline
+Mean               & 12.92 \\
+Median             & 11.38 \\
+Standard Deviation &  9.30 \\
+Range              & 75.01 \\
+\hline
+\end{tabular}
+
+
+\item 
+\begin{tabular}{lr}
+\hline
+\multicolumn{2}{c}{Year 1998} \\
+\hline
+Mean                   &   6.36 \\
+Median                 &   5.40 \\
+Standard Deviation     &   5.17 \\
+Range                  &  42.76 \\
+\hline
+\end{tabular}
+
+
+\item Year 1990 was the better year for investors. The average return
+  was much higher, although the returns were more variable.
+\end{enumerate}
+
+
+\subsubsection{Question (6 marks)}
+An Internet server claimed that its users averaged 15 hours per
+week. To determine whether this was an overstatement, a competitor
+conducted a survey of 150 customers and found that the average time
+spent online was 13 hours per week with a standard deviation of 6.5
+hours. Do the data provide sufficient evidence to indicate that the
+average hours of use are less than that claimed by the first Internet
+server? Test at the 1\% level of significance.
+
+\subsubsection*{Solution}
+
+\begin{align*}
+\text{Data: } & n = 150 \quad \bar{x} = 13 \quad s = 6 .5 \quad \alpha
+= 0.01 & \text{(1 mark)} \\
+\text{Hypotheses: } & H_0 : \mu = 15 \quad H_A: \mu < 15 & \text{(1
+  mark)} \\
+\text{Test statistic: } & \text{As n is large, } z =
+\frac{\bar{x}-\mu}{s/\sqrt{n}} = \frac{13 - 15}{6.5/\sqrt{150}} =
+-3.77 & \text{(1 mark)} \\
+\text{Rejection region: } &  \text{From the }z-\text{tables, }
+-z_{\alpha} = -z_{0.01} = -2.33 & \\
+ & \text{Reject } H_0 \text{ if } z < -2.33 & \text{(1 mark)} \\
+ & \text{As } -3.77 < -2.33,\text{ reject } H_0 \text{ at } 0.01\text{
+   level of significance.} & \text{(1 mark)}
+\end{align*}
+Conclusion: There is evidence to infer that the average time is less
+than that claimed by the Internet server.  (1 mark)
+
+
+\subsubsection*{Question ( 20 marks)}
+If $A$ and $B$ are mutually exclusive events such that $P(A) = 0.25$
+and $P(B) = 0.40$, find:
+\begin{enumerate}
+\item a) $P(A\cap B)$ \quad b) $P(A\cup B)$ \quad c) $P(A|B)$
+\item  The number of calls for help that an ambulance service receives ($x$) has the following
+      probability distribution:
+\begin{center}
+\begin{tabular}{|c|cccc|}
+\hline
+  $x$    &     0     &     1   &     2     &    3 \\
+\hline
+  $p(x)$ &     0.1   &     0.2 &     0.3   &    0.4 \\
+\hline
+\end{tabular}
+\end{center}
+a) Is this a valid assignment of probability values? Give two reasons
+for your answer. \\
+b)     What is the probability that the ambulance service receive at
+least 2 calls? \\
+c)     Find the expected number of calls that the ambulance service will receive. \\
+d)     Find the standard deviation of the number of calls.
+\item A radio call-in talk show has found that its switchboard receives an average of 30 calls
+  during a 30-minute broadcast. Find the probability that there will be at least 2 calls during a
+  5-minute period?
+\end{enumerate}
+    
+
+\subsubsection*{Solution}
+
+\begin{enumerate}
+\item 
+  (a) 
+  \begin{align*}
+    P(A\cap B) & = 0 \text{ (as $A$ and $B$ are mutually exclusive)} \hfill
+    \text{(2 marks)}
+  \end{align*}
+  (b)
+  \begin{align*}  
+    P(A\cup B) &= P(A) + P(B) - P(A\cap B) = 0.25 + 0.4 - 0 && \text{(1 mark)} \\
+    &= 0.65 && \text{(1 mark)}
+  \end{align*}
+  (c)
+  \begin{align*}
+    P(A|B) &= \frac{P(A\cap B)}{P(B)} = \frac{0}{0.4} && \text{(1
+      mark)} \\
+    &= 0 && \text{(1 mark)}
+  \end{align*}
+
+\item (a) Two reasons for being a valid assignment of probability
+  values:
+  \begin{itemize}
+  \item each probability value is between $0$ and $1$.
+  \item the total of all probability values is $1$.
+  \end{itemize}
+  (b) \begin{align*}
+    P(\text{at least 2}) &= P(X \ge 2)\\
+    &= P(X=2) + P(X=3) \\
+    &= 0.3 + 0.4 = 0.7 & \text{(1 mark)}
+  \end{align*}
+  (c) \begin{align*}
+    \mu = \mathbb{E}[X] &= 0\times 0.1 + 1\times 0.2 + 2\times 0.3 +
+    3\times 0.4 && \text{(0.5 marks)} \\
+      & \text{Hence, the expected number of calls is $2$.} && \text{(0.5 marks)}
+  \end{align*}
+  (d)
+  \begin{align*}
+    \mathbb{E}[X^2] &= 0^2\times 0.1 + 1^2\times 0.2 + 2^2\times 0.3 +
+    3^2\times 0.4 = 5 && \text{(1 mark)} \\
+    \var(X) &= \sigma^2 = \mathbb{E}[X^2] - \mathbb{E}[X]^2 \\
+    &= 5 - 2^2 - 1 && \text{(0.5 marks)} \\
+    & \text{Hence, the standard deviation of the number of calls }
+    \sigma = \sqrt{1} = 1 && \text{(0.5 marks)}
+  \end{align*}
+\item 
+
+\begin{align*}
+  & x = \text{number of calls in 5 minutes} \\
+  & \text{Then $x$ has a Poisson distribution with } \mu = 5 && \text{(1 mark)} \\
+  P(x \ge 2) &= 1 - P(x < 2) && \text{(1 mark)} \\
+  &= 1 - [P(x = 0) + P(x = 1)] \\
+  &= 1 - \left [ \frac{e^{-5}\times 5^0}{0!} + \frac{e^{-5}\times
+      5^1}{1!}\right ] \\
+  &= 1 - [0.0067 + 0.0337] && \text{(1 mark)} \\
+  &= 1 - 0.0404 \\
+  &= 0.9596 && \text{(1 mark)}
+\end{align*}
+\end{enumerate}
+
+
+
+\newpage
+
+%\thispagestyle{empty}
+
+\subsection*{Assignment Cover Sheet}
+
+\begin{flushright}
+\scalebox{0.2}{\includegraphics{uws_cymk}} \\[1em]
+School of Computing, Engineering and Mathematics \\
+\end{flushright}
+
+\begin{center}
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{|>{\raggedright}p{0.22\textwidth}|>{\raggedright\arraybackslash}p{0.6\textwidth}|}
+\hline
+Student Name & \\
+\hline
+Student Number & \\
+\hline
+Unit Name and Number & \unitcode~\unitname \\
+\hline
+Tutorial Group & \\
+\hline
+Tutorial Day and Time & \\
+\hline
+Lecturer/Tutor & \\
+\hline
+Title of Assignment & \\
+\hline
+Length & \\
+\hline
+Due Date & \\
+\hline
+Date Submitted & \\
+\hline
+Campus Enrolment & \\
+\hline
+\end{tabular}
+\renewcommand{\arraystretch}{1.3}
+\end{center}
+\textbf{Declaration:}
+\begin{itemize}
+\item[$\Box$] I hold a copy of this assignment that I can produce if the original is
+lost or damaged.
+
+\item[$\Box$] I hereby certify that no part of this assignment/product has been
+copied from any other student's work or from any other source except
+where due acknowledgement is made in the assignment.  
+
+\item[$\Box$] No part of this assignment/product has been written/produced for me by
+another person except where such collaboration has been authorised by
+the subject lecturer/tutor concerned.
+
+\item[$\Box$] I am aware that this work may be reproduced and submitted to
+plagiarism detection software programs for the purpose of detecting
+possible plagiarism (\textbf{which may retain a copy on its database for
+future plagiarism checking}).
+
+\item[$\Box$] I hereby certify that I have read and understand what the School of
+Computing, Engineering and Mathematics defines as minor and substantial breaches of
+misconduct as outlined in the learning guide for this unit.
+\end{itemize}
+
+\vspace{1em}
+\noindent
+Signature: \makebox[3in]{\hrulefill}
+
+\vspace{1em}
+\noindent
+\textbf{Note: An examiner or lecturer/tutor has the right not to mark this
+assignment if the above declaration has not been signed.}
+
+\newpage
+
+\chapter{Learning Resources and Information}
+
+As independent learners you must make choices about the resources you
+use to help you with your learning activities and assessments in this
+unit.  In the following section we briefly summarise the resources
+that are available to you.
+
+\section{Campus Resources}
+
+
+\subsection*{Library}
+\label{sec:library}
+%See the library home page to get help from a Librarian
+%\url{http://library.uws.edu.au/}.
+Search Central is a great Library resource that will help you find
+information for this unit \url{http://library.uws.edu.au/}
+
+
+%\subsection*{e-learning tools}
+
+\subsection*{Participation in class}
+
+To get the most from this unit, it is essential that each student
+participates in class. Participation includes asking questions,
+responding to questions and working through problems when they are
+given.
+
+\section{Useful reading}
+
+\subsection*{Textbook}
+Mendenhall, W., Beaver, R. and Beaver, B. (2012) Introduction to probability and statistics, 14th edition,
+Brooks/Cole Cengage Publishers, ISBN-10: 1133103758 ISBN-13: 978-1133103752
+
+\subsection*{References}
+Any text entitled `Introductory Statistics' or `Elementary Statistics'` will be useful. In addition to
+these basic texts, the following will be requested for purchase, if not already held in the library:
+\begin{itemize}
+\item Samuels, M. and Witmer, J. (2003) Statistics for the life sciences, Pearson Education
+        International.
+\item Bennett, J., Briggs, W., and Triola, M. (2003) Statistical reasoning for everyday life, 2nd edition,
+        Addison-Wesley.
+\item De Veaux, R., Velleman, P. and Bock, D. (2005) Introductory stats, 2nd edition, Addison-
+        Wesley.
+\item Fowler, J., Cohen, L., and Jarvis, P. (1998) Practical statistics for field biology, 2nd edition, John
+        Wiley.
+\item   Kiess, H. (2002) Statistical concepts for the behavioural sciences, 3rd edition, Allyn \& Bacon.
+\item   Kinney, J. (2002) Statistics for Science and Engineering, Addison-Wesley.
+\item   Lind, D., Marchal, W., Mason, R., and Wathen, S. (2005) Basic statistics using Excel for Office
+  XP, 12 edition, McGraw-Hill.
+\item   McClave, J. (2005) A first course in statistics, 9th edition, Prentice-Hall.
+\item   McKean, J. (2000) Data analysis for criminal justice and criminology: practice and applications, Allyn
+  \& Bacon.
+\item   Meehan, A. and Warner, C.B. (2000) Elementary data analysis using Microsoft Excel, 1st edition,
+  McGraw-Hill.
+\item   Pallant, J. (2001) SPSS Survival Manual: a step by step guide to data analysis using SPSS for
+  Windows, McGraw-Hill.
+\item   Selvin, S. (2004) Biostatistics: how it works, Prentice-Hall, ISBN: 0-13-046616-6.
+\item   Townend, J. (2002) Practical statistics for environmental and biological scientists, John Wiley.
+\item   Levine, D. M., Stephen, D., Krehbiel, T. C. and Berenson, M. L., 2002: Statistics for
+  Managers using Microsoft Excel (Third Edition), Prentice Hall. (Available at
+  Campbelltown and Parramatta campus library. Call Number: 519.50285/22.)
+\item   Freund, J. E., 2001: Modern Elementary Statistics, (Tenth Edition), Prentice-Hall.
+  (Available at Bankstown, Blacktown, Campbelltown, Hawkesbury, Parramatta and Penrith
+  (Allen) campus libraries. Call Number: 519.5/88.)
+\item   Selvanathan, A., Selvanathan, S., Keller, G. \& Warrack, B., 2000: Australian Business
+  Statistics.
+  (Available at Blacktown, Campbelltown, Hawkesbury, Parramatta and Penrith (Allen \&
+  Ward) campus libraries. Call Number: 658.4033/38.)
+\item   Selvanathan, A., Selvanathan, S., Keller, G., and Warrack, B. (2007), Australian Business
+  Statistics (4th edition), (or 3rd edition) Thomson.
+\item   Black, K., Asafu-Adjaye, J., Khan, N., Perera, N., Edwards, P. and Harris, M.,
+  "Australasian Business Statistics", John Wiley and Sons, 2007.
+\end{itemize}
+
+% \section{People who can help}
+% Teaching Team
+% Insert details here
+
+
+
+% Librarian
+% Insert details here
+
+
+\section{Online Resources}
+
+\subsection*{\vuws}
+
+\vuws~provides a range of essential online resources in this unit.  You
+are encouraged to check the site regularly for updates.  In
+particular, you will find websites that will help you with any
+numeracy difficulties you may be experiencing.
+
+\subsection*{Wikipedia}
+
+Wikipedia can be a great help with initial information on some topics.
+However in this unit Wikipedia articles should not be used in
+assessment tasks.
+
+\section{UWS website - Current Students}
+The ``Current Students'' page of the UWS web site
+\url{http://www.uws.edu.au/students} contains many important links,
+including:
+\begin{itemize}
+\item Managing your study - This site contains much of the information
+  necessary for the administration of your course throughout your
+  study at UWS.
+  \url{http://www.uws.edu.au/currentstudents/current_students/managing_your_study}
+\item Getting help - This site is a useful resource for students and a
+  hub for coordinating developments to improve your university
+  experience.
+  \url{//www.uws.edu.au/currentstudents/current_students/getting_help}
+\item e-learning - This is your entry to all aspect of e-learning at
+  UWS, including this unit's \vuws site.
+  \url{http://www.uws.edu.au/students/onlinesupport}
+\item Students with a disability should visit:
+  \url{http://www.uws.edu.au/currentstudents/current_students/getting_help/disability_services}
+\item Policies - This site includes the full details of policies that
+  apply to you as a UWS student.
+  \url{http://www.uws.edu.au/policies/a-z}
+\end{itemize}
+
+
+\subsection*{Literacy and/or numeracy resources}
+
+The Student Learning Unit website links students to an extensive range
+of learning resources and face-to-face workshops supporting tertiary
+academic literacy and mathematics: \url{http://www.uws.edu.au/slu}
+
+\subsection*{Referencing Requirements}
+Normally, in this unit, the assessment tasks will not require
+referencing.  However, if an assessment task does require referencing,
+then the Harvard, IEEE or APA styles are preferred, or `plain' if using LaTeX.
+Examples of these referencing styles are
+available on the library website \url{http://library.uws.edu.au/citing.php}
+
+
+
+
+
+
+\end{document}
