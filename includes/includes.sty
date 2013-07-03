@@ -140,22 +140,19 @@
 \usepackage{xunicode}
 %\usepackage{xltxtra}
 
-% using linux
-%%\setmathrm{MgOpen Cosmetica}
-\setmainfont{MgOpen Canonica}
-\setsansfont{MgOpen Cosmetica}
-\setmonofont{MgOpen Modata}
+\usepackage{ifplatform}
 
-% using OS X
-%\setmathrm{MgOpen Cosmetica}
-%\setmainfont[Mapping=tex-text]{Hoefler Text}
-%\setsansfont[Mapping=tex-text]{Optima}
-%\setmonofont{Courier New}
-
-%\setmainfont[Mapping=tex-text]{Arial}
-%\setsansfont[Mapping=tex-text]{Arial Black}
-%\setmonofont[Mapping=tex-text]{Courier}
-
+%\usepackage{includes/includes.osx}
+\ifwindows
+\fi
+\iflinux
+\usepackage{includes/includes.linux.sty}
+\fi
+\ifmacosx
+\usepackage{includes/includes.osx}
+\fi
+\ifcygwin
+\fi
 
 \DeclareMathOperator{\var}{Var}
 
@@ -182,3 +179,4 @@
 \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
 \newcommand{\NormalTok}[1]{{#1}}
 
+\newcommand{\norm}[1]{\|#1\|}

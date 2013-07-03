@@ -86,12 +86,12 @@ where the order depends on the words in the document collection.
 To compare document vectors, we examine the angle between the vectors,
 which is inversely proportional to the cosine of the angle:
 $$
-	s_{i,j} = \cos{(\theta_{i,j})} = \frac{\vec{d}_i \cdot \vec{d}_j}{\|\vec{d}_i\|\|\vec{d}_j\|}
+	s_{i,j} = \cos{(\theta_{i,j})} = \frac{\vec{d}_i \cdot \vec{d}_j}{\norm{\vec{d}_i}\norm{\vec{d}_j}}
 $$
 where:
 $$
 	\vec{d}_i \cdot \vec{d}_j = {\sum_{k = 1}^M d_{i,k}d_{j,k}}
-	\text{~and~} \|\vec{d}_i\| = \sqrt{{\sum_{k = 1}^M d_{i,k}^2}}
+	\text{~and~} \norm{\vec{d}_i} = \sqrt{{\sum_{k = 1}^M d_{i,k}^2}}
 $$
 Therefore, $s_{i,j} = 1$ if $\vec{d}_i = \vec{d}_j$, otherwise $s_{i,j} < 1$.
 
@@ -125,9 +125,9 @@ Construct the frequency table:
 \toprule
 & Social & Web & analytics & is & the & best & greatest & unit \\
 \cmidrule(r){1-1}\cmidrule(r){2-9}
-\vec{d}_1 &      1 &   1 &         1 &  1 &   1 &    1 &        0 &    0 \\
-\vec{d}_2 &      1 &   1 &         1 &  1 &   1 &    0 &        1 &    1 \\
-\vec{d}_3 &      1 &   2 &         1 &  1 &   1 &    1 &        0 &    1 \\
+$\vec{d}_1$ &      1 &   1 &         1 &  1 &   1 &    1 &        0 &    0 \\
+$\vec{d}_2$ &      1 &   1 &         1 &  1 &   1 &    0 &        1 &    1 \\
+$\vec{d}_3$ &      1 &   2 &         1 &  1 &   1 &    1 &        0 &    1 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -141,11 +141,11 @@ If we have the query *best Web unit*, we create the query vector $\vec{q}$ in
 the eight dimensional vector space:
 
 \begin{center}
-\begin{tabular}{cccccccc}
+\begin{tabular}{lcccccccc}
 \toprule
 & Social & Web & analytics & is & the & best & greatest & unit \\
 \midrule
-\vec{q}  &   0 &   1 &         0 &  0 &   0 &    1 &        0 &    1 \\
+$\vec{q}$  &   0 &   1 &         0 &  0 &   0 &    1 &        0 &    1 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -157,13 +157,12 @@ then compute the similarity of the query to all documents:
 \begin{center}
 \begin{tabular}{cccc}
 \toprule
-& \vec{d}\cdot\vec{q} & \|\vec{d}\| & S(\vec{d},\vec{q}) \\
-\vec{d}_1 & 2 & \sqrt{6}  & 2/(\sqrt{6}\sqrt{3}) = 0.47 \\
-\vec{d}_2 & 2 & \sqrt{7}  & 2/(\sqrt{7}\sqrt{3}) = 0.44 \\
-\vec{d}_3 & 4 & \sqrt{10} & 4/(\sqrt{10}\sqrt{3}) = 0.73 \\
-\vec{q}   &   & \sqrt{3}  & \\
+& $\vec{d}\cdot\vec{q}$ & $\norm{\vec{d}}$ & $S(\vec{d},\vec{q})$ \\
 \midrule
-
+$\vec{d}_1$ & 2 & $\sqrt{6}$  & $2/(\sqrt{6}\sqrt{3}) = 0.47$ \\
+$\vec{d}_2$ & 2 & $\sqrt{7}$  & $2/(\sqrt{7}\sqrt{3}) = 0.44$ \\
+$\vec{d}_3$ & 4 & $\sqrt{10}$ & $4/(\sqrt{10}\sqrt{3}) = 0.73$ \\
+$\vec{q}$   &   & $\sqrt{3}$  & \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -174,8 +173,6 @@ then compute the similarity of the query to all documents:
 Build and index of the documents
 
 1. The dog is on the hill
-2. 
-3.
 
 and compute the similarity of the documents to the query:
 
