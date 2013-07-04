@@ -23,7 +23,16 @@
 
 \setbeamertemplate{navigation symbols}{} 
 
+% add logo to frame titles
+\usepackage{textpos}
+
 \pgfdeclareimage[height=0.8cm]{logo}{information/uws-logo-white.pdf}
+
+\addtobeamertemplate{frametitle}{}{%
+\begin{textblock*}{0.13\textwidth}(.91\textwidth,-0.88cm)
+	\pgfuseimage{logo}
+\end{textblock*}}
+
 
 %\logo{\pgfuseimage{logo}}
 

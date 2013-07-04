@@ -1,5 +1,5 @@
 TEX = xelatex --shell-escape
-CODE = 300700
+CODE = 300958
 TEMPLATE_DIR = templates
 INCLUDE_DIR = includes
 LECTURE_DIR = lectures
@@ -87,6 +87,10 @@ SCRIPTS = $(addprefix ${LECTURE_DIR}/, week1/blood_donors.r \
 	week11/fitting-lines.r)
 
 
+# Dependancies for lecture tex files (needed if written in markdown or sweave)
+${TEMPLATE_DIR}/week05.tex:	${LECTURE_DIR}/text_analysis/text_index.tex
+
+# Rules for construction
 %.md:	%.Rmd
 	Rscript -e "library(knitr); knit('$<', output='$*.md')"
 
