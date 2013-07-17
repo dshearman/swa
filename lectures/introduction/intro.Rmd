@@ -76,8 +76,8 @@ upload information that others will read.
 As time has passed, higher level applications have been created for social
 activity on the Web:
 
-2. Forums: vUWS Discussion Board
-3. Bookmarking: delicious
+2. Forums: vUWS Discussion Board, Google Groups
+3. Bookmarking: Delicious, Pinterest, Reddit, Slashdot
 3. Video: YouTube, Vimeo
 4. Images: Flickr, Instagram
 7. Music: Last.fm
