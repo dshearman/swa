@@ -1,0 +1,109 @@
+% Introduction to Social Networks
+% Laurence A. F. Park and Glenn Stone
+% March 22, 2005
+
+
+# Social Networks
+
+## What are Social Networks?
+
+Social Networks consist of a set of items and connections showing how each of
+the items interact. We can have a social network of:
+
+- a set of students, where a pair of students is connected if they attend the same class,
+- a set of cities, where a pair of cities is connected if share a highway,
+- a set of programming languages, where a pair is connected if they share a paradigm,
+- a set of people, where a pair is connected if they are related.
+
+
+Social Network Analysis is the analysis of these networks to obtain
+information such as which item is the most influential, and if new items
+are introduced how does the network change.
+
+## Small World: Six degrees of separation
+
+The theory that two randomly selected people can find a chain of friends
+that is at most six in length.
+
+To examine the small world theory an experiment was devised using the
+U.S. Postal Service.
+
+- [https://en.wikipedia.org/wiki/Small_world_experiment]([https://en.wikipedia.org/wiki/Small_world_experiment#The_experiment)
+
+
+## Paul Erd\H{o}s
+
+The small world phenomenon extends to many communities. One of the earliest
+examined was the academic research community.
+
+The centre of the research community is thought to be Paul Erd\H{o}s, who
+published about 1500 articles with 509 co-authors.
+
+Researchers can measure their centrality with respect to this research
+social network by computing their [Erd\H{o}s
+number](http://www.ams.org/mathscinet/collaborationDistance.html).
+
+
+## Kevin Bacon
+
+Databases such as the [IMDB](http://www.imdb.com/) have allowed us to
+examine how connected the set of actors are through the movies they appear
+in.
+
+It was thought that the most connected actor was [Kevin
+Bacon](https://en.wikipedia.org/wiki/Kevin_Bacon)
+
+The movie distance between any two actors can be computed at the [Oracle of
+Bacon](http://oracleofbacon.org/).
+
+
+# The Social Web
+
+## The World Wide Web
+
+The World Wide Web is a collection of Web pages and databases that are
+served from computers spread across the Internet.
+
+The Web was conceived by Tim Berners-Lee as a method a sharing experimental
+particle physics results between labs across the world. It was quickly seen
+that this platform could be used to serve all kinds of information.
+
+The Web is intrinsically social in that, for it to grow, it requires us to
+upload information that others will read.
+
+## Being Social on the Web
+
+As time has passed, higher level applications have been created for social
+activity on the Web:
+
+2. Forums: vUWS Discussion Board
+3. Bookmarking: delicious
+3. Video: YouTube, Vimeo
+4. Images: Flickr, Instagram
+7. Music: Last.fm
+8. Bloging: LiveJournal, WordPress
+9. Academic: Mendeley
+9. Business: LinkedIn
+5. Location: Foursquare
+6. MySpace, Facebook, Google+
+5. Microblog: Twitter, Vine, Identi.ca, Tumblr
+9. Information seeking: StackExchange
+
+
+## Twitter
+
+
+## Facebook
+
+
+
+
+## Summary
+
+- Social Networks describe interaction amongst a set of elements
+
+
+## Next Week
+
+Introduction to R programming and data structures.
+
