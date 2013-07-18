@@ -1,0 +1,18 @@
+% Introduction to Social Networks
+% Laurence A. F. Park and Glenn Stone
+% March 22, 2005
+
+# Accessing Information from the Social Web
+
+## How do I get information from the Web to my program?
+
+When we access 
+
+
+
+## Scraping Web pages
+
+
+## Accessing an API
+
+An application programming interface (API)
