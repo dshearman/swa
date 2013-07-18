@@ -2,6 +2,39 @@
 % Laurence A. F. Park and Glenn Stone
 % March 22, 2005
 
+# Introduction to the Unit
+
+## Examine the Learning Guide
+
+The learning guide contains a description of:
+
+- the content of the unit
+- what is expected from each student
+- delivery of the unit
+- the assessment
+
+The learning guide is found in vUWS > 300958 > Unit Information
+
+
+## Teaching Team
+
+Unit Coordinator:
+
+- Laurence Park <lapark@scem.uws.edu.au>
+
+Lecturers:
+
+- Laurence Park <lapark@scem.uws.edu.au>
+- Glenn Stone <g.stone@uws.edu.au>
+
+Tutors:
+
+- Attila Egri-Nagy <a.egri-nagy@uws.edu.au>
+- Don Shearman <d.shearman@uws.edu.au>
+- Kingsley Agho
+- Nima Ramezani 
+- Shatha Aziz
+
 
 # Social Networks
 
@@ -31,30 +64,38 @@ U.S. Postal Service.
 - [https://en.wikipedia.org/wiki/Small_world_experiment]([https://en.wikipedia.org/wiki/Small_world_experiment#The_experiment)
 
 
-## Paul Erd\H{o}s
+## Paul Erdös
+
 
 The small world phenomenon extends to many communities. One of the earliest
 examined was the academic research community.
 
-The centre of the research community is thought to be Paul Erd\H{o}s, who
+- The centre of the research community is thought to be Paul Erdös, who
 published about 1500 articles with 509 co-authors.
+- Researchers can measure their centrality with respect to this research
+social network by computing their [Erdös number](http://www.ams.org/mathscinet/collaborationDistance.html).
 
-Researchers can measure their centrality with respect to this research
-social network by computing their [Erd\H{o}s
-number](http://www.ams.org/mathscinet/collaborationDistance.html).
+### Erdös Number
 
+If you have an Internet connected device, use the above link to examine the Erdös Number of a few of you lecturers.
 
 ## Kevin Bacon
 
 Databases such as the [IMDB](http://www.imdb.com/) have allowed us to
 examine how connected the set of actors are through the movies they appear
-in.
+in together.
 
 It was thought that the most connected actor was [Kevin
 Bacon](https://en.wikipedia.org/wiki/Kevin_Bacon)
 
 The movie distance between any two actors can be computed at the [Oracle of
 Bacon](http://oracleofbacon.org/).
+
+### Bacon Number
+
+If you have an Internet connected device, use the above link to
+examine the Bacon Number of a few actors. Can you find any actors with
+a Bacon number of 5 or more.
 
 
 # The Social Web
@@ -92,15 +133,98 @@ activity on the Web:
 
 ## Twitter
 
+[Twitter](http://twitter.com/) is a Web based social networking
+service that allows us to post messages of at most 140 characters, called tweets.
+
+- Twitter is social in that we are able to follow the posts of others
+and they are able to follow us.
+- The relationships at directional, meaning that $A$ can follow $B$
+without $B$ having to follow $A$.
+- Everyone's tweets are public and searchable.
+
+Twitter recently released that over 340 million tweets are posted per
+day, with over 1.6 billion search queries per day.
 
 ## Facebook
 
+[Facebook](http://facebook.com/) is a general social networking
+service that allows users to exchange information.
+
+- Facebook is social in that it allows us to be selective of who is
+  able to view the information we post.
+- The relationships are non-directional, meaning if $A$ is friends
+  with $B$ then $B$ is also friends with $A$.
+- Specific information in Facebook can be restricted to selected
+  friends and therefore not available to the public.
+
+Facebook has over 1 billion users.
+
+## Contributing to the Social Web
+
+
+For Web based social networks to exist, we must freely contribute and
+view information from them. 
+
+The recent introduction of the mobile devices (such as phones and
+tablet computers) that have access to the Web has added to the
+popularity of Web based social networks. They allow us to conveniently
+upload and view information as it happens.
+
+### Our presence on the Social Web
+
+Turn to the people around you and tell them 
+
+- which Social Web services you have contributed information to.
+- how often you add and read information from them
+- methods which you add and view information from them
+- why you add and view information from them
+
+# Analysis of the Social Web
+
+## Information in the Social Web
+
+Many social networking services on the Web have become a place for us to record our lives.
+
+- We post images of events
+- We share interesting sites with others
+- We write reviews of products
+- We broadcast what we have has for breakfast
+
+The social Web has become a place where we feel comfortable releasing
+our personal information.
+
+## Using personal information
+
+Businesses have an interest in the Social Web:
+
+- The top priority for all businesses is to make a profit, usually by
+offering a product or service.
+- Businesses must invest in the development of a product or service
+before it can be offered to the public.
+- If the public does not buy the product or service, the business had failed.
+
+Analysis of the Social Web allows us to predict the behaviour of the
+public under certain situations.
+
+## Getting opinions
+
+Governments have an interest in the Social Web:
+
+- The role of the government is to develop and implement policies and draft laws.
+- The polices and laws affect the public.
+- The public decide who is voted into government.
+
+Analysis of the Social Web allows us to gauge the opinion of the
+public at given times.
 
 
 
 ## Summary
 
-- Social Networks describe interaction amongst a set of elements
+- Social Networks describe interaction amongst a set of elements.
+- Social Networks appear everywhere.
+- The Web has provided us a basis for social interaction.
+- Analysing social networks on the Web provides us an insight of the state of the community.
 
 
 ## Next Week
