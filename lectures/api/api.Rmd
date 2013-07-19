@@ -9,10 +9,103 @@
 When we access 
 
 
-
 ## Scraping Web pages
 
 
+If you can view information in a Web page, then you are able to write
+a program to scrape the information into your database.
+
+Scraping data requires knowledge of the HTML structure of the page.
+
+\begin{block}{Example Web page scraping process}
+
+1. Download the HTML from the desired URL
+2. Parse the HTML into some data structure
+3. Extract the portions at the desired positions (e.g. the first paragraph of the second div block).
+
+\end{block}
+
+The Python library [BeautifulSoup](http://www.crummy.com/software/BeautifulSoup/) is an example of
+software that assists in Web page scraping.
+
+
+## Problems with Web page scraping
+
+This program scrapes the date from the Bureau of Meteorology Web site:
+~~~~ {#scrape_temp .python .numberLines startFrom="100"}
+import urllib2
+from BeautifulSoup import BeautifulSoup
+
+bom_url = "http://www.bom.gov.au/nsw/forecasts/sydney.shtml"
+
+# download the HTML
+html = urllib2.urlopen(bom_url).read()
+
+# parse HTML
+soup = BeautifulSoup(html)
+
+# find the temperature in the HTML
+max_temperature = soup.html.body.findAll('em',{"class" : "max"})[0].string
+
+# print the result
+print "The maximum temperature for today is " + max_temperature + " degrees."
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The code is dependent on the formatting of the Web page and so will
+break if the formatting changes.
+
+
+## Parts of a URL
+
+domain
+path
+parameters
+
 ## Accessing an API
 
-An application programming interface (API)
+
+Web site provides
+
+An **Application Programming Interface** (API) provides us access to the
+information in a structured format, allowing us to use the information
+in other applications.
+
+Web sites that provide an API, do so using a specific URL.
+
+\begin{block}{SCEM Seminars site}
+
+- The human readable form: [http://seminars.scem.uws.edu.au/detail.php?id=20]
+- The computer readable form using the API: [http://seminars.scem.uws.edu.au/api.php?id=20]
+
+\end{block}
+
+For an API to be effective, it must provide a consistent URL and data
+format that allows backward compatibility.
+
+
+## API data formats
+
+An API should present data in a standard format to allow us to use
+existing tools for parsing.
+
+The main formats used are:
+
+- XML
+- YAML
+- JSON
+
+Each of these formats allow us to represent complex data structures.
+
+## XML
+
+The eXtensible Markup Language (XML) is a 
+
+
+### Use of XML
+
+The Microsoft format .docx is an XML file compressed using Zip.
+
+
+
+
+
