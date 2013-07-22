@@ -98,12 +98,160 @@ Each of these formats allow us to represent complex data structures.
 
 ## XML
 
-The eXtensible Markup Language (XML) is a 
+The eXtensible Markup Language (XML) is a flexible language for representing information.
+It allows us to store data in a human readable form making information more accessible.
+Many organisations have adopted XML for use in their file formats (the
+Microsoft format .docx is an XML file compressed using Zip).
+
+### Tags
+
+- Start tag: <custard>
+- End tag: </custard>
+
+### Elements
+
+An XML element is any portion of the data encased in a start and end
+tag: <password>This is my password</password>. Note that elements can
+be nested to create a hierarchy of elements by placing elements within
+the tags of another element.
+
+### Attributes
+
+XML attributes allow us to add information to a tag:
+<password computer="barney.scem.uws.edu.au">Password for barney</password>
 
 
-### Use of XML
 
-The Microsoft format .docx is an XML file compressed using Zip.
+
+## Example XML
+
+~~~~ {#example_xml .xml .numberLines startFrom="100"}
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<characters>
+    <character id="Frodo">
+        <name>Frodo Baggins</name>
+        <race>Hobbit</race>
+    </character>
+    <character id="Gimli">
+        <name>Gimli</name>
+        <race>Dwarf</race>
+    </character>
+    <character id="Aragorn">
+        <name>Aragorn, son of Arathorn</name>
+        <race>Human</race>
+    </character>
+</characters>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Problem
+
+List all of the tags, elements and attributes of the above XML.
+
+
+## YAML
+
+YAML (YAML Ain't Markup Language) was designed as a data
+representation language that can store data types from most high level
+programming languages, and formatted so that it is easily read by
+humans.
+
+### Tags
+
+A YAML tag is a sequence of characters appearing before the associated
+data. A tag and its associated data are separated by a colon ':'.
+
+### Elements
+
+A YAML element consists of a tag and associated data, all indented at
+the same level, for example "password: this is my password".  Note
+that elements can be nested to create a hierarchy of elements by
+placing elements within the data portion of another element.
+
+### Lists
+
+A list of elements begin with a dash '-' and all elements are indented
+at the same level.
+
+## Example YAML
+
+~~~~ {#example_yaml .yaml .numberLines startFrom="100"}
+%YAML 1.1 # Characters from Middle Earth
+---
+characters:
+    - character:
+        id: Frodo
+        name: Frodo Baggins
+        race: Hobbit
+    - character:
+        id: Gimli
+        name: Gimli
+        race: Dwarf
+    - character:
+        id: Aragorn
+        name: Aragorn, son of Arathorn
+        race: Human
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### Problem
+
+List all of the tags, elements and attributes of the above XML.
+
+
+## JSON
+
+JavaScript Object Notation (JSON) is the format in which data
+structures are printed from javascript.  Since many Web applications
+are written in javascript, JSON has become a standard for sharing
+information between Web applications.
+
+### Tags
+
+A JSON tag is similar to a YAML tag, but it is encased in double
+quotes. E.g. "password":"Here is my password"
+
+### Elements
+
+A YAML element consists of a tag and associated data, all indented at
+the same level, for example "password: this is my password".  Note
+that elements can be nested to create a hierarchy of elements by
+placing elements within the data portion of another element.
+
+### Lists
+
+A list of elements begin with a dash '-' and all elements are indented
+at the same level.
+
+
+
+## Example JSON
+
+~~~~ {#example_json .json .numberLines startFrom="100"}
+{
+    "characters":
+    [
+        {
+            "id":"Frodo",
+            "name":"Frodo Baggins",
+            "race":"Hobbit"
+        }, 
+        {
+            "id":"Gimli",
+            "name":"Gimli",
+            "race":"Dwarf"
+        }, 
+        {
+            "id":"Aragorn",
+            "name":"Aragorn, son of Arathorn",
+            "race":"Human"
+        }
+    ]
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### Problem
+
+List all of the tags, elements and attributes of the above XML.
+
+
 
 
 
