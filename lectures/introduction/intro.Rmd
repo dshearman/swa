@@ -97,6 +97,13 @@ If you have an Internet connected device, use the above link to
 examine the Bacon Number of a few actors. Can you find any actors with
 a Bacon number of 5 or more.
 
+## NSA Surveillance
+
+A recent news article showed that the NSA has put half of the world on
+surveillance for suspected terrorist activities ([The
+Guardian](http://m.guardian.co.uk/world/2013/jul/17/nsa-surveillance-house-hearing))
+
+
 
 # The Social Web
 
@@ -217,6 +224,12 @@ Governments have an interest in the Social Web:
 Analysis of the Social Web allows us to gauge the opinion of the
 public at given times.
 
+
+# Data Analysis with R
+
+## Introducing R
+
+This semester, we will be using R to perform our data analysis.
 
 
 ## Summary
