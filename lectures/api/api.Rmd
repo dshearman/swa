@@ -31,25 +31,22 @@ software that assists in Web page scraping.
 
 ## Problems with Web page scraping
 
-This program scrapes the date from the Bureau of Meteorology Web site:
-~~~~ {#scrape_temp .python .numberLines startFrom="100"}
+This Python program scrapes the date from the Bureau of Meteorology Web site:
+
+```` {#scrape_temp .python .numberLines startFrom="100"}
 import urllib2
 from BeautifulSoup import BeautifulSoup
-
 bom_url = "http://www.bom.gov.au/nsw/forecasts/sydney.shtml"
 
 # download the HTML
 html = urllib2.urlopen(bom_url).read()
-
 # parse HTML
 soup = BeautifulSoup(html)
-
 # find the temperature in the HTML
 max_temperature = soup.html.body.findAll('em',{"class" : "max"})[0].string
-
 # print the result
 print "The maximum temperature for today is " + max_temperature + " degrees."
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`````````````````````````````````````````````````
 
 The code is dependent on the formatting of the Web page and so will
 break if the formatting changes.
@@ -66,7 +63,7 @@ parameters
 
 Web site provides
 
-An **Application Programming Interface** (API) provides us access to the
+An *Application Programming Interface* (API) provides us access to the
 information in a structured format, allowing us to use the information
 in other applications.
 
