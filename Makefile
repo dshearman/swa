@@ -89,6 +89,7 @@ SCRIPTS = $(addprefix ${LECTURE_DIR}/, week1/blood_donors.r \
 
 # Dependancies for lecture tex files (needed if written in markdown or sweave)
 ${TEMPLATE_DIR}/week01.tex:	${LECTURE_DIR}/introduction/intro.tex
+${TEMPLATE_DIR}/week02.tex:	${LECTURE_DIR}/api/api.tex
 ${TEMPLATE_DIR}/week05.tex:	${LECTURE_DIR}/text_analysis/text_index.tex
 
 # Rules for construction
