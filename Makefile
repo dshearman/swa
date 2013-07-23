@@ -99,6 +99,9 @@ ${TEMPLATE_DIR}/week05.tex:	${LECTURE_DIR}/text_analysis/text_index.tex
 %.tex:	%.md
 	pandoc -f markdown -t beamer --slide-level=2 $< -o $*.tex
 
+%.html: %.md
+	pandoc --slide-level=2 -s -c buttondown.css -f markdown -t html $< -o $*.html
+
 %.notes:	${INCLUDE_DIR}/article.tex ${TEMPLATE_DIR}/%.tex
 	${TEX}  -jobname "${CODE}.$*.notes" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/article.tex}\input{${TEMPLATE_DIR}/$*.tex}"
 
