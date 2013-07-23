@@ -154,11 +154,24 @@
 \DeclareMathOperator{\var}{Var}
 
 
-
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifxetex
+  \usepackage{fontspec,xltxtra,xunicode}
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+\else
+  \ifluatex
+    \usepackage{fontspec}
+    \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \else
+    \usepackage[utf8]{inputenc}
+  \fi
+\fi
 \usepackage{color}
 \usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
 \DefineShortVerb[commandchars=\\\{\}]{\|}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},fontsize=\small}
 % Add ',fontsize=\small' for more characters per line
 \newenvironment{Shaded}{}{}
 \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
@@ -177,3 +190,7 @@
 \newcommand{\NormalTok}[1]{{#1}}
 
 \newcommand{\norm}[1]{\|#1\|}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines

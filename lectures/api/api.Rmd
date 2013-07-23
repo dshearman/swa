@@ -2,11 +2,24 @@
 % Laurence A. F. Park and Glenn Stone
 % March 22, 2005
 
+
+# Algorithms in R
+
+
+
+
 # Accessing Information from the Social Web
 
-## How do I get information from the Web to my program?
+## How can my program access the Web?
 
-When we access 
+Web pages are designed for reading and easy navigation, and so it is
+difficult for a program to extract information from them.
+
+Most large sites have a database back end. Our programs would prefer
+to talk to the database.
+
+In this section, we will investigate how to automatically gather
+information from Web sites.
 
 
 ## Scraping Web pages
@@ -18,11 +31,11 @@ a program to scrape the information into your database.
 Scraping data requires knowledge of the HTML structure of the page.
 
 \begin{block}{Example Web page scraping process}
-
-1. Download the HTML from the desired URL
-2. Parse the HTML into some data structure
-3. Extract the portions at the desired positions (e.g. the first paragraph of the second div block).
-
+\begin{enumerate}
+\item Download the HTML from the desired URL
+\item Parse the HTML into some data structure
+\item Extract the portions at the desired positions (e.g. the first paragraph of the second div block).
+\end{enumerate}
 \end{block}
 
 The Python library [BeautifulSoup](http://www.crummy.com/software/BeautifulSoup/) is an example of
@@ -54,14 +67,27 @@ break if the formatting changes.
 
 ## Parts of a URL
 
-domain
-path
-parameters
+
+```
+scheme://domain:port/path?query_string#fragment_id
+```
+
+- scheme: http, https, ftp, ftps, ssh, webdav, ...
+- domain: either a domain name or IP address
+- port: port number, defaults to 80 if not provided
+- path: path to file on Web server
+- query string: arguments for dynamic files
+- fragment_id: tag identifying section of the file
+
+### Example
+
+Identify the parts of the URL:
+```
+http://www.google.com/search?client=safari&q=hello
+```
 
 ## Accessing an API
 
-
-Web site provides
 
 An *Application Programming Interface* (API) provides us access to the
 information in a structured format, allowing us to use the information
@@ -69,12 +95,10 @@ in other applications.
 
 Web sites that provide an API, do so using a specific URL.
 
-\begin{block}{SCEM Seminars site}
+The SCEM seminar site has a two access points:
 
-- The human readable form: [http://seminars.scem.uws.edu.au/detail.php?id=20]
-- The computer readable form using the API: [http://seminars.scem.uws.edu.au/api.php?id=20]
-
-\end{block}
+- The human readable form: [http://seminars.scem.uws.edu.au/detail.php?id=20](http://seminars.scem.uws.edu.au/detail.php?id=20)
+- The computer readable form using the API: [http://seminars.scem.uws.edu.au/api.php?id=20](http://seminars.scem.uws.edu.au/api.php?id=20)
 
 For an API to be effective, it must provide a consistent URL and data
 format that allows backward compatibility.
@@ -100,22 +124,24 @@ It allows us to store data in a human readable form making information more acce
 Many organisations have adopted XML for use in their file formats (the
 Microsoft format .docx is an XML file compressed using Zip).
 
+## XML structure
+ 
 ### Tags
 
-- Start tag: <custard>
-- End tag: </custard>
+- Start tag: \<custard\>
+- End tag: \</custard\>
 
 ### Elements
 
 An XML element is any portion of the data encased in a start and end
-tag: <password>This is my password</password>. Note that elements can
+tag: \<password\>This is my password\</password\>. Note that elements can
 be nested to create a hierarchy of elements by placing elements within
 the tags of another element.
 
 ### Attributes
 
 XML attributes allow us to add information to a tag:
-<password computer="barney.scem.uws.edu.au">Password for barney</password>
+\<password computer="barney.scem.uws.edu.au"\>Password for barney\</password\>
 
 
 
@@ -129,10 +155,6 @@ XML attributes allow us to add information to a tag:
     <character id="Frodo">
         <name>Frodo Baggins</name>
         <race>Hobbit</race>
-    </character>
-    <character id="Gimli">
-        <name>Gimli</name>
-        <race>Dwarf</race>
     </character>
     <character id="Aragorn">
         <name>Aragorn, son of Arathorn</name>
@@ -152,6 +174,8 @@ YAML (YAML Ain't Markup Language) was designed as a data
 representation language that can store data types from most high level
 programming languages, and formatted so that it is easily read by
 humans.
+
+## YAML structure
 
 ### Tags
 
@@ -181,17 +205,13 @@ characters:
         name: Frodo Baggins
         race: Hobbit
     - character:
-        id: Gimli
-        name: Gimli
-        race: Dwarf
-    - character:
         id: Aragorn
         name: Aragorn, son of Arathorn
         race: Human
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ### Problem
 
-List all of the tags, elements and attributes of the above XML.
+Identify all of the tags, elements and lists of the above YAML.
 
 
 ## JSON
@@ -201,22 +221,23 @@ structures are printed from javascript.  Since many Web applications
 are written in javascript, JSON has become a standard for sharing
 information between Web applications.
 
+## JSON structure
+
 ### Tags
 
 A JSON tag is similar to a YAML tag, but it is encased in double
-quotes. E.g. "password":"Here is my password"
+quotes. E.g. "password".
 
 ### Elements
 
-A YAML element consists of a tag and associated data, all indented at
-the same level, for example "password: this is my password".  Note
-that elements can be nested to create a hierarchy of elements by
-placing elements within the data portion of another element.
+JSON elements, like YAML elements, consist of a tag and associated
+data, but indentation is not needed.  Note that elements can be nested
+to create a hierarchy of elements by placing elements within the data
+portion of another element.
 
 ### Lists
 
-A list of elements begin with a dash '-' and all elements are indented
-at the same level.
+A list of elements is encased in square brackets, e.g. ['apple', 'banana', 'carrot' ]
 
 
 
@@ -232,11 +253,6 @@ at the same level.
             "race":"Hobbit"
         }, 
         {
-            "id":"Gimli",
-            "name":"Gimli",
-            "race":"Dwarf"
-        }, 
-        {
             "id":"Aragorn",
             "name":"Aragorn, son of Arathorn",
             "race":"Human"
@@ -246,11 +262,94 @@ at the same level.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ### Problem
 
-List all of the tags, elements and attributes of the above XML.
+Identify all of the tags, elements and lists of the above JSON.
 
 
+## Authentication
+
+Web sites offering an API usually require authentication to keep all
+users accountable. Without authentication, a user could constantly
+download information from a site, draining the sites resources and
+limiting its bandwidth, without detection.
+
+If all users are authenticated, then a site can limit the access time
+or downloads, ensuring all users have a consistent quality of service.
+
+Traditional authentication is to load the login page and provide your
+username and password.
+
+### Insecurity
+
+APIs are for access by programs that perform a specific task
+(e.g. list today's tweets). A program should not have full access to
+your account.
+
+## OAuth
+
+OAuth is a standard for authorisation, that provides temporary
+key for restricted access to a service.
+
+To obtain the OAuth key, we must manually access the site and generate
+a key with given access priviliages (read only, read and write, or
+write only).  This key can then be provided to a program to
+automatically access our account.
+
+### ROAuth
+
+We will be using the R library ROAuth to authenticate users through R.
 
 
+## Facebook Graph API
 
+Facebook offers an interface to test out queries before inserting them in a program:
+[https://developers.facebook.com/tools/explorer](https://developers.facebook.com/tools/explorer)
 
+To obtain an access token (for OAuth), you must login to a Facebook
+account.
 
+For more information on the Graph API:
+[https://developers.facebook.com/docs/reference/api/](https://developers.facebook.com/docs/reference/api/)
+
+### Example queries
+
+``` {#facebook_api .sql}
+https://graph.facebook.com/me?access_token=...
+https://graph.facebook.com/me/friends?access_token=...
+https://graph.facebook.com/me/mutualfriends/you?access_token=...
+```
+Note: "me" can be replaced with an ID, "you" must be replaced with an ID.
+
+## Twitter API
+
+Unfortunately, there is no Twitter explorer page. To get information
+from Twitter, we must send a HTTP request containing our ID, the
+access key and the query. The results are returned in JSON format.
+
+There are many programming languages the provide access to the Twitter
+API. We will use the R interface throughout this unit.
+
+More information on the Twitter API is here:
+[https://dev.twitter.com/docs/api/1.1](https://dev.twitter.com/docs/api/1.1)
+
+### Accessing Information
+
+Note that we have access to most of the information from Twitter, but
+we usually only have access to our information and our friends
+information from Facebook.
+
+### TwitteR
+
+We will be using the R library twitteR to access the Twitter API through R.
+
+## Summary
+
+- We can use R to write programs that interface with the Web.
+- Data can be scraped from Web pages or accessed using their API.
+- Web APIs provide data in either XML, YAML or JSON format.
+- To ensure a specific quality of service, Web sites require
+  authentication when using their API.
+- Facebook and Twitter provide powerful APIs.
+
+## Next Week
+
+Introduction to Graphs.
