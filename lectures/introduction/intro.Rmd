@@ -2,9 +2,23 @@
 % Laurence A. F. Park and Glenn Stone
 % March 22, 2005
 
+
 # Introduction to the Unit
 
-## Examine the Learning Guide
+## Motivation
+
+People are uploading data (text, images, videos, links) to the Web at
+every moment of the day. Some of you may be doing it right now!
+
+\vspace{1em}
+With proper analysis, we can use this data to examine the state of the
+world and predict the future directions of the world's communities.
+
+\vspace{1em}
+In this unit, we will learn how to perform this analysis.
+
+
+## Examining the Learning Guide
 
 The learning guide contains a description of:
 
@@ -31,7 +45,7 @@ Tutors:
 
 - Attila Egri-Nagy <a.egri-nagy@uws.edu.au>
 - Don Shearman <d.shearman@uws.edu.au>
-- Kingsley Agho
+- Kingsley Agho <k.agho@uws.edu.au>
 - Nima Ramezani 
 - Shatha Aziz
 
@@ -58,6 +72,7 @@ are introduced how does the network change.
 The theory that two randomly selected people can find a chain of friends
 that is at most six in length.
 
+\vspace{1em}
 To examine the small world theory an experiment was devised using the
 U.S. Postal Service.
 
@@ -85,9 +100,11 @@ Databases such as the [IMDB](http://www.imdb.com/) have allowed us to
 examine how connected the set of actors are through the movies they appear
 in together.
 
+\vspace{1em}
 It was thought that the most connected actor was [Kevin
-Bacon](https://en.wikipedia.org/wiki/Kevin_Bacon)
+Bacon](https://en.wikipedia.org/wiki/Kevin_Bacon).
 
+\vspace{1em}
 The movie distance between any two actors can be computed at the [Oracle of
 Bacon](http://oracleofbacon.org/).
 
@@ -101,7 +118,7 @@ a Bacon number of 5 or more.
 
 A recent news article showed that the NSA has put half of the world on
 surveillance for suspected terrorist activities ([The
-Guardian](http://m.guardian.co.uk/world/2013/jul/17/nsa-surveillance-house-hearing))
+Guardian](http://m.guardian.co.uk/world/2013/jul/17/nsa-surveillance-house-hearing)).
 
 
 
@@ -112,10 +129,12 @@ Guardian](http://m.guardian.co.uk/world/2013/jul/17/nsa-surveillance-house-heari
 The World Wide Web is a collection of Web pages and databases that are
 served from computers spread across the Internet.
 
+\vspace{1em}
 The Web was conceived by Tim Berners-Lee as a method a sharing experimental
 particle physics results between labs across the world. It was quickly seen
 that this platform could be used to serve all kinds of information.
 
+\vspace{1em}
 The Web is intrinsically social in that, for it to grow, it requires us to
 upload information that others will read.
 
@@ -172,6 +191,7 @@ Facebook has over 1 billion users.
 For Web based social networks to exist, we must freely contribute and
 view information from them. 
 
+\vspace{1em}
 The recent introduction of the mobile devices (such as phones and
 tablet computers) that have access to the Web has added to the
 popularity of Web based social networks. They allow us to conveniently
@@ -230,6 +250,18 @@ public at given times.
 ## Introducing R
 
 This semester, we will be using R to perform our data analysis.
+
+``` {#rdemo .r}
+x <- c(1,2,3)
+print(x)
+`````````````
+
+```{r dev='pdf'}
+#plot(1:10)
+hist(rnorm(1000))
+print(c(1,2,3))
+```
+
 
 
 ## Summary
