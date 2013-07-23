@@ -1,0 +1,65 @@
+# Twitter and Facebook APIs - 300958 Social Web Analysis - Week 3
+
+`r opts_chunk$set(prompt=TRUE, comment=NA)`
+`r knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
+
+## R Basics
+
+All of the lab sessions for 300958 Social Web Analysis will use R and
+RStudio. If these two applications are not installed on the computer
+you are using, download them from:
+
+- R: [http://cran.csiro.au/](http://cran.csiro.au/)
+- RStudio: [http://www.rstudio.com/ide/download/desktop](http://www.rstudio.com/ide/download/desktop)
+
+Install R, then Rstudio.
+
+Once they are installed, open RStudio and say hello.
+```{r}
+print("Hello world!")
+```
+
+## Accessing Twitter
+
+To access the Twitter API, we must first load the twitteR library.
+
+`r library("twitteR")`
+```{r}
+library("twitteR")
+```
+
+Register an application at Twitter
+https://dev.twitter.com/apps
+This will provides you with a consumer key and consumer secret.
+
+We then need to set up the OAuth session details.
+
+```{.r}
+cred <- OAuthFactory$new(consumerKey="insert here",
+     consumerSecret="insert here",
+     requestURL="https://api.twitter.com/oauth/request_token",
+     accessURL="https://api.twitter.com/oauth/access_token",
+     authURL="https://api.twitter.com/oauth/authorize")
+cred$handshake()
+```
+
+Once the handshake is performed, R will ask you to visit a URL to get
+an access code from Twitter. Get this code and provide it to R.
+Once the handshake is done, we can save the credential information
+and use it later, without having go directly to Twitter again.
+
+```{.r}
+save(cred, file="twitter.Rdata")
+```
+
+When we want to access Twitter in another session, we simply load and
+register the credentials:
+```{.r}
+load("twitter.Rdata")
+registerTwitterOAuth(cred)
+```
+
+
+```{.r}
+x = searchTwitter('kevin bacon')
+```

@@ -8,7 +8,7 @@
 %\usepackage{mathpazo}
 \usepackage[cm-default]{fontspec}
 \usepackage{url}
-
+\usepackage{hyperref}
 
 \setmainfont[Mapping=tex-text]{Arial}
 \setsansfont[Mapping=tex-text]{Arial Black}
@@ -145,32 +145,36 @@ license. Details of the licence can be found at
 
 %<Insert information about the unit, for example the objectives of the unit>
 
-The Social Web provides everyone with a voice, information from
+The Social Web provides everyone with an elegant platform to voice
+their opinion. The rapid take up of Web based social networking tools
+by society has lead to an abundance of data containing the opinions of
+millions of individuals.  Therefore, the analysis of information from
 Facebook, Twitter and Google+ should allow us to identify trends and
 relationships in society. Whilst this has interest on a personal
-level, the killer­apps will be in analysing such data for business;
+level, the killer­app will be in analysing such data for business;
 tracking the buzz around a new product, understanding the links
 between customers etc. This unit will introduce its students to the
 Social Web data that is available, and blend computational,
 mathematical and statistical concepts to allow extraction and analysis
 of such data.
 
-This Level 3 unit introduces students to various mathematical and statistical
-techniques supporting the study of computing and science. Presentation
-of the content will emphasise the correct principles and procedures
-for collecting and analysing scientific data, using information and
-communication technologies. Topics include describing different sets
-of data, probability distributions, statistical inference, and simple
-linear regression and correlation.
+This Level 3 unit introduces students to various mathematical and
+statistical techniques supporting the study of computing, engineering
+and science. Presentation of the content will emphasise the correct
+principles and procedures for accessing social Web data, performing
+and understanding exposure analysis, analysing and visualising social
+relationships using graphs, identifying important information using
+text mining, and investigating the significance of trends. Topics
+include graph analysis, text mining, temporal and spatial analysis,
+and exposure analysis.
 
 
 \unitname~is a core unit within the Bachelor of Information and
-Communications Technology. A condition of enrolment into this unit is
-a score of at least 70\% on the Basic Math Skills Test.
+Communications Technology. 
 
-The following units follow on from this unit: 
+Thus unit has the following prerequisites:
 \begin{itemize}
-\item 300699 Discrete Structures and Complexity
+\item 300700 Statistical Decision Making
 \end{itemize}
 
 
@@ -180,8 +184,6 @@ The following units follow on from this unit:
 % you  might like to state what the learning activities are, and how they contribute to student learning 
 % how is feedback given
 % etc
-
-
 
 
 %This diagram can be deleted/modified to your requirements
@@ -194,12 +196,24 @@ The following units follow on from this unit:
   & Phone: (02) 9685 9065 \quad
   Email: \texttt{l.park@uws.edu.au} \\[0.5em]
 
-   \textbf{Teaching Staff:} & Assoc. Prof. Glenn Stone \\
-   & Building EN, Room 1.31, Campus: Parameter \\
-   & Phone: (02) 9685 9253 \quad
-   Email: \texttt{g.stone@uws.edu.au} \\[0.5em]
+  \textbf{Teaching Staff:} & Assoc. Prof. Glenn Stone \\
+  & Building EN, Room 1.31, Campus: Parramatta \\
+  & Phone: (02) 9685 9253 \quad
+  Email: \texttt{g.stone@uws.edu.au} \\[0.5em]
 
+  \textbf{Tutors:} & Attila Egri-Nagy \\
+  & Email: \texttt{a.egri-nagy@uws.edu.au} \\[0.5em]
+
+  & Don Shearman \\
+  & Email: \texttt{d.shearman@uws.edu.au} \\[0.5em] 
+  
+  & Kingsley Agho \\[0.5em] 
+
+  & Nima Ramezani \\[0.5em] 
+
+  & Shatha Aziz
 \end{tabular}
+
 
 \section{Student consultation arrangements}
 
@@ -284,6 +298,7 @@ In addition, you should:
   tutor as soon as possible to resolve any problems.
 \end{itemize}
 
+
 \section{What you can expect from the teaching team}
 
 \subsection*{Feedback}
@@ -359,6 +374,7 @@ There are two policies that relate to misconduct - academic and
 non-academic misconduct.  Breaches of these policies can have very
 serious consequences.  It is essential that you are familiar with
 these policies and how to ovoid misconduct of any type.
+
 
 \subsection*{What is Academic Misconduct?}
 
@@ -606,7 +622,7 @@ There are seven main assessment activities in this unit:
 \end{center}
 %\textbf{* The highest 3 marks from the 4 tutorial exercise sets will be taken.}
 
-The compulsory assessment tasks are participation in the final
+The compulsory assessment tasks are: participation in the final
 examination. See below for further details. Students who do not
 participate in this task will receive an automatic failing grade
 (AF).
@@ -625,11 +641,11 @@ In order to pass this unit you must obtain a minimum combined overall
 mark of 50/100. No student, regardless of performance throughout the
 session, should expect to attain a passing grade in this unit without
 attaining;
-\begin{enumerate}
-\item at least 40\% in the final examination; and
+\begin{itemize}
+\item at least 40\% in the final examination.
 %\item at least 40\% for the continuous assessment (tests and
 %  assignment).
-\end{enumerate}
+\end{itemize}
 The following cut-off marks may act as a guide:
 \begin{itemize}
 \item High Distinction (H):            85/100 or higher
@@ -637,9 +653,9 @@ The following cut-off marks may act as a guide:
 \item Credit (C):                      65/100 - 74/100
 \item Pass (P):                        50/100 - 64/100
 \end{itemize}
-In this unit learning and teaching activities include of a two-hour
-lecture and a two-hour computer lab weekly. The computer lab is
-designed to allow student to implement the ideas presented in the
+In this unit learning and teaching activities consist of a weekly
+two-hour lecture and a weekly two-hour computer lab. The computer lab
+is designed to allow student to implement the ideas presented in the
 lectures.
 
 Students are expected to work individually through the set topics,
@@ -651,28 +667,31 @@ later topics build on the material covered earlier.
 \section{Learning outcomes and assessment}
 
 
-Students are expected to gain an understanding of basic statistical
-concepts as well as to recognise and use some common statistical
-formulae and more widely used statistical techniques. On successful
-completion of this unit, students should be able to:
+Students are expected to gain an understanding of the fundamental
+concepts of Web social networks as well as the ability to apply modern
+mathematical and statistical techniques to analyse the social network
+properties.  On successful completion of this unit, students should be
+able to:
 
 \begin{center}
-\begin{tabular}{|>{\raggedright}p{0.4\textwidth}|>{\raggedright\arraybackslash}p{0.5\textwidth}|}
+%\begin{tabular}{|>{\raggedright}p{0.4\textwidth}|>{\raggedright\arraybackslash}p{0.5\textwidth}|}
+ \begin{tabular}{|>{\raggedright\arraybackslash}p{0.4\textwidth}|>{\raggedright\arraybackslash}p{0.5\textwidth}|}
+%\begin{tabular}{ll}
 \hline
 \textbf{Learning Outcomes} & \textbf{Assessment Tasks} \\
 \hline
-Extract and process formatted data from social Web sources. &  \multirow{3}{0.5\textwidth}{Online Quizzes, Group Project} \\
+Extract and process formatted data from social Web sources. &  \multirow{3}{0.4\textwidth}{Online Quizzes, Group Project} \\
 \cline{1-1}
-Use computer algorithms to visualise complex social Web interactions.
+Use computer algorithms to visualise complex social Web interactions. & \\
 \cline{1-1}
-Partition a social network into clusters.
+Partition a social network into clusters. & \\
 \hline
-Use mathematical and statistical methods to identify significant trends in the social Web. &  \multirow{3}{0.5\textwidth}{Online Quizzes, 
+Use mathematical and statistical methods to identify significant trends in the social Web. &  \multirow{3}{0.5\textwidth}{Online Quizzes} \\
 \hline
 Use mathematical and statistical techniques to identify critical regions of a social network. &  \multirow{3}{0.5\textwidth}{Online Quizzes, Exam, Group Project} \\
-Choose an appropriate metric to measure the interaction between social network nodes. 
+Choose an appropriate metric to measure the interaction between social network nodes. & \\
 \cline{1-1}
-Compute the popularity, authority and hub scores for network nodes.
+Compute the popularity, authority and hub scores for network nodes. & \\
 \hline
 \end{tabular}
 \end{center}
@@ -688,14 +707,14 @@ The components of the assessment for this unit are as follows.
 \subsection*{Online Quizzes, best 5 of 8 @ 4\%, weighting 20\%}
 
 The online quizzes will be short tests, expected to take 15 minutes
-each that will provide students a chance to assess their knowledge
+each, that will provide students a chance to assess their knowledge
 throughout the unit.  There will be eight quizzes, but only the best
 five of the eight will contribute towards the students final grade.
 
 \subsection*{Group Project, weighting 30\%}
 
-The team project is designed to examine if each student can apply the
-knowledge learnt in the unit to analyse a social network.  The project
+The group project is designed to examine if each student can apply the
+knowledge from the unit to analyse a social network.  The project
 will be completed with a group of students, therefore it is crucial
 that all students in the team work together and delegate the tasks
 effectively.
@@ -740,6 +759,10 @@ calculated in one of the following way:
 
 \subsection*{Examples of typical questions and typical answers that
   would achieve high, or perfect, scores.}
+
+
+
+
 
 \subsubsection*{Question (6 marks)}
 
@@ -1100,58 +1123,20 @@ given.
 \section{Useful reading}
 
 \subsection*{Textbook}
-Mendenhall, W., Beaver, R. and Beaver, B. (2012) Introduction to probability and statistics, 14th edition,
-Brooks/Cole Cengage Publishers, ISBN-10: 1133103758 ISBN-13: 978-1133103752
 
-\subsection*{References}
-Any text entitled `Introductory Statistics' or `Elementary Statistics'` will be useful. In addition to
-these basic texts, the following will be requested for purchase, if not already held in the library:
+There is no official text book for this Unit. We have compiled an
+online book that covers the topics in this Unit:
 \begin{itemize}
-\item Samuels, M. and Witmer, J. (2003) Statistics for the life sciences, Pearson Education
-        International.
-\item Bennett, J., Briggs, W., and Triola, M. (2003) Statistical reasoning for everyday life, 2nd edition,
-        Addison-Wesley.
-\item De Veaux, R., Velleman, P. and Bock, D. (2005) Introductory stats, 2nd edition, Addison-
-        Wesley.
-\item Fowler, J., Cohen, L., and Jarvis, P. (1998) Practical statistics for field biology, 2nd edition, John
-        Wiley.
-\item   Kiess, H. (2002) Statistical concepts for the behavioural sciences, 3rd edition, Allyn \& Bacon.
-\item   Kinney, J. (2002) Statistics for Science and Engineering, Addison-Wesley.
-\item   Lind, D., Marchal, W., Mason, R., and Wathen, S. (2005) Basic statistics using Excel for Office
-  XP, 12 edition, McGraw-Hill.
-\item   McClave, J. (2005) A first course in statistics, 9th edition, Prentice-Hall.
-\item   McKean, J. (2000) Data analysis for criminal justice and criminology: practice and applications, Allyn
-  \& Bacon.
-\item   Meehan, A. and Warner, C.B. (2000) Elementary data analysis using Microsoft Excel, 1st edition,
-  McGraw-Hill.
-\item   Pallant, J. (2001) SPSS Survival Manual: a step by step guide to data analysis using SPSS for
-  Windows, McGraw-Hill.
-\item   Selvin, S. (2004) Biostatistics: how it works, Prentice-Hall, ISBN: 0-13-046616-6.
-\item   Townend, J. (2002) Practical statistics for environmental and biological scientists, John Wiley.
-\item   Levine, D. M., Stephen, D., Krehbiel, T. C. and Berenson, M. L., 2002: Statistics for
-  Managers using Microsoft Excel (Third Edition), Prentice Hall. (Available at
-  Campbelltown and Parramatta campus library. Call Number: 519.50285/22.)
-\item   Freund, J. E., 2001: Modern Elementary Statistics, (Tenth Edition), Prentice-Hall.
-  (Available at Bankstown, Blacktown, Campbelltown, Hawkesbury, Parramatta and Penrith
-  (Allen) campus libraries. Call Number: 519.5/88.)
-\item   Selvanathan, A., Selvanathan, S., Keller, G. \& Warrack, B., 2000: Australian Business
-  Statistics.
-  (Available at Blacktown, Campbelltown, Hawkesbury, Parramatta and Penrith (Allen \&
-  Ward) campus libraries. Call Number: 658.4033/38.)
-\item   Selvanathan, A., Selvanathan, S., Keller, G., and Warrack, B. (2007), Australian Business
-  Statistics (4th edition), (or 3rd edition) Thomson.
-\item   Black, K., Asafu-Adjaye, J., Khan, N., Perera, N., Edwards, P. and Harris, M.,
-  "Australasian Business Statistics", John Wiley and Sons, 2007.
+\item \url{http://en.wikipedia.org/wiki/User:Lapark/Books/swa}
 \end{itemize}
 
-% \section{People who can help}
-% Teaching Team
-% Insert details here
 
+\subsection*{References}
 
-
-% Librarian
-% Insert details here
+The UWS library has compiled the following Web page containing a list of books that may assist in learning the content of this Unit:
+\begin{itemize}
+\item \url{http://readings.uws.edu.au/imageserver/readings.php?ci=5642}
+\end{itemize}
 
 
 \section{Online Resources}
@@ -1163,11 +1148,6 @@ are encouraged to check the site regularly for updates.  In
 particular, you will find websites that will help you with any
 numeracy difficulties you may be experiencing.
 
-\subsection*{Wikipedia}
-
-Wikipedia can be a great help with initial information on some topics.
-However in this unit Wikipedia articles should not be used in
-assessment tasks.
 
 \section{UWS website - Current Students}
 The ``Current Students'' page of the UWS web site
@@ -1200,11 +1180,12 @@ of learning resources and face-to-face workshops supporting tertiary
 academic literacy and mathematics: \url{http://www.uws.edu.au/slu}
 
 \subsection*{Referencing Requirements}
+
 Normally, in this unit, the assessment tasks will not require
 referencing.  However, if an assessment task does require referencing,
-then the Harvard, IEEE or APA styles are preferred, or `plain' if using LaTeX.
-Examples of these referencing styles are
-available on the library website \url{http://library.uws.edu.au/citing.php}
+then the Harvard, IEEE or APA styles are preferred, or `plain' if
+using LaTeX.  Examples of these referencing styles are available on
+the library website \url{http://library.uws.edu.au/citing.php}
 
 
 
