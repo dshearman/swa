@@ -352,4 +352,4 @@ We will be using the R library twitteR to access the Twitter API through R.
 
 ## Next Week
 
-Introduction to Graphs.
+Simple Exposure Analysis
