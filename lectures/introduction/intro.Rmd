@@ -17,7 +17,6 @@ world and predict the future directions of the world's communities.
 \vspace{1em}
 In this unit, we will learn how to perform this analysis.
 
-
 ## Examining the Learning Guide
 
 The learning guide contains a description of:
@@ -251,15 +250,116 @@ public at given times.
 
 This semester, we will be using R to perform our data analysis.
 
-``` {#rdemo .r}
-x <- c(1,2,3)
-print(x)
-`````````````
 
-```{r dev='pdf'}
-#plot(1:10)
-hist(rnorm(1000))
-print(c(1,2,3))
+## What is `R`?
+`R` is a software environment for statistical computing and graphics. It runs on
+just about any platform (except iPad!) and is completely free (in the GNU sense).
+
+It is used extensively by academic statisticians for research and teaching and is gaining ground in business.
+
+It has 4634 extension packages available.
+
+### Pros
+Its free and open source. It has most methods for most things mostly before any other package. It has the best graphics. It extendable.
+
+### Cons
+It has a steep learning curve. No GUI by default. Poor (but improving) memory management; difficulty with very large data sets. 
+
+```{r, echo=FALSE}
+opts_chunk$set(prompt=TRUE, comment=NA, dev='tikz')
+options(width=54)
+```
+
+## `R` Resources
+* http://www.r-project.org --- Main `R` website.
+* CRAN --- http://cran.csiro.au --- Comprehensive `R` Archive Network --- base software and add-on packages.
+* RStudio --- http://www.rstudio.com --- is a powerful IDE for `R`
+* `R` Commander --- `install.package(Rcmdr)` --- is a partial GUI interface to `R` --- requires TclTk.
+* `R` Graph Gallery --- http://gallery.r-enthusiasts.com/ --- loads of pretty pictures.
+* http://cran.csiro.au/doc/contrib/Torfs+Brauer-Short-R-Intro.pdf --- ``A (very) short Introduction to R''
+* ``Introductory Statistics with R'', Peter Dalgaard, Springer 2008.
+
+## `R` Commands
+`R` can be used as a basic calculator.
+```{r}
+1+1
+sqrt(2)
+2^5
+```
+It can store things as named objects
+```{r}
+x <- 1
+print(x)
+```
+
+## `R` Commands
+It understands vectors and matrices
+```{r}
+x <- c(1,2)
+m <- matrix(c(1,2,3,4), ncol=2, byrow=TRUE)
+print(m)
+m %*% x
+```
+
+## `R` Commands
+It has functions, and you can write them
+```{r}
+x <- sqrt(2)
+sqr <- function(x) x^2
+sqr(2)
+```
+
+## Data in R
+is stored in `data.frames` 
+```{r}
+head(iris)
+
+```
+
+## Data in R
+```{r}
+dim(iris)
+```
+Some columns are numeric others are factors
+```{r}
+sapply(iris, class)
+```
+Data can read from text files (`read.csv` and `read.table`) and various formats
+using the `foreign` package.
+
+
+## Basic Statistics
+```{r} 
+x <- rnorm(100)
+mean(x)
+var(x)   ### sd(x)
+fivenum(x)
+```
+minimum, lower-quartile, median, upper-quartile, maximum
+
+## Basic Statistics
+```{r} 
+summary(iris)
+```
+
+
+## Basic Statistics
+```{r} 
+t.test(x)
+```
+
+## `R` has extensive plotting
+```{r, fig.width=4, fig.height=2.8, echo=2}
+par(pch=16, mar=c(4.1,4.1,1.1,1.1))
+plot(Sepal.Length~Sepal.Width,col=Species,data=iris)
+legend("topright", col=1:3, legend=levels(iris$Species), pch=16, cex=0.5)
+```
+
+## `R` has extensive plotting
+
+```{r, fig.width=4, fig.height=2.8, echo=2}
+par(pch=16, mar=c(4.1,4.1,1.1,1.1))
+plot(Sepal.Length~Species, data=iris)
 ```
 
 
