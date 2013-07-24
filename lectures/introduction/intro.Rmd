@@ -1,6 +1,6 @@
 % Introduction to Social Networks
-% Laurence A. F. Park and Glenn Stone
-% March 22, 2005
+% 300958 Social Web Analytics
+% Week 1
 
 
 # Introduction to the Unit
@@ -349,7 +349,7 @@ t.test(x)
 ```
 
 ## `R` has extensive plotting
-```{r, dev="pdf", fig.width=4, fig.height=2.8, echo=2}
+```{r, dev=c('pdf'), fig.cap=NULL, fig.width=4, fig.height=2.8, echo=2}
 par(pch=16, mar=c(4.1,4.1,1.1,1.1))
 plot(Sepal.Length~Sepal.Width,col=Species,data=iris)
 legend("topright", col=1:3, legend=levels(iris$Species), pch=16, cex=0.5)
@@ -357,7 +357,7 @@ legend("topright", col=1:3, legend=levels(iris$Species), pch=16, cex=0.5)
 
 ## `R` has extensive plotting
 
-```{r, dev="pdf", fig.width=4, fig.height=2.8, echo=2}
+```{r, fig.cap=NULL, dev=c('pdf'), fig.width=4, fig.height=2.8, echo=2}
 par(pch=16, mar=c(4.1,4.1,1.1,1.1))
 plot(Sepal.Length~Species, data=iris)
 ```
