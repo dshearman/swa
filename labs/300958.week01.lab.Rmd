@@ -63,3 +63,5 @@ registerTwitterOAuth(cred)
 ```{.r}
 x = searchTwitter('kevin bacon')
 ```
+
+http://files.meetup.com/1772780/Mining%20Twitter%20Using%20R.pdf
