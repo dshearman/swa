@@ -90,9 +90,16 @@ SCRIPTS = $(addprefix ${LECTURE_DIR}/, week1/blood_donors.r \
 # Dependancies for lecture tex files (needed if written in markdown or sweave)
 ${TEMPLATE_DIR}/week01.tex:	${LECTURE_DIR}/introduction/intro.tex
 ${TEMPLATE_DIR}/week02.tex:	${LECTURE_DIR}/api/api.tex
-${TEMPLATE_DIR}/week05.tex:	${LECTURE_DIR}/text_analysis/text_index.tex
+${TEMPLATE_DIR}/week04.tex:	${LECTURE_DIR}/text_analysis/text_index.tex
+${TEMPLATE_DIR}/week05.tex:	${LECTURE_DIR}/graphs/graphs_intro.tex
 
 # Rules for construction
+%.md.png:	%.Rmd
+	Rscript -e "library(knitr); opts_chunk[['set']](dev = 'png'); knit('$<', output='$*.md')"
+
+%.md.pdf:	%.Rmd
+	Rscript -e "library(knitr); opts_chunk[['set']](dev = 'pdf'); knit('$<', output='$*.md')"
+
 %.md:	%.Rmd
 	Rscript -e "library(knitr); knit('$<', output='$*.md')"
 
@@ -100,7 +107,10 @@ ${TEMPLATE_DIR}/week05.tex:	${LECTURE_DIR}/text_analysis/text_index.tex
 	pandoc -f markdown -t beamer --slide-level=2 $< -o $*.tex
 
 %.html: %.md
-	pandoc --slide-level=2 -s -c buttondown.css -f markdown -t html $< -o $*.html
+	pandoc --number-sections --section-divs --slide-level=2 -s -c buttondown.css -f markdown -t html $< -o $*.html
+
+%.web: 	%.md
+	pandoc --slide-level=2 -s -c buttondown.css -f markdown -t html $< -o ${OUTPUT_DIR}/$*.html
 
 %.notes:	${INCLUDE_DIR}/article.tex ${TEMPLATE_DIR}/%.tex
 	${TEX}  -jobname "${CODE}.$*.notes" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/article.tex}\input{${TEMPLATE_DIR}/$*.tex}"

@@ -1,10 +1,23 @@
 % Introduction to Social Networks
-% Laurence A. F. Park and Glenn Stone
-% March 22, 2005
+% 300958 Social Web Analytics
+% Week 1
+
 
 # Introduction to the Unit
 
-## Examine the Learning Guide
+## Motivation
+
+People are uploading data (text, images, videos, links) to the Web at
+every moment of the day. Some of you may be doing it right now!
+
+\vspace{1em}
+With proper analysis, we can use this data to examine the state of the
+world and predict the future directions of the world's communities.
+
+\vspace{1em}
+In this unit, we will learn how to perform this analysis.
+
+## Examining the Learning Guide
 
 The learning guide contains a description of:
 
@@ -31,7 +44,7 @@ Tutors:
 
 - Attila Egri-Nagy <a.egri-nagy@uws.edu.au>
 - Don Shearman <d.shearman@uws.edu.au>
-- Kingsley Agho
+- Kingsley Agho <k.agho@uws.edu.au>
 - Nima Ramezani 
 - Shatha Aziz
 
@@ -58,6 +71,7 @@ are introduced how does the network change.
 The theory that two randomly selected people can find a chain of friends
 that is at most six in length.
 
+\vspace{1em}
 To examine the small world theory an experiment was devised using the
 U.S. Postal Service.
 
@@ -85,9 +99,11 @@ Databases such as the [IMDB](http://www.imdb.com/) have allowed us to
 examine how connected the set of actors are through the movies they appear
 in together.
 
+\vspace{1em}
 It was thought that the most connected actor was [Kevin
-Bacon](https://en.wikipedia.org/wiki/Kevin_Bacon)
+Bacon](https://en.wikipedia.org/wiki/Kevin_Bacon).
 
+\vspace{1em}
 The movie distance between any two actors can be computed at the [Oracle of
 Bacon](http://oracleofbacon.org/).
 
@@ -101,7 +117,7 @@ a Bacon number of 5 or more.
 
 A recent news article showed that the NSA has put half of the world on
 surveillance for suspected terrorist activities ([The
-Guardian](http://m.guardian.co.uk/world/2013/jul/17/nsa-surveillance-house-hearing))
+Guardian](http://m.guardian.co.uk/world/2013/jul/17/nsa-surveillance-house-hearing)).
 
 
 
@@ -112,10 +128,12 @@ Guardian](http://m.guardian.co.uk/world/2013/jul/17/nsa-surveillance-house-heari
 The World Wide Web is a collection of Web pages and databases that are
 served from computers spread across the Internet.
 
+\vspace{1em}
 The Web was conceived by Tim Berners-Lee as a method a sharing experimental
 particle physics results between labs across the world. It was quickly seen
 that this platform could be used to serve all kinds of information.
 
+\vspace{1em}
 The Web is intrinsically social in that, for it to grow, it requires us to
 upload information that others will read.
 
@@ -172,6 +190,7 @@ Facebook has over 1 billion users.
 For Web based social networks to exist, we must freely contribute and
 view information from them. 
 
+\vspace{1em}
 The recent introduction of the mobile devices (such as phones and
 tablet computers) that have access to the Web has added to the
 popularity of Web based social networks. They allow us to conveniently
@@ -230,6 +249,119 @@ public at given times.
 ## Introducing R
 
 This semester, we will be using R to perform our data analysis.
+
+
+## What is `R`?
+`R` is a software environment for statistical computing and graphics. It runs on
+just about any platform (except iPad!) and is completely free (in the GNU sense).
+
+It is used extensively by academic statisticians for research and teaching and is gaining ground in business.
+
+It has 4634 extension packages available.
+
+### Pros
+Its free and open source. It has most methods for most things mostly before any other package. It has the best graphics. It extendable.
+
+### Cons
+It has a steep learning curve. No GUI by default. Poor (but improving) memory management; difficulty with very large data sets. 
+
+```{r, echo=FALSE}
+opts_chunk$set(prompt=TRUE, comment=NA, dev='tikz')
+options(width=54)
+```
+
+## `R` Resources
+* [http://www.r-project.org](http://www.r-project.org) --- Main `R` website.
+* CRAN --- [http://cran.csiro.au](http://cran.csiro.au) --- Comprehensive `R` Archive Network --- base software and add-on packages.
+* RStudio --- [http://www.rstudio.com](http://www.rstudio.com) --- is a powerful IDE for `R`
+* `R` Commander --- `install.package(Rcmdr)` --- is a partial GUI interface to `R` --- requires TclTk.
+* `R` Graph Gallery --- [http://gallery.r-enthusiasts.com/](http://gallery.r-enthusiasts.com/) --- loads of pretty pictures.
+* [http://cran.csiro.au/doc/contrib/Torfs+Brauer-Short-R-Intro.pdf](http://cran.csiro.au/doc/contrib/Torfs+Brauer-Short-R-Intro.pdf) --- ``A (very) short Introduction to R''
+* ``Introductory Statistics with R'', Peter Dalgaard, Springer 2008.
+
+## `R` Commands
+`R` can be used as a basic calculator.
+```{r}
+1+1
+sqrt(2)
+2^5
+```
+It can store things as named objects
+```{r}
+x <- 1
+print(x)
+```
+
+## `R` Commands
+It understands vectors and matrices
+```{r}
+x <- c(1,2)
+m <- matrix(c(1,2,3,4), ncol=2, byrow=TRUE)
+print(m)
+m %*% x
+```
+
+## `R` Commands
+It has functions, and you can write them
+```{r}
+x <- sqrt(2)
+sqr <- function(x) x^2
+sqr(2)
+```
+
+## Data in R
+is stored in `data.frames` 
+```{r}
+head(iris)
+
+```
+
+## Data in R
+```{r}
+dim(iris)
+```
+Some columns are numeric others are factors
+```{r}
+sapply(iris, class)
+```
+Data can read from text files (`read.csv` and `read.table`) and various formats
+using the `foreign` package.
+
+
+## Basic Statistics
+```{r} 
+x <- rnorm(100)
+mean(x)
+var(x)   ### sd(x)
+fivenum(x)
+```
+minimum, lower-quartile, median, upper-quartile, maximum
+
+## Basic Statistics
+```{r} 
+summary(iris)
+```
+
+
+## Basic Statistics
+```{r} 
+t.test(x)
+```
+
+## `R` has extensive plotting
+```{r, dev=c('pdf'), fig.cap=NULL, fig.width=4, fig.height=2.8, echo=2}
+par(pch=16, mar=c(4.1,4.1,1.1,1.1))
+plot(Sepal.Length~Sepal.Width,col=Species,data=iris)
+legend("topright", col=1:3, legend=levels(iris$Species), pch=16, cex=0.5)
+```
+
+## `R` has extensive plotting
+
+```{r, fig.cap=NULL, dev=c('pdf'), fig.width=4, fig.height=2.8, echo=2}
+par(pch=16, mar=c(4.1,4.1,1.1,1.1))
+plot(Sepal.Length~Species, data=iris)
+```
+
 
 
 ## Summary

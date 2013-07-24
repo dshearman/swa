@@ -1,9 +1,11 @@
-# Twitter and Facebook APIs - 300958 Social Web Analysis - Week 3
+% Twitter and Facebook APIs 
+% 300958 Social Web Analysis 
+% Week 3 Lab
 
 `r opts_chunk$set(prompt=TRUE, comment=NA)`
 `r knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
 
-## R Basics
+# R Basics
 
 All of the lab sessions for 300958 Social Web Analysis will use R and
 RStudio. If these two applications are not installed on the computer
@@ -19,7 +21,7 @@ Once they are installed, open RStudio and say hello.
 print("Hello world!")
 ```
 
-## Accessing Twitter
+# Accessing Twitter
 
 To access the Twitter API, we must first load the twitteR library.
 
@@ -65,3 +67,6 @@ x = searchTwitter('kevin bacon')
 ```
 
 http://files.meetup.com/1772780/Mining%20Twitter%20Using%20R.pdf
+
+# Accessing Facebook
+
