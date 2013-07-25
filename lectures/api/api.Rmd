@@ -5,6 +5,19 @@
 
 # Algorithms in R
 
+Installing packages requires the proxy to be setup:
+http://support.rstudio.org/help/kb/faq/configuring-r-to-use-an-http-proxy
+http://www.uws.edu.au/information_technology_services/its/servicedesk/proxy_settings
+
+install.packages("twitteR")
+
+If you can't get R to use the proxy, you can download the packages and install them locally
+
+Get the package from here:
+http://cran.r-project.org/web/packages/available_packages_by_name.html
+
+Tell R where you saved it:
+install.packages("/tmp/bigdata_0.1.tgz", repos=NULL)
 
 
 

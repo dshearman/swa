@@ -64,6 +64,59 @@ registerTwitterOAuth(cred)
 
 ```{.r}
 x = searchTwitter('kevin bacon')
+z = twListToDF(x)
+
+
+library(tm) #load text mining library
+setwd('F:/My Documents/My texts') #sets R's working directory to near where my files are
+a  <-Corpus(DirSource("/My Documents/My texts"), readerControl = list(language="lat")) #specifies the exact folder where my text file(s) is for analysis with tm.
+summary(a)  #check what went in
+a <- tm_map(a, removeNumbers)
+a <- tm_map(a, removePunctuation)
+a <- tm_map(a , stripWhitespace)
+a <- tm_map(a, tolower)
+a <- tm_map(a, removeWords, stopwords("english")) # this stopword file is at C:\Users\[username]\Documents\R\win-library\2.13\tm\stopwords 
+a <- tm_map(a, stemDocument, language = "english")
+adtm <-DocumentTermMatrix(a) 
+adtm <- removeSparseTerms(adtm, 0.75)
+
+
+cz = Corpus(VectorSource(z$text))
+tdm <- TermDocumentMatrix(cz, control = list(removePunctuation = TRUE, stopwords = TRUE, stem = TRUE))
+tdm = weightTfIdf(tdm)
+inspect(tdm)
+tdm2 <- removeSparseTerms(tdm, sparse=0.95)
+df <- as.data.frame(inspect(tdm2))
+d = dist(df)
+h = hclust(d)
+rect.hclust(h, k=5, border="red")
+
+
+cos.dissim <- function(x,y) {
+	   x = as.numeric(x)
+	   y = as.numeric(y)
+	   return(1 - (x %*% y)/(sqrt(x %*% x)*sqrt(y %*% y)))
+}
+
+cos.sim <- function(x,y) {
+	   x = as.numeric(x)
+	   y = as.numeric(y)
+	   return((x %*% y)/(sqrt(x %*% x)*sqrt(y %*% y)))
+}
+
+d = matrix(0, nrow(df), nrow(df))
+
+for (a in 1:nrow(df)) {
+    for (b in 1:nrow(df)) {
+    	d[a,b] <- cos.dissim(df[a,],df[b,])
+    }
+}
+rownames(d) <- rownames(df)
+
+d = as.dist(d)
+h = hclust(d)
+plot(h)
+
 ```
 
 http://files.meetup.com/1772780/Mining%20Twitter%20Using%20R.pdf

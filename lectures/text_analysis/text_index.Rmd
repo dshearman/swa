@@ -3,7 +3,7 @@
 % March 22, 2005
 
 <!-- Setting up R -->
-`ro warning=FALSE, dev="png", fig.cap="", cache=FALSE or`
+`r opts_chunk$set(warning=FALSE, dev="pdf", fig.cap="", cache=FALSE)`
 
 
 # Document Models
@@ -178,3 +178,239 @@ and compute the similarity of the documents to the query:
 
 
 ## Term Weights
+
+
+One one was a race horse
+Two two was one too
+One one won one race
+Two two won one too
+
+
+
+One was a race horse Two too won
+
+# Preprocessing Text
+
+## Preparing for index construction
+
+The English language contains a lot of redundancy that allows us to
+express ideas, but provides confusion to computer processes that do not
+understand the relationships between the words.
+
+In this section we will examine a few methods to strip down the text
+to increase the effectiveness of analysis.
+
+## Stop words
+
+Stop words provide no or only little information to our analysis and
+so can be safely removed. Removing stop words can be beneficial to an
+analysis, but it always depends on the text being examined.
+
+### Problem
+
+Which words can we remove from these documents:
+
+1. Social Web analytics is the best!
+2. Social Web analytics is the greatest unit.
+3. The best Web unit is Social Web analytics.
+
+
+## Stop word list
+
+Here is an example stop word list:
+
+a, able, about, across, after, all, almost, also, am, among, an, and,
+any, are, as, at, be, because, been, but, by, can, cannot, could,
+dear, did, do, does, either, else, ever, every, for, from, get, got,
+had, has, have, he, her, hers, him, his, how, however, i, if, in,
+into, is, it, its, just, least, let, like, likely, may, me, might,
+most, must, my, neither, no, nor, not, of, off, often, on, only, or,
+other, our, own, rather, said, say, says, she, should, since, so,
+some, than, that, the, their, them, then, there, these, they, this,
+tis, to, too, twas, us, wants, was, we, were, what, when, where,
+which, while, who, whom, why, will, with, would, yet, you, your
+
+Lists can be compiled for a specific task.
+
+### When not to remove stop words
+
+By removing stop words, we remove all occurrences of "To be or not to
+be."
+
+## Letter case and punctuation
+
+When examining words in documents, we want to identify how often they
+appear and in which documents they appear.
+
+To keep all occurrences of a word consistent, we must remove the any
+difference in letter case. This is done by adjusting all text to be
+lower case.
+
+Punctuation is important for text sequences (sentences), but not
+needed when examining individual terms. All punctuation can be
+removed.
+
+Our document set has been reduced to:
+
+1. social web analytics best
+2. social web analytics greatest unit
+3. best web unit social web analytics
+
+## Stemming
+
+There are many words that have the same stem, but are adjusted due to
+their use in a sentence. By removing the variation, we obtain a better
+understanding the occurrence of the word.
+
+For example the words "fishing", "fished", "fish", and "fisher" have
+the stem "fish". The words "argue", "argued", "argues" and "arguing
+have the stem "argue".
+
+The most commonly used stemming algorithms is Porter's stemmer.
+
+Our document set has been reduced to:
+
+1. social web analyt best
+2. social web analyt great unit
+3. best web unit social web analyt
+
+Note that the stems do not have to be words.
+
+# Weighting Terms
+
+## Going beyond term frequency
+
+We have treated the frequency of a term as its weight in the
+document. If a word appears two times in a documents, it is twice as
+relevant to that document when compared to a document that contains
+the word only once.
+
+If a documents contains a word 200 times, is the word twice as
+relevant to a document that contains the word 100 times? We would
+expect not. As the frequency of a word increase, the relevance of the
+word should not increase linearly.
+
+In this section we will examine how to compute the relevance of term
+to the document set and to each document.
+
+## Term weights
+
+For a given document collection, we can compute which words are the
+most descriptive of the set.
+
+### Requirements for a term weight
+
+- If a term appears in all documents, then is does not provide us with
+any information.  
+- If a term appears in only one document, then it is
+very representative of the difference between that document and the
+rest.
+
+
+## Term weight function
+
+The term weight can be computed using the function:
+$$
+	w_t = \log_e{\left ( \frac{N}{f_t} \right )}
+$$
+where $N$ is the number of documents, $f_t$ is the number of
+documents containing term $t$, and $w_t$ is the weight of term $t$.
+
+### Problem
+
+Compute the term weights for each of the words in the following
+document set:
+
+1. social web analyt best
+2. social web analyt great unit
+3. best web unit social web analyt
+
+## Term weight plot ($N = 100$)
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+plot(1:100, log(100/(1:100)), xlab="Term weight", ylab="Term Document Count")
+```
+
+## Within document term weight
+
+The within document term weight is a measure of how important the term
+is within the document. This weight is dependent on:
+
+- The frequency of the term in the document
+- The importance of the word in the document set (the term weight)
+
+
+## Within document term weight function
+
+The within document term weight can be computed using:
+$$
+\begin{aligned}
+	w_{d,t} &= \log_e{\left ( f_{d,t} + 1\right )}w_t \\
+	 &= \log_e{\left ( f_{d,t} + 1\right )}\log_e{\left ( \frac{N}{f_t} \right )} \\
+\end{aligned}
+$$
+where $f_{d,t}$ is the frequency of term $t$ in document $d$ and
+$w_{d,t}$ is the weight of term $t$ in document $d$.
+
+### Problem 
+
+Using the results from the previous problem, compute the within
+document term weights for each of the words in the first document:
+
+1. social web analyt best
+2. social web analyt great unit
+3. best web unit social web analyt
+
+
+## Weighted frequency plot
+
+As the frequency increases, the increase in weight reduces.
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+plot(1:100, log(1:100 + 1), xlab="f", ylab="log(f+ 1)")
+```
+
+
+
+
+
+## Summary
+
+You should know how to:
+
+- construct a text index
+- represent documents and queries as vectors
+- find the terms weight and within document term weight
+- evaluate the accuracy of search results using Precision, Recall and Average Precision.
+
+
+
+
+# show the difference in weight and raw frequency
+library("tm")
+data(crude)
+a <- tm_map(crude, removeNumbers)
+a <- tm_map(a, removePunctuation)
+a <- tm_map(a , stripWhitespace)
+a <- tm_map(a, tolower)
+a <- tm_map(a, removeWords, stopwords("english"))
+a <- tm_map(a, stemDocument, language = "english")
+
+A = TermDocumentMatrix(a)
+B = TermDocumentMatrix(crude)
+W = weightTfIdf(A)
+
+D = as.data.frame(inspect(A))
+E = as.data.frame(inspect(B))
+F = as.data.frame(inspect(W))
+
+t = table(apply(D, 1, sum))
+s = table(apply(E, 1, sum))
+
+# frequency
+rownames(E)[order(E[,17], decreasing=TRUE)][1:10]
+# weights
+rownames(F)[order(F[,17], decreasing=TRUE)][1:10]
+
