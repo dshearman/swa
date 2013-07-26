@@ -6,6 +6,21 @@
 `r opts_chunk$set(warning=FALSE, dev="pdf", fig.cap="", cache=FALSE)`
 
 
+# Motivation
+
+## Finding the public opinion
+
+
+The social Web contains the opinions of a large sample of the
+population. We can use messages written by the public to examine
+public opinion.
+
+\vspace{-6em}
+\largeimage{figure/swa_tweets}
+
+
+[Geek vs Nerd](http://slackprop.wordpress.com/2013/06/03/on-geek-versus-nerd/)
+
 # Document Models
 
 ## The need for a document model
@@ -15,10 +30,11 @@ searching through them, to either:
 
 - Find the document that is most similar to a query (Google)
 - Find the document that is most similar to another document
+- Find words that are most similar to another word
 
-In both cases, we need to be able to compare documents to documents or
-queries, so we need to define a document similarity (or dissimilarity)
-function: 
+In each cases, we need to be able to compare documents to documents,
+documents to queries, or words to words, so we need to define a
+document and word similarity (or dissimilarity) function:
 $$
    s_{i,j} = S(d_i, d_j) 
 $$
@@ -388,29 +404,4 @@ You should know how to:
 
 
 
-# show the difference in weight and raw frequency
-library("tm")
-data(crude)
-a <- tm_map(crude, removeNumbers)
-a <- tm_map(a, removePunctuation)
-a <- tm_map(a , stripWhitespace)
-a <- tm_map(a, tolower)
-a <- tm_map(a, removeWords, stopwords("english"))
-a <- tm_map(a, stemDocument, language = "english")
-
-A = TermDocumentMatrix(a)
-B = TermDocumentMatrix(crude)
-W = weightTfIdf(A)
-
-D = as.data.frame(inspect(A))
-E = as.data.frame(inspect(B))
-F = as.data.frame(inspect(W))
-
-t = table(apply(D, 1, sum))
-s = table(apply(E, 1, sum))
-
-# frequency
-rownames(E)[order(E[,17], decreasing=TRUE)][1:10]
-# weights
-rownames(F)[order(F[,17], decreasing=TRUE)][1:10]
 

@@ -1,6 +1,6 @@
 % Twitter and Facebook APIs 
 % 300958 Social Web Analysis 
-% Week 3 Lab
+% Week 4 Lab
 
 `r opts_chunk$set(prompt=TRUE, comment=NA)`
 `r knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
@@ -28,6 +28,7 @@ To access the Twitter API, we must first load the twitteR library.
 `r library("twitteR")`
 ```{r}
 library("twitteR")
+library("ROAuth")
 ```
 
 Register an application at Twitter
@@ -64,7 +65,27 @@ registerTwitterOAuth(cred)
 
 ```{.r}
 x = searchTwitter('kevin bacon')
+
+x = searchTwitter('social web analytics', n = 500, lang = "en")
 z = twListToDF(x)
+
+
+
+library("wordcloud")
+library("tm")
+
+cz = Corpus(VectorSource(z$text))
+#cz = tm_map(cz, function(x) iconv(enc2utf8(x), sub = "byte"))
+cz = tm_map(cz, function(x) iconv(x, to='UTF-8-MAC', sub='byte'))
+cz <- tm_map(cz, removeNumbers)
+cz <- tm_map(cz, removePunctuation)
+cz <- tm_map(cz, stripWhitespace)
+cz <- tm_map(cz, tolower)
+cz <- tm_map(cz, removeWords, stopwords("english")) # this stopword file is at C:\Users\[username]\Documents\R\win-library\2.13\tm\stopwords 
+cz <- tm_map(cz, removeWords, c("social", "web", "analytics"))
+cz <- tm_map(cz, function(x) sub("http[^ ]*","", x))
+cz <- tm_map(cz, stemDocument, language = "english")
+wordcloud(cz)
 
 
 library(tm) #load text mining library
