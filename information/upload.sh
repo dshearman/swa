@@ -1,3 +1,3 @@
 #!/bin/sh
 
-scp learning-guide.pdf mail:~/Homepage/300958/
+scp learning-guide.pdf mail.scem.uws.edu.au:~/Homepage/300958/

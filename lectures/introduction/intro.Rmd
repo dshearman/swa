@@ -54,12 +54,20 @@ Tutors:
 ## What are Social Networks?
 
 Social Networks consist of a set of items and connections showing how each of
-the items interact. We can have a social network of:
+the items interact. 
 
-- a set of students, where a pair of students is connected if they attend the same class,
-- a set of cities, where a pair of cities is connected if share a highway,
-- a set of programming languages, where a pair is connected if they share a paradigm,
-- a set of people, where a pair is connected if they are related.
+\begin{block}{Social networks or just networks}
+
+Which of these are considered social networks:
+
+\begin{itemize}
+\item a set of students, where a pair of students is connected if they attend the same class,
+\item a set of cities, where a pair of cities is connected if share a highway,
+\item a set of programming languages, where a pair is connected if they share a paradigm,
+\item a set of people, where a pair is connected if they are related.
+\end{itemize}
+
+\end{block}
 
 
 Social Network Analysis is the analysis of these networks to obtain
@@ -91,7 +99,7 @@ social network by computing their [Erdös number](http://www.ams.org/mathscinet/
 
 ### Erdös Number
 
-If you have an Internet connected device, use the above link to examine the Erdös Number of a few of you lecturers.
+If you have an Internet connected device, use the above link to examine the Erdös Number of a few of your lecturers.
 
 ## Kevin Bacon
 
@@ -196,7 +204,7 @@ tablet computers) that have access to the Web has added to the
 popularity of Web based social networks. They allow us to conveniently
 upload and view information as it happens.
 
-### Our presence on the Social Web
+### Our presence on the Social Web:
 
 Turn to the people around you and tell them 
 
@@ -286,14 +294,14 @@ options(width=54)
 sqrt(2)
 2^5
 ```
-It can store things as named objects
+It can store things as named objects.
 ```{r}
 x <- 1
 print(x)
 ```
 
 ## `R` Commands
-It understands vectors and matrices
+It understands vectors and matrices.
 ```{r}
 x <- c(1,2)
 m <- matrix(c(1,2,3,4), ncol=2, byrow=TRUE)
@@ -302,7 +310,7 @@ m %*% x
 ```
 
 ## `R` Commands
-It has functions, and you can write them
+It has functions, and you can write them.
 ```{r}
 x <- sqrt(2)
 sqr <- function(x) x^2
@@ -310,7 +318,7 @@ sqr(2)
 ```
 
 ## Data in R
-is stored in `data.frames` 
+Tables are stored in `data.frames` .
 ```{r}
 head(iris)
 
@@ -320,7 +328,7 @@ head(iris)
 ```{r}
 dim(iris)
 ```
-Some columns are numeric others are factors
+Some columns are numeric, others are factors.
 ```{r}
 sapply(iris, class)
 ```
@@ -370,6 +378,7 @@ plot(Sepal.Length~Species, data=iris)
 - Social Networks appear everywhere.
 - The Web has provided us a basis for social interaction.
 - Analysing social networks on the Web provides us an insight of the state of the community.
+- We can use R to assist in the analysis of social Web data.
 
 
 ## Next Week
