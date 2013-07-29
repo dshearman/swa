@@ -29,6 +29,8 @@
 
 \usepackage{graphics}
 
+\usepackage{enumerate}
+
 \DeclareMathOperator{\var}{Var}
 
 % set page margins
@@ -911,6 +913,76 @@ two-won         & 1 & 0 \\
 
 This gives us the two clusters: \{one, race, horse\} and \{two, won\}.
 
+\subsubsection*{Question (10 marks)}
+
+The table below shows the counts of all time \emph{likes} by age group and gender for a particular facebook page.
+
+\begin{center}
+\begin{tabular}{rrrrrrrr}
+  \hline
+ & 13--17 & 18--24 & 25--34 & 35--44 & 45--54 & 55--65 & 65+ \\ 
+  \hline
+F & 0 & 16 & 9 & 7 & 3 & 1 & 1 \\ 
+  M & 3 & 99 & 30 & 6 & 3 & 1 & 3 \\ 
+   \hline
+\end{tabular}
+\end{center}
+
+The owner of this page is interested in determining whether the age profile of likes depends on gender.
+
+\begin{enumerate}[i)]
+\item State the \emph{null} hypothesis for the statistical test that corresponds to the question, ``Does the age profile of likes depends on gender?''
+\item Identify one problem with using a $\chi^2$ (Chi-squared) test with this data.
+\item Using only the age groups 18--24 , 25--34  and 35--44, find the proportion of likes in each age group.
+\item Using only the same age groups,  find the proportion of likes in each gender.
+\item Using only the same age groups,  calculate a $\chi^2$ statistic for testing whether the age
+  profile varies by gender, and state its degrees of freedom.
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}[i)]
+\item The null hypothesis would be 
+
+\begin{quote}
+$H_0$: Age and Gender are INDEPENDENT
+\end{quote}
+\item Several of the cells have very small counts, and therefore the
+  $\chi^2$ approximation will not be accurate.
+\item Using only the sub-table
+\begin{center}
+\begin{tabular}{rrrr}
+  \hline
+ & 18-24 & 25-34 & 35-44 \\ 
+  \hline
+F & 16 & 9 & 7 \\ 
+  M & 99 & 30 & 6 \\ 
+   \hline
+\end{tabular}
+\end{center}
+Total number of likes is 167. Therefore proportions are ``18-24''
+(99+16)/167 = 0.689, ``25-34'' (9+30)/167 = 0.234, ``35-44''
+(7+6)/167 = 0.078
+\item ``F''  (16+9+7)/167 = 0.192, ``M'' (99+30+6)/167 = 0.808
+\item \[
+\chi^2 = \sum \frac{(O_{ij}-E_{ij})^2}{E_{ij}}\]
+
+Expected counts are $E_{ij} = n\times p_i \times q_j$
+\begin{center}
+\begin{tabular}{rrrr}
+  \hline
+ & 18-24 & 25-34 & 35-44 \\ 
+  \hline
+F & 22.09 & 7.50 & 2.50 \\ 
+  M & 92.97 & 31.58 & 10.53 \\ 
+   \hline
+\end{tabular}
+\end{center}
+
+Therefore, $\chi^2 = 12.50$. There are 2 degrees of freedom
+($(r-1)\times (c-1)$).
+\end{enumerate}
+
 \newpage
 
 %\thispagestyle{empty}
@@ -1086,3 +1158,9 @@ the library website \url{http://library.uws.edu.au/citing.php}
 
 
 \end{document}
+
+
+%% Local Variables: 
+%% mode: latex
+%% TeX-engine: xetex
+%% End: 
