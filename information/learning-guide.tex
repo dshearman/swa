@@ -471,6 +471,7 @@ refuses to comply.  This continued abuse will be regarded as
 substantial.
 \end{enumerate}
 
+
 There are many resources to help you ovoid academic misconduct.  The
 library staff (see section \ref{sec:library}) can help you with referencing and the
 Student Learning Unit can assist with academic writing and plagiarism.
@@ -488,6 +489,7 @@ misconduct and while these things are rare they do happen.  If you
 believe you have been the victim of non-academic misconduct or you are
 aware of any academic misconduct it is very important that you report
 it.
+
 
 You should report all matters of academic misconduct directly to your
 Head of Program.
@@ -507,6 +509,7 @@ The University also has a confidential Complaints Handling department
 (see link above for contact details).  You may contact this department
 of the University at any time however we would appreciate the
 opportunity to resolve this directly first.
+
 
 
 
@@ -570,6 +573,7 @@ Week & Topic & Text readings & Assessment \\
 Each week, students are expected to attend lectures and
 computer labs. For full details about the timetable for this unit, go to
 \timetablelink~and search for \unitcode.
+
 
 
 \subsection*{Lectures}
@@ -657,6 +661,8 @@ In this unit learning and teaching activities consist of a weekly
 two-hour lecture and a weekly two-hour computer lab. The computer lab
 is designed to allow student to implement the ideas presented in the
 lectures.
+
+
 
 Students are expected to work individually through the set topics,
 receiving assistance as required and attempting specific lab
@@ -764,260 +770,146 @@ calculated in one of the following way:
 
 
 
-\subsubsection*{Question (6 marks)}
 
-Many in Britain believe that to spare the rod is to spoil the
-child. An article in the New York Time (August 18, 1985) gives the
-results of a national poll in Britain conducted in February by
-Marketing and Opinion Research International for the Times of
-London. Of 604 parents questioned, 63\% were in favour of corporal
-punishment in schools. Construct a 90\% confidence interval to
-estimate the proportion of the British population in favour of
-corporal punishment in schools.
+\subsubsection*{Question (4 marks)}
 
-\subsubsection*{Solution}
-Let $p$ be the proportion of the British population in favour of corporal punishment in
-schools. The required confidence interval of $p$ is given by:
-\begin{align*}
-  & \hat{p} \pm z_{\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}  & \text{(2 marks)}\\
-  & = 0.63\pm 1.645\times \sqrt{(0.63\times (1-0.63)/604}  & \text{(2 marks)}\\
-  & = (0.598,0.662)
-\end{align*}
-The 90\% confidence interval for the population proportion of the British population in favour of
-corporal punishment in schools is from 59.8\% to 66.2\%.\quad (2 marks).
+Plot the degree distribution of the following graph and identify if it
+is a small world graph or not.
+% g = barabasi.game(10, directed=FALSE)
+% plot(g)
+% table(degree(g))
 
-\subsubsection*{Question (10 marks)}
-A firm specialising in agricultural products wants to conduct a market
-trial for one of its new products. A random sample of 600 potential
-customers is chosen to receive advertising material describing the new
-product. It is decided that additional advertising and promotion will
-occur only if the sample results provide strong evidence that the
-actual (population) response rate will exceed
-7\%. What decision will be made if 50 out of the 600 people make a purchase? Test using $\alpha = 0.05$.
-
-\subsubsection*{Solution}
-Let $p$ be the response rate.
-\begin{align*}
-  \text{step 1. } &  H_0 : p = 0.07 \text{ v } H_1 : p > 0.07 & \text{(2
-    marks)} \\
-  \text{step 2. } & \text{Test statistic: } z = (\hat{p} - p)/\sqrt{p(1
-    - p)/n} & \text{(2 marks)} \\
-  \text{step 3. } & \text{Significance level: } \alpha = 0.05 &
-  \text{(0.5 marks)} \\
-  \text{step 4. } & \text{Critical value: } z_{\alpha} = z_{0.05} =
-  1.645. \text{ Reject } H_0 \text{ if } z > 1.645. & \text{(0.5
-    marks)} \\
-  \text{step 5. } & \hat{p} = 50/600 = 0.0833 &  \\
-                 & z = (0.0833 - 0.07)/\sqrt{0.07*(1-0.07)/600} =
-                 1.277 & \text{(2 marks)} \\ 
-  \text{step 6. } & \text{Since } 1.277 < 1.645, H_0 \text{ cannot be
-    rejected at the 5\% level of significance}. & \text{(3 marks)}
-\end{align*}
-We conclude that there is no strong evidence to show that the response
-rate exceeds 7\% and that additional advertising and promotion should
-not take place
-
-
-\subsubsection*{Question (1 mark for each part)}
-
-The annual returns on shareholders' funds of 97 of Australian's top
-100 companies for the years 1990 and 1998 are obtained.
+\vspace{-6em}
 \begin{center}
-\begin{tabular}{lrrrrrrr}
-  & \multicolumn{7}{c}{Investment Returns (\%)} \\
-  Year 1990 & 7.01 & 13.07 & 2.57 & \ldots & 13.30 & 4.15 & 1.74 \\
-  Year 1998 & 6.49 & 0.53  & 5.33 & \ldots & 20.47 & 3.04 & 14.60 \\
-\end{tabular}
+\includegraphics{bnetwork}
 \end{center}
+
+\subsubsection*{Solution}
+
+The degree distribution is:
+\begin{center}
+\includegraphics{bnetwork-dist}
+\end{center}
+
+The distribution shows that the frequency is exponentially decreasing
+as the degree increases and so this graph resembles a small world
+graph.
+
+
+\subsubsection*{Question (4 marks)}
+
+Using the following document set:
 \begin{enumerate}
-\item Produce a histogram of the 1990 returns.
-\item Produce a histogram of the 1998 returns.
-\item Find the mean, median, range and standard deviation for the 1990 returns.
-\item Repeat part (iii) for the 1998 returns.
-\item Which was the better year for investors?
+\item One one was a race horse.
+\item Two two was one too.
+\item One one won one race.
+\item Two two won one too.
 \end{enumerate}
-
-\subsubsection*{Solution}
-
+Complete the following tasks:
 \begin{enumerate}
-
-% Plots generated in R using these commands:
-%
-% x.1990 <- rpois(100,12.92)
-% x.1998 <- rpois(100,6.36)
-%
-% pdf('question-plot-1990.pdf', width=5, height=4)
-% hist(x.1990, xlab='Investment Returns', main='1990')
-% dev.off()
-%
-% pdf('question-plot-1998.pdf', width=5, height=4)
-% hist(x.1998, xlab='Investment Returns', main='1998')
-% dev.off()
-
-\item ~
-
-\vspace{-4em}
-\begin{center}
-\scalebox{0.6}{\includegraphics{question-plot-1990}}
-\end{center}
-
-\item ~
-
-\vspace{-4em}
-\begin{center}
-\scalebox{0.6}{\includegraphics{question-plot-1998}}
-\end{center}
-
-\item 
-\begin{tabular}{lr}
-\hline
-\multicolumn{2}{c}{Year 1990} \\
-\hline
-Mean               & 12.92 \\
-Median             & 11.38 \\
-Standard Deviation &  9.30 \\
-Range              & 75.01 \\
-\hline
-\end{tabular}
-
-
-\item 
-\begin{tabular}{lr}
-\hline
-\multicolumn{2}{c}{Year 1998} \\
-\hline
-Mean                   &   6.36 \\
-Median                 &   5.40 \\
-Standard Deviation     &   5.17 \\
-Range                  &  42.76 \\
-\hline
-\end{tabular}
-
-
-\item Year 1990 was the better year for investors. The average return
-  was much higher, although the returns were more variable.
+\item Construct a term frequency matrix of the following document set.
+\item Compute the term weight of each term.
+\item Order the words from most important to least important.
 \end{enumerate}
-
-
-\subsubsection{Question (6 marks)}
-An Internet server claimed that its users averaged 15 hours per
-week. To determine whether this was an overstatement, a competitor
-conducted a survey of 150 customers and found that the average time
-spent online was 13 hours per week with a standard deviation of 6.5
-hours. Do the data provide sufficient evidence to indicate that the
-average hours of use are less than that claimed by the first Internet
-server? Test at the 1\% level of significance.
+Note: use the stop word list \{was, a, too\}.
 
 \subsubsection*{Solution}
 
-\begin{align*}
-\text{Data: } & n = 150 \quad \bar{x} = 13 \quad s = 6 .5 \quad \alpha
-= 0.01 & \text{(1 mark)} \\
-\text{Hypotheses: } & H_0 : \mu = 15 \quad H_A: \mu < 15 & \text{(1
-  mark)} \\
-\text{Test statistic: } & \text{As n is large, } z =
-\frac{\bar{x}-\mu}{s/\sqrt{n}} = \frac{13 - 15}{6.5/\sqrt{150}} =
--3.77 & \text{(1 mark)} \\
-\text{Rejection region: } &  \text{From the }z-\text{tables, }
--z_{\alpha} = -z_{0.01} = -2.33 & \\
- & \text{Reject } H_0 \text{ if } z < -2.33 & \text{(1 mark)} \\
- & \text{As } -3.77 < -2.33,\text{ reject } H_0 \text{ at } 0.01\text{
-   level of significance.} & \text{(1 mark)}
-\end{align*}
-Conclusion: There is evidence to infer that the average time is less
-than that claimed by the Internet server.  (1 mark)
-
-
-\subsubsection*{Question ( 20 marks)}
-If $A$ and $B$ are mutually exclusive events such that $P(A) = 0.25$
-and $P(B) = 0.40$, find:
-\begin{enumerate}
-\item a) $P(A\cap B)$ \quad b) $P(A\cup B)$ \quad c) $P(A|B)$
-\item  The number of calls for help that an ambulance service receives ($x$) has the following
-      probability distribution:
+After removing the stop words and case folding, the term frequency matrix is:
 \begin{center}
-\begin{tabular}{|c|cccc|}
+\begin{tabular}{lcccccc}
 \hline
-  $x$    &     0     &     1   &     2     &    3 \\
+  & one & race & horse & two & won \\
 \hline
-  $p(x)$ &     0.1   &     0.2 &     0.3   &    0.4 \\
+1 & 2 & 1 & 1 & 0 & 0 \\
+2 & 1 & 0 & 0 & 2 & 0 \\
+3 & 3 & 1 & 0 & 0 & 2 \\
+4 & 1 & 0 & 0 & 2 & 1 \\
 \hline
 \end{tabular}
 \end{center}
-a) Is this a valid assignment of probability values? Give two reasons
-for your answer. \\
-b)     What is the probability that the ambulance service receive at
-least 2 calls? \\
-c)     Find the expected number of calls that the ambulance service will receive. \\
-d)     Find the standard deviation of the number of calls.
-\item A radio call-in talk show has found that its switchboard receives an average of 30 calls
-  during a 30-minute broadcast. Find the probability that there will be at least 2 calls during a
-  5-minute period?
-\end{enumerate}
-    
-
-\subsubsection*{Solution}
-
-\begin{enumerate}
-\item 
-  (a) 
-  \begin{align*}
-    P(A\cap B) & = 0 \text{ (as $A$ and $B$ are mutually exclusive)} \hfill
-    \text{(2 marks)}
-  \end{align*}
-  (b)
-  \begin{align*}  
-    P(A\cup B) &= P(A) + P(B) - P(A\cap B) = 0.25 + 0.4 - 0 && \text{(1 mark)} \\
-    &= 0.65 && \text{(1 mark)}
-  \end{align*}
-  (c)
-  \begin{align*}
-    P(A|B) &= \frac{P(A\cap B)}{P(B)} = \frac{0}{0.4} && \text{(1
-      mark)} \\
-    &= 0 && \text{(1 mark)}
-  \end{align*}
-
-\item (a) Two reasons for being a valid assignment of probability
-  values:
-  \begin{itemize}
-  \item each probability value is between $0$ and $1$.
-  \item the total of all probability values is $1$.
-  \end{itemize}
-  (b) \begin{align*}
-    P(\text{at least 2}) &= P(X \ge 2)\\
-    &= P(X=2) + P(X=3) \\
-    &= 0.3 + 0.4 = 0.7 & \text{(1 mark)}
-  \end{align*}
-  (c) \begin{align*}
-    \mu = \mathbb{E}[X] &= 0\times 0.1 + 1\times 0.2 + 2\times 0.3 +
-    3\times 0.4 && \text{(0.5 marks)} \\
-      & \text{Hence, the expected number of calls is $2$.} && \text{(0.5 marks)}
-  \end{align*}
-  (d)
-  \begin{align*}
-    \mathbb{E}[X^2] &= 0^2\times 0.1 + 1^2\times 0.2 + 2^2\times 0.3 +
-    3^2\times 0.4 = 5 && \text{(1 mark)} \\
-    \var(X) &= \sigma^2 = \mathbb{E}[X^2] - \mathbb{E}[X]^2 \\
-    &= 5 - 2^2 - 1 && \text{(0.5 marks)} \\
-    & \text{Hence, the standard deviation of the number of calls }
-    \sigma = \sqrt{1} = 1 && \text{(0.5 marks)}
-  \end{align*}
-\item 
-
+The term weight of each word is calculated using:
 \begin{align*}
-  & x = \text{number of calls in 5 minutes} \\
-  & \text{Then $x$ has a Poisson distribution with } \mu = 5 && \text{(1 mark)} \\
-  P(x \ge 2) &= 1 - P(x < 2) && \text{(1 mark)} \\
-  &= 1 - [P(x = 0) + P(x = 1)] \\
-  &= 1 - \left [ \frac{e^{-5}\times 5^0}{0!} + \frac{e^{-5}\times
-      5^1}{1!}\right ] \\
-  &= 1 - [0.0067 + 0.0337] && \text{(1 mark)} \\
-  &= 1 - 0.0404 \\
-  &= 0.9596 && \text{(1 mark)}
+  w_t = \log{\left (\frac{N}{f_t}\right )}
 \end{align*}
+where $N = 4$.
+\begin{center}
+\begin{tabular}{lcccccc}
+\hline
+  & one & race & horse & two & won \\
+\hline
+$f_t$ & 4 & 2 & 1 & 2 & 1 & 2 \\
+$w_t$ & 0 & 0.693 & 1.386 & 0.693 & 0.693 \\
+\hline
+\end{tabular}
+\end{center}
+Therefore the order of the words, from most important to least important is:
+\begin{enumerate}
+\item horse
+\item race 
+\item two 
+\item won 
+\item one
 \end{enumerate}
 
 
+\subsubsection*{Question (4 marks)}
+
+Arrange the set of words into two clusters using single linkage clustering from the following adjacency matrix:
+\begin{center}
+\begin{tabular}{lccccc}
+\hline
+  & one & race & horse & two & won \\
+\hline
+one   & 0 & 1 & 1 & 2 & 2 \\
+race  & 1 & 0 & 1 & 3 & 2 \\
+horse & 1 & 1 & 0 & 3 & 1 \\
+two   & 2 & 3 & 3 & 0 & 1 \\
+won   & 2 & 2 & 1 & 1 & 0 \\
+\hline
+\end{tabular}
+\end{center}
+
+We choose ``one'' and ``race'' as the most similar pair of clusters, and merge them to obtain:
+\begin{center}
+\begin{tabular}{lcccc}
+\hline
+  & one-race & horse & two & won \\
+\hline
+one-race  & 0 & 1 & 2 & 2 \\
+horse     & 1 & 0 & 3 & 1 \\
+two       & 2 & 3 & 0 & 1 \\
+won       & 2 & 1 & 1 & 0 \\
+\hline
+\end{tabular}
+\end{center}
+
+We choose ``one-race'' and ``horse'' as the next most similar pair of clusters, and merge them to obtain:
+\begin{center}
+\begin{tabular}{lccc}
+\hline
+  & one-race-horse & two & won \\
+\hline
+one-race  & 0 & 2 & 1 \\
+two       & 2 & 0 & 1 \\
+won       & 1 & 1 & 0 \\
+\hline
+\end{tabular}
+\end{center}
+
+We choose ``two'' and ``won'' as the next most similar pair of clusters, and merge them to obtain:
+\begin{center}
+\begin{tabular}{lcc}
+\hline
+  & one-race-horse & two-won \\
+\hline
+one-race-horse  & 0 & 1 \\
+two-won         & 1 & 0 \\
+\hline
+\end{tabular}
+\end{center}
+
+This gives us the two clusters: \{one, race, horse\} and \{two, won\}.
 
 \newpage
 
@@ -1090,6 +982,7 @@ Signature: \makebox[3in]{\hrulefill}
 \noindent
 \textbf{Note: An examiner or lecturer/tutor has the right not to mark this
 assignment if the above declaration has not been signed.}
+
 
 \newpage
 
