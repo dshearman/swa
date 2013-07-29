@@ -983,9 +983,62 @@ Therefore, $\chi^2 = 12.50$. There are 2 degrees of freedom
 ($(r-1)\times (c-1)$).
 \end{enumerate}
 
-\newpage
+\subsubsection*{Question (10 marks)}
 
-%\thispagestyle{empty}
+\begin{enumerate}[a)]
+\item Explain the main features of BACI designs and when they might be
+  used.
+\item A mobile phone company which is about to start a major
+  advertising campaign collects information about mentions
+  on Twitter. Using a search the company collects the number of
+  mentions of their product for 3 days before the campaign and 3 days
+  after the campaign. They also collect the number of mentions for
+  their main competitor on the same days. The data are below.
+
+\begin{center}
+\begin{tabular}{|r|r|r|}\hline
+&\multicolumn{2}{c|}{Advertising}\\ \hline
+&Before&After\\ \hline\hline
+Company&105, 107,  98& 110, 139, 120\\ \hline
+Competitor&82, 100,  80&  88,  89,  78\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{enumerate}[i)]
+\item Calculate the total mentions for each company before and after
+  the advertising.
+\item Calculate the \emph{contrast} for the interaction between
+  company and time.
+\item Calculate the \emph{Sum of Squares} for the interaction between
+  company and time.
+\item Given that the sum of squares for error is 795.3, find the
+  $F$-statistic for the interaction between
+  company and time.
+\end{enumerate}
+\end{enumerate}
+
+\textbf{Solution}
+\begin{enumerate}[a)]
+\item A BACI (or Before/After/Control/Impact) design is used to
+  test the impact of an intervention. The key features are that the
+  results before and after an intervention are compared to a control
+  that should not be directly affected by the intervention.
+\item \begin{enumerate}[i)]
+\item \begin{tabular}{rrr}
+  \hline
+ & Before & After \\ 
+  \hline
+Company & 310 & 369 \\ 
+  Competitor & 262 & 255 \\ 
+   \hline
+\end{tabular}
+\item Contrast for the interaction is (310+255) - (262+369) = -66
+\item SSQ = $\frac{contrast^2}{4*n}$ = $\frac{66^2}{12}$ = 363
+\item $F = \frac{SSQ}{SSE/df_E} = \frac{363}{795.3/8} = 3.651$
+\end{enumerate}
+\end{enumerate}
+
+% \thispagestyle{empty}
 
 \subsection*{Assignment Cover Sheet}
 
