@@ -83,7 +83,7 @@ that is at most six in length.
 To examine the small world theory an experiment was devised using the
 U.S. Postal Service.
 
-- [https://en.wikipedia.org/wiki/Small_world_experiment]([https://en.wikipedia.org/wiki/Small_world_experiment#The_experiment)
+- [https://en.wikipedia.org/wiki/Small_world_experiment](http://en.wikipedia.org/wiki/Small_world_experiment#The_experiment)
 
 
 ## Paul Erdös
