@@ -1,0 +1,74 @@
+
+Which parser is most suitable for the following data:
+
+<programminglanguages><language>C++</language><language>Python</language><language>Ruby</language></programminglanguages>
+
+CSV
+XML
+YAML
+JSON
+
+2
+
+
+Which parser is most suitable for the following data:
+
+{"programminglanguages":[{"language":"C++"},{"language":"Python"},{"language":"Ruby"}]}
+
+CSV
+XML
+YAML
+JSON
+
+4
+
+
+In the following URL http://www.ibm.com:8080/doc/COBOL/search.php?q=structure
+the query string is
+
+http
+www.ibm.com
+doc/COBOL/search.php
+q=structure
+
+4
+
+
+In the following URL http://www.ibm.com:8080/doc/COBOL/search.php?q=structure
+the domain is
+
+http
+www.ibm.com
+doc/COBOL/search.php
+q=structure
+
+2
+
+
+A benefit of using OAuth is that:
+
+it provides faster connection times
+it ignores the access limits set by Web services
+we can limit the access of a program to our data
+we can share our access key with others
+
+3
+
+
+Web service providers prefer users to access their data using an API rather than scraping because:
+
+it allows the provider to control the quality of service to all users
+it forces users to see advertising provided by the provider
+it allows the provider to identify the IP address of the user
+it provides more up to date information that the Web site
+
+1
+
+The small world theory of social network states that:
+
+if there are too many items in the network, the network will split
+there is a direct connection between all items in the network
+the network can be placed on the surface of a sphere so that no paths are crossing
+there is only a short path between every pair of items in the network
+
+4

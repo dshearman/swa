@@ -7,6 +7,8 @@
 
 # R Basics
 
+## Installing R
+
 All of the lab sessions for 300958 Social Web Analysis will use R and
 RStudio. If these two applications are not installed on the computer
 you are using, download them from:
@@ -21,9 +23,93 @@ Once they are installed, open RStudio and say hello.
 print("Hello world!")
 ```
 
+## Getting familiar with RStudio
+
+Once RStudio is loaded, we will see four sections:
+
+- Text editor (top left). Use this to enter code and save it as a script.
+- Console (bottom left). Code can be entered straight into the console, or scripts can be run by entering source("script_filename.r")
+- Workspace (top right). This section shows the variables that are currently defined. 
+- Browser (bottom right). We can access files, view plots, examine packages and access help in the browser.
+
+To write your first script, type:
+```{r}
+print("Hello world!")
+```
+into the text editor, save it as hello.r. Then go to the console section and type:
+```{r}
+source("hello.r")
+```
+By sourcing the script, you will run every command. Since there is one command in the script, only one command will be run.
+
+If R complains that it cannot find the file, it may be looking in the wrong directory. To set the directory, use:
+```{r}
+setwd("directory")
+```
+where directory is where your script is stored.
+
+## Writing functions
+
+If a particular piece of code is run often, it may be wise to place it
+in a function. In R, functions are stored in variables. If we define the function:
+```{r}
+addOne = function(x) {
+       return(x + 1)
+}
+```
+we can examine the function by typing its name in the console and pressing enter.
+To run the function, we must add parentheses to the end and include any arguments:
+```{r}
+addOne(5)
+```
+If the result is not assigned to a variable, it is printed to the screen.
+
+
+## Installing Libraries
+
+Installing libraries requires access to the Internet and hence R needs
+to know about the Web proxy when within UWS.
+
+Information on how to tell R about the proxy is here:
+
+- http://support.rstudio.org/help/kb/faq/configuring-r-to-use-an-http-proxy
+
+Information about the proxy setting is here:
+
+- http://www.uws.edu.au/information_technology_services/its/servicedesk/proxy_settings
+
+Once this has been done, you may install libraries using the install.packages command:
+
+install.packages("twitteR")
+
+If R will not speak to the proxy, you can download the packages and install them locally.
+
+Get the package from here:
+
+- http://cran.r-project.org/web/packages/available_packages_by_name.html
+
+Install the package by telling R where you saved it:
+
+- install.packages("/tmp/bigdata_0.1.tgz", repos=NULL)
+
+
 # Accessing Twitter
 
-To access the Twitter API, we must first load the twitteR library.
+To access the Twitter API, a Twitter account is needed. If you do not have one, sign up here:
+
+- https://twitter.com/
+
+To access the Twitter API, we must register a program that is accessing the API. To register the program, visit this link:
+
+- https://dev.twitter.com/apps
+
+and log in. Once you have logged in, click "Create a new application"
+and fill in the form. When the application is created, it will be
+provided a consumer key and a consumer secret; these text sequences
+are needed soon.
+
+We can access the Twitter API in R by loading the twitteR and ROAuth libraries (and
+installing them first if needed).
 
 `r library("twitteR")`
 ```{r}
@@ -31,11 +117,8 @@ library("twitteR")
 library("ROAuth")
 ```
 
-Register an application at Twitter
-https://dev.twitter.com/apps
-This will provides you with a consumer key and consumer secret.
-
-We then need to set up the OAuth session details.
+We then need to set up the OAuth session details. Note: insert your
+applications key and secret where needed.
 
 ```{.r}
 cred <- OAuthFactory$new(consumerKey="insert here",
