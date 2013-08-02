@@ -2,12 +2,6 @@
 % Laurence A. F. Park and Glenn Stone
 % March 22, 2005
 
-
-# Algorithms in R
-
-
-
-
 # Accessing Information from the Social Web
 
 ## How can my program access the Web?

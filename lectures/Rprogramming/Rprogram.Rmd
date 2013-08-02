@@ -1,0 +1,256 @@
+% Introduction to Social Networks
+% Laurence A. F. Park and Glenn Stone
+% March 22, 2005
+
+
+# Algorithms in R
+
+## Hello World
+
+```{r}
+Hello <- function() print("Hello World")
+
+
+Hello()
+```
+
+## R Scripts
+In R commands or programs are stored in text files called "scripts".
+
+They are usually given the file extension ".r" or ".R"
+
+R itself has a menu item (under "File") to open a script or create a new one.
+
+Rstudio also does.
+
+## R Studio
+
+R studio is an IDE (Integrated Development Environment)
+
+\includegraphics[width=0.99\textwidth]{Rstudio.png}
+
+## R Studio 
+* The top left pane is an editor for scripts (and other files)
+* The bottom left is the R console
+* The top right has workspace tab and history tab
+    * Workspace is the list of objects created in R
+    * History contains the commands you have run
+* The bottom left has 4 tabs
+    * Files - a listing of the *current working directory*
+    * Plots - any plots made in R go here
+    * Packages - the available add-on packages
+    * Help - help and documentation
+
+## R Syntax - Basic data
+
+R has several basic data types
+
+* numbers - 1234, 3.14, 1e5
+* strings - "Hello"
+* factors - factor(c("H","H", "T", "H"), levels=c("H","T"))
+
+## R Syntax - Operators
+
+It has operators 
+
+* Numeric,    + - * / ^
+* Comparison,  < > <= >= == !=
+* Logical,    & | && ||
+* Assignment  <- = ->
+
+## R Syntax - Objects and Expressions
+
+Objects have names made up of letters, numbers, . and _
+
+A letter comes first, case matters
+
+Values can be assigned to them
+
+```{r}
+x = 1
+y <- "String"
+```
+
+An R expression is combination of objects, operators and data items (possibly with brackets)
+
+```{r}
+1+1
+2*(1+x)
+```
+
+## R Syntax - Vectors
+
+Vectors are set of items stored together. They have length and content.
+
+They are constructed with "c"
+
+```{r}
+x <- c(1,3,7)
+length(x)
+```
+
+The ":" operator can be used to set up a sequence of integers
+
+```{r}
+x <- 2:7
+x
+```
+
+## R Syntax - Vectors
+
+"seq" is more general (see help)
+
+```{r}
+x <- seq(2,12,2)
+x
+```
+
+Individual entries are accessed with "[" (square brackets) and can be assigned to
+```{r}
+x[3]
+x[4] <- 10
+x
+```
+
+## R Syntax - Lists
+
+Vectors contain things that are of the same type. Lists are more general.
+
+```{r}
+x <- list(1, "Hello World", 1:5)
+x
+```
+
+## R Syntax - Lists
+
+Entries are accessed (and assigned to) with "[["
+```{r}
+x[[2]]
+x[[2]] <- "Good-bye!"
+x
+```
+
+## R functions
+
+R has Functions both built in and you can write your own.
+
+Built in functions can be called on objects or vectors
+
+```{r}
+sqrt(2)
+x <- 1:4
+sqrt(x)
+```
+Note that many functions are *vectorized*
+
+## R functions
+
+Functions are called using brackets "()" (no space)
+
+Any arguments are in the brackets, arguments can be named.
+
+```{r}
+sum(1:10)  ### Sum of 1 upto 10
+sum(x=1:10)  ### Same
+```
+
+## R functions
+
+To define a new function use the "function" keyword
+
+```{r}
+Hello <- function() print("Hello World")
+```
+Note this function has no arguments. But we still need the brackets to call it
+```{r}
+Hello()
+```
+
+## R Control structures
+
+Control structures control how the function proceeds
+
+### if statements
+```{r, eval=FALSE}
+if(condition) {
+  expression~1
+} else {
+  expression~2
+}
+```
+Where expression~1 is executed if the condition is TRUE or non-zero
+and expression~2 is executed otherwise
+
+## R Control structures
+Loops allow things to be repeated. In R loops run through vectors.
+
+### for loops
+```{r, eval=FALSE}
+for(i in vector) {
+  expression
+}
+```
+expression is executed with i set to each value in vector in turn
+
+## Example 1 - Factorial
+
+```{r, tidy=FALSE}
+Factorial <- function(n) {
+  fac <- 1
+  for(i in 1:n) fac <- fac * i
+  return(fac)
+}
+
+Factorial(5)
+```
+
+## Example 2 - Recursive Factorial
+
+```{r, tidy=FALSE}
+RFactorial <- function(n) {
+  if(n==1) return(n)
+  else return(n*RFactorial(n-1))
+}
+
+RFactorial(5)
+```
+
+## R Control structures
+There are break and next statements
+* break breaks out of a loop
+* next skips to the next entry
+
+There are also while loops
+
+### while loops
+```{r, eval=FALSE}
+while(condition) {
+  expression
+}
+```
+Keep executing the expression while the condition is TRUE (or nonzero)
+
+## Towers of Hanoi example?
+
+[Tower of Hanoi](https://en.wikipedia.org/wiki/Tower_of_Hanoi)
+
+\includegraphics[width=0.99\textwidth]{HanoiStart.png}
+
+## Towers of Hanoi example?
+```{r, eval=FALSE, tidy=FALSE}
+move.hanoi <- function(k, from, to, via) {
+  if (k > 1) {
+    move.hanoi(k - 1, from, via, to)
+    move.hanoi(1, from, to, via)
+    move.hanoi(k - 1, via, to, from)
+    }
+  else {
+    cat("Move ", LETTERS[tower[[from]][1]], 
+        " from ", from,
+        " to ", to, "\n")
+    }
+  }
+
+move.hanoi(n, 1, 3, 2)
+```
+
