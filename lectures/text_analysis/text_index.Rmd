@@ -389,6 +389,56 @@ plot(1:100, log(1:100 + 1), xlab="f", ylab="log(f+ 1)")
 ```
 
 
+# Evaluating Results
+
+## Ranking documents
+
+Given a document model, we can compute how similar all documents are
+to a particular document, or how similar all documents are to a
+query. Either way, the result is a ranked list of documents from best
+matching to worst matching.
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+  Document ID & Score & Rank \\
+\midrule
+  D1012123 & 4.56 & 1 \\
+  D2342923 & 4.23 & 2 \\
+  D2342233 & 3.78 & 3 \\
+  D7453232 & 3.66 & 4 \\
+  \vdots & \vdots & \vdots \\
+  D6454644 & -4.01 & 983453 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The document score is used to provide the rank. Once we have the rank,
+we can ignore the score. Google presents the user with the top ten
+results, with the option to view the next ten.
+
+## Comparing results for difference document models
+
+If we are given two document models, we can compute two different
+ranked lists for the same problem (query). We can use these ranked
+lists to evaluate the accuracy of each document model.
+
+To evaluate a document model, we need:
+
+- the truth (the correct ranking)
+- an evaluation function (to compare the computed ranking to the correct ranking).
+
+
+## Obtaining the truth
+
+The ranking of an entire document set for a given query is a
+subjective process. Given only 10 documents, there are $10! =
+3,628,800$ different possible rankings. If two documents are similar,
+it is difficult to say which should be ranked higher than the other.
+
+Rather than providing a ranking as the truth, we can instead provide
+the set of documents that are relevant to the query, meaning that the
+remaining documents are irrelevant.
 
 
 
