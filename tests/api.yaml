@@ -1,0 +1,69 @@
+%YAML 1.2
+---
+
+questions:
+
+    - type: MC
+      question: "Which parser is most suitable for the following data: <programminglanguages><language>C++</language><language>Python</language><language>Ruby</language></programminglanguages>"
+      choices:
+        - CSV
+        - XML
+        - YAML
+        - JSON
+      correct_answer: 2
+
+    - type: MC
+      question: 'Which parser is most suitable for the following data: {"programminglanguages":[{"language":"C++"},{"language":"Python"},{"language":"Ruby"}]}'
+      choices:
+        - CSV
+        - XML
+        - YAML
+        - JSON
+      correct_answer: 4
+
+    - type: MC
+      question: 'In the following URL "http://www.ibm.com:8080/doc/COBOL/search.php?q=structure" the query string is:'
+      choices:
+        - http
+        - www.ibm.com
+        - doc/COBOL/search.php
+        - q=structure
+      correct_answer: 4
+
+    - type: MC
+      question: 'In the following URL "http://www.ibm.com:8080/doc/COBOL/search.php?q=structure" the domain is:'
+      choices:
+        - http
+        - www.ibm.com
+        - doc/COBOL/search.php
+        - q=structure
+      correct_answer: 2
+
+    - type: MC
+      question: "A benefit of using OAuth is that:"
+      choices:
+        - it provides faster connection times
+        - it ignores the access limits set by Web services
+        - we can limit the access of a program to our data
+        - we can share our access key with others
+      correct_answer: 3
+
+    - type: MC
+      question: "Web service providers prefer users to access their data using an API rather than scraping because:"
+      choices:
+        - it allows the provider to control the quality of service to all users
+        - it forces users to see advertising provided by the provider
+        - it allows the provider to identify the IP address of the user
+        - it provides more up to date information that the Web site
+      correct_answer: 1
+
+    - type: MC
+      question: "The small world theory of social network states that:"
+      choices:
+        - if there are too many items in the network, the network will split
+        - there is a direct connection between all items in the network
+        - the network can be placed on the surface of a sphere so that no paths are crossing
+        - there is only a short path between every pair of items in the network
+      correct_answer: 4
+
+...
