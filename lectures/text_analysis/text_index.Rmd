@@ -15,11 +15,16 @@ The social Web contains the opinions of a large sample of the
 population. We can use messages written by the public to examine
 public opinion.
 
+[Geek vs Nerd](http://slackprop.wordpress.com/2013/06/03/on-geek-versus-nerd/)
+
+
+## Digging through the piles of text
+
+There is so much text available. How can we find the pieces that are important?
+
 \vspace{-6em}
 \largeimage{figure/swa_tweets}
 
-
-[Geek vs Nerd](http://slackprop.wordpress.com/2013/06/03/on-geek-versus-nerd/)
 
 # Document Models
 
@@ -440,6 +445,7 @@ Rather than providing a ranking as the truth, we can instead provide
 the set of documents that are relevant to the query, meaning that the
 remaining documents are irrelevant.
 
+A perfect ranking would place all relevant documents higher on the list than all irrelevant documents.
 
 
 ## Summary

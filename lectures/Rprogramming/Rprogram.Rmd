@@ -234,7 +234,7 @@ Keep executing the expression while the condition is TRUE (or nonzero)
 
 [Tower of Hanoi](https://en.wikipedia.org/wiki/Tower_of_Hanoi)
 
-\includegraphics[width=0.99\textwidth]{HanoiStart.png}
+\includegraphics[width=0.99\textwidth]{HanoiStart.pdf}
 
 ## Towers of Hanoi example?
 ```{r, eval=FALSE, tidy=FALSE}
