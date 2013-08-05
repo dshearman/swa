@@ -1,3 +1,15 @@
+### Conway's Game of Life
+### http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
+###
+### To run the simulation:
+### 1. type source("life.r") in R
+### 2. click on the plot a few times to create life
+### 3. click "Finish" in the cornet of the plot window
+### 4. watch as life unfolds.
+###
+### Note that the grid size and number of iterations can be set at the
+### end of the file.
+### To test out changes, set the iterations to 1.
 
 create.grid <- function(size) {
   ## Create the environment.
@@ -18,6 +30,10 @@ wrap.coordinates <- function(grid, pos) {
   }
   return(list(x = x.pos, y = y.pos))
   
+}
+
+total.life <- function(grid) {
+  return(sum(grid$grid))
 }
 
 add <- function(grid, pos) {
@@ -61,6 +77,8 @@ count.neighbours <- function(grid, pos) {
   ## Count the number of living neighbours of a point.
   
   counter = 0
+  x = pos$x
+  y = pos$y
   
   for (x in pos$x + c(-1,0,1)) {
     for (y in pos$y + c(-1,0,1)) {
@@ -92,11 +110,6 @@ grow <- function(grid, pos) {
 }
 
 
-
-
-
-
-
 time.step <- function(grid) {
   ## Compute the next state of the grid.
   
@@ -118,7 +131,7 @@ click.points <- function(grid) {
   ## Allow the user to click to insert life into the grid.
 
   show.grid(grid)
-
+  cat("Click on the plot to allocate life. When finished, click Finish at the top right corner of the plot.\n")
   repeat {
     click.loc <- locator(1)
     if (!is.null(click.loc)) {
@@ -127,8 +140,6 @@ click.points <- function(grid) {
       if ((pos$x == wrap.pos$x) & (pos$y == wrap.pos$y)) {
         grid = add(grid, pos)
         show.grid(grid)
-        print(pos)
-        print(wrap.pos)
       } else {
         break
       }
@@ -139,10 +150,32 @@ click.points <- function(grid) {
   return(grid)
 }
 
+run.life <- function(grid, iterations) {
+  ## main life iterator
+
+  ## step though time
+  for (a in 1:iterations) {
+
+    cat("\rIteration: ", a)
+    
+    ## compute the state of life for the next time step
+    grid = time.step(grid)
+    Sys.sleep(0)
+    ## show the state of life
+    show.grid(grid)
+    if (total.life(grid) == 0) {
+      ## if there is no life left, stop the simulation
+      break
+    }
+  }
+  cat("\n")
+}
+
+
 
 ## set up varaibles
 grid.size = 20
-iterations = 100
+iterations = 50
 
 ## create grid
 grid <- create.grid(grid.size)
@@ -154,15 +187,11 @@ grid = add(grid, list(x = 6, y = 6))
 grid = add(grid, list(x = 6, y = 7))
 grid = add(grid, list(x = 5, y = 8))
 
-## manually allocate life
+## or manually allocate life
 grid = click.points(grid)
 
-## step though time
-for (a in 1:iterations) {
-  Sys.sleep(0)
-  show.grid(grid)
-  grid = time.step(grid)
-}
+## run the simulation
+run.life(grid, iterations)
 
 
 

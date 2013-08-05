@@ -48,6 +48,73 @@ setwd("directory")
 ```
 where directory is where your script is stored.
 
+
+# Coding in R
+
+Code in R can be written in a procedural style or object oriented
+style. If a script is run, it is interpreted from the top of the file to the bottom.
+The control of the flow can be obtained by writing conditional statements (if, else)
+and loops (for, while).
+
+## if statement
+
+If the execution of code depends on the state of a variable, we can
+use an if statement. For example, if the operating system is Windows,
+the file path is "C:\User\greg\file.txt", else the file path is
+"/home/greg/file.txt".
+
+The if statement in R has the syntax:
+```{.r}
+if (condition) {
+   ## run this code if condition is true
+}
+```
+The statement can also be extended to include other conditions and a default condition.
+```{.r}
+if (condition 1) {
+   ## run this code if condition 1 is true
+}
+else if (condition 2) {
+   ## run this code if condition 1 is false and condition 2 is true
+}
+else {
+   ## run this code if condition 1  and condition 2 are false
+}
+```
+
+## Exercise
+
+
+
+
+
+
+## for loop
+
+Loops allow us to execute a piece of code a number of times, where the
+number of not known until run time. For example, for every year that
+Greg has been born, give him a birthday punch.
+
+
+```{.r}
+for (variable in sequence) {
+  ### run this code using variable
+}
+```
+
+
+## Exercise
+
+The function cat will print its contents to the screen. E.g.
+```{r}
+a = 5
+cat("This is a number ", a, "\n")
+```
+Write a for loop to convert a number to a sequence of plus signs. For
+example, 5 will be converted to "+++++".
+
+
+
 ## Writing functions
 
 If a particular piece of code is run often, it may be wise to place it
@@ -226,4 +293,64 @@ plot(h)
 http://files.meetup.com/1772780/Mining%20Twitter%20Using%20R.pdf
 
 # Accessing Facebook
+
+
+
+
+# The Game of Life
+
+John Conway developed the Game of Life to show how complex systems can
+be obtained from a few simple rules.
+
+[http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life](http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
+
+The game has a grid of cells that are either alive or dead. At each
+iteration of the game, the state of a cell is determined by the number
+of neighbour cells that are alive. The rules are:
+
+- If a cell has three living neighbours, it remains or becomes alive.
+- If a cell has two living neighbours, it's state does not change.
+- If a cell has less than 2 or more than three living neighbours, it dies.
+
+The game is a zero player game, meaning that once we set up the
+initial state are press go, we no longer interact with the game.
+
+There are many initial states that end up with no life after a number
+of iterations, but there are many interesting initial states that
+grow, cycle or remain static. See the Wikipedia page for details of
+these initial states.
+
+We have written the code to run the game of life in R. To run it, simply
+source the R script:
+```{.r}
+source("life.r")
+```
+
+Then click on the plot to show where you want the initial life to be,
+then click Finish (at the top right corner of the plot). We then watch
+the life grow and die.
+
+Unfortunately, the script is missing the code from the function:
+```{.r}
+count.neighbours <- function(grid, pos) {
+  ## Count the number of living neighbours of a point.
+  
+  counter = 0
+  x = pos$x
+  y = pos$y
+  
+  ### insert the missing code here!
+
+  return(counter)
+}
+```
+The function takes the life grid and a position. It returns the number
+of living neighbours of the position. Note that each cell has eight
+neighbours, so the number returned must be between 0 and 8.
+
+Use your knowledge of R from the previous part of this lab to write
+the missing code, then enjoy the game of life.
+Make sure to try out some of these staring patterns:
+[http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Examples_of_patterns](http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Examples_of_patterns)
+
 
