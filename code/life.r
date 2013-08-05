@@ -121,13 +121,17 @@ click.points <- function(grid) {
 
   repeat {
     click.loc <- locator(1)
-    pos = list(x = round(click.loc$x), y = round(click.loc$y))
-    wrap.pos = wrap.coordinates(grid, pos)
-    if ((pos$x == wrap.pos$x) & (pos$y == wrap.pos$y)) {
-      grid = add(grid, pos)
-      show.grid(grid)
-      print(pos)
-      print(wrap.pos)
+    if (!is.null(click.loc)) {
+      pos = list(x = round(click.loc$x), y = round(click.loc$y))
+      wrap.pos = wrap.coordinates(grid, pos)
+      if ((pos$x == wrap.pos$x) & (pos$y == wrap.pos$y)) {
+        grid = add(grid, pos)
+        show.grid(grid)
+        print(pos)
+        print(wrap.pos)
+      } else {
+        break
+      }
     } else {
       break
     }
@@ -155,6 +159,7 @@ grid = click.points(grid)
 
 ## step though time
 for (a in 1:iterations) {
+  Sys.sleep(0)
   show.grid(grid)
   grid = time.step(grid)
 }
