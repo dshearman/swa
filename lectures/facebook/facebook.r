@@ -35,7 +35,7 @@ get.fb.friends <- function(id, token) {
 
 
 id = "560679740"
-data = get.fb.friends(id, token)
+friends = get.fb.friends(id, token)
 
 
 get.fb.mutualfriends <- function(id1, id2, token) {
@@ -47,5 +47,5 @@ get.fb.mutualfriends <- function(id1, id2, token) {
 }
 
 
-mut.data = get.fb.friends(id, token)
-friends$data[[1]]$name
+mut.data = get.fb.mutualfriends(id, friends$data[[1]]$id, token)
+

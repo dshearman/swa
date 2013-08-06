@@ -1,0 +1,407 @@
+% Introduction to R
+% 300958 Social Web Analysis 
+% Week 3 Lab
+
+`r opts_chunk$set(prompt=TRUE, comment=NA)`
+`r knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
+
+# R Basics
+
+## Installing R
+
+All of the lab sessions for 300958 Social Web Analysis will use R and
+RStudio. If these two applications are *not* installed on the computer
+you are using, download them from:
+
+- R: [http://cran.csiro.au/](http://cran.csiro.au/)
+- RStudio: [http://www.rstudio.com/ide/download/desktop](http://www.rstudio.com/ide/download/desktop)
+
+Install R, then Rstudio.
+
+Once they are installed, open RStudio and say hello.
+```{r}
+print("Hello world!")
+```
+
+## Getting familiar with RStudio
+
+Once RStudio is loaded, we will see four sections:
+
+- Text editor (top left). Use this to enter code and save it as a script.
+- Console (bottom left). Code can be entered straight into the console, or scripts can be run by entering source("script_filename.r")
+- Workspace (top right). This section shows the variables that are currently defined. 
+- Browser (bottom right). We can access files, view plots, examine packages and access help in the browser.
+
+To write your first script, type:
+```{r eval=FALSE}
+print("Hello world!")
+```
+into the text editor, save it as hello.r. Then go to the console section and type:
+```{r eval=FALSE}
+source("hello.r")
+```
+By sourcing the script, you will run every command. Since there is one command in the script, only one command will be run.
+There is also a source button above the text editor window.
+
+If R complains that it cannot find the file, it may be looking in the wrong directory. To set the directory, use:
+```{r eval=FALSE}
+setwd("directory")
+```
+where `directory` is where your script is stored.
+
+
+# R Documentation
+
+If you have never programmed in R before, download this document as a
+reference:
+
+- [http://cran.csiro.au/doc/contrib/Torfs+Brauer-Short-R-Intro.pdf](http://cran.csiro.au/doc/contrib/Torfs+Brauer-Short-R-Intro.pdf)
+
+Read through it and try some of the examples.
+
+## The R help system
+
+R also has an extensive help system. Each function is documented and
+accessible using the function `help`. For example, the documentation
+of the function `plot` can be read by issuing the command:
+
+```{r eval=FALSE}
+help(plot)
+```
+or
+```{r eval=FALSE, tidy=FALSE}
+?plot
+```
+
+Each help page contains the sections:
+
+- Description: explaining what the function does.
+- Usage: showing how to call the function and what the default arguments are.
+- Arguments: Describing the arguments in detail.
+- Details: explains how the function behaves.
+- See Also: other similar functions.
+- Examples: examples of using the function.
+
+The examples section at the bottom of the help page can be very useful
+if you have not used the function before.
+
+## Exercise
+
+Go to the help page for `plot` and try out the examples from the
+Examples section of the help file.
+
+
+# Coding in R
+
+The real power of R comes from its ability to run complex programs
+with a few lines of code. In this section, we will examine the
+fundamentals of coding in R.
+
+## Variables
+
+In R variables are defined once data is assigned. R has dynamic
+typing, meaning that we *do not* have to declare the type of the
+variable (e.g. int x;), the type of the variable is set once data is
+assigned. To create a variable `x` of type numeric containing the
+value `4`, we issue the command:
+```{r}
+x = 4
+```
+If `x` did not exist, R creates the variable and then assigns the value.
+
+We can create variables of type `string`:
+```{r}
+x = "hello, this is some text."
+```
+
+## Data Structures
+
+R provides a few fundamental data structures that can be used by
+themselves, or used as building blocks for more complicated structures.
+
+
+### Arrays
+
+Arrays are set of values that can be accessed by providing the correct
+index number.
+
+
+A one dimensional array is a vector. To create a vector, we use the function `c`:
+```{r}
+ages = c(24, 43, 76, 21, 32)
+```
+A two dimensional array is created using the function `matrix`:
+```{r}
+cross.ages = matrix(c(24, 43, 76, 21, 32, 54), ncol = 2)
+```
+
+Higher dimensional arrays can be constructed using the function
+`array`. Here is an example of a three dimensional array, where each
+dimension has two items:
+```{r}
+really.cross.ages = array(c(24, 43, 76, 21, 32, 54, 43, 65), c(2,2,2))
+```
+
+To access data from an array, we provide the index on the data.
+To access the second item of the vector `ages`:
+```{r}
+ages[2]
+```
+To access the second and fifth items of the vector `ages`:
+```{r}
+ages[c(2,5)]
+```
+To access the second up to the fifth items of the vector `ages`:
+```{r}
+ages[2:5]
+```
+To access the first row and second column of the matrix `cross.ages`:
+```{r}
+cross.ages[1,2]
+```
+To access the second column of the matrix `cross.ages`:
+```{r}
+cross.ages[,2]
+```
+
+Note that data types cannot be mixed in an array (e.g. it cannot
+contain both numeric and string value, only one or the other).
+
+
+### Data Frames
+
+A data frame is a rectangular table of data. with named5B5B5B columns.  The
+`iris` data frame is part of the core R libraries and so is always
+accessible in R.
+
+We can examine the size of the data frame:
+```{r}
+dim(iris)
+```
+We can examine the names of the data frame columns:
+```{r}
+names(iris)
+```
+We can select a column:
+```{r}
+iris$Petal.Width
+```
+We can view the first few items of the data frame:
+```{r}
+head(iris)
+```
+We can also access the elements using indexing (as if it were a matrix):
+```{r}
+iris[3,]
+```
+
+To create a new data frame, we provide the column data, where each
+column of a vector of the same length:
+```{r}
+my.data = data.frame(colour = c("red", "green", "blue"), length = c(1,4,3))
+```
+
+### Lists
+
+Lists are generic storage data structures that are constructed in a
+similar fashion to a data frame, but there is no restriction on the
+data they can hold.
+
+We can have a list that stores a persons information:
+```{r}
+bob = list(name = "Bob Bobson", age = 42, runs = c(13, 45, 87, 2, 9))
+```
+We can even have a list of lists:
+```{r}
+bobs = list(list(name = "Bob Bobson", age = 42, runs = c(13, 45, 87, 2, 9)),
+     list(name = "Bob Johnson", town = "Bobville", bowling.runs = c(45, 23, 54, 12), 
+     	       bowling.wickets = c(2,0,2,3)))
+```
+
+There are two methods of accessing a list, single and double
+brackets. The single brackets method returns a list contain the items:
+```{r}
+bobs[1]
+```
+The double brackets method returns the contents:
+```{r}
+bobs[[1]]
+```
+The method chosen is based on what will be done with the data in the
+next stage of your program.
+
+If the list contains names, we can access the data by calling the name
+(just as in the data frame section):
+```{r}
+bob$runs
+```
+
+### Exercise
+
+What data structure would you choose to store your past results at
+UWS? Write code to store your results in the variable `past.results`.
+
+
+## Flow Control
+
+Code in R can be written in a procedural style or object oriented
+style. If a script is run, it is interpreted from the top of the file to the bottom.
+The control of the flow can be obtained by writing conditional statements (if, else)
+and loops (for, while).
+
+### if statement
+
+If the execution of code depends on the state of a variable, we can
+use an if statement. For example, if the operating system is Windows,
+the file path is "C:\User\greg\file.txt", else the file path is
+"/home/greg/file.txt".
+
+The if statement in R has the syntax:
+```{r eval=FALSE}
+if (condition) {
+   ## run this code if condition is true
+}
+```
+The statement can also be extended to include other conditions and a default condition.
+```{r eval=FALSE}
+if (condition 1) {
+   ## run this code if condition 1 is true
+}
+else if (condition 2) {
+   ## run this code if condition 1 is false and condition 2 is true
+}
+else {
+   ## run this code if condition 1  and condition 2 are false
+}
+```
+
+
+The `if` statement depends on a condition, where a condition is simply
+a statement that returns a `TRUE` or `FALSE` value. 
+If the variable x is defined as:
+```{r}
+x == 4
+```
+A condition could be as simple as:
+```{r}
+x == 2
+```
+or it could be a function that exists or we have written:
+```{r eval=FALSE}
+do.i.like.this.number(2)
+```
+
+
+### for loop
+
+Loops allow us to execute a piece of code a number of times, where the
+number of not known until run time. For example, for every year that
+Greg has been born, give him a birthday punch.
+
+
+```{r eval=FALSE}
+for (variable in sequence) {
+  ### run this code using variable
+}
+```
+
+
+### Exercise
+
+The function cat will print its contents to the screen. E.g.
+```{r}
+a = 5
+cat("This is a number ", a, "\n")
+```
+Write a for loop to convert a number to a sequence of plus signs. For
+example, 5 will be converted to "+++++".
+
+
+Write an `if` statement to test if an item in `past.results` is a pass
+or fail grade.  Then use a for loop to test all of the grades in
+`past.results`.
+
+
+
+## Writing functions
+
+If a particular piece of code is run often, it may be wise to place it
+in a function. In R, functions are stored in variables. If we define the function:
+```{r}
+addOne = function(x) {
+       return(x + 1)
+}
+```
+we can examine the function by typing its name in the console and pressing enter.
+To run the function, we must add parentheses to the end and include any arguments:
+```{r}
+addOne(5)
+```
+If the result is not assigned to a variable, it is printed to the screen.
+
+
+### Exercise
+
+Write a function `check.pass` that takes the data structure
+`past.results` and returns a vector showing if each grade was a pass
+or a fail.
+
+# The Game of Life
+
+John Conway developed the [Game of
+Life](http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) to show
+how complex systems can be obtained from a few simple rules.
+
+
+The game has a grid of cells that are either alive or dead. At each
+iteration of the game, the state of a cell is determined by the number
+of neighbour cells that are alive. The rules are:
+
+- If a cell has three living neighbours, it remains or becomes alive.
+- If a cell has two living neighbours, it's state does not change.
+- If a cell has less than 2 or more than three living neighbours, it dies.
+
+The game is a zero player game, meaning that once we set up the
+initial state are press go, we no longer interact with the game.
+
+There are many initial states that end up with no life after a number
+of iterations, but there are many interesting initial states that
+grow, cycle or remain static. See the Wikipedia page for details of
+these initial states.
+
+We have written the code to run the game of life in R. To run it,
+simply download the file [life.r](./life.r) into your *working
+directory* and source the R script:
+```{r eval=FALSE}
+source("life.r")
+```
+
+Then click on the plot to show where you want the initial life to be,
+then click Finish (at the top right corner of the plot). We then watch
+the life grow and die.
+
+Unfortunately, the script is missing the code from the function:
+```{r eval=FALSE}
+count.neighbours <- function(grid, pos) {
+  ## Count the number of living neighbours of a point.
+  
+  counter = 0
+  x = pos$x
+  y = pos$y
+  
+  ### insert the missing code here!
+
+  return(counter)
+}
+```
+The function takes the life grid and a position. It returns the number
+of living neighbours of the position. Note that each cell has eight
+neighbours, so the number returned must be between 0 and 8.
+
+Use your knowledge of R from the previous part of this lab to write
+the missing code, then enjoy the game of life.  Make sure to try out
+some of these [staring
+patterns](http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Examples_of_patterns).
+
+
+
