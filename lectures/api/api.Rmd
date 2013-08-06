@@ -73,9 +73,9 @@ scheme://domain:port/path?query_string#fragment_id
 - query string: arguments for dynamic files
 - fragment_id: tag identifying section of the file
 
-### Example
+### Problem
 
-Identify the parts of the URL:
+Identify each part of the URL:
 ```
 http://www.google.com/search?client=safari&q=hello
 ```
@@ -334,6 +334,23 @@ information from Facebook.
 ### TwitteR
 
 We will be using the R library twitteR to access the Twitter API through R.
+
+
+## Demonstration
+
+We will now show how to set up access to Twitter information using R
+and the Twitter API.
+
+Steps:
+1. Set up a Twitter App
+2. Obtain the App OAuth keys
+3. Give R the OAuth keys to authorise it to connect to the App
+4. Start downloading tweets
+
+
+Try to do this yourself later. We will require Twitter information in
+the later lab classes.
+
 
 ## Summary
 

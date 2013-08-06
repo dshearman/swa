@@ -81,6 +81,17 @@ div#TOC, nav#TOC
 
 @media print
     {
+body {
+    margin: auto;
+    padding-right: 1em;
+    padding-left: 1em;
+    max-width: none;
+    color: black;
+    font-size: 100%;
+    line-height: 140%;
+    color: #333; 
+}
+
     div#TOC, nav#TOC
         {
         /* Don't display TOC in print */
@@ -453,6 +464,17 @@ div.footnotes li[id^="fn"] /* A footnote item within that div */
    imports this one and adds a class just to do this.
 */
 
+span.header-section-number {
+    padding-right: 0.5em;
+}
+
+a:link {color:#772222;}      /* unvisited link */
+a:visited {color:#992222;}  /* visited link */
+
+.title, .author, .date {
+    color:#222277;
+}
+
 @media print
     {
     .noprint
@@ -460,3 +482,4 @@ div.footnotes li[id^="fn"] /* A footnote item within that div */
         display:none;
         }
     }
+

@@ -23,7 +23,7 @@ public opinion.
 There is so much text available. How can we find the pieces that are important?
 
 \vspace{-6em}
-\largeimage{figure/swa_tweets}
+\largeimage{swa_tweets}
 
 
 # Document Models
@@ -36,6 +36,27 @@ searching through them, to either:
 - Find the document that is most similar to a query (Google)
 - Find the document that is most similar to another document
 - Find words that are most similar to another word
+
+### Which tweet is most similar to "Hero memories" or "Game"?
+
+\begin{columns}[t]
+\begin{column}{0.45\textwidth}
+@Richmond\_FC Final siren, the Tiges win by 41 points at the 
+MCG! \#gotiges \#yellowandblack
+\end{column}
+\begin{column}{0.45\textwidth}
+@SJGames \#hook The deities inform the heroes that one of the PCs will
+soon die, to be replaced by another version who will retain his
+memories. -sjm
+\end{column}
+\end{columns}
+
+\pause
+\vspace{1em}
+How can we compute the similarity over millions of tweets?
+
+
+## Document model qualities
 
 In each cases, we need to be able to compare documents to documents,
 documents to queries, or words to words, so we need to define a
