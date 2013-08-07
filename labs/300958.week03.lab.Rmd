@@ -170,7 +170,7 @@ contain both numeric and string value, only one or the other).
 
 ### Data Frames
 
-A data frame is a rectangular table of data. with named5B5B5B columns.  The
+A data frame is a rectangular table of data. with named columns.  The
 `iris` data frame is part of the core R libraries and so is always
 accessible in R.
 
@@ -280,7 +280,7 @@ The `if` statement depends on a condition, where a condition is simply
 a statement that returns a `TRUE` or `FALSE` value. 
 If the variable x is defined as:
 ```{r}
-x == 4
+x = 4
 ```
 A condition could be as simple as:
 ```{r}
@@ -295,7 +295,7 @@ do.i.like.this.number(2)
 ### for loop
 
 Loops allow us to execute a piece of code a number of times, where the
-number of not known until run time. For example, for every year that
+number is not known until run time. For example, for every year that
 Greg has been born, give him a birthday punch.
 
 

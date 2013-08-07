@@ -256,9 +256,10 @@ RFactorial(5)
 
 
 ## R Control structures
-There are break and next statements
-* break breaks out of a loop
-* next skips to the next entry
+There are break and next statements:
+
+* break: breaks out of a loop
+* next: skips to the next entry
 
 There are also while loops
 

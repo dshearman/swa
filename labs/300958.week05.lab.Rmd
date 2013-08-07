@@ -169,3 +169,33 @@ http://files.meetup.com/1772780/Mining%20Twitter%20Using%20R.pdf
 
 
 
+library("twitteR")
+library("tm")
+library("wordcloud")
+
+
+# show the difference in weight and raw frequency
+library("tm")
+data(crude)
+a <- tm_map(crude, removeNumbers)
+a <- tm_map(a, removePunctuation)
+a <- tm_map(a , stripWhitespace)
+a <- tm_map(a, tolower)
+a <- tm_map(a, removeWords, stopwords("english"))
+a <- tm_map(a, stemDocument, language = "english")
+
+A = TermDocumentMatrix(a)
+B = TermDocumentMatrix(crude)
+W = weightTfIdf(A)
+
+D = as.data.frame(inspect(A))
+E = as.data.frame(inspect(B))
+F = as.data.frame(inspect(W))
+
+t = table(apply(D, 1, sum))
+s = table(apply(E, 1, sum))
+
+# frequency
+rownames(E)[order(E[,17], decreasing=TRUE)][1:10]
+# weights
+rownames(F)[order(F[,17], decreasing=TRUE)][1:10]
