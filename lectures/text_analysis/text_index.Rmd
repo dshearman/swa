@@ -20,7 +20,10 @@ public opinion.
 
 ## Digging through the piles of text
 
-There is so much text available. How can we find the pieces that are important?
+Given ten documents, we could read them and find which are relevant to
+our needs. Given a million documents, we have to automate the
+process. There is so much text available. How can we find the pieces
+that are important?
 
 \vspace{-6em}
 \largeimage{swa_tweets}
@@ -54,6 +57,84 @@ memories. -sjm
 \pause
 \vspace{1em}
 How can we compute the similarity over millions of tweets?
+
+
+Documents are defined by their content, the words they contain. 
+When we write a document:
+
+- we have model of the document $M_d$ in our mind.
+- we then sample words from the document model $M_d$ to create the document.
+
+The words in the document are a sample from a model. We can take many
+samples to obtain many documents, each with different words. But
+because they all come from the same document model, they contain the
+same ideas.
+
+
+# Divergence from Randomness
+
+The importance of a word in a document is inversely proportional to
+the probability of it appearing. Meaning, if we expect a word to
+appear and it appears, it is not interesting. If we expect a word not
+to appear and it doesn't, it is interesting.
+
+
+$$
+	P(w|d) \prop P(w|C)
+$$
+
+
+### Probability of occurrence
+
+Which words do you expect in a document collection from computing:
+\begin{center}
+	computer, with, nuclear, windows, water, snowman.
+\end{center}
+
+## Using the Binomial distribution
+
+We can compute the probability of a word appearing, using the Binomial
+distribution.
+
+\begin{block}{Binomial Distribution}
+
+The probability of $x$ successes, in $n$ trials, where each trial has
+the probability of successes $p$.
+
+\end{block}
+
+- A document is a sample of $n$ words. 
+- If word $w$ is chosen, we have a success, if word $w$ is not chosen,
+  we have a failure.
+- The probability $p$ of word $w$ is the proportion of occurrences of
+  word $w$ in the document collection.
+
+
+## Binomial Example
+
+A document collection contains 10 documents, each containing 100 words (total of 1000 words).
+
+The word "the" appears 100 times in the collection, so its probability
+is $p = 100/1000 = 0.1$
+
+In a given document of length 100, "the" appears 12 times. The
+probability of this occurring is:
+$$
+	P(X = 12) = \text{Binomial}(12, n = 100, p = 0.1) = 0.0987
+$$
+
+The word "tank" appears 3 times in the collection, so its probability
+is $p = 3/1000 = 0.003$
+
+In a given document of length 100, "tank" appears 2 times. The
+probability of this occurring is:
+$$
+	P(X = 2) = \text{Binomial}(2, n = 100, p = 0.003) = 0.033
+$$
+
+The lower probability implies a less likely event. Since it has
+happened, this event is special.
+
 
 
 ## Document model qualities
