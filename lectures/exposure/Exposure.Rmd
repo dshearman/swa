@@ -1,0 +1,81 @@
+# Facebook Insights
+
+## Facebook Insights
+
+If you own a facebook page and you have 30 "likes" then you get access to facebook insights.
+
+Facebook believes these Insights are useful - particularly to business.
+
+The School of Computing, Engineering and Mathematics has a facebook page.
+
+
+## Likes, Reach and Talking About
+
+Facebook Insights records data (over a fixed period) relating to the number of likes, 
+the reach and the number "Talking About"
+
+This can be at the *page* or *post* level
+
+* Likes are just the number of unique people who click the *like* button on a page or post. 
+* Reach is the number of unique people who might have seen a page or post. It includes likes, but also 
+includes people who have seen it because it was *shared* etc.
+* "Talking about" means actively interacting with a page or post. 
+That is likes, comments, tags or shares etc.
+
+These measures can be obtained for various time periods, daily, weekly, 28-day, as well as a cummulative total.
+
+The measures are only available for pages that 30 or more of that measure.
+
+## Business Questions
+
+The sort of things an organisation might be interested in include.
+
+* What is the Reach of our facebook presence?
+* What are the demographics of that Reach --- are we getting to our target audience?
+* What impacts have changes to our page/posts/presence made on Reach?
+
+Facebook provide graphical visualisations of this data. We will look at replicating this, and
+doing some simple statistical analysis.
+
+## Facebook Insights
+
+\includegraphics[width=0.9\linewidth]{Insights1.pdf}
+
+## Facebook Insights
+
+The overview screen shows the Reach (and "Talking About") of the Page
+
+The figures at the top are current Likes, and cummulative TA and Reach for the last 7 days.
+
+The graph shows the TA and Reach for 7 day period ending on a particular day, plotted against that day.
+
+The purple circles represent the number of posts each day.
+
+This is all for the past month.
+
+(There is a table of per post info also)
+
+## Facebook Insights
+
+\includegraphics[width=0.9\linewidth]{Insights2.pdf}
+
+## Facebook Insights
+
+On the second screen (its the same for Likes, Reach or Talking About), the Likes are broken down by several
+demographic factors
+
+* Gender, Age, Country, Town, and Language.
+
+The graph is a *bar plot* of proportions by gender and age.
+
+You can choose the time period that this covers, upto a 92 day period.
+
+You can also Export the data for 180 days.
+
+
+## Export Data
+
+<<eval=FALSE>>=
+library(gdata)
+@
+
