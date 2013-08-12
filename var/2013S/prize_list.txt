@@ -1,0 +1,33 @@
+From: Jacob Henwood <17815589@student.uws.edu.au>
+Subject: R Syntax
+Date: Sun, 11 Aug 2013 03:46:55 +0000
+
+Hi,
+
+I put a post in the discussion about if-else-if syntax in R. Seeing as it
+implies that the example you gave has the wrong syntax, does it count as
+pointing out a mistake?
+
+Cheers,
+
+Jacob C W Henwood
+17815589 - BICT - Parramatta
+
+From: Jacob Henwood
+Sent:  aturday   0  ugust  013  1  9  M
+To: l.park@uws.edu.au
+
+Hey Dr P,
+
+I had completely forgot about R’s weird if-else syntax.  I really don’t like
+writing code like that, but seeing as R is so much fun I can live with it.
+
+Stats Predator
+“If it tables, we can graph it!”
+
+Cheers,
+
+Jacob C W Henwood
+17815589 - BICT - Parramatta
+
+------------------------------------------------------------------------

@@ -204,7 +204,7 @@ Control structures control how the function proceeds
 
 ### if statements
 ```{r, eval=FALSE}
-if(condition) {
+if (condition) {
   expression~1
 } else {
   expression~2
@@ -244,8 +244,7 @@ Factorial(5)
 RFactorial <- function(n) {
   if(n==1) {
     return(n)
-  }
-  else {
+  } else {
     return(n * RFactorial(n - 1))
   }
 }
@@ -285,8 +284,7 @@ move.hanoi <- function(k, from, to, via) {
     move.hanoi(k - 1, from, via, to)
     move.hanoi(1, from, to, via)
     move.hanoi(k - 1, via, to, from)
-  }
-  else {
+  } else {
     cat("Move ", LETTERS[tower[[from]][1]], 
         " from ", from,
         " to ", to, "\n")

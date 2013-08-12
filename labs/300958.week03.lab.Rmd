@@ -266,11 +266,9 @@ The statement can also be extended to include other conditions and a default con
 ```{r eval=FALSE}
 if (condition 1) {
    ## run this code if condition 1 is true
-}
-else if (condition 2) {
+} else if (condition 2) {
    ## run this code if condition 1 is false and condition 2 is true
-}
-else {
+} else {
    ## run this code if condition 1  and condition 2 are false
 }
 ```
