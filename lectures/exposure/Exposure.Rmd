@@ -75,7 +75,133 @@ You can also Export the data for 180 days.
 
 ## Export Data
 
-<<eval=FALSE>>=
-library(gdata)
-@
+The small button to the right of this second screen allows us to export data.
 
+* Data can be exported at a page or post level.
+* Dates can be chosen upto 180 days long.
+* XLS or CSV format can be used. XLS contains more information.
+
+We we look at Page level, XLS data.
+
+As exported by Facebook there are sometimes problems with this file,
+so open it in Excel and re-save as an XLSX file.
+
+## Export Data
+\newcommand\sfont{\fontsize{8}{8.1}\selectfont}
+
+R has some facilities to read XLSX files. The gdata library is one. (This will need to be installed)
+
+```{r, results='hide', warning=FALSE, message=FALSE}
+library(gdata, quietly=TRUE)
+```
+```{r, size='sfont', cache=TRUE}
+sheetCount("Facebook Insights Data Export 2013-08-07.xlsx")
+sheetNames("Facebook Insights Data Export 2013-08-07.xlsx")
+```
+
+## Export Data
+
+The XLSX file contains 65 sheets.
+We are primarily going to look at "Key Metrics" and "Lifetime Likes by Gender and Age"
+
+(These are saved as CSV for ease of use, but...)
+
+```{r, eval=FALSE}
+keyMetrics <- read.xls("Facebook Insights Data Export 2013-08-07.xlsx", 1)
+Likes <- read.xls("Facebook Insights Data Export 2013-08-07.xlsx", 30)
+```
+
+```{r}
+keyMetrics <- read.csv("keyMetrics.csv", as.is=TRUE)
+dim(keyMetrics)
+Likes <- read.csv("LifetimeLikesByGenderAge.csv")
+dim(Likes)
+```
+
+The "as.is=TRUE" prevents the key metrics being treated as factors. (see later)
+
+# Key Metrics
+
+## Key Metrics
+The Key Metrics data has a header row, and a second row that is a description. There are 90 columns: 1,15,18 and 24 are;
+
+* **Date** The Date! 
+* **Daily Total Reach** Daily The number of people 
+who have seen any content associated with your Page. (Unique Users)
+* **Daily Organic Reach** Daily The number of people who visited your Page, or saw your Page or one of its posts in News Feed or ticker. These can be people who have liked your Page and people who haven't. (Unique Users)
+* **Daily Viral Reach** Daily The number of people who saw your Page or one of its posts from a story shared by a Friend. These stories include liking your Page, posting to your Page's Timeline, liking, commenting on or sharing one of your Page posts, answering a question you posted, responding to one of your events, mentioning your Page, tagging your Page in a photo or checking in at your location. (Unique Users)
+
+## Key Metrics
+```{r}
+dates <- keyMetrics[,1]
+dates <- dates[-1]
+dates <- strptime(dates, format="%m/%d/%y")
+reach <- keyMetrics[,15]
+reach[1]
+reach <- as.numeric(reach[-1])
+```
+
+## Key Metrics
+```{r, fig.cap=NULL, dev=c('pdf'), fig.width=4, fig.height=2.8}
+plot(dates, reach, type="l")
+```
+
+## Key Metrics
+```{r, fig.cap=NULL, dev=c('pdf'), fig.width=4, fig.height=2.8}
+keep <- dates > as.POSIXlt("2013-07-01")
+plot(dates[keep], reach[keep], type="l")
+```
+
+# Likes and Demographics
+
+## Demographics
+
+Demographics refers to the characteristics of individuals. In Facebook, the most useful demographics are Age group and Gender. City, Country and Language are also recorded.
+
+Several sheets in the XLSX file have breakdown by demographics.
+
+We will look at "Lifetime Likes by Gender and Age"
+
+## Likes and Demographics
+Reading in the CSV file gives the following. Because this is cummulative data, we are interested in a particular (recent) date.
+```{r}
+xx <- Likes[158,]
+print(xx)
+```
+
+## Likes and Demographics
+First we make this into a table (matrix) after discarding the Date, and "U" categories.
+The NA should be a zero. And we set up meaningful row and columns names
+
+```{r, tidy=FALSE}
+tab <- matrix(as.numeric(xx[3:16]), nrow=2, byrow=TRUE)
+tab[1,1] <- 0
+colnames(tab) <- c("13-17", "18-24", "25-34", "35-44", 
+                   "45-54", "55-64", "65+")
+rownames(tab) <- c("Female","Male")
+print(tab)
+```
+
+## Likes and Demographics
+So we can draw a graph similar to the Facebook one (bar plot)
+```{r, echo=2, fig.cap=NULL, dev=c('pdf'), fig.width=4, fig.height=2.8}
+par(mar=c(4,4,2,2)+.1)
+barplot(tab, legend=TRUE, col=c("pink","lightblue"))
+```
+
+## Likes and Demographics
+However, side by side bars are sometimes easier to compare.
+```{r, echo=2, tidy=FALSE, fig.cap=NULL, dev=c('pdf'), fig.width=4, fig.height=2.8}
+par(mar=c(4,4,2,2)+.1)
+barplot(tab, legend=TRUE, col=c("pink","lightblue"), 
+        beside=TRUE)
+```
+
+##  Questions of interest.
+Business (or page owners) might be interested to know...
+
+* What proportion of Likes are ... eg. Male, 18 to 24?
+* Is this proportion changing (see later lecture)
+* Are the age *profiles* different for males and females?
+
+These are statistical questions...

@@ -6,6 +6,10 @@
 *.snm
 *.toc
 *.vrb
-
 ## Ignore emacs backup files
 *~
+## Ignore some other stuff
+.Rproj.user
+300958-social_web_analytics.Rproj
+.DS_Store
+.Rhistory
