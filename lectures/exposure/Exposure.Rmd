@@ -81,7 +81,7 @@ The small button to the right of this second screen allows us to export data.
 * Dates can be chosen upto 180 days long.
 * XLS or CSV format can be used. XLS contains more information.
 
-We we look at Page level, XLS data.
+We will look at Page level, XLS data.
 
 As exported by Facebook there are sometimes problems with this file,
 so open it in Excel and re-save as an XLSX file.
@@ -102,23 +102,297 @@ sheetNames("Facebook Insights Data Export 2013-08-07.xlsx")
 ## Export Data
 
 The XLSX file contains 65 sheets.
-We are primarily going to look at "Key Metrics" and "Lifetime Likes by Gender and Age"
+We are primarily going to look at "Key Metrics" and "Weekly Reach by Demographics"
 
 (These are saved as CSV for ease of use, but...)
 
 ```{r, eval=FALSE}
 keyMetrics <- read.xls("Facebook Insights Data Export 2013-08-07.xlsx", 1)
-Likes <- read.xls("Facebook Insights Data Export 2013-08-07.xlsx", 30)
+WeekReach <- read.xls("Facebook Insights Data Export 2013-08-07.xlsx", 34)
 ```
 
 ```{r}
 keyMetrics <- read.csv("keyMetrics.csv", as.is=TRUE)
 dim(keyMetrics)
-Likes <- read.csv("LifetimeLikesByGenderAge.csv")
-dim(Likes)
+WeekReach <- read.csv("WeeklyReachDemog.csv")
+dim(WeekReach)
 ```
 
 The "as.is=TRUE" prevents the key metrics being treated as factors. (see later)
+
+# Reach and Demographics
+
+## Demographics
+
+Demographics refers to the characteristics of individuals. In Facebook, the most useful demographics are Age group and Gender. City, Country and Language are also recorded.
+
+Several sheets in the XLSX file have breakdown by demographics.
+
+We will look at "Weekly Reach Demographics"
+
+## Reach and Demographics
+Reading in the CSV file gives the following. At the moment, we are interested in a particular (recent) date.
+```{r}
+xx <- WeekReach[158,]
+print(xx)
+```
+
+## Reach and Demographics
+First we make this into a table (matrix) after discarding the Date, and "U" categories.
+And we set up meaningful row and columns names
+
+```{r, tidy=FALSE}
+tab <- matrix(as.numeric(xx[3:16]), nrow=2, byrow=TRUE)
+colnames(tab) <- c("13-17", "18-24", "25-34", "35-44", 
+                   "45-54", "55-64", "65+")
+rownames(tab) <- c("Female","Male")
+print(tab)
+```
+
+## Reach and Demographics
+So we can draw a graph similar to the Facebook one (bar plot)
+```{r, echo=2, fig.cap=NULL, dev=c('pdf'), fig.width=5, fig.height=2.8}
+par(mar=c(5,4,1,1)+.1, cex=0.7)
+barplot(tab, legend=TRUE, col=c("pink","lightblue"))
+```
+
+## Reach and Demographics
+However, side by side bars are sometimes easier to compare.
+```{r, echo=2, tidy=FALSE, fig.cap=NULL, dev=c('pdf'), fig.width=5, fig.height=2.8}
+par(mar=c(6,4,0,1)+.1, cex=0.7)
+barplot(tab, legend=TRUE, col=c("pink","lightblue"), 
+        beside=TRUE)
+```
+
+##  Questions of interest.
+Business (or page owners) might be interested to know...
+
+* What proportion of Reach is ... eg. Male or 18 to 24? If the page, represents a product or service
+you might be interested in whether you are raeching Males more than Females? 
+* Is this proportion changing? (see later lecture)
+* Are the age *profiles* different for males and females? Is there something different about the age profiles 
+that you are reaching?
+
+These are statistical questions...provided we are prepared to assume that the reach is a *random sample* of all possible Reach. (Discuss?)
+
+## Proportions
+
+The simple (point) estimate of the proportion in category XYZ, is simply the number 
+in that category divided by the total.
+
+Eg. Number of males  (2+121+31+7+4+2+3)= 170, Number of females (1+45+15+6+2+3+2) =74,
+therefore total = 170+74 = 244
+
+proportion 170/244 = 0.697 or 69.7%
+
+## Confidence Interval for Proportion
+
+Revision: A confidence interval is a range that contains the true proportion with high confidence.
+
+For a proportion it takes the form, $\hat{p} \pm \Delta$ where $\Delta = z_{\alpha/2} \sqrt{\hat{p}(1-\hat{p})/n}$
+where $n$ is the total (and should be large), and $z_{\alpha/2}$ is 
+a constant derived from a Normal distribution, that determines the level of confidence.
+
+For a $\alpha=$ 95% confidence interval $z_{\alpha/2} = 1.960$
+
+For a $\alpha=$ 90% confidence interval $z_{\alpha/2} = 1.645$
+
+## Confidence Interval for Proportion
+
+Q. Find a 95% confidence interval for the proportion of males reached.
+
+$\hat{p}= 0.697$, $z_{\alpha/2} = 1.960$, $n=244$
+
+Therefore, $\Delta = z_{\alpha/2} \sqrt{\hat{p}(1-\hat{p})/n} = 1.960\times\sqrt{0.697*(1-0.697)/244} = 0.058$
+
+Confidence Interval is $\hat{p}\pm\Delta = 0.697 \pm 0.058$ or $(0.639, 0.755)$
+
+
+## Confidence Interval for Proportion
+
+In R we can use the prop.test function. It does a hypothesis test, but also computes a confidence interval.
+**prop.test(x,n, conf.level)** where x is the count in the category of interest (not the proportion)
+
+```{r}
+prop.test(170,244, conf.level=0.95)
+```
+
+Results are slightly different due to a different approximation.
+
+## Age profiles
+
+Are the age profiles of the males and females that we are reaching different?
+That is, neglecting the the difference in overall number is the spread across ages different?
+
+```{r}
+print(tab)
+```
+
+Is there evidence, that the age profiles of genders in our audience differs?
+
+This is a *hypothesis test*
+
+## Hypothesis test
+
+Revision: In a hypothesis test we assume a hypothesis that will be accepted by default (null hypothesis), 
+and then try and show that the data demonstrates this is unlikely.
+
+In this case, our null hypothesis will be that the age profiles of males and females are the same.
+The *alternative hypothesis* is that they are not.
+
+Think of the data as a table (or matrix) with $r$ rows and $c$ columns
+called $X$ and denote the entry in the $i$-th row and $j$-th as $X_{ij}$
+
+In our example, $r$ is 2, and $c$ is 7 and $X_{2,2} = 121$ for example.
+
+
+## Chi-squared test
+
+Firstly, assume the null hypothesis is true. Then we can ignore gender and estimate the proportion in each age group.
+
+The total numbers in each age category are;
+```{r, echo=FALSE}
+apply(tab,2,sum)
+```
+
+So the proportions ($q_j$) are (divide by 244);
+```{r, echo=FALSE}
+q <- apply(tab,2,sum)/sum(tab)
+print(q<-round(q,3))
+```
+
+We already know that the proportions in each *row* ($p_i$) are;
+```{r, echo=FALSE}
+p <- apply(tab,1,sum)/sum(tab)
+print(p<-round(p,3))
+```
+
+## Chi-squared test
+
+So if the null hypothesis is true, the *expected* proportion in the $ij$-th cell of the table, is just
+$p_i \times q_j$. This means the *expected* **number** in that cell is 
+$np_iq_j$.
+
+So how different are the observed? We could look at  $(X_{ij} - np_iq_j)^2$.
+If this is big then the observed cell counts and expected are different.
+
+Taking all cells into account we have to use a *weighted* sum. 
+$$
+\chi^2 = \sum_i \sum_j \frac{(X_{ij} - np_iq_j)^2}{np_iq_j}
+$$
+
+If this is big then some of the observed cell counts and expected counts are different.
+
+## Chi-squared test
+
+If the observed and expected counts are different then it is likely the null hypothesis is false.
+
+So how big does $\chi^2$ have to be? It depends on the number of rows and columns in the table $X$, 
+and how sure you want to be that they are different.
+
+The approximate *critical* values are taken from a $\chi^2$-distribtuion. This is a Chi-squared test!
+
+NOTE: this only works if the expected values are all bigger than about 5.
+
+## Chi-squared distribution.
+
+Suppose you want to make an error, 5% of the time. That is, you will say the age profiles are different 
+when they are not really, only 5% of the time. (This is called the significance or $\alpha$)
+
+Then the value that $\chi^2$ has to exceed depends on the size of the table. It depends on the
+*degrees of freedom* which in this case is 
+$(r-1)\times(c-1)$
+
+```{r, echo=FALSE}
+TT <- round(qchisq(0.95, 1:10),3)
+names(TT) <- as.character(1:10)
+print(TT)
+```
+
+Critical values for a $\chi^2$ distribution for degrees of freedom upto 10.
+
+## Summary of chi-squared test
+
+1. Compute the row and column proportions
+2. Compute the expected cell counts
+3. Compute the squared difference between the observed and expected counts
+4. Sum the squared differences using the reciprocal of the expected counts as weights
+5. Refer the $\chi^2$ to a critcal value, if exceeds it reject the null hypothesis.
+
+## The Facebook data
+
+The expected counts are
+```{r, echo=FALSE}
+E <- round(sum(tab)*outer(p,q,"*"),2)
+print(E)
+```
+Some of these are less than 5. We have two options either discard some cells, this changes the hypothesis. 
+Or aggregate some cells. 
+
+## The Facebook data
+
+If we change the categories and add up we get
+```{r, echo=FALSE}
+tab2 <- tab[,2:4]
+tab2[,1] <- tab2[,1] + tab[,1]
+tab2[,3] <- tab2[,3] + apply(tab[,5:7],1,sum)
+colnames(tab2) <- c("<25", "25-34", "35+")
+print(tab2)
+```
+The proportions are now
+```{r, echo=FALSE}
+q <- round(apply(tab2,2,sum)/sum(tab2),3)
+print(q)
+print(p)
+```
+
+## The Facebook data
+
+Thus the expected counts are (all greater than 5)
+```{r, echo=FALSE}
+X <- tab2
+E <- round(sum(X)*outer(p,q,"*"),2)
+print(E)
+```
+
+So the Observed minus Expected Squared is
+```{r, echo=FALSE}
+(X-E)^2
+```
+And the weighted sum ($\chi^2$) is `r sum((X-E)^2/E)`
+
+This is **not** larger than the critical value of a $\chi^2$ on 2 degrees of freedom (5.991), so we cannot reject the null hypothesis
+
+## The Facebook data in R
+
+Of course R does all of this
+```{r}
+X <- matrix(c(46, 123, 15, 31, 13, 16), ncol=3)
+colnames(X) <- c("<25", "25-34", "35+")
+rownames(X) <-  c("Female", "Male")
+print(X)
+chisq.test(X)
+```
+The numbers are slightly different (due to rounding this time) and the test returns a *p value*. 
+
+## *p* values
+
+The *p* value is the probability of exceeding the calculated $\chi^2$ under the null hypothesis.
+
+So instead of seeing if the calculated $\chi^2$ is bigger than a critical value, you can check if the p-value is 
+less than the significance (5% say --- 0.05)
+
+## The Facebook data in R
+
+It turns out R can handle the "counts less than 5" case also, using *Fisher's exact test*
+
+```{r, echo=2:3}
+X <- tab
+print(X)
+fisher.test(X)
+```
+
+Fisher's exact test is generally not done by hand.
 
 # Key Metrics
 
@@ -142,66 +416,30 @@ reach <- as.numeric(reach[-1])
 ```
 
 ## Key Metrics
-```{r, fig.cap=NULL, dev=c('pdf'), fig.width=4, fig.height=2.8}
+```{r, fig.cap="Daily Total Reach", dev=c('pdf'), fig.width=4, fig.height=2.8, echo=2}
+par(mar=c(4,4,0,1)+0.1, cex=0.7)
 plot(dates, reach, type="l")
 ```
 
 ## Key Metrics
-```{r, fig.cap=NULL, dev=c('pdf'), fig.width=4, fig.height=2.8}
-keep <- dates > as.POSIXlt("2013-07-01")
+```{r, fig.cap="Daily Total Reach", dev=c('pdf'), fig.width=4, fig.height=2.8, echo=2:3}
+par(mar=c(4,4,0,1)+0.1, cex=0.7)
+keep <- (dates > as.POSIXlt("2013-07-01"))
 plot(dates[keep], reach[keep], type="l")
 ```
 
-# Likes and Demographics
-
-## Demographics
-
-Demographics refers to the characteristics of individuals. In Facebook, the most useful demographics are Age group and Gender. City, Country and Language are also recorded.
-
-Several sheets in the XLSX file have breakdown by demographics.
-
-We will look at "Lifetime Likes by Gender and Age"
-
-## Likes and Demographics
-Reading in the CSV file gives the following. Because this is cummulative data, we are interested in a particular (recent) date.
-```{r}
-xx <- Likes[158,]
-print(xx)
+## Weekly Total Reach
+```{r, fig.cap="Weekly Total Reach", dev=c('pdf'), fig.width=4, fig.height=2.8, echo=2:3}
+par(mar=c(4,4,0,1)+0.1, cex=0.7)
+wreach <- as.numeric(keyMetrics[-1,16])
+plot(dates[keep], wreach[keep], type="l")
 ```
 
-## Likes and Demographics
-First we make this into a table (matrix) after discarding the Date, and "U" categories.
-The NA should be a zero. And we set up meaningful row and columns names
+## Conclusion
 
-```{r, tidy=FALSE}
-tab <- matrix(as.numeric(xx[3:16]), nrow=2, byrow=TRUE)
-tab[1,1] <- 0
-colnames(tab) <- c("13-17", "18-24", "25-34", "35-44", 
-                   "45-54", "55-64", "65+")
-rownames(tab) <- c("Female","Male")
-print(tab)
-```
+So by exporting the data we can do a lot more than the usual insights provide
 
-## Likes and Demographics
-So we can draw a graph similar to the Facebook one (bar plot)
-```{r, echo=2, fig.cap=NULL, dev=c('pdf'), fig.width=4, fig.height=2.8}
-par(mar=c(4,4,2,2)+.1)
-barplot(tab, legend=TRUE, col=c("pink","lightblue"))
-```
-
-## Likes and Demographics
-However, side by side bars are sometimes easier to compare.
-```{r, echo=2, tidy=FALSE, fig.cap=NULL, dev=c('pdf'), fig.width=4, fig.height=2.8}
-par(mar=c(4,4,2,2)+.1)
-barplot(tab, legend=TRUE, col=c("pink","lightblue"), 
-        beside=TRUE)
-```
-
-##  Questions of interest.
-Business (or page owners) might be interested to know...
-
-* What proportion of Likes are ... eg. Male, 18 to 24?
-* Is this proportion changing (see later lecture)
-* Are the age *profiles* different for males and females?
-
-These are statistical questions...
+* Testing of Reach demographics
+* Estimating features of Reach/Likes etc
+* Graphing different parameters
+* Graphing over different time periods
