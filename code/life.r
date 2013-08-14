@@ -173,7 +173,7 @@ run.life <- function(grid, iterations) {
 
 
 
-## set up varaibles
+## set up variables
 grid.size = 20
 iterations = 50
 

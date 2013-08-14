@@ -94,7 +94,7 @@ R has some facilities to read XLSX files. The gdata library is one. (This will n
 ```{r, results='hide', warning=FALSE, message=FALSE}
 library(gdata, quietly=TRUE)
 ```
-```{r, size='sfont', cache=TRUE}
+```{r, size='sfont', cache=FALSE}
 sheetCount("Facebook Insights Data Export 2013-08-07.xlsx")
 sheetNames("Facebook Insights Data Export 2013-08-07.xlsx")
 ```

@@ -1,0 +1,50 @@
+%YAML 1.2
+---
+# A sample test questions file containing:
+#   MC: multiple choice
+#   NUM: numerical answer
+#   TF: true/false questions
+# Use python yamltocsv.py question_file.yaml > question_file.csv to create the
+# vUWS ready file.
+
+questions:
+
+    - type: MC
+      question: "Social Web Analytics is:"
+      choices:
+        - "the best unit"
+        - "the greatest unit"
+        - "the unit that I save for last because it is so mentally stimulating"
+        - "great to talk about at parties"
+      correct_answer: 2
+
+    - type: MC
+      question: "I like using R to program because:"
+      choices:
+        - "I can easily find bugs in my programs"
+        - "it is the pirate's favourite programming language"
+        - "it's free"
+        - "Laurence told me to like it"
+      correct_answer: 2
+
+    - type: NUM
+      question: "How many car parking places are there available at UWS right now?"
+      answer: "0"
+      tolerance: "0.5"
+
+    - type: TF
+      question: "Laurence writes great test questions."
+      answer: "True"
+
+
+    - type: MC
+      question: "By choosing an answer at random, what is the probability that you answer this question correctly?"
+      choices:
+        - "0.25"
+        - "0.5"
+        - "0.25"
+        - "0.8"
+      correct_answer: 4
+    
+
+...
