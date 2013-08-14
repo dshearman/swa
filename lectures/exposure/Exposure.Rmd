@@ -8,7 +8,6 @@ Facebook believes these Insights are useful - particularly to business.
 
 The School of Computing, Engineering and Mathematics has a facebook page.
 
-
 ## Likes, Reach and Talking About
 
 Facebook Insights records data (over a fixed period) relating to the number of likes, 
