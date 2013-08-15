@@ -1,0 +1,192 @@
+% Simple Exposure Analysis
+% 300958 Social Web Analysis 
+% Week 4 Lab
+
+`r opts_chunk$set(prompt=TRUE, comment=NA)`
+`r knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
+
+# Using R
+## Reading in Data
+
+The easiest way to get data into R is to use `read.csv`. CSV stands for comma seperated values. 
+By default, R will read CSV files and if a column is numeric, make a numeric variable. 
+If the column contains any character data, the whole column will be made into a factor.
+
+The Key Metrics sheet from facebook has a top row with short variable *names* and a 
+second row with longer descriptions.
+This means that R will read every column as a factor. To prevent this we use 
+the `as.is=TRUE` option in `read.csv`. This has the effect of leaving character variables as character. 
+
+This problem doesn't occur for most of the other sheets.
+
+### Exercise
+Use `read.csv` to read in the CSV files "keyMetrics.csv", "LifetimeLikesByGenderAge.csv" and "WeeklyReachDemog.csv".
+Give the data.frames that you read into sensible names! (use as.is=TRUE for keyMetrics.csv)
+
+## Manipulating data frames
+
+The `dim` function in R gives the dimensions of a data.frame. Use it on your objects.
+The `head` function shows the top few rows, and typing the data.frame name prints all of it out. Try these out.
+
+The `summary` command gives a quick summary of each variable (column) in the data frame.
+
+## Key metrics
+
+To do anything with the Key Metrics data we have to convert the dates 
+(they will have been read as character strings), and convert the other columns to numeric data.
+
+### Converting Dates
+
+The first column in Key Metrics is a date string. To use it in plots it needs to be a data structure
+that can be manipulated. R has several forms of date structure but we will use something called POSIXlt.
+To convert from a string to POSIXlt we use the function `strptime`. Here is the code from lectures.
+
+```{r eval=FALSE}
+dates <- keyMetrics[,1]
+dates <- dates[-1]
+dates <- strptime(dates, format="%m/%d/%y")
+```
+
+We extract the first column, remove the first row (it is the long description) and convert using `strptime`.
+
+Try this with your data.frame
+
+### Extracting a column of numeric data
+
+In lectures we extracted the Daily and Weekly Total Reach (columns 15 and 16) using the code like the following.
+
+```{r eval=FALSE}
+reach <- keyMetrics[,15]
+reach <- as.numeric(reach[-1])
+wreach <- as.numeric(keyMetrics[-1,16])
+```
+
+Identify and extract the "Weekly Total impressions" variable from the keyMetrics. HINT: the `names` function will
+give a list of column names.
+
+Impressions are the views of any content on a page.
+
+### Plotting
+Try plotting the "Weekly Total impressions" by date. Remember for reach we used `plot(dates, reach, type="l")`
+
+```{r include=FALSE}
+keyMetrics <- read.csv("keyMetrics.csv", as.is=TRUE)
+dates <- strptime(keyMetrics[-1,1], format="%m/%d/%y")
+impress <- as.numeric(keyMetrics[-1,28])
+plot(dates,impress, type="l")
+```
+
+Look at the help page for `plot` (see the examples) 
+and try changing the axis labels (`xlab=` and `ylab=`), give a title (`main=`) and
+changing colours and line type (`col=` and `lty=`)
+
+## Likes and Reach
+
+The Likes and Reach by Demographics sheets (CSV files) are a different format. Generally we are 
+interested in these demographics for a particular date.
+
+The following template code will extract the 158th row, including only the females and males (columns 3 to 16).
+
+```{r eval=FALSE}
+tab <- matrix(as.numeric(WeekReach[158,3:16]), nrow=2, byrow=TRUE)
+colnames(tab) <- c("13-17", "18-24", "25-34", "35-44", 
+                   "45-54", "55-64", "65+")
+rownames(tab) <- c("Female","Male")
+print(tab)
+```
+
+Try this for your data frames, use different rows (between 1 and 158).
+
+Use `barplot(tab, legend=TRUE, col=c("pink","lightblue"))` to make a barplot. 
+Investigate changing the colours (`col=`) and the `beside=` option. 
+
+# Manual Calculations
+
+The purpose of this section is to give you practice of manual calculations for confidence 
+intervals for proportions and $\chi^2$ tests. You shgould use your calculator to verify that 
+you can get these results. If you don't have your calculator you can use R *as a calculator*.
+
+## Confidence Intervals for Proportions
+
+$z_{0.025} = 1.960$ and $z_{0.05} = 1.645$.
+
+```{r include=FALSE}
+m1 = 89
+n1 = 104
+p1 = round(m1/n1,3)
+d1 = 1.960*sqrt(p1*(1-p1)/n1)
+m2 = 52
+n2 = 200
+p2 = round(m2/n2,3)
+d2 = 1.960*sqrt(p2*(1-p2)/n2)
+m3 = 441
+n3 = 762
+p3 = round(m3/n3,3)
+d3 = 1.645*sqrt(p3*(1-p3)/n3)
+
+```
+
+* The proportion of males that reach a page is `r m1` out of `r n1` in a particular week. 
+Find a 95% confidence interval for
+the proportion of males in the audience for this page.
+
+ANSWER: (`r round(p1-d1,3)`, `r round(p1+d1,3)`)
+
+* For `r m2` out of `r n2` find a 95% confidence interval for
+the proportion.
+
+ANSWER: (`r round(p2-d2,3)`, `r round(p2+d2,3)`)
+
+* For `r m3` out of `r n3` find a 90% confidence interval for
+the proportion.
+
+ANSWER: (`r round(p3-d3,3)`, `r round(p3+d3,3)`)
+
+Your answers may be slightly different due to rounding.
+
+Try this in R using `prop.test` (remember the results may be slightly different)
+
+## $\chi^2$ tests
+
+```{r include=FALSE}
+sim <- function(p1,p2=p1,n) rbind(t(rmultinom(1,n,p1)), t(rmultinom(1,n,p2)))
+csq <- function(x) {
+p <- round(apply(x,1,sum)/sum(x),3)
+q <- round(apply(x,2,sum)/sum(x),3)
+e <- round(sum(x) * outer(p,q,"*"),3)
+sum((x-e)^2/e)
+}
+degf <- function(x) (ncol(x)-1)*(nrow(x)-1)
+```
+
+```{r include=FALSE}
+X1 <- matrix(c(46, 123, 15, 31, 13, 16), ncol=3)
+colnames(X1) <- c("<25", "25-34", "35+")
+rownames(X1) <-  c("Female", "Male")
+set.seed(12345)
+X2 <- sim(runif(3), runif(3), 305) 
+dimnames(X2) <- dimnames(X1)
+X3 <- sim(runif(4), runif(4), 276) 
+colnames(X3) <- c("<25", "25-34", "35-44", "45+")
+rownames(X3) <-  c("Female", "Male")
+```
+
+* Find the $\chi^2$ statistic and the degrees of freedom for the following tables.
+
+```{r  echo=FALSE}
+print(X1)
+```
+
+ANSWER: $\chi^2 =$ `r csq(X1)`, degrees of freedom = `r degf(X1)`
+
+```{r  echo=FALSE}
+print(X2)
+```
+
+ANSWER: $\chi^2 =$ `r csq(X2)`, degrees of freedom = `r degf(X2)`
+
+```{r  echo=FALSE}
+print(X3)
+```
+
+ANSWER: $\chi^2 =$ `r csq(X3)`, degrees of freedom = `r degf(X3)`
