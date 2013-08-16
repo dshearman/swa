@@ -20,8 +20,8 @@ the `as.is=TRUE` option in `read.csv`. This has the effect of leaving character 
 This problem doesn't occur for most of the other sheets.
 
 ### Exercise
-Use `read.csv` to read in the CSV files "keyMetrics.csv", "LifetimeLikesByGenderAge.csv" and "WeeklyReachDemog.csv".
-Give the data.frames that you read into sensible names! (use as.is=TRUE for keyMetrics.csv)
+Use `read.csv` to read in the CSV files "keyMetrics.csv", "LifetimeLikesByGenderAge.csv" and "WeeklyReachDemog.csv" into data frames.
+Make sure you give sensible names to the data frames you create. Use as.is=TRUE for keyMetrics.csv to avoid the mentioned problem.
 
 ## Manipulating data frames
 
@@ -37,8 +37,8 @@ To do anything with the Key Metrics data we have to convert the dates
 
 ### Converting Dates
 
-The first column in Key Metrics is a date string. To use it in plots it needs to be a data structure
-that can be manipulated. R has several forms of date structure but we will use something called POSIXlt.
+The first column in Key Metrics is a date string. To use it in plots, it needs to be a data structure
+that can be manipulated. R has several forms of date structures but we will use something called POSIXlt.
 To convert from a string to POSIXlt we use the function `strptime`. Here is the code from lectures.
 
 ```{r eval=FALSE}
