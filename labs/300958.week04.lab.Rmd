@@ -190,3 +190,8 @@ print(X3)
 ```
 
 ANSWER: $\chi^2 =$ `r csq(X3)`, degrees of freedom = `r degf(X3)`
+
+# More R
+
+Try repeating the R analyses above for other columns in the keyMetrics.csv spreadsheet and using the
+LifetimeLikesByGenderAge.csv (instead of WeeklyReach)
