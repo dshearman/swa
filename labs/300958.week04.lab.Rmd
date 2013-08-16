@@ -20,7 +20,7 @@ the `as.is=TRUE` option in `read.csv`. This has the effect of leaving character 
 This problem doesn't occur for most of the other sheets.
 
 ### Exercise
-Use `read.csv` to read in the CSV files "keyMetrics.csv", "LifetimeLikesByGenderAge.csv" and "WeeklyReachDemog.csv" into data frames.
+Use `read.csv` to read in the CSV files [keyMetrics.csv](keyMetrics.csv), [LifetimeLikesByGenderAge.csv](LifetimeLikesByGenderAge.csv) and [WeeklyReachDemog.csv](WeeklyReachDemog.csv) into data frames.
 Make sure you give sensible names to the data frames you create. Use as.is=TRUE for keyMetrics.csv to avoid the mentioned problem.
 
 ## Manipulating data frames
@@ -193,5 +193,11 @@ ANSWER: $\chi^2 =$ `r csq(X3)`, degrees of freedom = `r degf(X3)`
 
 # More R
 
-Try repeating the R analyses above for other columns in the keyMetrics.csv spreadsheet and using the
-LifetimeLikesByGenderAge.csv (instead of WeeklyReach)
+Compute the confidence interval for the proportion of males reached and the
+proportion of females reached (independent of age).  Do the confidence
+intervals show one proportion is significantly greater than the other?
+
+Construct the $2\times 2$ table containing the number of males and females
+(independent of age), versus the months of April and May. Does a $\chi^2$ test
+show that the reach for gender is independent of the two months?
+
