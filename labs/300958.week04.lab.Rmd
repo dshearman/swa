@@ -191,11 +191,7 @@ print(X3)
 
 ANSWER: $\chi^2 =$ `r csq(X3)`, degrees of freedom = `r degf(X3)`
 
-# More R
-
-Compute the confidence interval for the proportion of males reached and the
-proportion of females reached (independent of age).  Do the confidence
-intervals show one proportion is significantly greater than the other?
+# More R --- a challenge
 
 Construct the $2\times 2$ table containing the number of males and females
 (independent of age), versus the months of April and May. Does a $\chi^2$ test
