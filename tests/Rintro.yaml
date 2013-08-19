@@ -4,17 +4,17 @@
 questions:
 
     - type: NUM
-      question: "What is the numerical result of the following R code: x <- seq(2,14,2)\n print(x[3])"
+      question: "<p>What is the numerical result of the following R code:</p>x <- seq(2,14,2)<br />print(x[3])"
       answer: "6"
       tolerance: "0.1"
 
     - type: NUM
-      question: "What is the numerical result of the following R code: x <- 7:19\n print(length(x))"
+      question: "<p>What is the numerical result of the following R code:</p>x <- 7:19<br />print(length(x))"
       answer: "13"
       tolerance: "0.1"
 
     - type: MC
-      question: "What is the result of the following R code: if (2 < 1) {\n print("Hello")\n } else {\n print("World")\n }"
+      question: '<p>What is the result of the following R code:</p>if (2 < 1) {<br />&nbsp;&nbsp;&nbsp;&nbsp;print("Hello")<br /> } else {<br />&nbsp;&nbsp;&nbsp;&nbsp;print("World")<br /> }'
       choices:
        - "Hello"
        - "World"
@@ -23,7 +23,7 @@ questions:
       correct_answer: 2
 
     - type: MC
-      question: 'What is the result of the following R code: x <- list(1, "Hello World!", "Red", 1:5)\n print(x[[3]])'
+      question: '<p>What is the result of the following R code:</p>x <- list(1, "Hello World!", "Red", 1:5)<br />print(x[[3]])'
       choices:
        - "1 2 3 4 5" 
        - "1"
@@ -31,7 +31,7 @@ questions:
        - "Red"
       correct_answer: 4
 
-     - type: TF
-       question: 'Is this syntax the correct way to define a function?: Hello <- function  print("Hello World")'
-       answer: "False"
+    - type: TF
+      question: '<p>Is this syntax the correct way to define a function?:</p>Hello <- function  print("Hello World")'
+      answer: "False"
 
