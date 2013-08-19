@@ -15,6 +15,13 @@ The social Web contains the opinions of a large sample of the
 population. We can use messages written by the public to examine
 public opinion.
 
+To examine opinion, we must examine the text and be able to compute:
+
+- the relationship between words (dog is more similar to puppy than rocket)
+- the relationship between words and documents (a document is related to the word puppy)
+- the relationship between documents (document $A$ is more similar to document $B$ than $C$)
+
+Example using word similarities:
 [Geek vs Nerd](http://slackprop.wordpress.com/2013/06/03/on-geek-versus-nerd/)
 
 
@@ -22,10 +29,9 @@ public opinion.
 
 \begin{columns}
 \begin{column}{0.45\textwidth}
-Given ten documents, we could read them and find which are relevant to
-our needs. Given a million documents, we have to automate the
-process. There is so much text available. How can we find the pieces
-that are important?
+Given ten documents, we could read them and record the relationships between words and documents.
+
+Given a million documents, we have to automate the process.
 \end{column}
 \begin{column}{0.45\textwidth}
 \vspace*{-2em}
@@ -104,80 +110,6 @@ $$
 
 The weight of each word is a function of the frequency of the word in
 the document and in the collection of documents.
-
-
-
-
-
-
-
-## Divergence from Randomness
-
-The importance of a word in a document is inversely proportional to
-the probability of it appearing. Meaning, if we expect a word to
-appear and it appears, it is not interesting. If we expect a word not
-to appear and it doesn't, it is interesting.
-
-Remember that $log(1/x) = -log(x)$, so we can compute the weight of a
-term in a document as:
-$$
-	\text{weight}(w|d) \propto -\log{\left ( P(w|C) \right )}
-$$
-
-### Probability of occurrence
-
-Which words do you expect in a document collection from computing:
-\begin{center}
-	computer, with, nuclear, windows, water, snowman.
-\end{center}
-
-\pause
-
-Words with low probability, that appear, are provided a higher weight.
-
-## Using the Binomial distribution
-
-We can compute the probability of a word appearing, using the Binomial
-distribution.
-
-\begin{block}{Binomial Distribution}
-
-The probability of $x$ successes, in $n$ trials, where each trial has
-the probability of successes $p$.
-
-\end{block}
-
-- A document is a sample of $n$ words. 
-- If word $w$ is chosen, we have a success, if word $w$ is not chosen,
-  we have a failure.
-- The probability $p$ of word $w$ is the proportion of occurrences of
-  word $w$ in the document collection (occurrences of word w / total
-  number of words in collection).
-
-
-## Binomial Example
-
-A document collection contains 10 documents, each containing 100 words
-(total of 1000 words).  The word "the" appears 100 times in the
-collection, so its probability $P(w|C)$ is $p = 100/1000 = 0.1$.  In a
-given document of length 100, "the" appears 12 times. The probability
-of this occurring is:
-$$
-\begin{aligned}
-	P(X = 12) &= \text{Binomial}(12, n = 100, p = 0.1) \\
-	&= {100 \choose 12}0.1^{12}{(1 - 0.1)}^{100 - 12} =  0.0987
-\end{aligned}
-$$
-with weight:
-$$
-	\text{weight}(w|d) = -log(0.0987) = 2.316
-$$
-
-### Problem 
-
-The word "tank" appears 3 times in the collection, so its probability
-is $p = 3/1000 = 0.003$. In a given document of length 100, "tank"
-appears 2 times. Compute its weight.
 
 
 
@@ -341,6 +273,173 @@ Two two won one too
 
 One was a race horse Two too won
 
+
+
+# Word Weight
+
+## Computing Word Weight
+
+When computing word weight (the importance of a word in the document
+set), we must take into account the distribution of the words.
+
+The weight of a word depends on its context, therefore, we must
+compute the weight of each word when given a new document set.
+
+\begin{block}{Example}
+The word "blood" will have the weight:
+\begin{itemize}
+\item [low] Medical research article set
+\item [high] My brother's diary.
+\end{itemize}
+\end{block}
+
+We will examine the weighting method:
+
+- Divergence from Randomness
+- TF-IDF
+
+
+## Divergence from Randomness
+
+The importance of a word in a document is inversely proportional to
+the probability of it appearing. Meaning, if we expect a word to
+appear and it appears, it is not interesting. If we expect a word not
+to appear and it doesn't, it is interesting.
+
+Remember that $log(1/x) = -log(x)$, so we can compute the weight of a
+term in a document as:
+$$
+	\text{weight}(w|d) \propto -\log{\left ( P(w|C) \right )}
+$$
+
+### Probability of occurrence
+
+Which words do you expect in a document collection from computing:
+\begin{center}
+	computer, with, nuclear, windows, water, snowman.
+\end{center}
+
+\pause
+
+Words with low probability, that appear, are provided a higher weight.
+
+## Using the Binomial distribution
+
+We can compute the probability of a word appearing, using the Binomial
+distribution.
+
+\begin{block}{Binomial Distribution}
+
+The probability of $x$ successes, in $n$ trials, where each trial has
+the probability of successes $p$.
+
+\end{block}
+
+- A document is a sample of $n$ words. 
+- If word $w$ is chosen, we have a success, if word $w$ is not chosen,
+  we have a failure.
+- The probability $p$ of word $w$ is the proportion of occurrences of
+  word $w$ in the document collection (occurrences of word w / total
+  number of words in collection).
+
+
+## Binomial Example
+
+A document collection contains 10 documents, each containing 100 words
+(total of 1000 words).  The word "the" appears 100 times in the
+collection, so its probability $P(w|C)$ is $p = 100/1000 = 0.1$.  In a
+given document of length 100, "the" appears 12 times. The probability
+of this occurring is:
+$$
+\begin{aligned}
+	P(X = 12) &= \text{Binomial}(12, n = 100, p = 0.1) \\
+	&= {100 \choose 12}0.1^{12}{(1 - 0.1)}^{100 - 12} =  0.0987
+\end{aligned}
+$$
+with weight:
+$$
+	\text{weight}(w|d) = -log(0.0987) = 2.316
+$$
+
+### Problem 
+
+The word "tank" appears 3 times in the collection, so its probability
+is $p = 3/1000 = 0.003$. In a given document of length 100, "tank"
+appears 2 times. Compute its weight.
+
+
+
+## Term weight function
+
+The term weight can be computed using the function:
+$$
+	w_t = \log_e{\left ( \frac{N}{f_t} \right )}
+$$
+where $N$ is the number of documents, $f_t$ is the number of
+documents containing term $t$, and $w_t$ is the weight of term $t$.
+
+### Problem
+
+Compute the term weights for each of the words in the following
+document set:
+
+1. social web analyt best
+2. social web analyt great unit
+3. best web unit social web analyt
+
+## Term weight plot ($N = 100$)
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+plot(1:100, log(100/(1:100)), xlab="Term weight", ylab="Term Document Count")
+```
+
+## Within document term weight
+
+The within document term weight is a measure of how important the term
+is within the document. This weight is dependent on:
+
+- The frequency of the term in the document
+- The importance of the word in the document set (the term weight)
+
+
+## Within document term weight function
+
+The within document term weight can be computed using:
+$$
+\begin{aligned}
+	w_{d,t} &= \log_e{\left ( f_{d,t} + 1\right )}w_t \\
+	 &= \log_e{\left ( f_{d,t} + 1\right )}\log_e{\left ( \frac{N}{f_t} \right )} \\
+\end{aligned}
+$$
+where $f_{d,t}$ is the frequency of term $t$ in document $d$ and
+$w_{d,t}$ is the weight of term $t$ in document $d$.
+
+### Problem 
+
+Using the results from the previous problem, compute the within
+document term weights for each of the words in the first document:
+
+1. social web analyt best
+2. social web analyt great unit
+3. best web unit social web analyt
+
+
+## Weighted frequency plot
+
+As the frequency increases, the increase in weight reduces.
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+plot(1:100, log(1:100 + 1), xlab="f", ylab="log(f+ 1)")
+```
+
+
+
+
+
+
+
 # Preprocessing Text
 
 ## Preparing for index construction
@@ -459,70 +558,6 @@ very representative of the difference between that document and the
 rest.
 
 
-## Term weight function
-
-The term weight can be computed using the function:
-$$
-	w_t = \log_e{\left ( \frac{N}{f_t} \right )}
-$$
-where $N$ is the number of documents, $f_t$ is the number of
-documents containing term $t$, and $w_t$ is the weight of term $t$.
-
-### Problem
-
-Compute the term weights for each of the words in the following
-document set:
-
-1. social web analyt best
-2. social web analyt great unit
-3. best web unit social web analyt
-
-## Term weight plot ($N = 100$)
-
-\vspace{-6em}
-```{r, echo=FALSE, fig.width=5, fig.height=4}
-plot(1:100, log(100/(1:100)), xlab="Term weight", ylab="Term Document Count")
-```
-
-## Within document term weight
-
-The within document term weight is a measure of how important the term
-is within the document. This weight is dependent on:
-
-- The frequency of the term in the document
-- The importance of the word in the document set (the term weight)
-
-
-## Within document term weight function
-
-The within document term weight can be computed using:
-$$
-\begin{aligned}
-	w_{d,t} &= \log_e{\left ( f_{d,t} + 1\right )}w_t \\
-	 &= \log_e{\left ( f_{d,t} + 1\right )}\log_e{\left ( \frac{N}{f_t} \right )} \\
-\end{aligned}
-$$
-where $f_{d,t}$ is the frequency of term $t$ in document $d$ and
-$w_{d,t}$ is the weight of term $t$ in document $d$.
-
-### Problem 
-
-Using the results from the previous problem, compute the within
-document term weights for each of the words in the first document:
-
-1. social web analyt best
-2. social web analyt great unit
-3. best web unit social web analyt
-
-
-## Weighted frequency plot
-
-As the frequency increases, the increase in weight reduces.
-
-\vspace{-6em}
-```{r, echo=FALSE, fig.width=5, fig.height=4}
-plot(1:100, log(1:100 + 1), xlab="f", ylab="log(f+ 1)")
-```
 
 
 # Evaluating Results
