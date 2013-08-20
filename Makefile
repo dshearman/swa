@@ -108,7 +108,7 @@ ${TEMPLATE_DIR}/week05.tex:	${LECTURE_DIR}/graphs/graphs_intro.tex
 	pandoc -f markdown -t beamer --slide-level=2 $< -o $*.tex
 
 %.html: %.md
-	pandoc --table-of-contents --toc-depth=1 --number-sections --section-divs --slide-level=2 -s -c buttondown.css -f markdown -t html $< -o $*.html
+	pandoc --mathjax --table-of-contents --toc-depth=1 --number-sections --section-divs --slide-level=2 -s -c buttondown.css -f markdown -t html $< -o $*.html
 
 %.web: 	%.md
 	pandoc --slide-level=2 -s -c buttondown.css -f markdown -t html $< -o ${OUTPUT_DIR}/$*.html

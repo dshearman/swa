@@ -9,12 +9,14 @@
 For this lab, we will need the twitteR, ROAuth and tm libraries.
 
 Installing libraries requires access to the Internet and hence R needs
-to know about the Web proxy when within UWS. R may have already been provided the proxy information, so first assume that the proxy has been set
+to know about the Web proxy when within UWS. R may have already been
+provided the proxy information, so first assume that the proxy has
+been set.
 
 
 ## Installing twitteR and tm
 
-Once this has been done, you may install libraries using the install.packages command:
+If the proxy is set, you may install libraries using the install.packages command:
 ```{r eval=FALSE}
 install.packages("twitteR")
 install.packages("tm")
@@ -23,12 +25,13 @@ install.packages("ROAuth")
 If R will not speak to the proxy, you can download the packages and install them locally.
 The list of all packages is here:
 
-- http://cran.r-project.org/web/packages/available_packages_by_name.html
+- [http://cran.r-project.org/web/packages/available_packages_by_name.html](http://cran.r-project.org/web/packages/available_packages_by_name.html)
 
 The packages needed for this lab are:
-- http://cran.r-project.org/web/packages/tm/index.html
-- http://cran.r-project.org/web/packages/twitteR/index.html
-- http://cran.r-project.org/web/packages/ROAuth/index.html
+
+- [http://cran.r-project.org/web/packages/tm/index.html](http://cran.r-project.org/web/packages/tm/index.html)
+- [http://cran.r-project.org/web/packages/twitteR/index.html](http://cran.r-project.org/web/packages/twitteR/index.html)
+- [http://cran.r-project.org/web/packages/ROAuth/index.html](http://cran.r-project.org/web/packages/ROAuth/index.html)
 
 From these Web pages, download either the MacOS or Windows binary to a local directory.
 Then install the package by telling R where you saved it. For example, if we saved
@@ -53,6 +56,8 @@ Information about the proxy setting is here:
 
 # Accessing Twitter
 
+To allow R to access twitter, we need to provide R with twitter's
+keys. In this section we will examine the process perform this.
 
 ## Obtaining OAuth keys
 
@@ -80,8 +85,8 @@ library("twitteR")
 library("ROAuth")
 ```
 
-We then need to set up the OAuth session details. Note: insert your
-applications key and secret where needed.
+We then need to set up the OAuth session details. **Note**: insert your
+application's key and secret where needed.
 
 ```{.r}
 cred <- OAuthFactory$new(consumerKey="insert here",
@@ -115,7 +120,7 @@ register the credentials:
 ```{.r}
 load("twitter.Rdata")
 ```
-**NOTE**: If you performed the performed the handshake in R, you can
+**NOTE**: If you performed the handshake in R, you can
   save the credential data, then open RStudio and load the credential
   data. This will allow you to continue working in RStudio.
 
@@ -130,7 +135,7 @@ We are now ready to request information from the Twitter API.
 
 ## Searching Twitter
 
-**NOTE** Anyone with Web access can upload information to
+**NOTE**: Anyone with Web access can upload information to
   Twitter. Therefore, we are unable to control the text that appears
   from any Twitter downloads. The tasks we have provided did not
   contain offensive material at the time of writing, but we cannot
@@ -147,7 +152,7 @@ terms "Kevin" and "Bacon":
 tweets = searchTwitter('kevin bacon', n = 100, lang = "en")
 ```
 
-The varaible `tweets` is a list. Examine the list items using double brackets.
+The variable `tweets` is a list. Examine the list items using double brackets (e.g. `tweets[[2]]`).
 
 Convert the list to a data frame:
 
@@ -182,7 +187,7 @@ or for all tweets:
 tweet.words = strsplit(tweets.df$text, "[^A-Za-z]+")
 ```
 
-The variable tweet is a list, where each list item is a vector of the
+The variable `tweet.words` is a list, where each list item is a vector of the
 words from a tweet. We want to combine all words to count them, so we
 remove the list and tabulate the resulting vector:
 
@@ -193,8 +198,8 @@ word.table = table(unlist(tweet.words))
 To identify the top 20 occurring words, we must sort the table and
 examine the top 20 items.
 
-**Examine** the help page for `sort` to obtain the top 20 occurring
-  words.
+**Examine** the help page for `sort` and work out how to obtain the
+  top 20 occurring words from the table.
 
 Do these words tell us anything about Kevin Bacon. It is likely that
 they don't. The list is likely to contain words such as *is*, *of*,
@@ -203,8 +208,8 @@ meaningful terms.
 
 # Text Mining
 
-In this section, we will use the library `tm` to assist us in finding
-more useful information about Kevin Bacon.
+In this section, we will use the library `tm` (text mining) to assist
+us in finding more useful information about Kevin Bacon.
 
 First load the library:
 
@@ -212,117 +217,87 @@ First load the library:
 library("tm")
 ```
 
-
-To do this for all tweets, we should write a function. 
-
-**Write** the function `extract.words` that takes a character string
-(such as `tweets.df$text[1]`) and returns the 
-
+The `tm` functions work with its own `Corpus` object, so we must
+convert the data frame into a corpus:
 
 ```{.r}
-library("wordcloud")
-library("tm")
-
-cz = Corpus(VectorSource(z$text))
-#cz = tm_map(cz, function(x) iconv(enc2utf8(x), sub = "byte"))
-cz = tm_map(cz, function(x) iconv(x, to='UTF-8-MAC', sub='byte'))
-cz <- tm_map(cz, removeNumbers)
-cz <- tm_map(cz, removePunctuation)
-cz <- tm_map(cz, stripWhitespace)
-cz <- tm_map(cz, tolower)
-cz <- tm_map(cz, removeWords, stopwords("english")) # this stopword file is at C:\Users\[username]\Documents\R\win-library\2.13\tm\stopwords 
-cz <- tm_map(cz, removeWords, c("social", "web", "analytics"))
-cz <- tm_map(cz, function(x) sub("http[^ ]*","", x))
-cz <- tm_map(cz, stemDocument, language = "english")
-wordcloud(cz)
-
-
-library(tm) #load text mining library
-setwd('F:/My Documents/My texts') #sets R's working directory to near where my files are
-a  <-Corpus(DirSource("/My Documents/My texts"), readerControl = list(language="lat")) #specifies the exact folder where my text file(s) is for analysis with tm.
-summary(a)  #check what went in
-a <- tm_map(a, removeNumbers)
-a <- tm_map(a, removePunctuation)
-a <- tm_map(a , stripWhitespace)
-a <- tm_map(a, tolower)
-a <- tm_map(a, removeWords, stopwords("english")) # this stopword file is at C:\Users\[username]\Documents\R\win-library\2.13\tm\stopwords 
-a <- tm_map(a, stemDocument, language = "english")
-adtm <-DocumentTermMatrix(a) 
-adtm <- removeSparseTerms(adtm, 0.75)
-
-
-cz = Corpus(VectorSource(z$text))
-tdm <- TermDocumentMatrix(cz, control = list(removePunctuation = TRUE, stopwords = TRUE, stem = TRUE))
-tdm = weightTfIdf(tdm)
-inspect(tdm)
-tdm2 <- removeSparseTerms(tdm, sparse=0.95)
-df <- as.data.frame(inspect(tdm2))
-d = dist(df)
-h = hclust(d)
-rect.hclust(h, k=5, border="red")
-
-
-cos.dissim <- function(x,y) {
-	   x = as.numeric(x)
-	   y = as.numeric(y)
-	   return(1 - (x %*% y)/(sqrt(x %*% x)*sqrt(y %*% y)))
-}
-
-cos.sim <- function(x,y) {
-	   x = as.numeric(x)
-	   y = as.numeric(y)
-	   return((x %*% y)/(sqrt(x %*% x)*sqrt(y %*% y)))
-}
-
-d = matrix(0, nrow(df), nrow(df))
-
-for (a in 1:nrow(df)) {
-    for (b in 1:nrow(df)) {
-    	d[a,b] <- cos.dissim(df[a,],df[b,])
-    }
-}
-rownames(d) <- rownames(df)
-
-d = as.dist(d)
-h = hclust(d)
-plot(h)
-
+tweet.corpus = Corpus(VectorSource(tweets.df$text))
 ```
 
-http://files.meetup.com/1772780/Mining%20Twitter%20Using%20R.pdf
+then convert the characters to UTF8:
 
-# Accessing Facebook
+```{.r}
+tweet.corpus = tm_map(tweet.corpus, 
+	     function(x) iconv(enc2utf8(x), sub = "byte")) # for Windows
+tweet.corpus = tm_map(tweet.corpus, 
+	     function(x) iconv(x, to='UTF-8-MAC', sub='byte')) # for OS X
+```
+
+**Note**: `tm_map` applies the given function to each document in the corpus.
+*Keep this in mind for the next section.*
+
+## Preprocessing the document set
+
+Now that we have our corpus, we want to
+
+1. remove numbers
+2. remove punctuation
+3. remove whitespace
+4. case fold all characters to lower case
+5. remove a set of stop words
+6. reduce each word to its stem
+
+To perform each of these tasks, `tm` provides the functions
+`removeNumbers`, `removePunctuation`, `stripWhitespace`, `tolower`,
+`removeWords` and `stemDocument`  and the application function `tm_map`.
+
+**Use** your knowledge of R, the help pages and your favourite Web
+search engine to work out how to perform the six tasks, then implement
+them on our corpus.  You can examine the changes in the corpus by
+printing the contents of the first document using `tweet.corpus[[1]]`.
+
+## Weighting the Document Matrix
+
+In the lecture, we saw a form of TF-IDF weighting, were each document
+term weight is computed as:
 
 
+$$
+	w_{d,t} = \log_e{\left ( f_{d,t} + 1 \right )}\log_e{\left ( \frac{N}{f_t} \right )}
+$$
+
+where $f_{d,t}$ is the frequency of term $t$ in document $d$ (found at
+`tweet.matrix[d,t]`), $N$ is the number of documents (given by
+`dim(tweet.matrix)[1]`) and $f_t$ is the number of documents
+containing term $t$ (found using `sum(tweet.matrix[,t] > 0)`.
+
+To apply this document term weighting, we need to extract the term
+frequency matrix from the corpus object:
+
+```{.r}
+twitter.dtm = DocumentTermMatrix(tweet.corpus) # create the DocumentTermMatrix object
+twitter.matrix = inspect(twitter.dtm) # convert to a matrix
+```
+
+**Compute** the weighted document term matrix `tweet.weighted.matrix`
+  containing the values of $w_{d,t}$.
+
+**Sum** the weights in `tweet.weighted.matrix` to obtain an overall
+  weight for each term.
+
+**Locate** the position of the top 20 words, according to the overall
+word weight.  Use the vector `colnames(tweet.matrix)` to locate the
+word names.
 
 
-library("twitteR")
-library("tm")
-library("wordcloud")
+Are these words more descriptive of Kevin Bacon than those computed
+using only term frequencies? They should be after all the effort you
+put into calculating them!
 
 
-# show the difference in weight and raw frequency
-library("tm")
-data(crude)
-a <- tm_map(crude, removeNumbers)
-a <- tm_map(a, removePunctuation)
-a <- tm_map(a , stripWhitespace)
-a <- tm_map(a, tolower)
-a <- tm_map(a, removeWords, stopwords("english"))
-a <- tm_map(a, stemDocument, language = "english")
+# Label your friends.
 
-A = TermDocumentMatrix(a)
-B = TermDocumentMatrix(crude)
-W = weightTfIdf(A)
+You found words associated to Kevin Bacon. Use Twitter to find words
+associated to your friend's names.
 
-D = as.data.frame(inspect(A))
-E = as.data.frame(inspect(B))
-F = as.data.frame(inspect(W))
 
-t = table(apply(D, 1, sum))
-s = table(apply(E, 1, sum))
-
-# frequency
-rownames(E)[order(E[,17], decreasing=TRUE)][1:10]
-# weights
-rownames(F)[order(F[,17], decreasing=TRUE)][1:10]
