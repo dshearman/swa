@@ -104,6 +104,13 @@ ${TEMPLATE_DIR}/week05.tex:	${LECTURE_DIR}/graphs/graphs_intro.tex
 %.md:	%.Rmd
 	Rscript -e "library(knitr); knit('$<', output='$*.md')"
 
+%.yaml: %.Ryaml
+	Rscript -e "library(knitr); knit('$<', output='$*.yaml')"
+
+%.Ryaml: %.R
+	Rscript --vanilla -e 'source("${TEST_DIR}/rlist.r"); yaml.header(); source("$<"); yaml.footer();' > "$*.Ryaml"
+
+
 %.tex:	%.md
 	pandoc -f markdown -t beamer --slide-level=2 $< -o $*.tex
 
