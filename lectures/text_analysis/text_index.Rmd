@@ -2,8 +2,6 @@
 % Laurence A. F. Park
 % March 22, 2005
 
-<!-- Setting up R -->
-`r opts_chunk$set(warning=FALSE, dev="pdf", fig.cap="", cache=FALSE)`
 
 
 # Motivation
@@ -83,22 +81,8 @@ samples to obtain many documents, each with different words. But
 because they all come from the same document model, they contain the
 same ideas.
 
-## Document model qualities
 
-In each cases, we need to be able to compare documents to documents,
-documents to queries, or words to words, so we need to define a
-document and word similarity (or dissimilarity) function:
-$$
-   s_{i,j} = S(d_i, d_j) 
-$$
-where $s_{i,j}$ is large if $d_i$ and $d_j$ are similar, and 
-$s_{i,j}$ is small if $d_i$ and $d_j$ are dissimilar.
-
-Before we can define a similarity function, we need to define how the
-document will be represented. Hence we need to define a mathematical
-model for a document, also known as a document model.
-
-## Document models
+## Document model form
 
 The most common form of document representation is as a *bag of
 words*, meaning that each document is represented as a set of unique
@@ -115,9 +99,6 @@ the document and in the collection of documents.
 
 ## Types of Document Models
 
-A document is a sequence of words. In order to apply mathematical
-operations to a set of documents, we must first define a mathematical
-model of a document.
 
 There are three main document models:
 
@@ -127,6 +108,8 @@ There are three main document models:
 
 Each of these models treats the documents as a *bag of words*, meaning
 that order of the words is lost once the model is computed.
+
+We will examine the Vector Space Model.
 
 ## Vector Space Model
 
@@ -163,36 +146,35 @@ in the document.
 
 ## Document vectors
 
-A document vector $\vec{d}_i$ is an ordered set of term frequencies,
-where the order depends on the words in the document collection.
+A document vector $\vec{d}_i$ is an ordered set of term frequencies
+$f_{d,t}$, where the order depends on the words in the document
+collection.
 
 
 To compare document vectors, we examine the angle between the vectors,
 which is inversely proportional to the cosine of the angle:
 $$
-	s_{i,j} = \cos{(\theta_{i,j})} = \frac{\vec{d}_i \cdot \vec{d}_j}{\norm{\vec{d}_i}\norm{\vec{d}_j}}
+	s({\vec{d}_i,\vec{d}_j}) = \cos{(\theta_{i,j})} = \frac{\vec{d}_i \cdot \vec{d}_j}{\norm{\vec{d}_i}\norm{\vec{d}_j}}
 $$
 where:
 $$
-	\vec{d}_i \cdot \vec{d}_j = {\sum_{k = 1}^M d_{i,k}d_{j,k}}
-	\text{~and~} \norm{\vec{d}_i} = \sqrt{{\sum_{k = 1}^M d_{i,k}^2}}
+	\vec{d}_i \cdot \vec{d}_j = {\sum_{k = 1}^M f_{d_i,t_k}f_{d_j,t_k}}
+	\text{~and~} \norm{\vec{d}_i} = \sqrt{{\sum_{k = 1}^M f_{d_i,t_k}^2}}
 $$
-Therefore, $s_{i,j} = 1$ if $\vec{d}_i = \vec{d}_j$, otherwise $s_{i,j} < 1$.
+Therefore, $s({\vec{d}_i,\vec{d}_j}) = 1$ if $\vec{d}_i/\norm{\vec{d}_i} = \vec{d}_j/\norm{\vec{d}_j}$, otherwise $-1 \le s_{i,j} < 1$.
 
 
 ## Queries
 
-We want to be able to compare queries to documents, in order to find
-documents that are most relevant to the query. Fortunately, a query is
-a set of words, and can be modelled using a document vector.
+Using the Vector Space Model, we can compare documents to documents,
+but we want to be able to compare queries to documents as well (to find the documents most relevant to a query).
+
+Fortunately, a query is a set of words, and can be seen as a very
+short document. Therefore, we can represent a query using a document
+vector.
 
 
-## Probabilistic Model
-
-## Language Model
-
-
-## Example: Constructing a document index
+## Example: Document vectors in the Vector Space
 
 Our document set:
 
@@ -207,11 +189,11 @@ Construct the frequency table:
 \begin{center}
 \begin{tabular}{lcccccccc}
 \toprule
-& Social & Web & analytics & is & the & best & greatest & unit \\
+\onslide<2->{& Social & Web & analytics & is & the & best & greatest & unit} \\
 \cmidrule(r){1-1}\cmidrule(r){2-9}
-$\vec{d}_1$ &      1 &   1 &         1 &  1 &   1 &    1 &        0 &    0 \\
-$\vec{d}_2$ &      1 &   1 &         1 &  1 &   1 &    0 &        1 &    1 \\
-$\vec{d}_3$ &      1 &   2 &         1 &  1 &   1 &    1 &        0 &    1 \\
+\onslide<3->{$\vec{d}_1$ &      1 &   1 &         1 &  1 &   1 &    1 &        0 &    0} \\
+\onslide<4->{$\vec{d}_2$ &      1 &   1 &         1 &  1 &   1 &    0 &        1 &    1} \\
+\onslide<5>{$\vec{d}_3$ &      1 &   2 &         1 &  1 &   1 &    1 &        0 &    1} \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -243,9 +225,9 @@ then compute the similarity of the query to all documents:
 \toprule
 & $\vec{d}\cdot\vec{q}$ & $\norm{\vec{d}}$ & $S(\vec{d},\vec{q})$ \\
 \midrule
-$\vec{d}_1$ & 2 & $\sqrt{6}$  & $2/(\sqrt{6}\sqrt{3}) = 0.47$ \\
-$\vec{d}_2$ & 2 & $\sqrt{7}$  & $2/(\sqrt{7}\sqrt{3}) = 0.44$ \\
-$\vec{d}_3$ & 4 & $\sqrt{10}$ & $4/(\sqrt{10}\sqrt{3}) = 0.73$ \\
+$\vec{d}_1$ & 2 & $\sqrt{6}$  & \onslide<3->{$2/(\sqrt{6}\sqrt{3}) = 0.47$} \\
+$\vec{d}_2$ & 2 & $\sqrt{7}$  & \onslide<4->{$2/(\sqrt{7}\sqrt{3}) = 0.44$} \\
+$\vec{d}_3$ & 4 & $\sqrt{10}$ & \onslide<5>{$4/(\sqrt{10}\sqrt{3}) = 0.73$} \\
 $\vec{q}$   &   & $\sqrt{3}$  & \\
 \bottomrule
 \end{tabular}
@@ -254,33 +236,71 @@ $\vec{q}$   &   & $\sqrt{3}$  & \\
 
 ## Problem: Index and Query
 
-Build and index of the documents
+### Problem
 
-1. The dog is on the hill
+Construct the frequency table of the following four documents:
 
-and compute the similarity of the documents to the query:
+- One one was a race horse
+- Two two was one too
+- One one won one race
+- Two two won one too
 
-
-## Term Weights
-
-
-One one was a race horse
-Two two was one too
-One one won one race
-Two two won one too
+and compute the similarity of the documents to the query: "one won"
 
 
+## Document Matrix
 
-One was a race horse Two too won
+Computing the similarity is the inner product of normalised
+vectors. Therefore, we can compute the similarity to all documents
+using a matrix multiply.
+
+Our document matrix is:
+$$
+	D = 
+	\left [
+	\begin{array}{c}
+	\vec{d_1}/\norm{d_1} \\
+	\vec{d_2}/\norm{d_2} \\
+	\vdots \\
+	\vec{d_N}/\norm{d_N} \\
+	\end{array}
+	\right ]
+	=
+	\left [
+	\begin{array}{cccc}
+	w_{d_1,t_1} & w_{d_1,t_2} & \ldots & w_{d_1,t_M} \\
+	w_{d_2,t_1} & w_{d_2,t_2} & \ldots & w_{d_2,t_M} \\
+	\vdots & \vdots & \ddots & \vdots \\
+	w_{d_N,t_1} & w_{d_N,t_2} & \ldots & w_{d_N,t_M} \\
+	\end{array}
+	\right ]
+$$
+where:
+$$
+	w_{d_i,t_j} = f_{d_i,t_j}/\norm{d_i}
+$$
+and $w_{d_i,t_j}$ and $f_{d_i,t_j}$ are the weight and term frequency
+of word $t_j$ in document $d_i$.
 
 
+## Similarity using the Document Matrix
+
+Given a document matrix $D$, we can compute the similarity of all
+documents to query $\vec{q}$ using:
+$$
+	\vec{s} = D\vec{q}^{T}
+$$
+where $\vec{s}$ is the vector of similarity scores, and 
+$\vec{q}^{T}$ is the transpose of $\vec{q}$.
 
 # Word Weight
 
-## Computing Word Weight
+## Importance of words
 
-When computing word weight (the importance of a word in the document
-set), we must take into account the distribution of the words.
+Not all words have equal importance, so they should not contribute
+equally to the similarity score. For example, if a word appears in
+every document, it is not very informative. If a word appears in one
+document, it may define the document.
 
 The weight of a word depends on its context, therefore, we must
 compute the weight of each word when given a new document set.
@@ -288,12 +308,35 @@ compute the weight of each word when given a new document set.
 \begin{block}{Example}
 The word "blood" will have the weight:
 \begin{itemize}
-\item [low] Medical research article set
-\item [high] My brother's diary.
+\item ~[low] Medical research article set
+\item ~[high] My brother's diary.
 \end{itemize}
 \end{block}
 
-We will examine the weighting method:
+
+## Going beyond term frequency
+
+We have treated the normalised frequency of a term as its weight
+$w_{d,t}$ in the document. If a word appears two times in a documents,
+it is twice as relevant to that document when compared to a document
+that contains the word only once.
+
+If a document contains a word 200 times, is the word twice as
+relevant to a document that contains the word 100 times? We would
+expect not. As the frequency of a word increase, the relevance of the
+word should not increase linearly.
+
+In this section we will examine how to compute the relevance of term
+to the document set and to each document.
+
+
+
+## Computing Word Weight
+
+When computing word weight (the importance of a word in the document
+set), we must take into account the distribution of the words.
+
+We will examine the weighting methods:
 
 - Divergence from Randomness
 - TF-IDF
@@ -304,17 +347,19 @@ We will examine the weighting method:
 The importance of a word in a document is inversely proportional to
 the probability of it appearing. Meaning, if we expect a word to
 appear and it appears, it is not interesting. If we expect a word not
-to appear and it doesn't, it is interesting.
+to appear and it does, it is interesting.
 
-Remember that $log(1/x) = -log(x)$, so we can compute the weight of a
-term in a document as:
+Remember that $log(1/x) = -log(x)$, so we can compute the weight of
+word $w$ in a document $d$ as:
 $$
-	\text{weight}(w|d) \propto -\log{\left ( P(w|C) \right )}
+	w_{d,t} = -\log{\left ( P(w|d) \right )}
 $$
+
+\pause
 
 ### Probability of occurrence
 
-Which words do you expect in a document collection from computing:
+Given a set of computing documents, which words should have high weight?
 \begin{center}
 	computer, with, nuclear, windows, water, snowman.
 \end{center}
@@ -322,6 +367,17 @@ Which words do you expect in a document collection from computing:
 \pause
 
 Words with low probability, that appear, are provided a higher weight.
+
+
+## The effect of $-log(x)$
+
+At the probability increases, $-\log{p}$ decreases:
+\vspace{-6em}
+
+```{r, echo=FALSE, fig.width=5, fig.height=4, dev="pdf"}
+x = (1:100)/100
+plot(x, -log(x), xlab="P(w|d)", ylab="-log(P(w|d))", type="l")
+```
 
 ## Using the Binomial distribution
 
@@ -339,7 +395,7 @@ the probability of successes $p$.
 - If word $w$ is chosen, we have a success, if word $w$ is not chosen,
   we have a failure.
 - The probability $p$ of word $w$ is the proportion of occurrences of
-  word $w$ in the document collection (occurrences of word w / total
+  word $w$ in the document collection (occurrences of word $w$ / total
   number of words in collection).
 
 
@@ -358,58 +414,114 @@ $$
 $$
 with weight:
 $$
-	\text{weight}(w|d) = -log(0.0987) = 2.316
+	w_{d,t} = -log(0.0987) = 2.316
 $$
 
-### Problem 
 
-The word "tank" appears 3 times in the collection, so its probability
-is $p = 3/1000 = 0.003$. In a given document of length 100, "tank"
-appears 2 times. Compute its weight.
+## DFR Binomial Horses
 
 
+\begin{block}{Problem}
 
-## Term weight function
+Compute the DFR Binomial weight for each word in the first document
+from the document set below.
+
+\begin{itemize}
+\item One one was a race horse
+\item Two two was one too
+\item One one won one race
+\item Two two won one too
+\end{itemize}
+
+\end{block}
+
+Hint: the Binomial probability is computed as:
+$$
+\begin{aligned}
+	P(X = x) &= {n \choose x}p^{x}{(1 - p)}^{n - x}
+\end{aligned}
+$$
+
+
+## TF-IDF
+
+TF-IDF weighting was designed using experimentation, and has shown to
+provide good results for a simple method.
+
+- TF: term frequency
+- IDF: Inverse Document Frequency
+
+The weight for term in a document is computed as the product of the
+term frequency weight and inverse document frequency weight.
+
+
+## Term weight function (IDF)
+
+IDF is a measure of the terms importance across the document collection.
 
 The term weight can be computed using the function:
 $$
-	w_t = \log_e{\left ( \frac{N}{f_t} \right )}
+	\text{IDF}_t = \log_e{\left ( \frac{N}{f_t} \right )}
 $$
 where $N$ is the number of documents, $f_t$ is the number of
-documents containing term $t$, and $w_t$ is the weight of term $t$.
+documents containing term $t$, and $\text{IDF}_t$ is the weight of term $t$.
 
-### Problem
 
-Compute the term weights for each of the words in the following
-document set:
-
-1. social web analyt best
-2. social web analyt great unit
-3. best web unit social web analyt
 
 ## Term weight plot ($N = 100$)
 
+As the term document count increases, its weight decreases.
 \vspace{-6em}
-```{r, echo=FALSE, fig.width=5, fig.height=4}
-plot(1:100, log(100/(1:100)), xlab="Term weight", ylab="Term Document Count")
+
+```{r, echo=FALSE, fig.width=5, fig.height=3.8, dev="pdf"}
+plot(1:100, log(100/(1:100)), ylab="Term weight", xlab="Term Document Count")
 ```
 
-## Within document term weight
+## Computing the IDF
 
-The within document term weight is a measure of how important the term
-is within the document. This weight is dependent on:
+### Problem 
 
-- The frequency of the term in the document
-- The importance of the word in the document set (the term weight)
+Compute the IDF term weights for each of the words in the following
+document set:
+
+- One one was a race horse
+- Two two was one too
+- One one won one race
+- Two two won one too
 
 
-## Within document term weight function
+## Within document term weight (TF)
+
+The within document term weight (TF) is a measure of how important the
+term is within the document. This weight is dependent on the frequency
+of the term in the document.
 
 The within document term weight can be computed using:
 $$
 \begin{aligned}
-	w_{d,t} &= \log_e{\left ( f_{d,t} + 1\right )}w_t \\
-	 &= \log_e{\left ( f_{d,t} + 1\right )}\log_e{\left ( \frac{N}{f_t} \right )} \\
+	\text{TF}_{d,t} &= \log_e{\left ( f_{d,t} + 1\right )}
+\end{aligned}
+$$
+where $f_{d,t}$ is the frequency of term $t$ in document $d$ and
+$\text{TF}_{d,t}$ is the weight of term $t$ in document $d$.
+
+## TF weighted frequency plot
+
+As the frequency increases, the increase in weight reduces.
+\vspace{-6em}
+
+```{r, echo=FALSE, fig.width=5, fig.height=3.8, dev="pdf"}
+plot(1:100, log(1:100 + 1), xlab="Term Frequency", ylab="log(Term Frequency + 1)")
+```
+
+
+## TF-IDF: Putting it together.
+
+The weighted term frequency is given as:
+$$
+\begin{aligned}
+	w_{d,t} &= \text{TF}_t\times \text{IDF}_{d,t} \\
+		&= \log_e{\left ( f_{d,t} + 1\right )}\log_e{\left ( \frac{N}{f_t} \right )} \\
 \end{aligned}
 $$
 where $f_{d,t}$ is the frequency of term $t$ in document $d$ and
@@ -420,19 +532,12 @@ $w_{d,t}$ is the weight of term $t$ in document $d$.
 Using the results from the previous problem, compute the within
 document term weights for each of the words in the first document:
 
-1. social web analyt best
-2. social web analyt great unit
-3. best web unit social web analyt
+- One one was a race horse
+- Two two was one too
+- One one won one race
+- Two two won one too
 
 
-## Weighted frequency plot
-
-As the frequency increases, the increase in weight reduces.
-
-\vspace{-6em}
-```{r, echo=FALSE, fig.width=5, fig.height=4}
-plot(1:100, log(1:100 + 1), xlab="f", ylab="log(f+ 1)")
-```
 
 
 
@@ -483,6 +588,8 @@ which, while, who, whom, why, will, with, would, yet, you, your
 
 Lists can be compiled for a specific task.
 
+\pause 
+
 ### When not to remove stop words
 
 By removing stop words, we remove all occurrences of "To be or not to
@@ -493,7 +600,7 @@ be."
 When examining words in documents, we want to identify how often they
 appear and in which documents they appear.
 
-To keep all occurrences of a word consistent, we must remove the any
+To keep all occurrences of a word consistent, we must remove any
 difference in letter case. This is done by adjusting all text to be
 lower case.
 
@@ -514,10 +621,10 @@ their use in a sentence. By removing the variation, we obtain a better
 understanding the occurrence of the word.
 
 For example the words "fishing", "fished", "fish", and "fisher" have
-the stem "fish". The words "argue", "argued", "argues" and "arguing
+the stem "fish". The words "argue", "argued", "argues" and "arguing"
 have the stem "argue".
 
-The most commonly used stemming algorithms is Porter's stemmer.
+The most commonly used stemming algorithm is Porter's stemmer.
 
 Our document set has been reduced to:
 
@@ -527,180 +634,23 @@ Our document set has been reduced to:
 
 Note that the stems do not have to be words.
 
-# Weighting Terms
-
-## Going beyond term frequency
-
-We have treated the frequency of a term as its weight in the
-document. If a word appears two times in a documents, it is twice as
-relevant to that document when compared to a document that contains
-the word only once.
-
-If a documents contains a word 200 times, is the word twice as
-relevant to a document that contains the word 100 times? We would
-expect not. As the frequency of a word increase, the relevance of the
-word should not increase linearly.
-
-In this section we will examine how to compute the relevance of term
-to the document set and to each document.
-
-## Term weights
-
-For a given document collection, we can compute which words are the
-most descriptive of the set.
-
-### Requirements for a term weight
-
-- If a term appears in all documents, then is does not provide us with
-any information.  
-- If a term appears in only one document, then it is
-very representative of the difference between that document and the
-rest.
 
 
 
 
-# Evaluating Results
-
-## Ranking documents
-
-Given a document model, we can compute how similar all documents are
-to a particular document, or how similar all documents are to a
-query. Either way, the result is a ranked list of documents from best
-matching to worst matching.
-
-\begin{center}
-\begin{tabular}{lcc}
-\toprule
-  Document ID & Score & Rank \\
-\midrule
-  D1012123 & 4.56 & 1 \\
-  D2342923 & 4.23 & 2 \\
-  D2342233 & 3.78 & 3 \\
-  D7453232 & 3.66 & 4 \\
-  \vdots & \vdots & \vdots \\
-  D6454644 & -4.01 & 983453 \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-The document score is used to provide the rank. Once we have the rank,
-we can ignore the score. Google presents the user with the top ten
-results, with the option to view the next ten.
-
-## Comparing results for difference document models
-
-If we are given two document models, we can compute two different
-ranked lists for the same problem (query). We can use these ranked
-lists to evaluate the accuracy of each document model.
-
-To evaluate a document model, we need:
-
-- the truth (the correct ranking)
-- an evaluation function (to compare the computed ranking to the correct ranking).
-
-
-## Obtaining the truth
-
-The ranking of an entire document set for a given query is a
-subjective process. Given only 10 documents, there are $10! =
-3,628,800$ different possible rankings. If two documents are similar,
-it is difficult to say which should be ranked higher than the other.
-
-Rather than providing a ranking as the truth, we can instead provide
-the set of documents that are relevant to the query, meaning that the
-remaining documents are irrelevant.
-
-A perfect ranking would place all relevant documents higher on the
-list than all irrelevant documents. But how do we score ranking that
-are not perfect?
-
-### Which ranking is better
-
-\begin{columns}
-\begin{column}{0.45\textwidth}
-The best ranking is:
-\begin{itemize}
-\item 1 1 1 1 0 0 0 0
-\end{itemize}
-\end{column}
-\begin{column}{0.45\textwidth}
-Which is the better of these two:
-\begin{itemize}
-\item 1 0 0 0 1 1 1 0
-\item 0 1 1 0 1 1 0 0
-\end{itemize}
-\end{column}
-\end{columns}
-
-## Precision at $k$
-
-A simple measure of accuracy is to count the number of relevant
-documents in the top $k$ ranked documents.
-
-The precision at 5 for the following ranking is 2:
-\begin{center}
-	1 0 0 1 0 1 1 0 1 1
-\end{center}
-
-### Problem
-
-Calculate the precision at 5 for these rankings:
-
-- 0 0 1 1 1 0 1 1 0 0
-- 1 0 0 0 0 0 0 1 0 1
-- 1 1 1 1 1 1 1 1 0 1
-
-## Reciprocal Rank
-
-In some cases, we are interested on returning one relevant document,
-rather then a number of them. For this case, the position of the
-relevant document is important.
-
-The reciprocal rank is the reciprocal of the rank of the first
-relevant document. If the first relevant document appears at rank $x$,
-the reciprocal rank is $1/x$.
-
-### Problem
-
-Calculate the reciprocal rank for the following rankings:
-
-- 0 0 1 1 1 0 1 1 0 0
-- 1 0 0 0 0 0 0 1 0 1
-- 1 1 1 1 1 1 1 1 0 1
-
-
-## Average Precision
-
-If we want to measure how well we ranked all documents, we use Average
-Precision. This is the average of the precision at each relevant
-document:
-
-$$
-	\text{AP} = \frac{1}{R}{\sum_{i = 1}^{R} \frac{i}{r_i}}
-$$
-where $r_i$ is the rank is the $i$th top ranked relevant document.
-
-### Example
-
-Given the ranked list with relevant documents in the positions: 
-
-1 1 0 0 0 1
-
-$AP = (1/1 + 2/2 + 3/6)/3 = 0.833$
 
 
 ## Summary
 
 You should know how to:
 
-- construct a text index
-- represent documents and queries as vectors
-- find the terms weight and within document term weight
-- evaluate the accuracy of search results using Precision at $k$,
-  Reciprocal Rank and Average Precision.
+- construct document and query vectors, and use them to compute similarity
+- compute term weights using DFR and TF-IDF
+- preprocess a document collection
 
 
+## Next Week
 
+Graphs
 
 
