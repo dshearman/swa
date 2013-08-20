@@ -1,4 +1,4 @@
-% Twitter and Facebook APIs 
+% Text Mining 1: Indexing and Querying Text
 % 300958 Social Web Analysis 
 % Week 5 Lab
 
@@ -6,46 +6,70 @@
 
 # Installing Libraries
 
+For this lab, we will need the twitteR, ROAuth and tm libraries.
+
 Installing libraries requires access to the Internet and hence R needs
-to know about the Web proxy when within UWS.
+to know about the Web proxy when within UWS. R may have already been provided the proxy information, so first assume that the proxy has been set
 
-Information on how to tell R about the proxy is here:
 
-- http://support.rstudio.org/help/kb/faq/configuring-r-to-use-an-http-proxy
-
-Information about the proxy setting is here:
-
-- http://www.uws.edu.au/information_technology_services/its/servicedesk/proxy_settings
-
+## Installing twitteR and tm
 
 Once this has been done, you may install libraries using the install.packages command:
 ```{r eval=FALSE}
 install.packages("twitteR")
+install.packages("tm")
+install.packages("ROAuth")
 ```
 If R will not speak to the proxy, you can download the packages and install them locally.
-Get the package from here:
+The list of all packages is here:
 
 - http://cran.r-project.org/web/packages/available_packages_by_name.html
 
-Install the package by telling R where you saved it:
+The packages needed for this lab are:
+- http://cran.r-project.org/web/packages/tm/index.html
+- http://cran.r-project.org/web/packages/twitteR/index.html
+- http://cran.r-project.org/web/packages/ROAuth/index.html
+
+From these Web pages, download either the MacOS or Windows binary to a local directory.
+Then install the package by telling R where you saved it. For example, if we saved
+the packages in the /tmp directory:
 ```{r eval=FALSE}
-install.packages("/tmp/bigdata_0.1.tgz", repos=NULL)
+install.packages("/tmp/tm_0.5-9.1.zip", repos=NULL)
 ```
+
+## Setting the Proxy Information
+
+If you have installed the twitteR, ROAuth and tm packages, you can skip this section.
+
+Information on how to tell R about the proxy is here:
+
+- [http://support.rstudio.org/help/kb/faq/configuring-r-to-use-an-http-proxy](http://support.rstudio.org/help/kb/faq/configuring-r-to-use-an-http-proxy)
+
+Information about the proxy setting is here:
+
+- [http://www.uws.edu.au/information_technology_services/its/servicedesk/proxy_settings](http://www.uws.edu.au/information_technology_services/its/servicedesk/proxy_settings)
+
+
 
 # Accessing Twitter
 
+
+## Obtaining OAuth keys
+
 To access the Twitter API, a Twitter account is needed. If you do not have one, sign up here:
 
-- https://twitter.com/
+- [https://twitter.com/](https://twitter.com/)
 
 To access the Twitter API, we must register a program that is accessing the API. To register the program, visit this link:
 
-- https://dev.twitter.com/apps
+- [https://dev.twitter.com/apps](https://dev.twitter.com/apps)
 
 and log in. Once you have logged in, click "Create a new application"
 and fill in the form. When the application is created, it will be
-provided a consumer key and a consumer secret; these text sequences
-are needed soon.
+provided a *consumer key* and a *consumer secret*; these text sequences
+are needed soon, so keep them handy.
+
+## Authorising R
 
 We can access the Twitter API in R by loading the twitteR and ROAuth libraries (and
 installing them first if needed).
@@ -70,6 +94,14 @@ cred$handshake()
 
 Once the handshake is performed, R will ask you to visit a URL to get
 an access code from Twitter. Get this code and provide it to R.
+
+**NOTE**: there is a bug in RStudio that prevents us from copying the
+  OAuth URL to the clipboard. So you can either:
+
+- Use R (not RStudio) when issuing the handshake, or
+- manually type out the provided URL into a Web browser.
+
+
 Once the handshake is done, we can save the credential information
 and use it later, without having go directly to Twitter again.
 
@@ -79,20 +111,115 @@ save(cred, file="twitter.Rdata")
 
 When we want to access Twitter in another session, we simply load and
 register the credentials:
+
 ```{.r}
 load("twitter.Rdata")
+```
+**NOTE**: If you performed the performed the handshake in R, you can
+  save the credential data, then open RStudio and load the credential
+  data. This will allow you to continue working in RStudio.
+
+
+Finally, to establish the connection to Twitter, we must register our application:
+
+```{.r}
 registerTwitterOAuth(cred)
 ```
 
+We are now ready to request information from the Twitter API.
+
+## Searching Twitter
+
+**NOTE** Anyone with Web access can upload information to
+  Twitter. Therefore, we are unable to control the text that appears
+  from any Twitter downloads. The tasks we have provided did not
+  contain offensive material at the time of writing, but we cannot
+  guarantee that there will not be offensive language during the time
+  of the lab.
+
+
+Let's find which words are mentioned with "Kevin Bacon".
+
+First get the latest 100 tweets written in English, containing the
+terms "Kevin" and "Bacon":
 
 ```{.r}
-x = searchTwitter('kevin bacon')
+tweets = searchTwitter('kevin bacon', n = 100, lang = "en")
+```
 
-x = searchTwitter('social web analytics', n = 500, lang = "en")
-z = twListToDF(x)
+The varaible `tweets` is a list. Examine the list items using double brackets.
+
+Convert the list to a data frame:
+
+```{.r}
+tweets.df = twListToDF(tweets)
+```
+
+Remember that a data frame is a table, with column headings. Examine the column headings:
+
+```{.r}
+names(tweets.df)
+```
+
+There are many columns that we can explore. At this moment, we are interested in the text:
+
+```{.r}
+tweets.df$text
+```
+
+To examine the word frequencies, we must build a frequency table. To
+do this, we must extract the words from the strings.  We can extract
+sequences of letters by splitting the strings on all non-letter
+characters. We can do this for the first tweet:
+
+```{.r}
+strsplit(tweets.df$text[1], "[^A-Za-z]+")
+```
+
+or for all tweets:
+
+```{.r}
+tweet.words = strsplit(tweets.df$text, "[^A-Za-z]+")
+```
+
+The variable tweet is a list, where each list item is a vector of the
+words from a tweet. We want to combine all words to count them, so we
+remove the list and tabulate the resulting vector:
+
+```{.r}
+word.table = table(unlist(tweet.words))
+```
+
+To identify the top 20 occurring words, we must sort the table and
+examine the top 20 items.
+
+**Examine** the help page for `sort` to obtain the top 20 occurring
+  words.
+
+Do these words tell us anything about Kevin Bacon. It is likely that
+they don't. The list is likely to contain words such as *is*, *of*,
+*a* and so on. We need to use a more sophisticated method to extract
+meaningful terms.
+
+# Text Mining
+
+In this section, we will use the library `tm` to assist us in finding
+more useful information about Kevin Bacon.
+
+First load the library:
+
+```{.r}
+library("tm")
+```
 
 
+To do this for all tweets, we should write a function. 
 
+**Write** the function `extract.words` that takes a character string
+(such as `tweets.df$text[1]`) and returns the 
+
+
+```{.r}
 library("wordcloud")
 library("tm")
 
