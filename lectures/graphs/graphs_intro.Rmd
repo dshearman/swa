@@ -1,14 +1,229 @@
-% Introduction to Graphs
+% Introduction to Graphs (Definition, Graph statistics, Storage)
 % Laurence A. F. Park
 % March 22, 2005
 
+```{r setup, include=FALSE}
+opts_chunk$set(dev = 'pdf', fig.cap="")
+```
+
+
 # What is a graph?
 
-# Defining a graph
 
-# Storing a Graph
+Directed Graphs
+Weighted Graphs
+
+
+Adjacency
+Shortest Path
+
+Subgraph
+
+## Not a graph
+
+This was a graph when you were in high school.
+This is now called a *plot*.
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+x = (1:10)
+y = x^3 %% 10
+#par(mar = (c(3.5, 3.5, 4, 2) + 0.1))
+par(mgp = c(1.5, 0.4, 0))
+plot(x, y, xlab="Some numbers", ylab="Some other numbers", type="b", cex.lab=0.8, cex.axis=0.8,)
+```
+
+## A graph
+
+Now that you have passed high school, we can let you know that this is a graph.
+
+\vspace{-2em}
+```{r, echo=FALSE, fig.width=5, fig.height=2.8}
+library("igraph")
+par(mar = c(0,0,0,0))
+g = erdos.renyi.game(10,p=0.4)
+V(g)$label.cex = 0.8
+plot(g, layout=layout.fruchterman.reingold, vertex.size = 15)
+```
+
+
+## Formal Definition
+
+A graph is a set of vertices, connected by edges.
+A graph is given by $G = (V,E)$, where $V$ is the set of vertices:
+$$
+	V = \{v_1, v_2, \ldots, v_n \}
+$$
+and $E$ is the set of edges (pairs of vertices):
+$$
+	E= \{e_1, e_2, \ldots, e_n\}, \quad e_i = \{v_i, v_j\}, \quad v_i, v_j \in V
+$$
+
+
+\begin{minipage}{0.3\textwidth}
+We define this graph as:
+\begin{itemize}
+\item $V = \{v_1, v_2, v_3, v_4\}$
+\item $E = \{\{v_1, v_2\}, \{v_1, v_3\}, \{v_1, v_4\}, \{v_2, v_4\} \}$
+\end{itemize}
+\end{minipage}
+
+```{r, echo=FALSE, fig.width=1, fig.height=1}
+g = graph.formula(A-B, A-C, A-D, B-D)
+par(mar = c(0,0,0,0))
+V(g)$label.cex = 0.8
+plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]),expression("v"[4])), layout=layout.fruchterman.reingold, vertex.size = 50)
+```
+
+# Graph Parameters
+
+degree
+degree distribution
+
+Girth
+Empty Graph
+
+## Shortest Path
+
+Edge Count
+Vertex Count
 
 # Centrality
 
+## Measures of Centrality
+
+A measure of centrality directs us to the centre of an object,
+therefore the location of the centre depends on how we define the
+centre.
+
+For continuous numerical data, we can compute the centre as the mean,
+median or mode, depending on how we define the centre. For graphs there are
+also many measures of centrality.
+
+There is usually no clear centre of a graph, therefore centrality methods
+provide a centrality score to all vertices, where the greater the score,
+the more likely the centre exists at that associated vertex.
+
+## Degree Centrality
+
+The simplest measure of centrality is *Degree Centrality*. The
+centrality score for each vertex is equal to the number of edges
+connected to it. The reasoning for this measure is, the greater the
+degree of a vertex, the more likely that information will flow through
+it.
+$$
+	C_{\text{degree}}(v) = \text{deg}(v)
+$$
+
+### Problem
+
+Compute the degree centrality for the following graph.
+
+```{r, echo=FALSE, fig.width=1, fig.height=1}
+g = graph.formula(A-B, A-C, A-D, B-D)
+par(mar = c(0,0,0,0))
+V(g)$label.cex = 0.8
+plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]),expression("v"[4])), layout=layout.fruchterman.reingold, vertex.size = 50)
+```
+
+## Closeness Centrality
+
+A vertex should be considered the centre if we can reach all other
+vertices from it with the shortest number of hops.
+
+If we define $d(v_i, v_j)$ as the number of hops along the shortest
+path from $v_i$ to $v_j$, then we define closeness centrality as:
+$$
+	C_{\text{closeness}}(v) = {\sum_{u \in V} d(v,u)}
+$$
+
+### Problem
+
+Compute the degree centrality for the following graph.
+
+```{r, echo=FALSE, fig.width=1, fig.height=1}
+g = graph.formula(A-B, A-C, A-D, B-D)
+par(mar = c(0,0,0,0))
+V(g)$label.cex = 0.8
+plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]),expression("v"[4])), layout=layout.fruchterman.reingold, vertex.size = 50)
+```
+
+## Between Centrality
+
+
+Centrality can be measured by the usefulness of the vertex.  If the
+shortest path between vertices $u_i$ and $u_j$ contain vertex $v$,
+then the betweenness centrality of $v$ is considered increase.
+
+If we define $\text{sp}_{u_i,u_j}$ as the number of shortest paths
+from vertices $u_i$ to $u_j$ and $\text{sp}_{u_i,u_j}(v)$ as the number of
+shortest paths from vertices $u_i$ to $u_j$ that pass through $v$,
+then the betweenness centrality of $v$ is:
+$$
+	C_{\text{betweenness}}(v) = {\sum_{u_i, u_j \in V, u_i\ne u_j} \frac{\text{sp}_{u_i,u_j}(v)}{\text{sp}_{u_i,u_j}}}
+$$
+Note that a shortest path containing $v$ at its start or end cannot
+pass though $v$. Therefore, we can ignore all paths that begin with
+$v$ and end with $v$.
+
+
+
+## Eigenvalue Centrality
+
+
+
+
+## Vertex Betweenness centrality
+
+## Edge Betweenness centrality
+
+## Closeness
+
+## Cliques
+
+## Clique Number
+
+diameter
+average.path.length(g)
+transitivity(g, type="average")
+# Centrality
+
 http://www.buzzfeed.com/tessastuart/40-people-with-more-hollywood-connections-than-kevin-bacon
+
+
+
+# Special Graphs
+
+Complete (Full) Graph
+Density
+
+
+
+# Directed Graphs
+
+
+
+
+
+
+
+
+# Random Graphs
+
+## Erd\"{o}s-Renyi Graph
+
+## Watts-Strogatz Graph
+
+## Barabasi Graph
+
+
+
+
+
+
+# Storing a Graph
+
+
+
+
 
