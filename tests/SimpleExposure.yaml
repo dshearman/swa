@@ -39,11 +39,15 @@ questions:
       correct_answer: 2
 
     - type: TF
+      question: "<p>Organic Reach is the number of unique people who saw your Page or one of its posts from a story shared by a Friend</p>"
+      answer: "False"
+
+    - type: TF
       question: "<p>A 95% confidence interval for a proportion will always be smaller than a 90% confidence interval</p>"
       answer: "False"
 
     - type: TF
-      question: "<p>For an approximate 95% confidence interval, the appropriate <mrow><msub><mi>z</mi><mrow><mi>&alpha;</mi><mo>&sol;</mo><mn>2</mn></mrow></msub></mrow> multiplier is 1.645</p>"
+      question: "<p>For an approximate 95% confidence interval, the appropriate <mrow><msub><mi>z</mi><mrow><mi>&alpha;</mi><mo>&sol;</mo><mn>2</mn></mrow></msub></mrow> multiplier is 1.960</p>"
       answer: "True"
 
     - type: TF
@@ -54,3 +58,29 @@ questions:
       question: "<p>If there are 2 rows and 5 columns the <math><mrow><msup><mi>&chi;</mi><mn>2</mn></msup></mrow></math> (chi-squared) test has 10 degrees of freedom</p>"
       answer: "False"
 
+    - type: MC
+      question: "<p>Which R function below can be used for calculating a confidence interval for a proportion</p>"
+      choices:
+       - "chisq.test"
+       - "prop.test"
+       - "fisher.test"
+       - "plot"
+      correct_answer: 2
+
+    - type: MC
+      question: "<p>Which R function below can be used for testing whether age profile varies by gender when some of the expected cell counts are less than 5</p>"
+      choices:
+       - "chisq.test"
+       - "prop.test"
+       - "fisher.test"
+       - "plot"
+      correct_answer: 3
+
+    - type: MC
+      question: "<p>Which R function below can be used for testing whether age profile varies by gender when some of the expected cell counts are greater than 5</p>"
+      choices:
+       - "chisq.test"
+       - "prop.test"
+       - "fisher.test"
+       - "plot"
+      correct_answer: 1
