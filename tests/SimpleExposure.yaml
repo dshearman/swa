@@ -51,7 +51,7 @@ questions:
       answer: "True"
 
     - type: TF
-      question: 'The <math><mrow><msup>	<mi>&chi;</mi><mn>2</mn></msup></mrow></math> (chi-squared) test is used to test whether age profiles vary by gender, for example.'
+      question: 'The <math><mrow><msup><mi>&chi;</mi><mn>2</mn></msup></mrow></math> (chi-squared) test can be used to test whether age profiles vary by gender.'
       answer: "True"
 
     - type: TF
@@ -77,7 +77,7 @@ questions:
       correct_answer: 3
 
     - type: MC
-      question: "<p>Which R function below can be used for testing whether age profile varies by gender when some of the expected cell counts are greater than 5</p>"
+      question: "<p>Which R function below can be used for testing whether age profile varies by gender when all of the expected cell counts are greater than 5</p>"
       choices:
        - "chisq.test"
        - "prop.test"
