@@ -1,0 +1,162 @@
+% Graphs 1: Graphs and their parameters
+% 300958 Social Web Analysis 
+% Week 6 Lab
+
+
+# Requirements
+
+For this lab, we will be using the `igraph` package. Install the
+package before beginning the lab:
+
+```{r eval=FALSE}
+install.packages("igraph")
+```
+
+If the package does not download due to the UWS proxy server, see [Lab
+5](300958.week05.lab.html) for further information on installing
+packages.
+
+Once installed. Load the library:
+```{r}
+library("igraph")
+```
+
+
+# Creating a graph
+
+
+To create a graph, we can use the formula interface or provide an
+adjacency matrix.
+
+## Graph Formula
+
+We can create a graph by providing the `graph.formula` function with the se of vertices, and how they are connected. For example:
+```{r}
+g1 = graph.formula(A-B, A-C, A-D, B-D)
+```
+To view the graph, we can print out the graph variable `g1`:
+```{r}
+print(g1)
+```
+To view the vertices of the graph, use the function `V`:
+```{r}
+V(g1)
+```
+To view the edges, use the function `E`:
+```{r}
+E(g1)
+```
+To visualise the graph, plot it:
+```{r fig.cap="The graph `g1`"}
+plot(g1)
+```
+
+## Adjacency Matrix
+
+To create a graph from an adjacency matrix, we must first create the
+matrix. An adjacency matrix $A$ contains $N$ rows and columns, where
+$N$ is the number of vertices. The element $a_{i,j}$ of $A$ is the
+element from the $i$th row and the $j$th column. If there is an edge
+between the $i$th vertex and $j$th vertex, then $a_{i,j} = 1$.
+If there is no edge, then $a_{i,j} = 0$.
+
+We can first make a $4\times 4$ matrix, containing all zeros:
+```{r}
+A = matrix(0,4,4)
+```
+Then add the edges by allocating ones. We will make the same graph
+shown above in `g1`. We want to connect the first vertex to the
+second, third and fourth vertices:
+```{r}
+A[1,c(2,3,4)] = 1
+```
+We also want to connect the second vertex to the first and fourth:
+```{r}
+A[2,c(1,4)] = 1
+```
+We connect the thrid vertex to the first:
+```{r}
+A[3,1] = 1
+```
+And connect the fourth vertex to the first and second:
+```{r}
+A[4,c(1,2)] = 1
+```
+Giving us:
+```{r}
+print(A)
+```
+Notice that the matrix is symmetric. Adjacency matrices for undirected
+graphs are always symmetric, showing that the edges can be followed
+from either direction.
+
+We create the matrix with:
+```{r}
+g2 = graph.adjacency(A)
+```
+and visualise it:
+```{r fig.cap="The graph `g2`. The arrow heads on the edges imply that the graph is directed, but it is not."}
+plot(g2)
+```
+
+Notice that the edges in the plot of `g2` have arrows, implying that
+it is a directed graph. Examine the help page of the function 
+`graph.adjacency` and work out how to make the graph undirected.
+
+
+
+
+# Creating Random Graphs
+
+We saw in the lecture that we are able to create an Erdős-Renyi Graph
+once given the parameters $n$ (the number of vertices) and $p$ (the
+probability of an edge appearing).
+
+To create and Erdős-Renyi Graph:
+```{r, fig.cap="Random Erdős-Renyi Graph"}
+g.er = erdos.renyi.game(n = 100,p = 0.1)
+plot(g.er,  vertex.size = 5)
+```
+
+In the plot command, we reduced the vertex size so we can see the
+edges more clearly. Run the plot command without `vertex.size = 5` to
+see the difference.
+
+
+To create a Barabási–Albert Graph, we must provide $n$ (the number of
+vertices). We can also provide the $k$ (the power) and $m$ (the number
+of edges to add to each new vertex).
+```{r, fig.cap="Random Barabási–Albert Graph"}
+g.ba = barabasi.game(n = 100, directed=FALSE)
+plot(g.ba,  vertex.size = 5)
+```
+
+
+
+graph.density(g.ba)
+
+shortest.paths
+diameter
+
+
+degree(g.ba)
+closeness
+
+
+We defined the closeness centrality of a vertex $v$ as the sum of the
+distance from $v$ to all other vertices. To compute the closeness of
+each vertex, we use:
+```{r}
+closeness(g.ba)
+```
+This does not look right. The sum of differences should be an integer,
+but the R output is a set of real values. Read the R help page for
+`closeness` to find what R is computing. Then work out which of the
+vertices is the most central with respect to closeness centrality.
+
+
+Betweenness
+
+
+average.path.length(g)
+transitivity(g, type="average")
