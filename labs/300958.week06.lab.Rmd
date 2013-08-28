@@ -160,3 +160,98 @@ Betweenness
 
 average.path.length(g)
 transitivity(g, type="average")
+
+
+# Twitter Graph
+
+Load the twitteR library:
+```{r}
+library("igraph")
+```
+
+Register your application with Twitter using the process from 
+[Lab 5](300958.week05.lab.html)
+
+
+- Popular people have many followers.
+- Popular people have popular followers.
+
+Useful twitteR functions for this lab: `getUser`, `friends`, `followers`
+
+
+Let's examine Kevin Rudd:
+```{r eval=FALSE}
+user = getUser("KRuddMP")
+```
+To examine all of the details for Kevin Rudd, convert the twitteR object into a data frame:
+```{r eval=FALSE}
+user$toDataFrame()
+```
+
+The above function provides information such as the number of friends,
+the number of followers, if the account is protected and verified and
+the owners name and id.  Kevin Rudd is a popular person, so he must
+have popular friends. From the output of `user$toDataFrame()` identify
+how many friends Kevin Rudd has.
+
+We now want to download the list of Kevin Rudd's friends. Since he has
+a large number of friends, we download the first 100.
+```{r eval=FALSE}
+friends = user$getFriends(100)
+```
+
+We now have the details of 100 of Kevin Rudd's friends. 
+Examine the information of the first friend:
+```{r eval=FALSE}
+friends[[1]]$toDataFrame()
+```
+We can find which friends are the most popular by examining their follower count.
+```{r eval=FALSE}
+friends[[1]]$getFollowersCount()
+```
+**From** this list of 100 friends, extract the 10 friends with the most followers.
+**Then** use twitteR to download the 
+
+
+Protected
+
+getFriends()
+
+
+
+friends = user$getFriends(100)
+
+el = cbind(rep(user$getScreenName(), length(friends)),
+    	      sapply(friends,screenName))
+
+
+All friends
+
+friends = user$getFriends()
+
+# removed unreadable protected
+unprotected.friends = friends[!sapply(friends, protected)]
+
+# find the ten most popular friends
+ten.popular = order(sapply(unprotected.friends, friendsCount), decreasing=TRUE)[1:10]
+
+more.friends = list()
+for (a in 1:10) {
+    friend = unprotected.friends[[ten.popular[a]]]
+    cat("Getting friends of", friend$getScreenName(), "...\n")
+    more.friends[[a]] = friend$getFriends(100)
+}
+
+sum(sapply(more.friends[[1]],id) %in% sapply(more.friends[[10]],id))
+
+getCurRateLimitInfo()
+
+for (a in 1:10) {
+    friend = unprotected.friends[[ten.popular[a]]]
+    el.friend = cbind(rep(friend$getScreenName(), length(more.friends[[a]])),
+    	      sapply(more.friends[[a]],screenName))
+    el = rbind(el,el.friend)
+}
+
+g = graph.edgelist(el)
+
