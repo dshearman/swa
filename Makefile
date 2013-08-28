@@ -1,4 +1,5 @@
 TEX = xelatex --shell-escape
+R_PROG := /opt/local/bin/R
 CODE = 300958
 TEMPLATE_DIR = templates
 INCLUDE_DIR = includes
@@ -113,6 +114,10 @@ ${TEMPLATE_DIR}/week05.tex:	${LECTURE_DIR}/graphs/graphs_intro.tex
 
 %.tex:	%.md
 	pandoc -f markdown -t beamer --slide-level=2 $< -o $*.tex
+
+%.tex:	%.Rtex
+	echo "library(tools); Sweave('$<')" | ${R_PROG} --vanilla --silent
+
 
 %.html: %.md
 	pandoc --mathjax --table-of-contents --toc-depth=1 --number-sections --section-divs --slide-level=2 -s -c buttondown.css -f markdown -t html $< -o $*.html
