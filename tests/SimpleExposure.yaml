@@ -1,0 +1,86 @@
+%YAML 1.2
+---
+
+questions:
+    - type: MC
+      question: "<p>What does the term REACH mean in Facebook Insights?</p>"
+      choices:
+       - "the number of unique people who click the like button"
+       - "the number of unique people actively interacting with a page or post"
+       - "the number of unique people who might have seen a page or post"
+       - "the number of people who logged in to facebook last month"
+      correct_answer: 3
+
+    - type: MC
+      question: "<p>Which of the following is NOT a demographic variable available in Facebook Insights?</p>"
+      choices:
+       - "Age group"
+       - "Gender"
+       - "Country"
+       - "Religion"
+      correct_answer: 4
+
+    - type: MC
+      question: "<p>Facebook Reach information is NOT easily available for which of the following time periods?</p>"
+      choices:
+       - "Quarterly"
+       - "28 days"
+       - "Weekly"
+       - "Daily"
+      correct_answer: 1
+
+    - type: MC
+      question: "<p>Which of the following business questions is NOT answerable using Facebook data?</p>"
+      choices:
+       - "What proportion of our audience is Male?"
+       - "How much of our audience also like our competitors page?"
+       - "What proportion of our audience is over 55?"
+       - "How is our Reach changing over time?"
+      correct_answer: 2
+
+    - type: TF
+      question: "<p>Organic Reach is the number of unique people who saw your Page or one of its posts from a story shared by a Friend</p>"
+      answer: "False"
+
+    - type: TF
+      question: "<p>A 95% confidence interval for a proportion will always be smaller than a 90% confidence interval</p>"
+      answer: "False"
+
+    - type: TF
+      question: "<p>For an approximate 95% confidence interval, the appropriate <mrow><msub><mi>z</mi><mrow><mi>&alpha;</mi><mo>&sol;</mo><mn>2</mn></mrow></msub></mrow> multiplier is 1.960</p>"
+      answer: "True"
+
+    - type: TF
+      question: 'The <math><mrow><msup><mi>&chi;</mi><mn>2</mn></msup></mrow></math> (chi-squared) test can be used to test whether age profiles vary by gender.'
+      answer: "True"
+
+    - type: TF
+      question: "<p>If there are 2 rows and 5 columns the <math><mrow><msup><mi>&chi;</mi><mn>2</mn></msup></mrow></math> (chi-squared) test has 10 degrees of freedom</p>"
+      answer: "False"
+
+    - type: MC
+      question: "<p>Which R function below can be used for calculating a confidence interval for a proportion</p>"
+      choices:
+       - "chisq.test"
+       - "prop.test"
+       - "fisher.test"
+       - "plot"
+      correct_answer: 2
+
+    - type: MC
+      question: "<p>Which R function below can be used for testing whether age profile varies by gender when some of the expected cell counts are less than 5</p>"
+      choices:
+       - "chisq.test"
+       - "prop.test"
+       - "fisher.test"
+       - "plot"
+      correct_answer: 3
+
+    - type: MC
+      question: "<p>Which R function below can be used for testing whether age profile varies by gender when all of the expected cell counts are greater than 5</p>"
+      choices:
+       - "chisq.test"
+       - "prop.test"
+       - "fisher.test"
+       - "plot"
+      correct_answer: 1

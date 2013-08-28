@@ -651,6 +651,6 @@ You should know how to:
 
 ## Next Week
 
-Graphs
+Introduction to Graphs
 
 
