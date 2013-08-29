@@ -30,7 +30,7 @@ adjacency matrix.
 
 ## Graph Formula
 
-We can create a graph by providing the `graph.formula` function with the se of vertices, and how they are connected. For example:
+We can create a graph by providing the `graph.formula` function with the set of vertices, and how they are connected (edges). For example:
 ```{r}
 g1 = graph.formula(A-B, A-C, A-D, B-D)
 ```
@@ -103,8 +103,20 @@ Notice that the edges in the plot of `g2` have arrows, implying that
 it is a directed graph. Examine the help page of the function 
 `graph.adjacency` and work out how to make the graph undirected.
 
+## Edge List
 
-
+We can also create a graph using an edge list. An edge list is an
+$M\times 2$ matrix, containing $M$ edges. Each row of the edge list
+provide the start and end vertices. For example:
+```{r}
+el = matrix(c("A","A","A","B","B","C","D","D"),4,2)
+print(el)
+```
+We then create the graph:
+```{r fig.cap="Graph from an edge list"}
+g4 = graph.edgelist(el, directed=FALSE)
+plot(g4)
+```
 
 # Creating Random Graphs
 
@@ -131,17 +143,35 @@ g.ba = barabasi.game(n = 100, directed=FALSE)
 plot(g.ba,  vertex.size = 5)
 ```
 
+# Examining the Graphs
+
+In this section, we will examine some of the functions that that
+available for us to examine properties of graphs.
+
+## Density
+
+By visually examining the two graphs above, which looks denser? Use
+the function `graph.density` to compute the density of each graph and
+compare the results to your guess.
 
 
-graph.density(g.ba)
+## Diameter
 
-shortest.paths
-diameter
+The diameter is the longest shortest path. Which of the two graphs do
+you expect to have the largest diameter?  Use the function `diameter`
+to compute the diameter of each graph.
 
 
-degree(g.ba)
-closeness
+## Degree
 
+What do you expect the degree distribution of each graph to look like?
+We can compute the degree of each vertex using the function `degree`.
+We can also compute the degree distribution of the graph using the function
+`degree.distribution`. Use the `help` pages to understand the output.
+
+**Which** vertex is most central according to Degree Centrality?
+
+## Closeness
 
 We defined the closeness centrality of a vertex $v$ as the sum of the
 distance from $v$ to all other vertices. To compute the closeness of
@@ -150,49 +180,88 @@ each vertex, we use:
 closeness(g.ba)
 ```
 This does not look right. The sum of differences should be an integer,
-but the R output is a set of real values. Read the R help page for
+but the R output is a set of real values. 
+
+**Read** the R help page for
 `closeness` to find what R is computing. Then work out which of the
 vertices is the most central with respect to closeness centrality.
 
 
-Betweenness
+## Betweenness
+
+Betweenness centrality measures how often a vertex is used in shortest
+paths. We can compute betweenness using:
+```{r}
+betweenness(g.er)
+```
+
+**Is** the centre the same for all three centrality measures? Examine this for the 
+Erdős-Renyi graph and Barabási–Albert graph.
 
 
-average.path.length(g)
-transitivity(g, type="average")
+# Small Graph
+
+Using the following graph:
+```{r fig.cap="Small Graph"}
+g3 = graph.formula(A-B, A-C, A-D, B-D, B-E, E-D, C-E)
+plot(g3)
+```
+Calculate the:
+
+- Degree Distribution
+- Degree Centrality
+- Closeness Centrality
+- Betweenness Centrality
+
+using the methods shown in the lecture. Then check your answer using the R functions.
 
 
 # Twitter Graph
+
+We will now access Twitter to obtain a graph constructed from a *seed*
+user.
 
 Load the twitteR library:
 ```{r}
 library("igraph")
 ```
-
-Register your application with Twitter using the process from 
+and register your application with Twitter using the process from 
 [Lab 5](300958.week05.lab.html)
 
+## Dowloading a user
+
+Each twitter user has a set of *friends* and a set of *followers*:
+
+- Followers of user $x$: users who are following $x$.
+- Friends of user $x$: users who $x$ is following. 
+
+Therefore, a user can choose their friends, but cannot choose their
+followers. There are many users of Twitter, we want to find the
+interesting ones. Interesting users usually have many followers
+(because they are interesting). So when obtaining information about
+users on Twitter, we should note:
 
 - Popular people have many followers.
-- Popular people have popular followers.
 
-Useful twitteR functions for this lab: `getUser`, `friends`, `followers`
-
-
+Using `twitteR`, we can download user information when given a screen
+name or ID.
 Let's examine Kevin Rudd:
 ```{r eval=FALSE}
 user = getUser("KRuddMP")
 ```
+The variable `user` is now a `twitteR` object, which we can use as a seed for our graph.
+
 To examine all of the details for Kevin Rudd, convert the twitteR object into a data frame:
 ```{r eval=FALSE}
 user$toDataFrame()
 ```
-
 The above function provides information such as the number of friends,
 the number of followers, if the account is protected and verified and
-the owners name and id.  Kevin Rudd is a popular person, so he must
+the owner's name and id.  Kevin Rudd is a popular person, so he must
 have popular friends. From the output of `user$toDataFrame()` identify
 how many friends Kevin Rudd has.
+
+## Dowloading a user's friends.
 
 We now want to download the list of Kevin Rudd's friends. Since he has
 a large number of friends, we download the first 100.
@@ -200,58 +269,166 @@ a large number of friends, we download the first 100.
 friends = user$getFriends(100)
 ```
 
+The above function gets the friends of `user`; since `user` contains
+Kevin Rudd's details, the function returns a list of his friends.  The
+list of friends is a list of `twitteR` objects, so `friends[[1]]` is the
+same data type as `user`.
+
+
 We now have the details of 100 of Kevin Rudd's friends. 
 Examine the information of the first friend:
 ```{r eval=FALSE}
 friends[[1]]$toDataFrame()
 ```
 We can find which friends are the most popular by examining their follower count.
+Here we examine the follower count of the first friend:
 ```{r eval=FALSE}
 friends[[1]]$getFollowersCount()
 ```
-**From** this list of 100 friends, extract the 10 friends with the most followers.
-**Then** use twitteR to download the 
+To examine the follower count of all friends:
+```{r eval=FALSE}
+follower.count = c()
+for (a in c(1:length(friends))) {
+    follower.count[a] = friends[[a]]$getFollowersCount()
+}
+```
+Let's make this a function for convenience:
+```{r eval=FALSE}
+count.followers = function(friends) {
+    follower.count = c()
+    for (a in c(1:length(friends))) {
+        follower.count[a] = friends[[a]]$getFollowersCount()
+    }
+    return(follower.count)
+}
+```
+
+**Find** the 10 friends that have the most followers. What are their
+names?  Note the function `sort` will sort the vector of follower
+counts. The function `order` will sort, but provide the position of
+the sort. So to find the top 10, we use `order` with `decreasing=TRUE`
+and choose the first ten values, giving us the positions of the top
+10.
 
 
-Protected
+Some Twitter accounts are protected, meaning that we can't read them
+unless we are a follower. We can detect if the first friend account is protected using:
+```{r eval=FALSE}
+friends[[1]]$getProtected()
+```
 
-getFriends()
+**Write** a `for` loop to check if any of the friend accounts are
+protected and store the `TRUE`/`FALSE` values in the variable `protected.status`. 
+
+Once we have the vector `protected.status`, we can extract the unprotected friends of Kevin Rudd:
+```{r eval=FALSE}
+unprotected.friends = friends[!protected.status]
+```
+This will select the positions that are FALSE (the exclamation mark !
+changes FALSE to TRUE and TRUE to FALSE).
+
+**Using** the function `count.followers` find the 10 unprotected
+  friends with the most followers and store them in `top.unprotected.friends`.
 
 
-
-friends = user$getFriends(100)
-
-el = cbind(rep(user$getScreenName(), length(friends)),
-    	      sapply(friends,screenName))
-
-
-All friends
-
-friends = user$getFriends()
-
-# removed unreadable protected
-unprotected.friends = friends[!sapply(friends, protected)]
-
-# find the ten most popular friends
-ten.popular = order(sapply(unprotected.friends, friendsCount), decreasing=TRUE)[1:10]
-
+Now that we have the list of top 10 unprotected friends, we can use this to download the
+friends' friends.
+Lets create a place to store the friends of friends.
+```{r eval=FALSE}
 more.friends = list()
-for (a in 1:10) {
-    friend = unprotected.friends[[ten.popular[a]]]
-    cat("Getting friends of", friend$getScreenName(), "...\n")
-    more.friends[[a]] = friend$getFriends(100)
+```
+We can download a list of 100 friends of the first friend of Kevin Rudd using:
+```{r eval=FALSE}
+more.friends[[1]] = top.unprotected.friends[[1]]$getFriends(100)
+```
+
+**Write** a `for` loop to download 100 friends from the 10 most
+popular friends of Kevin Rudd and store them in `more.friends`.
+
+
+## Creating the Twitter Graph
+
+Now we have Kevin Rudd, 100 of Kevin Rudd's friends, and 100 of 10 of
+Kevin Rudd's most popular friends.
+
+We can create a graph by constructing an edge list (who links to who).
+We know Kevin Rudd links to all of his friends 100, so the edge list
+will contain 100 rows beginning with Kevin Rudd and ending with the
+friend of Kevin Rudd. First we must get the names of all of Kevin
+Rudd's friends. 
+
+First we allocate a variable to contain the names:
+```{r eval=FALSE}
+friend.names = c()
+```
+We can get the first name using:
+```{r eval=FALSE}
+friend.names[1] = friends[[1]]$getScreenName()
+```
+
+**Write** a `for` loop to store all 100 screen names in the variable `friend.names`.
+
+We can now build the edge list using:
+```{r eval=FALSE}
+rudd = rep(user$getScreenName(), length(friends)) # repeat Kevin Rudd's user name 100 times
+el = cbind(rudd,friend.names) # bind the columns to create a matrix
+```
+
+We need to do the same for Kevin Rudd's 10 most popular friends. To
+simplify the process, we should write a function. 
+
+**Using** what you have done above, write the function:
+```{r eval=FALSE}
+user.to.edgelist <- function(user, friends) {
+
+  # create the list of friend screen names
+  friend.names = c()		
+  for (a in c(1:length(friends))) {
+      # enter missing code
+  } 
+
+  user.name = rep(user$getScreenName(), length(friends)) # repeat user's name
+  el = cbind(user.name,friend.names) # bind the columns to create a matrix
+
+  return(el)
 }
+```
 
-sum(sapply(more.friends[[1]],id) %in% sapply(more.friends[[10]],id))
-
-getCurRateLimitInfo()
-
-for (a in 1:10) {
-    friend = unprotected.friends[[ten.popular[a]]]
-    el.friend = cbind(rep(friend$getScreenName(), length(more.friends[[a]])),
-    	      sapply(more.friends[[a]],screenName))
-    el = rbind(el,el.friend)
+We can use the created function `user.to.edgelist` to create the edge list for Kevin Rudd:
+```{r eval=FALSE}
+el.rudd = user.to.edgelist(user, friends)
+```
+We can also build the edge list for the top 10 friends using a loop:
+```{r eval=FALSE}
+for (a in c(1:length(more.friends))) {
+    el.friend = user.to.edgelist(top.unprotected.friends[[a]], more.friends[[a]])
+    el.rudd = rbind(el.rudd, el.friend) # append the new edge list to the old one.
 }
+```
+Now that we have the edge list, we can create the graph:
+```{r eval=FALSE}
+g = graph.edgelist(el.rudd)
+```
+Let's plot the graph. Since there are many vertices, we will reduce
+the vertex size and use a spacial plot layout:
+```{r eval=FALSE}
+plot(g, layout=layout.fruchterman.reingold, vertex.size = 5)
+```
+This graph contains many vertices that we did not examine. To remove
+these, let's only keep the vertices with degree (in or out) greater
+than 1.
+```{r eval=FALSE}
+g2 = subgraph(g, which(degree(g, mode="all") > 1))
+```
+This graph is now easier to visualise:
+```{r eval=FALSE}
+plot(g2, layout=layout.fruchterman.reingold, vertex.size = 5)
+```
 
-g = graph.edgelist(el)
+**Who** is at the centre of the graph? Use the centrality measures to
+  examine this.
 
+**Examine** the graph density. Is it sparse or dense?
+
+**Examine** the degree distribution. Is this graph more similar to an
+Erdős-Renyi graph or a Barabási–Albert graph?
