@@ -40,7 +40,7 @@ def print_tf(question):
     print question['type'] + seperator + question['question'] + seperator + question['answer']
 
 def print_num(question):
-    print question['type'] + seperator + question['question'] + seperator + question['answer'] + seperator + question['tolerance']
+    print question['type'] + seperator + question['question'] + seperator + str(question['answer']) + seperator + str(question['tolerance'])
 
 
 
