@@ -1,0 +1,391 @@
+# Word Clouds
+
+## Crude Oil Texts
+
+```{r, echo=FALSE, fig.cap="Word cloud from Crude Oil texts", dev='pdf', fig.width=3, fig.height=2.5, warning=FALSE, message=FALSE, cache=TRUE}
+library(wordcloud)
+library(tm)
+par(cex=0.5)
+data(crude)
+tdm <- TermDocumentMatrix(crude, control = list(removePunctuation = TRUE,
+                                         stopwords = stopwords(),
+                                         removeNumbers = TRUE, tolower = TRUE))
+m <- as.matrix(tdm)
+freq <- sort(rowSums(m),decreasing=TRUE)
+words = names(freq) 
+wordcloud(words,freq, random.order=FALSE,
+          colors=brewer.pal(8, "Dark2"))
+```
+
+## Word Clouds
+
+Word clouds are a simple visualisation of word frequencies in a corpus of texts.
+
+[Wordle](http://www.wordle.net) is the most famous example.
+
+The basic idea of a word cloud is that the size of the text should represent the frequency of the word,
+and words should be *placed* in some way.
+
+A simple way to set the text size is using a linear scale.
+
+$$
+s = s_{min} + (s_{max}-s_{min}) \frac{f-f_{min}}{f_{max}-f_{min}}
+$$
+
+where here $s$ is text size and $f$ is frequency
+
+## Placing the words
+
+The simple idea behind placing the words is this.
+
+1. Place the first word (highest frequency) in the centre.
+2. Assume some words are already placed. 
+3. Try placing the next word at the *current* position.
+   * If it doesn't fit ie. it overlaps with already placed words move the *current* position out along a *spiral* and return to 3.
+   * If it does fit place the word.
+4. Repeat for any remaining words.
+
+## Placing the words
+
+A spiral is used to place the words, it is easiest to express the equation for in polar coordinates.
+
+$$ r = g(\theta)$$
+
+where $r$ is the radius (distance from the origin) and $\theta$ is the angle (can be greater than $360^\circ$)
+
+The simplest form is a linear function of $\theta$
+$$ r = \delta \times \theta$$
+
+## Placing the words
+
+```{r, fig.width=3, fig.height=2.5, dev='pdf', fig.cap="", echo=FALSE}
+plot.new()
+par(mar=rep(0,4))
+plot.window(c(-1,1), c(-1,1), asp=1)
+n <- floor((2*pi)/(0.1*0.1))+1
+theta <- seq(from=0, by=0.1, length=n)
+r <- 0.1*theta/(2*pi) 
+lines(r*cos(theta), r*sin(theta))
+```
+A Linear Spiral
+
+## Word Clouds
+Animated Demo
+```{r, eval=FALSE}
+library(animation)
+source("mywordle.R")
+mywordle(words,freq, pause=TRUE)
+```
+
+## Word Clouds Code
+```
+boxes <- list()
+r <- 0
+theta <- 0
+for(i in 1:length(words)) {
+  repeat {
+    b <- box(r, theta, words[i], sizes[i])
+    if(!is.overlapped(b, boxes)) break
+    theta <- theta + thetaStep
+    r <- r + rStep
+    }
+  text(r*cos(theta),r*sin(theta), words[i], adj=c(0.5,0.5), cex=sizes[i])
+  boxes <- c(list(b), boxes)
+  }
+```
+
+## Word Clouds in R
+Of course, R has prettier functions that allow colours and the rotation of some words (at random)
+
+```{r, echo=2:3, fig.cap="Word cloud from Crude Oil texts", dev=c('pdf'), fig.width=3, fig.height=2.5, message=FALSE, tidy=FALSE}
+par(cex=0.5)
+library(wordcloud)
+wordcloud(words,freq, random.order=FALSE,
+          colors=brewer.pal(8, "Dark2"))
+```
+
+# Principal Components Analysis
+
+## Dimension Reduction
+
+One of the goals of visualisation is dimension reduction.
+
+Often a dataset consist of more than one measurement on each individual or observation.
+
+For example, 
+* heights and weights etc of individuals. (>2 measurement)
+* Use or not of multiple words in a tweet (usage counts). (>100 "measurements")
+* Expression of a gene in a biological sample. (>10,000 measurements)
+
+Visualisation usually requires a small number of dimensions. We cannot easily *see* very high-dimensions.
+
+We will look at two ways to do this; *Principal Components Analysis* and *Multidimensional Scaling*
+
+## Principal Components Analysis
+
+Fisher's Iris data
+
+```{r, fig.cap="", dev='pdf', fig.width=4, fig.height=3, echo=FALSE}
+par(mar=rep(0.01,4), oma=rep(0,4))
+cols.iris <- unclass(iris$Species)+1
+pairs(iris[,1:4], col=cols.iris, pch=16, cex=0.5, xaxt="n", yaxt="n", gap=0.1)
+```
+
+## Principal Components Analysis
+
+In this example it is not too difficult to visualise the 4-dimensional data. There are 150 sets of
+measurements on iris flowers, from 3 different species.
+
+Principal components is a method to try and find a low dimensional representation of the variability in the data.
+
+Suppose we $p$ measurements represented by the random variables $X_1,\ldots,X_p$
+
+In the iris data $p$ is 4 and each of the $X_i$ represent a Sepal or Petal, Length or Width.
+
+## Principal Components Analysis
+
+Each of the $p$ variables has a variance and pairs of the variables may be correlated.
+
+Principal components seeks a new variable $Y_1$ that is a linear combination of the original variables and has *maximum* variance.
+
+$$Y_1 = a_1 X_1 + a_2 X_2 + \cdots + a_p X_p$$
+
+Since $Var(aZ) = a^2Var(Z)$ we must also restrict the $a_i$'s so they are not arbitrarily big. Usually,
+
+$$ a_1^2 + a_2^2 + \cdots + a_p^2 = 1$$
+
+## Principal Components Analysis
+
+The $a_i$'s are actually computed using something called an Eigen Value or Singular Value Decomposition.
+
+The $a_i$'s above give the first principal component. But this is only one dimension. 
+
+To plot the data 2 dimensions would be useful. So the *second* principal component is defined as the linear 
+combination of the $X_i$'s that maximizes the variance AND is *orthogonal* to the first principal component.
+
+$$Y_2 = b_1 X_1 + b_2 X_2 + \cdots + b_p X_p$$
+
+with the $b_i$'s chosen to maximise variance subject to the constraints that,
+
+$$b_1^2 + b_2^2 + \cdots + b_p^2 = 1 \text{  AND  } a_1b_1 + a_2b_2 + \cdots + a_pb_p = 0$$
+
+And so on....
+
+## Principal Components Analysis
+
+```{r, echo=2:3}
+X <- iris[,1:4]
+pca <- prcomp(X)
+summary(pca)
+```
+
+## Principal Components Analysis
+
+The summary shows the standard deviation of each of the 4 PCs for the iris data.
+
+It also shows the percentage of *total variation* explained and the cumulative percentage.
+
+The first two principal components here explain 97.8% of the total variation.
+
+## Principal Components Analysis
+```{r, echo=FALSE,fig.cap="", dev='pdf', fig.width=4, fig.height=3}
+par(mar=c(4,4,1,1))
+plot(pca$x[,1:2], col=cols.iris, pch=16, axes=FALSE)
+box()
+```
+
+## PCA with twitter data?
+
+```{r, eval=FALSE, tidy=FALSE, size="footnotesize"}
+library(twitteR)
+### Search Twitter for some "relevant" tweets
+tweets1 = searchTwitter("Kevin Rudd", n=500, lang="en")
+tweets2 = searchTwitter("Tony Abbott", n=500, lang="en")
+tweets3 = searchTwitter("Christine Milne", n=500, lang="en")
+tweets = c(tweets1, tweets2, tweets3)
+### Extract the tweet text
+stext = sapply(tweets, function(x) x$getText())
+library(tm)
+### create a corpus and create document term matrix
+corpus = Corpus(VectorSource(stext))
+stoplist =   stopwords =c("kevin","rudd","tony", "abbott", 
+                          "christine", "milne",
+                          "ausvotes", "auspol",
+                          stopwords("english"))
+tdm = TermDocumentMatrix(corpus, 
+        control = list(removePunctuation = TRUE,stopwords = stoplist,
+                       removeNumbers = TRUE, tolower = TRUE))
+### convert tdm to matrix
+M = as.matrix(tdm)
+```
+
+## PCA with twitter data?
+This generates around 3000 terms on 1500 tweets.
+
+The term-document matrix as above is terms (rows) by tweets (columns). R expects the *variables* to be in columns
+so we transpose. 
+
+Also, PCA works best for approximately Normally distributed data
+
+The term-document matrix is counts of each term (word) in each document (tweet) 
+it is unlikely to be Normally distributed.
+
+So we make a transformation; one possibility is TF-IDF but we find a square root works better here.
+
+## PCA with twitter data?
+```{r, echo=FALSE}
+load("TweetMatrix.RData")
+```
+```{r, echo=2,fig.cap="", dev='pdf', fig.width=4, fig.height=3, cache=TRUE}
+par(mar=c(4,4,1,1))
+pca.tweet <- prcomp(sqrt(t(M)))
+plot(pca.tweet$x[,1:2], col=cols, pch=16, axes=FALSE)
+box()
+```
+
+## PCA with twitter data?
+```{r}
+summary(pca.tweet)$importance[,1:5]
+```
+Notice that even the first 5 principal components only explain 11% of the variation. In fact, 20 components only explain 25%...
+
+# Multidimensional Scaling
+
+## Multidimensional scaling
+
+Multidimensional scaling is a alternate way to view the dimension reduction problem.
+
+If the data exists in $p$ dimensions, and there is a distance defined between all 
+pairs of observations/objects in the $p$ dimensions. Can we construct a low dimensional (2D?) 
+that has as near as possible the same distances in the low dimensional space?
+
+## Multidimensional scaling
+
+We need to define the distances in the high ($p$) and low dimensional spaces.
+
+We also need to define the *distance* between distances...
+
+In the simplest case, think of the distance in the high dimensional space as *Euclidean* distance. 
+In two or three dimensions this is the distance you get by measuring with a ruler/tape measure.
+
+$$D_{ij} = \sqrt{ \sum_k (X_{ik}-X_{jk})^2 }$$
+
+Here $X_{ik}$ is the measurement of the $k$-th variable on the $i$-th object/observation in the $p$ dimensional space
+
+## Multidimensional scaling
+
+We can use Euclidean distance in the low dimensional space also (say $d_{ij}$).
+
+$$d_{ij} = \sqrt{ \sum_k (Y_{ik}-Y_{jk})^2 }$$
+
+Here $Y_{ik}$ is the allocated value of the $k$-th component of the $i$-th object/observation 
+in the low dimensional space
+
+One possibility for the *distance* between *distances* is the so called Frobenius norm.
+
+$$\sum_{i,j} (D_{ij} - d_{ij})^2$$
+
+We aim to choose the $Y_{ik}$ to make the Frobenius norm as small as possible.
+
+## Multidimensional scaling
+
+For the Frobenius norm, and Euclidean distance in the low dimensional space, this can all be done
+using an Eigen Value decomposition or Singular Value Decomposition.
+
+## Multidimensional scaling - Iris Data
+```{r, fig.cap="", dev='pdf', fig.width=4, fig.height=2.5, echo=2:3}
+par(mar=rep(0.1,4))
+D <- dist(X)
+mds <- cmdscale(D, k=2)
+plot(mds, col=cols.iris, pch=16, axes=FALSE)
+box()
+```
+
+## Multidimensional scaling - Iris Data
+
+This plot looks very like the PCA plot for the Iris data!!
+
+Well actually, when both the distances are Euclidean distance, and the Frobenius norm is used,
+PCA and MDS are equivalent.
+
+Why use MDS? Because we can use different distances (in the high dimensional space usually).
+
+## Multidimensional scaling - Iris Data
+```{r, fig.cap="", dev='pdf', fig.width=4, fig.height=2.5, echo=2:3}
+par(mar=rep(0.1,4))
+D <- dist(X, method="maximum")
+mds <- cmdscale(D, k=2)
+plot(mds, col=cols.iris, pch=16, axes=FALSE)
+box()
+```
+
+
+## Multidimensional scaling - Tweets
+
+We need to think carefully about the distance between tweets. 
+
+Euclidean distance using words in tweets (term-document) is not likely to be appropriate. 
+
+We could consider
+
+* Euclidean distance of square roots.
+* Euclidean distance in the TF-IDF transformed matrix?
+* The binary metric
+
+Most of the terms occur very few times in each tweet. (mostly zero or one). The binary
+metric just looks at presence/absence of a term.
+
+## Binary Metric
+
+When comparing two tweets, think of each term being either present or absent in one or both tweets.
+
+If we count the number of terms present in one or both tweets we can summarise in a table like the following.
+
+\begin{center}
+\begin{tabular}{l|c|c}
+&\multicolumn{2}{c}{Tweet A}\\ 
+Tweet B&Absent&Present\\ \hline
+Absent&a&b\\ \hline
+Present&c&d\\
+\end{tabular}
+\end{center}
+
+Then the *Binary Metric$ is $\frac{b+c}{b+c+d}$.
+
+It is the ratio of the count of terms occuring in only one tweet
+to the total numer of terms present in one or the other tweet.
+
+## Multidimensional scaling - Tweets
+```{r, echo=TRUE, cache=TRUE}
+D <- dist(t(M), method="binary")
+mds.tweet <- cmdscale(D, k=2)
+```
+```{r, echo=FALSE, fig.cap="", dev='pdf', fig.width=4, fig.height=2.5}
+par(mar=rep(0.1,4))
+plot(mds.tweet, col=cols, pch=16, axes=FALSE)
+box()
+```
+
+## Multidimensional scaling - Tweets using TF-IDF
+```{r, echo=TRUE, cache=TRUE}
+M2 <- as.matrix(weightTfIdf(tdm))
+D <- dist(t(M2))
+mds.tweet <- cmdscale(D, k=2)
+```
+```{r, echo=FALSE,fig.cap="", dev='pdf', fig.width=4, fig.height=2.5}
+par(mar=rep(0.1,4))
+plot(mds.tweet, col=cols, pch=16, axes=FALSE)
+box()
+text(mean(par("usr")[1:2]), mean(par("usr")[3:4]),"YUK!")
+```
+
+## Summary
+
+We looked at;
+
+* Word Clouds as a simple frequency of words visualization
+* Principal Components Analysis for dimension reduction
+* Multidimensional Scaling as a more flexible dimension reduction
+  * Including the Binary Metric
+  
+
