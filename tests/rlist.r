@@ -12,7 +12,7 @@ yaml.header <- function() {
 }
 
 
-yaml.out <- function(question, parameters) {
+yaml.out <- function(question, parameters = "") {
   if (question$type == "NUM") {
     return(yaml.NUM.out(question, parameters))
   }
@@ -22,28 +22,28 @@ yaml.out <- function(question, parameters) {
 }
 
 yaml.NUM.out <- function(question, parameters) {
-  cat("    - type: ", question$type, "\n")
-  cat("      known.parameters: ", question$known.parameters, "\n")
-  cat("      set.parameters: '`r ", parameters, "`'\n")
-  cat("      question: ", question$question, "\n")
-  cat("      answer: ", question$answer, "\n")
-  cat("      tolerance: ", question$tolerance, "\n\n")
+  cat("    - type: '", question$type, "'\n", sep="")
+  cat("      known.parameters: '", question$known.parameters, "'\n", sep="")
+  cat("      set.parameters: '`r ", parameters, "`'\n", sep="")
+  cat("      question: '", question$question, "'\n", sep="")
+  cat("      answer: '", question$answer, "'\n", sep="")
+  cat("      tolerance: '", question$tolerance, "'\n\n", sep="")
 }
 
 
 yaml.MC.out <- function(question, parameters) {
-  cat("    - type: ", question$type, "\n")
-  cat("      known.parameters: ", question$known.parameters, "\n")
-  cat("      set.parameters: '`r ", parameters, "`'\n")
-  cat("      question: ", question$question, "\n")
-  cat("      choices: ", question$answer, "\n")
+  cat("    - type: '", question$type, "'\n", sep="")
+  cat("      known.parameters: '", question$known.parameters, "'\n", sep="")
+  cat("      set.parameters: '`r ", parameters, "`'\n", sep="")
+  cat("      question: '", question$question, "'\n", sep="")
+  cat("      choices:\n", sep="")
   for (choice in question$choices) {
-    cat("       - ", choice, "\n")
+    cat("       - '", choice, "'\n", sep="")
   }
-  cat("      correct_answer: ", question$correct_answer, "\n\n")
+  cat("      correct_answer: ", question$correct_answer, "\n\n", sep="")
 }
 
 
 yaml.footer <- function() {
-  cat("...\n")
+  cat("...\n", sep="")
 }

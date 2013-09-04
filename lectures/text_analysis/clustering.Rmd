@@ -1,0 +1,403 @@
+% Text Mining 2: Clustering
+% Laurence A. F. Park
+% March 22, 2005
+
+```{r setup, include=FALSE}
+opts_chunk$set(dev = 'pdf', fig.cap="")
+library("mvtnorm")
+```
+
+
+# Motivation
+
+We have 1000 tweets. What are they about? Can we summarise them?
+
+Clustering allows us to group similar documents or words, allowing us
+to identify topics in the document set.
+
+# Introduction to Clustering
+
+
+# K-means Clustering
+
+## K-means
+
+K-means clustering was designed to be used in a Euclidean space,
+meaning it uses the Euclidean distance:
+$$
+	d(\vec{x}_i,\vec{x}_j) = {\sum_{n=1}^{N} {(x_{in} - x_{jn})}^2} = \norm{\vec{x}_i - \vec{x}_j}_2^2
+$$
+
+
+We want to minimise the within-point scatter over all clusters:
+$$
+	W(C) = {\sum_{k = 1}^K {\sum_{C(i) = k} {\sum_{C(j) = k} \norm{\vec{x}_i - \vec{x}_j}_2^2}}}
+$$
+$K$ is the number of clusters, $C(i) = k$ if point $\vec{x}_i$ belongs to cluster $k$, and $W(C)$ is the
+sum of the distances between all points in each cluster. By minimising $W(C)$, we obtain tight clusters.
+
+
+## K-means Algorithm
+
+K-means iterates through two steps, until the centres stabilise (stop moving).
+
+### Compute which object belongs to which cluster
+
+For each object $\vec{x}_i$:
+$$
+	C(i) = \argmin_{1 \le k \le K}{\norm{\vec{x}_i - \vec{m}_k}}
+$$
+
+### Compute the centre of each cluster
+
+For each cluster $k$:
+$$
+\begin{aligned}
+	\vec{m}_k &= \argmin_{\vec{m} \in \mathbb{R}^m}{\sum_{C(i) = k} \norm{\vec{x}_i - \vec{m}}}\\
+	    &= \frac{1}{N_k}{\sum_{C(i) = k} \vec{x}_i}
+\end{aligned}
+$$
+
+## Complete K-means Algorithm
+
+1. Choose $K$ the number of clusters wanted.
+2. Assign the cluster centres $\vec{m}_k$ randomly.
+3. While the new centres are different to the last centres:
+    i. Assign each object to its closest cluster centre.
+    ii. Compute the cluster mean from the cluster objects.
+
+## K-means Example: Assign Centres
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+cluster1 = rmvnorm(30, mean = c(7,5), sigma = matrix(c(1,0,0,1),2,2))
+cluster2 = rmvnorm(30, mean = c(2,12), sigma = matrix(c(1,0,0,1),2,2))
+cluster3 = rmvnorm(30, mean = c(15,12), sigma = matrix(c(1,0,0,1),2,2))
+cluster4 = rmvnorm(30, mean = c(14,3), sigma = matrix(c(1,0,0,1),2,2))
+X.k = rbind(cluster1,cluster2,cluster3,cluster4)
+N = nrow(X.k)
+clusters = sample(4, N, replace=TRUE)
+compute.means = function(X.k, clusters) {
+    mean1 = apply(X.k[clusters == 1,],2,mean)
+    mean2 = apply(X.k[clusters == 2,],2,mean)
+    mean3 = apply(X.k[clusters == 3,],2,mean)
+    mean4 = apply(X.k[clusters == 4,],2,mean)
+    return(rbind(mean1, mean2, mean3, mean4))
+}
+means = compute.means(X.k, clusters)
+par(mgp = c(1.5, 0.4, 0))
+plot(X.k[,1], X.k[,2], xlab=expression("x"[1]), ylab=expression("x"[2]), cex.lab=0.8, cex.axis=0.8,)
+points(means[,1], means[,2], pch=22, bg=c(1:4))
+```
+
+
+
+## K-means Example: Assign cluster membership
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+cluster.distance = function(x, means) {
+    apply(means, 1, point.distance, x)
+}
+point.distance = function(x, y) {
+    return(sum((x - y)^2))
+}
+cluster.membership = function(X.k, means) {
+    return(apply(apply(X.k, 1, cluster.distance, means),2,which.min))
+}
+clusters = cluster.membership(X.k, means)
+par(mgp = c(1.5, 0.4, 0))
+plot(X.k[,1], X.k[,2], xlab=expression("x"[1]), ylab=expression("x"[2]), cex.lab=0.8, cex.axis=0.8, col=clusters)
+points(means[,1], means[,2], pch=22, bg=c(1:4))
+```
+
+## K-means Example: Recompute cluster centres
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+means = compute.means(X.k, clusters)
+par(mgp = c(1.5, 0.4, 0))
+plot(X.k[,1], X.k[,2], xlab=expression("x"[1]), ylab=expression("x"[2]), cex.lab=0.8, cex.axis=0.8, col=clusters)
+points(means[,1], means[,2], pch=22, bg=c(1:4))
+```
+
+## K-means Example: Reassign cluster membership
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+clusters = cluster.membership(X.k, means)
+par(mgp = c(1.5, 0.4, 0))
+plot(X.k[,1], X.k[,2], xlab=expression("x"[1]), ylab=expression("x"[2]), cex.lab=0.8, cex.axis=0.8, col=clusters)
+points(means[,1], means[,2], pch=22, bg=c(1:4))
+```
+
+## K-means Example: Recompute cluster centres
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+means = compute.means(X.k, clusters)
+par(mgp = c(1.5, 0.4, 0))
+plot(X.k[,1], X.k[,2], xlab=expression("x"[1]), ylab=expression("x"[2]), cex.lab=0.8, cex.axis=0.8, col=clusters)
+points(means[,1], means[,2], pch=22, bg=c(1:4))
+```
+
+## K-means Problem
+
+For the following points and cluster centres:
+
+1. Compute the cluster membership of each point.
+2. Recompute the cluster centres.
+
+Insert data here.
+
+## Problems with K-means
+
+- K means requires the cluster centres to allocated before the
+  iteration begins. If we choose random assignment, we may obtain
+  different cluster results with each run.
+
+- K-means requires us to set the number of clusters before the
+  algorithm is run, but we usually don't know how many clusters there
+  are.
+
+- K-means uses Euclidean distance, which may not be appropriate for
+  us.
+
+
+## Spherical K-means Algorithm
+
+We may want to use K-means with the Cosine similarity, rather than
+Euclidean distance (remember that Cosine similarity measures the
+Cosine of the angle between the vectors). If we normalise the points
+($\vec{z}_i = \vec{x}_i/\norm{\vec{x}_i}$):
+
+### Compute which object belongs to which cluster
+
+For each object $\vec{x}_i$:
+$$
+	C(i) = \argmin_{1 \le k \le K}{\frac{\vec{x}_i \cdot \vec{m}_k}{\norm{\vec{x}_i}\norm{\vec{m}_k}}}
+	= \argmin_{1 \le k \le K}{\vec{z}_i \cdot \vec{m}_k}
+$$
+
+### Compute the centre of each cluster
+
+For each cluster $k$:
+$$
+	\vec{m}_k = \frac{\sum_{C(i) = k} \vec{z}_i}{\norm{\sum_{C(i) = k} \vec{z}_i}}
+$$
+
+
+## Sample Data Set
+
+How many clusters are there?
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+cluster1 = rmvnorm(30, mean = c(7,5), sigma = matrix(c(1,0,0,1),2,2))
+cluster2 = rmvnorm(30, mean = c(2,12), sigma = matrix(c(1,0,0,1),2,2))
+cluster3 = rmvnorm(30, mean = c(15,12), sigma = matrix(c(1,0,0,1),2,2))
+cluster4 = rmvnorm(30, mean = c(14,3), sigma = matrix(c(1,0,0,1),2,2))
+X.large = rbind(cluster1,cluster2,cluster3,cluster4)
+#par(mar = (c(3.5, 3.5, 4, 2) + 0.1))
+par(mgp = c(1.5, 0.4, 0))
+plot(X.large[,1], X.large[,2], xlab=expression("x"[1]), ylab=expression("x"[2]), cex.lab=0.8, cex.axis=0.8,)
+```
+
+
+## Total Sum of Squares (SST)
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+cluster1 = rmvnorm(5, mean = c(5,5), sigma = matrix(c(1,0,0,1),2,2))
+cluster2 = rmvnorm(5, mean = c(2,12), sigma = matrix(c(1,0,0,1),2,2))
+cluster3 = rmvnorm(5, mean = c(15,9), sigma = matrix(c(1,0,0,1),2,2))
+cluster4 = rmvnorm(5, mean = c(14,3), sigma = matrix(c(1,0,0,1),2,2))
+cluster.number = c(rep(1,5),rep(2,5),rep(3,5),rep(4,5))
+X = rbind(cluster1,cluster2,cluster3,cluster4)
+m = apply(X,2,mean)
+point.count = nrow(X)
+par(mgp = c(1.5, 0.4, 0))
+plot(X[,1], X[,2], xlab=expression("x"[1]), ylab=expression("x"[2]), cex.lab=0.8, cex.axis=0.8)
+for (a in 1:point.count) {
+    segments(m[1],m[2],X[a,1],X[a,2], col=2)
+}
+```
+
+## Cluster Centres
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+c1 = apply(cluster1,2,mean)
+c2 = apply(cluster2,2,mean)
+c3 = apply(cluster3,2,mean)
+c4 = apply(cluster4,2,mean)
+par(mgp = c(1.5, 0.4, 0))
+plot(X[,1], X[,2], xlab=expression("x"[1]), ylab=expression("x"[2]), cex.lab=0.8, cex.axis=0.8)
+centres = rbind(c1,c2,c3,c4)
+points(centres[,1],centres[,2], pch=2, col=2)
+```
+
+## Between Cluster Sum of Squares (SSB)
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+par(mgp = c(1.5, 0.4, 0))
+plot(X[,1], X[,2], xlab=expression("x"[1]), ylab=expression("x"[2]), cex.lab=0.8, cex.axis=0.8)
+points(centres[,1],centres[,2], pch=2, col=2)
+segments(m[1],m[2],c1[1],c1[2], col=2)
+segments(m[1],m[2],c2[1],c2[2], col=2)
+segments(m[1],m[2],c3[1],c3[2], col=2)
+segments(m[1],m[2],c4[1],c4[2], col=2)
+```
+
+## Within Cluster Sum of Squares (SSW)
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+par(mgp = c(1.5, 0.4, 0))
+plot(X[,1], X[,2], xlab=expression("x"[1]), ylab=expression("x"[2]), cex.lab=0.8, cex.axis=0.8)
+centres = rbind(c1,c2,c3,c4)
+points(centres[,1],centres[,2], pch=2, col=2)
+for (a in 1:point.count) {
+    segments(centres[cluster.number[a],1],centres[cluster.number[a],2],X[a,1],X[a,2], col=2)
+}
+```
+
+
+For any clustering:
+$$
+	SST = SSB + SSW
+$$
+
+A clustering should maximise SSB (the between cluster distance) and
+minimise SSW (the within cluster distance).
+
+
+## Elbow method
+
+When choosing the number of clusters:
+
+- If we increase the number of clusters, we reduce SSW and increase SSB.
+- If we choose to have too many clusters, the clustering becomes worthless.
+
+How do we trade off between minimising the number of clusters and minimising SSB?
+
+The number of clusters is provided by the clustering where the reduction of SSE slows.
+
+## Elbow method example
+
+The number of clusters is given by the position of the *elbow* bend.
+
+\vspace{-6em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+wss <- (nrow(X.large)-1)*sum(apply(X.large,2,var))
+bss = 0
+for (i in 2:15) {
+    z = kmeans(X.large, centers=i)
+    wss[i] <- z$tot.withinss
+    bss[i] <- z$betweenss
+}
+par(mgp = c(1.5, 0.4, 0))
+plot(1:15, wss, type="b", xlab="Number of Clusters", ylab="Sum of squares")
+points(1:15, bss, type="b", col=2, pch=2)
+legend("right", c("SSW","SSB"), pch=c(1,2), col=c(1,2))
+```
+
+# Hierarchical Clustering
+
+## Hierarchical Clustering Example
+
+\vspace{-3em}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
+d = dist(X)
+h = hclust(d, "complete")
+par(mgp = c(1.5, 0.4, 0))
+plot(h)
+```
+
+
+
+## Types of Hierarchical Clustering
+
+### Agglomerative Clustering (bottom up)
+
+1. Treat all points as clusters
+2. Iteratively merge the most closest clusters, until we are left with one cluster of all points.
+
+### Divisive Clustering (top down)
+
+1. Treat all points as begin in one cluster
+2. Iteratively split the cluster with the largest gap, until app points are in their own cluster.
+
+We will not examine Divisive Clustering in this Unit.
+
+
+## Types of Agglomerative Clustering
+
+
+Agglomerative clustering requires us to select the two most similar
+clusters and merge them.  There are many ways which we can define
+cluster similarity, therefore there are many forms of agglomerative
+clustering.
+
+We will examine:
+
+- Single Linkage Clustering
+- Complete Linkage Clustering
+- Group Average Clustering
+
+Each of these methods begin with all points as a cluster, then the
+clusters are merged one by one until we have one cluster of all
+points.
+
+## Single Linkage Clustering
+
+Single linkage clustering defines the distance between clusters $G$ and $H$ as:
+$$
+	d_{\text{SL}}(G,H) = \min_{i \in G, j \in H}{d_{ij}}
+$$
+where $d_{ij}$ is the distance between points $\vec{x}_i$ and $\vec{x}_j$.
+
+
+## Complete Linkage Clustering
+
+Complete linkage clustering defines the distance between clusters $G$ and $H$ as:
+$$
+	d_{\text{CL}}(G,H) = \max_{i \in G, j \in H}{d_{ij}}
+$$
+where $d_{ij}$ is the distance between points $\vec{x}_i$ and $\vec{x}_j$.
+
+
+## Group Average Clustering
+
+Group average clustering defines the distance between clusters $G$ and $H$ as:
+$$
+	d_{\text{GA}}(G,H) = \frac{1}{N_G N_H}{\sum_{i \in G} \sum_{j \in H} d_{ij}}
+$$
+where $d_{ij}$ is the distance between points $\vec{x}_i$ and
+$\vec{x}_j$, and $N_G$ and $N_H$ are the number of points in clusters
+$G$ and $H$ respectively.
+
+write
+
+
+# Choosing the number of clusters
+
+
+## Summary
+
+From this lecture, we have learnt:
+
+- Clustering allows us to summarise data
+- We can cluster data using a clustering algorithm; we examined
+  K-means and two forms of Hierarchical clustering.
+- The clusters obtained depend on the distance between the objects,
+  therefore we must measure the distance appropriately (choose the right metric).
+- We must choose the number of clusters for k-means clustering, but we
+  are provided all clusters using hierarchical clustering.
+
+
+
+## Next Week
+
+Graphs 2: Page Rank

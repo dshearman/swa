@@ -11,7 +11,7 @@ questions = list(
     list(
       type =  'NUM',
       known.parameters =  "fdt ft N",
-      question = 'Compute the TF-DF weight of the word "castle" in document d, given that the word appears in document d `r fdt` times, and the word "castle" appears in `r ft` of the `r N` documents in the collection.',
+      question = 'Compute the TF-IDF weight of the word "castle" in document d, given that the word "castle" appears in document d `r fdt` times, and the word "castle" appears in `r ft` of the `r N` documents in the collection.',
       answer = '`r log(fdt + 1)*log(N/ft)`',
       tolerance = "0.1"
     ),
@@ -20,10 +20,10 @@ questions = list(
       known.parameters =  "q d",
       question = 'A query has been converted into the following vector `r paste(c("[", q, "]"), collapse=" ")`. Which of the following document vectors is most similar to the given query vector (using Cosine similarity)?',
       choices = list(
-            '\"`r paste(c("[", d[1,], "]"), collapse=" ")`\"',
-            '\"`r paste(c("[", d[2,], "]"), collapse=" ")`\"',
-            '\"`r paste(c("[", d[3,], "]"), collapse=" ")`\"',
-            '\"`r paste(c("[", d[4,], "]"), collapse=" ")`\"'),
+            '`r paste(c("[", d[1,], "]"), collapse=" ")`',
+            '`r paste(c("[", d[2,], "]"), collapse=" ")`',
+            '`r paste(c("[", d[3,], "]"), collapse=" ")`',
+            '`r paste(c("[", d[4,], "]"), collapse=" ")`'),
       correct_answer = '`r L = apply(d, 1, function(x) sqrt(sum(x^2))); nd = diag(1/L) %*% d; which.max(nd %*% q)`'
     ),
     list(
@@ -47,6 +47,28 @@ questions = list(
             'less than or equal to M unique words',
             'less than M unique words'),
       correct_answer = '3'
+    ),
+    list(
+      type =  'MC',
+      known.parameters =  "",
+      question = 'The stem of the word "writing" is:',
+      choices = list(
+            'writer',
+            'write',
+            'ing',
+            'written'),
+      correct_answer = '2'
+    ),
+    list(
+      type =  'MC',
+      known.parameters =  "",
+      question = 'Which of the following words is least likely to be a stop word:',
+      choices = list(
+            'and',
+            'potato',        
+            'this',
+            'every'),
+      correct_answer = '2'
     )
 
 )
@@ -68,8 +90,9 @@ yaml.out(questions[[3]], "q = c(1,0,1,0,0); d = rbind(c(0,0,2,1,1),c(1,1,1,0,0),
 yaml.out(questions[[3]], "q = c(0,0,1,1,0); d = rbind(c(0,0,2,1,1),c(1,1,1,0,0),c(1,0,0,5,1),c(0,1,0,0,1))")
 yaml.out(questions[[3]], "q = c(0,0,0,1,1); d = rbind(c(0,0,2,1,1),c(1,1,1,0,0),c(1,0,0,5,1),c(0,1,0,0,1))")
 
-yaml.out(questions[[4]], "")
-yaml.out(questions[[5]], "")
-
+yaml.out(questions[[4]])
+yaml.out(questions[[5]])
+yaml.out(questions[[6]])
+yaml.out(questions[[7]])
 
 
