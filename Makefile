@@ -116,7 +116,7 @@ ${TEMPLATE_DIR}/week07.tex:	${LECTURE_DIR}/text_analysis/clustering.tex
 
 
 %.tex:	%.md
-	pandoc -f markdown -t beamer --slide-level=2 $< -o $*.tex
+	pandoc -f markdown+grid_tables -t beamer --slide-level=2 $< -o $*.tex
 
 %.tex:	%.Rtex
 	echo "library(tools); Sweave('$<')" | ${R_PROG} --vanilla --silent

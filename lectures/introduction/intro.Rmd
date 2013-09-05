@@ -83,7 +83,7 @@ that is at most six in length.
 To examine the small world theory an experiment was devised using the
 U.S. Postal Service.
 
-- [https://en.wikipedia.org/wiki/Small_world_experiment](http://en.wikipedia.org/wiki/Small_world_experiment#The_experiment)
+- <https://en.wikipedia.org/wiki/Small_world_experiment>
 
 
 ## Paul Erdös
@@ -279,12 +279,12 @@ options(width=54)
 ```
 
 ## `R` Resources
-* [http://www.r-project.org](http://www.r-project.org) --- Main `R` website.
-* CRAN --- [http://cran.csiro.au](http://cran.csiro.au) --- Comprehensive `R` Archive Network --- base software and add-on packages.
-* RStudio --- [http://www.rstudio.com](http://www.rstudio.com) --- is a powerful IDE for `R`
+* <http://www.r-project.org> --- Main `R` website.
+* CRAN --- <http://cran.csiro.au> --- Comprehensive `R` Archive Network --- base software and add-on packages.
+* RStudio --- <http://www.rstudio.com> --- is a powerful IDE for `R`
 * `R` Commander --- `install.package(Rcmdr)` --- is a partial GUI interface to `R` --- requires TclTk.
-* `R` Graph Gallery --- [http://gallery.r-enthusiasts.com/](http://gallery.r-enthusiasts.com/) --- loads of pretty pictures.
-* [http://cran.csiro.au/doc/contrib/Torfs+Brauer-Short-R-Intro.pdf](http://cran.csiro.au/doc/contrib/Torfs+Brauer-Short-R-Intro.pdf) --- ``A (very) short Introduction to R''
+* `R` Graph Gallery --- <http://gallery.r-enthusiasts.com/> --- loads of pretty pictures.
+* <http://cran.csiro.au/doc/contrib/Torfs+Brauer-Short-R-Intro.pdf> --- ``A (very) short Introduction to R''
 * ``Introductory Statistics with R'', Peter Dalgaard, Springer 2008.
 
 ## `R` Commands
