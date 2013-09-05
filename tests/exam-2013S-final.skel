@@ -36,6 +36,16 @@ _precision(4)
 \end{questions}
 
 
+\question{Question 2}{2 marks}
+
+
+\begin{questions}[]
+
+  _q2(<[ g = graph.formula(A-B, A-C, A-D, B-D) ]>)
+
+\end{questions}
+
+
 
 \testend
 
