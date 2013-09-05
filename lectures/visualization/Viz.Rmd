@@ -350,10 +350,10 @@ Present&c&d\\
 \end{tabular}
 \end{center}
 
-Then the *Binary Metric$ is $\frac{b+c}{b+c+d}$.
+Then the *Binary Metric* is $\frac{b+c}{b+c+d}$.
 
 It is the ratio of the count of terms occuring in only one tweet
-to the total numer of terms present in one or the other tweet.
+to the total number of terms present in one or the other tweet.
 
 ## Multidimensional scaling - Tweets
 ```{r, echo=TRUE, cache=TRUE}
