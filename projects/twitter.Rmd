@@ -106,6 +106,10 @@ marking criteria:
       performed that reduced any uncertainty in the previous analysis.
 ---------------------------------------------------------------------
 
+A mark within the provided range is given based on the quality and
+presentation of the information in the report.
+
+
 If a report is submitted late, the maximum mark it can achieve will be
 reduced by 10% (3 marks) per day. E.g., if a report is submitted five
 days late, it can receive at most 15 marks.
@@ -133,8 +137,8 @@ By including this statement, we the authors of this work, verify that:
 
 - We are aware that this work may be reproduced and submitted to
   plagiarism detection software programs for the purpose of detecting
-  possible plagiarism (\textbf{which may retain a copy on its database
-  for future plagiarism checking}).
+  possible plagiarism (**which may retain a copy on its database
+  for future plagiarism checking**).
 
 - We hereby certify that we have read and understand what the School
   of Computing and Mathematics defines as minor and substantial
@@ -149,12 +153,80 @@ By including this statement, we the authors of this work, verify that:
 
 # Project Description
 
+The company "Old School Business", also known as OSB wants to start
+using social media to promote its business. They have approached your
+team with a request to find what other businesses have done
+successfully using social media.
 
-## Gather the Data
+OSB are particularly interested in using Twitter and so have asked
+your group to perform the following analysis on Twitter.
+
+To begin, find a company that has a Twitter handle with over 10,000
+followers, then perform the following tasks using the chosen Twitter
+handle.
+
+## What to tweet
+
+To be successful on Twitter, a company needs to provide useful
+information to its followers. We will examine this information so that
+we can suggest what OSB can tweet about.  We do not want to present
+all tweets to OSB, so we must identify if there is a set of common
+tweet themes. This process involves:
+
+a. download the last 1000 tweets from the chosen Twitter handle,
+
+b. cluster the tweets from the set of tweets using an appropriate
+   number of clusters,
+
+c. examine a sample of the tweets in each cluster to determine the
+   theme of each cluster.
 
 
+## Who to follow
 
-## Analyse the Data
+Following others in Twitter is the same as endorsing them. We want to
+examine if there is any method in choosing who to follow. We believe
+that it is best to follow others that tweet about topics we will tweet
+about, but we are unsure if this is true. To examine this:
+
+a. locate 10 friends of the chosen Twitter handle,
+
+b. download the last 100 tweets of each friend,
+
+c. examine if there is a significant difference in the words used
+   between the chosen Twitter handle and each of the ten friends.
+
+
+## Following friends
+
+We are unsure if friending your followers leads to an increase in
+popularity. To examine this, we will:
+
+
+a. obtain a sample of the 1.5 degree egocentric graph centred at the
+   chosen Twitter handle.  The egocentric graph should contain a
+   sample of ten of the chosen Twitter handle's most popular friends,
+   and a sample of ten of the chosen Twitter handle's most popular
+   followers.
+
+b. compute the centrality score for Twitter handle in our graph.
+
+c. identify which Twitter handles friend their followers.
+
+d. examine if there is a correlation between a handle's centrality
+   score and the number of followers it has friended.
+
+
+OSB want the analysis performed by your group to be submitted to them
+as a written report, where each part of the analysis is clearly
+explained, so that the directors of the company can understand what
+was done.
+
+The report should be divided into sections and logically laid out, so
+that the reader can quickly find wanted information.
+
+Figures and tables should be used where needed.
+
 
 
 
