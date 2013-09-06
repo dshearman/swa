@@ -3,7 +3,7 @@
 % Week 4 Lab
 
 `r opts_chunk$set(prompt=TRUE, comment=NA)`
-`r knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
+
 
 # Using R
 ## Reading in Data
