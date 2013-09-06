@@ -1,0 +1,111 @@
+% Visualization of Social Web Data
+% 300958 Social Web Analysis 
+% Week 7 Lab
+
+`r opts_chunk$set(prompt=TRUE, comment=NA)`
+
+# Setting up some Tweets data
+
+You will need the `tm` and `wordcloud` packages so `install.packages` these.
+
+## Search Twitter
+
+After setting up the authentication as in previous labs search for 3 or 4 related search terms in Twitter.
+The code we used in lectures was like this, but try and use different terms.
+
+```{r eval=FALSE}
+tweets1 = searchTwitter("Kevin Rudd", n=500, lang="en")
+tweets2 = searchTwitter("Tony Abbott", n=500, lang="en")
+tweets3 = searchTwitter("Christine Milne", n=500, lang="en")
+tweets = c(tweets1, tweets2, tweets3)   # Put the three searches together
+```
+
+If there technical problems doing this the tweet examples from lectures are in an R data file called 
+[Tweets.RData](Tweets.RData). This can be read using `load("Tweets.RData")`
+
+```{r eval=FALSE,include=FALSE}
+load("Tweets.RData")
+tweets = c(tweets1, tweets2, tweets3)
+```
+
+## Build a term-document matrix
+The  next step is to build a *term document matrix*
+
+```{r eval=FALSE, tidy=FALSE}
+library(tm)
+stext = sapply(tweets, function(x) x$getText())
+corpus = Corpus(VectorSource(stext)) # create a corpus
+# Make a stop list
+stoplist =   stopwords =c("kevin","rudd", "tony", "abbott", "christine", "milne",
+                          "ausvotes", "auspol",  stopwords("english"))
+# create document term matrix applying some transformations
+tdm = TermDocumentMatrix(corpus, 
+                         control = list(removePunctuation = TRUE,  
+                                        stopwords = stoplist,
+                                        removeNumbers = TRUE, tolower = TRUE, 
+                                        stemming=FALSE)) # No stemming 
+# Convert to a standard R matrix
+M = as.matrix(tdm)
+# Word frequencies correspond to row Sums in this tdm.
+freqs = rowSums(M)
+```
+
+# Draw a Wordle-esque word cloud
+
+Use the R `wordcloud` library to draw a word cloud of the most common tweets. If you forget the `min.freq`
+it will take a long time to draw.
+
+```{r eval=FALSE, tidy=FALSE}
+library(wordcloud)
+wordcloud(names(freqs), freqs, random.order=FALSE, min.freq=10)
+```
+
+Experiment with the options `rot.per` and `colors` to `wordcloud`. (see the help page).
+
+Add some of the least interesting words to the stoplist above and repeat the wordcloud.
+
+# Principal Components Analysis
+
+Using the term-document matrix from above, produce visualisation plot of the first two prinicpal components.
+
+First we generate a vector of colors to represent the (in our case 3) search terms
+
+```{r eval=FALSE, tidy=FALSE}
+colors = c(rep("red", length(tweets1)), 
+           rep("blue", length(tweets2)), 
+           rep("green", length(tweets3)))
+```
+
+```{r eval=FALSE}
+pca <- prcomp(t(M))
+plot(pca$x[,1], pca$x[,2], col=colors, pch=16)
+```
+
+Try and plot the first and third principal components. And the second and third.
+
+Repeat using a `sqrt` transformation.
+
+# Multidimensional Scaling
+
+Compute a two-dimensional representation of the term-document matrix that best matches 
+the binary metric distances between tweets. (Warning these calculations will take a few minutes to run)
+
+```{r eval=FALSE}
+D <- dist(t(M), method="binary")
+mds <- cmdscale(D, k=2)
+plot(mds[,1], mds[,2], col=colors, pch=16)
+```
+
+Repeat using a three dimensional representation, and plot the first v. third and second v. third dimensions.
+
+
+# Challenge - Modify the Word Cloud.
+
+The file [SimpleWordle.R](SimpleWordle.R) contains the code for a simplified version of the word cloud drawing code.
+As a challenge, try modifying this code to 
+
+1. Add colour.
+2. Add $90^\circ$ rotation of a proportion of words at random.
+
+(Hint: `runif` can generate a uniform random number so that `runif(1)< p` will be `TRUE` `p` proportion of the time.
+Also `text` takes an argument `srt=90` to write text at 90 degrees).
