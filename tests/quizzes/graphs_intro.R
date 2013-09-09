@@ -51,8 +51,8 @@ yaml.out(questions[[3]], 'file_name = "wi7caak3iare1Oacheet.png"; g = graph.form
 yaml.out(questions[[3]], 'file_name = "bo6queiqueeHeic9sho8.png"; g = graph.formula(1-2, 2-3, 1-3, 2-4, 2-5, 5-3); ')
 
 yaml.out(questions[[4]], 'file_name = "Bieza2ug3uBahdeeGhei.png"; g = graph.formula(1-2, 2-3, 1-3, 2-4, 2-5); ')
-yaml.out(questions[[4]], 'file_name = "heih0iViungis5Ueng5g.png"; g = graph.formula(1-2, 2-3, 1-3, 2-4, 2-5); ')
-yaml.out(questions[[4]], 'file_name = "eigh7aeYeegh9EiMahsu.png"; g = graph.formula(1-2, 2-3, 1-3, 2-4, 2-5); ')
-yaml.out(questions[[4]], 'file_name = "kahx6seVeix9utohthae.png"; g = graph.formula(1-2, 2-3, 1-3, 2-4, 2-5); ')
+yaml.out(questions[[4]], 'file_name = "heih0iViungis5Ueng5g.png"; g = graph.formula(1-2, 2-3, 3-4, 4-5, 5-1); ')
+yaml.out(questions[[4]], 'file_name = "eigh7aeYeegh9EiMahsu.png"; g = graph.formula(1-2, 1-3, 1-4, 1-5, 2-3, 3-4, 4-5, 5-1); ')
+yaml.out(questions[[4]], 'file_name = "kahx6seVeix9utohthae.png"; g = graph.formula(1-2, 1-3, 1-4, 1-5, 2-3, 2-4, 2-5, 3-4, 3-5, 4-5); ')
 
 
