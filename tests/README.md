@@ -1,8 +1,6 @@
-# Tests
+# Tests directory
 
-This directory contains files used to create exams and online tests.
+This directory contains the files required to generate quizzes and exams.
 
-## yamltocsv.py
-
-Each of the test question are added in YAML format and can be converted
-to the CSV format used by Blackboard using the python script yamltocsv.py.
+- quizzes: contains the files for quizzes.
+- exams: contains the files for exams.
