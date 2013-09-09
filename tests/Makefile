@@ -1,23 +1,25 @@
-#PROJ := final-exam-2010
-PROJ := exam-2010A-final.pdf exam-2010A-deferred.pdf
-DOC := 	${PROJ}.Rtex
-OUT := 	${PROJ}.pdf
-R_PROG := /usr/bin/R
-TEX := xelatex
+TEX = xelatex --shell-escape
+R_PROG := /opt/local/bin/R
+CODE = 300958
+TEMPLATE_DIR = templates
+INCLUDE_DIR = includes
+LECTURE_DIR = lectures
+TUTORIAL_DIR = tutorials
+PROJECT_DIR = projects
+INFORMATION_DIR = information
+TEST_DIR = tests
+OUTPUT_DIR = bin
+YAMLTOCSV := python ./yamltocsv.py
 
-build:	$(PROJ)
 
-bib:	
-	bibtex ${PROJ}
+# Rules for construction
 
-%.pdf:	%.tex
-	xelatex $<
+%.yaml: %.Ryaml
+	Rscript -e "library(knitr); knit('$<', output='$*.yaml')"
 
-%.tex:	%.Rtex exam_question.pool.m4 uwsexam.cls
-	echo "library(tools); Sweave('$<')" | ${R_PROG} --vanilla --silent
+%.Ryaml: %.R
+	Rscript --vanilla -e 'source("rlist.r"); yaml.header(); source("$<"); yaml.footer();' > "$*.Ryaml"
 
-%.R:	%.Rtex
-	echo "library(tools); Stangle('$<')" | ${R_PROG} --vanilla --silent 
+%.csv: %.yaml
+	${YAMLTOCSV} $< > $*.csv
 
-%.Rtex:	%.skel
-	m4 -P $< > $@

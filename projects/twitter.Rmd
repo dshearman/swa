@@ -175,10 +175,13 @@ tweet themes. This process involves:
 
 a. download the last 1000 tweets from the chosen Twitter handle,
 
-b. cluster the tweets from the set of tweets using an appropriate
+b. visualise the 1000 tweets using multi-dimensional scaling, making
+   sure an appropriate metric is used.
+
+c. cluster the tweets from the set of tweets using an appropriate
    number of clusters,
 
-c. examine a sample of the tweets in each cluster to determine the
+d. examine a sample of the tweets in each cluster to determine the
    theme of each cluster.
 
 
