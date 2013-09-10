@@ -2,13 +2,13 @@
 % Laurence A. F. Park
 % March 22, 2005
 
+
 ```{r setup, include=FALSE}
 opts_chunk$set(dev = 'pdf', fig.cap="", fig.width=4.4, fig.height=3.1)
 library("mvtnorm")
 ```
 
-
-# Motivation
+## Motivation
 
 We have 1000 tweets. What are they about? Can we summarise them?
 
@@ -16,6 +16,157 @@ Clustering allows us to group similar documents or words, allowing us
 to identify topics in the document set.
 
 # Introduction to Clustering
+
+## What is Clustering?
+
+### Clustering
+
+To gather objects into clusters.
+
+### Cluster
+
+A subset where each element of the subset is similar using some
+measurement and each element is dissimilar to element of other
+clusters.
+
+\vspace{1em}
+Therefore, for a given clustering, items in a cluster should be close,
+but items in different clusters should be distant.
+
+## Simple Clustering Example
+
+\newenvironment{latexcode}{}{}
+\begin{latexcode}
+\definecolor{clusterone}{rgb}{1,0.5,0.5}
+\definecolor{clustertwo}{rgb}{0.5,0.5,1}
+\definecolor{clusterthree}{rgb}{0.5,1,1}
+
+\newcommand{\firstrowcolour}{}
+\newcommand{\secondrowcolour}{}
+\newcommand{\thirdrowcolour}{}
+\newcommand{\fourthrowcolour}{}
+\newcommand{\fifthrowcolour}{}
+\newcommand{\sixthrowcolour}{}
+\only<2>{
+  We can cluster by age:
+  \renewcommand{\firstrowcolour}{\rowcolor{clusterone}}
+  \renewcommand{\secondrowcolour}{\rowcolor{clusterone}}
+  \renewcommand{\thirdrowcolour}{\rowcolor{clusterone}}
+  \renewcommand{\fourthrowcolour}{\rowcolor{clustertwo}}
+  \renewcommand{\fifthrowcolour}{\rowcolor{clustertwo}}
+  \renewcommand{\sixthrowcolour}{\rowcolor{clustertwo}}
+}
+\only<3>{
+  We can cluster by gender:
+  \renewcommand{\firstrowcolour}{\rowcolor{clusterone}}
+  \renewcommand{\secondrowcolour}{\rowcolor{clustertwo}}
+  \renewcommand{\thirdrowcolour}{\rowcolor{clusterone}}
+  \renewcommand{\fourthrowcolour}{\rowcolor{clustertwo}}
+  \renewcommand{\fifthrowcolour}{\rowcolor{clustertwo}}
+  \renewcommand{\sixthrowcolour}{\rowcolor{clusterone}}
+}
+\only<4>{
+  We can cluster by hair colour:
+  \renewcommand{\firstrowcolour}{\rowcolor{clusterone}}
+  \renewcommand{\secondrowcolour}{\rowcolor{clustertwo}}
+  \renewcommand{\thirdrowcolour}{\rowcolor{clustertwo}}
+  \renewcommand{\fourthrowcolour}{\rowcolor{clusterone}}
+  \renewcommand{\fifthrowcolour}{\rowcolor{clusterthree}}
+  \renewcommand{\sixthrowcolour}{\rowcolor{clusterone}}
+}
+\only<5>{
+  We can cluster by age and hair colour (here we have assumed that brown is more similar to blonde than black):
+  \renewcommand{\firstrowcolour}{\rowcolor{clusterone}}
+  \renewcommand{\secondrowcolour}{\rowcolor{clustertwo}}
+  \renewcommand{\thirdrowcolour}{\rowcolor{clustertwo}}
+  \renewcommand{\fourthrowcolour}{\rowcolor{clusterthree}}
+  \renewcommand{\fifthrowcolour}{\rowcolor{clusterthree}}
+  \renewcommand{\sixthrowcolour}{\rowcolor{clusterthree}}
+}
+
+\begin{center}
+%\only<1-6>{
+%\newcolumntype{A}{c}
+\newcolumntype{A}{>{\columncolor{blue!20}}c}
+\begin{tabular}{|A|c|c|c|c|c|}
+\hline
+\rowcolor{blue!20}
+                          & Age & Gender & Hair Colour \\\hline
+\firstrowcolour  Person 1 & 7   & Male   & Brown  \\\hline
+\secondrowcolour Person 2 & 5   & Female & Black  \\\hline
+\thirdrowcolour  Person 3 & 12  & Male   & Black  \\\hline
+\fourthrowcolour Person 4 & 32  & Female & Brown  \\\hline
+\fifthrowcolour  Person 5 & 45  & Female & Blonde \\\hline
+\sixthrowcolour  Person 6 & 28  & Male   & Brown  \\\hline
+\end{tabular}
+\end{center}
+\end{latexcode}
+
+## Clustering by observation
+
+Clusters may be identifiable for low dimensional data, or data projected to two dimensions using Multidimensional Scaling:
+
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.7}
+cluster1 = rmvnorm(30, mean = c(7,5), sigma = matrix(c(1,0,0,1),2,2))
+cluster2 = rmvnorm(30, mean = c(2,12), sigma = matrix(c(1,0,0,1),2,2))
+cluster3 = rmvnorm(30, mean = c(15,12), sigma = matrix(c(1,0,0,1),2,2))
+cluster4 = rmvnorm(30, mean = c(14,3), sigma = matrix(c(1,0,0,1),2,2))
+X.k = rbind(cluster1,cluster2,cluster3,cluster4)
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+plot(X.k[,1], X.k[,2], xlab=expression("x"[1]), ylab=expression("x"[2]))
+```
+
+## Clustering Text
+
+Unfortunately, text data is very high dimensional and may be difficult
+to visualise. We saw in the Text Mining 1 lecture that we can
+represent a text document (or tweet) using an $M$ dimensional vector:
+$$
+  \vec{d}_i = [ w_{d_it_1} ~ w_{d_it_2} ~ w_{d_it_3} ~ \ldots ~ w_{d_it_M} ]
+$$
+where $M$ is the number of unique words in the document collection,
+and $w_{d_it_j}$ is the weight of term $t_j$ in document $d_i$.  We
+also saw that the set of document vectors can be combined to form the
+document-term matrix $A$.
+
+To cluster these vectors, we need to be able to compute which vectors
+are similar and which are dissimilar. We do this by defining a
+similarity metric for the document vectors. 
+
+
+## Similarity for Document Vectors
+
+In this Unit, we have seen the dissimilarity functions:
+
+- Euclidean Distance (Text Mining 1, Visualisation)
+- Binary metric (Visualisation)
+
+and the similarity function:
+
+- Cosine measure (Text Mining 1)
+
+
+
+### Similarity vs. Dissimilarity
+
+Dissimilarity measures how different items are, so a dissimilarity of
+0 means the items are the same. As the difference in the items
+increases, the dissimilarity increases.
+
+Similarity measures how similar items are, so a similarity of 0 means
+the items are different.  The more similar the items are, the greater
+the similarity score. The Cosine measure has a maximum of 1, meaning
+that if two items are the same, the similarity score is 1.
+
+## Computing Clusters
+
+Once we have a vector space and a (dis)similarity function for the
+vectors, we can use a clustering algorithm to cluster the vectors.
+
+In this Unit, we will examine the clustering algorithms:
+
+- K-means clustering
+- Hierarchical clustering
 
 
 # K-means Clustering
@@ -136,27 +287,42 @@ plot(X.k[,1], X.k[,2], xlab=expression("x"[1]), ylab=expression("x"[2]), col=clu
 points(means[,1], means[,2], pch=22, bg=c(1:4))
 ```
 
-## K-means Problem
+## K-means numerical Example
 
-For the following points and cluster centres:
+Five two dimensional data points. Let's find two clusters.
 
-1. Compute the cluster membership of each point.
-2. Recompute the cluster centres.
+```{r, echo=FALSE}
+X = matrix(c(1,1,2,4,4,1,2,1,4,5),5,2)
+print(X)
+```
+\pause
 
-Insert data here.
+### Problem
+
+Find 3 clusters using the initial centres:
+```{r, echo=FALSE}
+centers = matrix(c(1,2,3,1,2,3),3,2)
+print(centers)
+```
+
 
 ## Problems with K-means
 
+K-means clustering is one of the most widely used clustering
+algorithms due to its simplicity. But it does have problems.
+
 - K means requires the cluster centres to allocated before the
-  iteration begins. If we choose random assignment, we may obtain
-  different cluster results with each run.
+  iteration begins. The initial cluster centres are chosen randomly,
+  so there is a chance that we obtain different clusters each time we
+  run K-means.
+
+- K-means uses Euclidean distance, which may not be appropriate for
+  us. We will next examine Spherical K-means to use Cosine similarity.
 
 - K-means requires us to set the number of clusters before the
   algorithm is run, but we usually don't know how many clusters there
-  are.
+  are. We will later examine how to set the number of clusters.
 
-- K-means uses Euclidean distance, which may not be appropriate for
-  us.
 
 
 ## Spherical K-means Algorithm
@@ -182,9 +348,11 @@ $$
 $$
 
 
-## Sample Data Set
+# Choosing the number of clusters
 
-How many clusters are there?
+## Number of Clusters
+
+What makes a good clustering?
 
 ```{r, echo=FALSE}
 cluster1 = rmvnorm(30, mean = c(7,5), sigma = matrix(c(1,0,0,1),2,2))
@@ -196,6 +364,23 @@ X.large = rbind(cluster1,cluster2,cluster3,cluster4)
 par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
 plot(X.large[,1], X.large[,2], xlab=expression("x"[1]), ylab=expression("x"[2]),)
 ```
+
+## Choosing the number of Clusters
+
+K-means requires us to set the number of clusters before we run the
+algorithm.
+
+To decide on the number of clusters, we must remember that a good clustering will have:
+
+- all points within a cluster are close
+- all points in different clusters are distant.
+
+To measure the closeness of points within and between clusters, we will use:
+
+- SST: Total Sum of Squares
+- SSW: Within Sum of Squares
+- SSB: Between Sum of Squares
+
 
 
 ## Total Sum of Squares (SST)
@@ -215,6 +400,23 @@ for (a in 1:point.count) {
     segments(m[1],m[2],X[a,1],X[a,2], col=2)
 }
 ```
+
+## Total Sum of Squares Calculation
+
+SST is the sum of squares of all points from the centre of the data.
+
+$$
+	SST =  {\sum_{i=1}^{N} {\left ( \vec{x}_i - \vec{\bar{x}}\right )}^2}
+$$
+
+The mean point is:
+
+$$
+	\vec{\bar{x}} = \frac{1}{N}{\sum_{i=1}^{N} \vec{x}_i}
+$$
+where $N$ is the number of points.
+
+To define SSW and SSB, we need to choose cluster centres.
 
 ## Cluster Centres
 
@@ -253,32 +455,42 @@ for (a in 1:point.count) {
 }
 ```
 
+## Within and Between Sum of Squares Calculations
+
+SSB is the between cluster sum of squares. It is the same as SST, where we move all points to the cluster centre.
+
+$$
+	SSB =  {\sum_{i=1, k = C(\vec{x}_i)}^{N} {\left ( \vec{c}_k - \vec{\bar{x}}\right )}^2}
+$$
+where $C(\vec{x}_i)$ is the cluster number for point $\vec{x}_i$ and $\vec{c}_k$ is the centre of cluster $k$.
+
+SSW is the within cluster sum of squares. It is the same as SST, where
+we use the cluster centre instead of the mean.
+
+$$
+	SSW =  {\sum_{i=1, k = C(\vec{x}_i)}^{N} {\left ( \vec{x}_i - \vec{c}_k \right )}^2}
+$$
+
+## Relationship between SST, SSW and SSB
+
+We want to choose the number of clusters that maximises SSB (large
+separation between clusters), and minimises SSW (points in cluster are
+close to each other).
+
+For a given set of points, SST is constant (does not depend on the clustering).
 
 For any clustering:
 $$
 	SST = SSB + SSW
 $$
 
-A clustering should maximise SSB (the between cluster distance) and
-minimise SSW (the within cluster distance).
+Therefore, if SSB increases, SSW must decrease.
 
+## Comparing SSW and SSB
 
-## Elbow method
+For the previous set of points, we SSB and SSW:
 
-When choosing the number of clusters:
-
-- If we increase the number of clusters, we reduce SSW and increase SSB.
-- If we choose to have too many clusters, the clustering becomes worthless.
-
-How do we trade off between minimising the number of clusters and minimising SSB?
-
-The number of clusters is provided by the clustering where the reduction of SSE slows.
-
-## Elbow method example
-
-The number of clusters is given by the position of the *elbow* bend.
-
-```{r, echo=FALSE}
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.8}
 wss <- (nrow(X.large)-1)*sum(apply(X.large,2,var))
 bss = 0
 for (i in 2:15) {
@@ -292,7 +504,44 @@ points(1:15, bss, type="b", col=2, pch=2)
 legend("right", c("SSW","SSB"), pch=c(1,2), col=c(1,2))
 ```
 
+
+## Elbow method
+
+When choosing the number of clusters:
+
+- If we increase the number of clusters, we reduce SSW and increase SSB.
+- If we choose to have too many clusters, the clustering becomes worthless.
+
+How do we trade off between minimising the number of clusters and minimising SSB?
+
+### Elbow method
+
+The number of clusters is provided by the clustering where the
+reduction of SSW slows (the elbow bend).
+
+
+## Elbow method example
+
+The number of clusters is given by the position of the *elbow* bend.
+
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.8}
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+plot(1:15, wss, type="b", xlab="Number of Clusters", ylab="Sum of squares")
+points(1:15, bss, type="b", col=2, pch=2)
+legend("right", c("SSW","SSB"), pch=c(1,2), col=c(1,2))
+```
+
 # Hierarchical Clustering
+
+
+## Hierarchy of Points
+
+A hierarchy shows the order of its items, usually in the form of a
+tree. The higher an item is in the tree, the more important it is.
+
+Hierarchical clustering provides us with a tree of clusters, called a
+\alert{dendrogram} that shows the division of clusters.
+
 
 ## Hierarchical Clustering Example
 
@@ -377,81 +626,17 @@ par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
 plot(rpoints, xlab=expression("x"[1]), ylab=expression("x"[2]))
 ```
 
-## Single Linkage Example
+## Complete Linkage Problem
 
-```{r, echo=FALSE}
+### Problem 
+Find the hierarchy of clusters from the following plot using complete linkage.
+
+```{r, echo=FALSE, fig.width=4, fig.height=2.2}
+rpoints = rmvnorm(5, mean = c(5,5), sigma = matrix(c(1,0,0,1),2,2))
 par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
 plot(rpoints, xlab=expression("x"[1]), ylab=expression("x"[2]))
-point.count = nrow(rpoints)
-for (a in (1:(point.count-1))) {
-    for (b in ((a+1):point.count)) {
-        segments(rpoints[a,1],rpoints[a,2],rpoints[b,1],rpoints[b,2], col=2, lty=3)
-    }
-}
 ```
 
-## Single Linkage Example
-
-```{r, echo=FALSE}
-d = dist(rpoints)
-D = as.matrix(d)
-# take diag out of calculation
-diag(D) = max(D)+1
-min.pos = arrayInd(which.min(D), dim(D))
-clusters = 1:5
-
-par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
-plot(rpoints, xlab=expression("x"[1]), ylab=expression("x"[2]))
-point.count = nrow(rpoints)
-for (a in (1:(point.count-1))) {
-    for (b in ((a+1):point.count)) {
-        segments(rpoints[a,1],rpoints[a,2],rpoints[b,1],rpoints[b,2], col=2, lty=3)
-    }
-}
-segments(rpoints[min.pos[1],1],rpoints[min.pos[1],2],rpoints[min.pos[2],1],rpoints[min.pos[2],2], col=2, lty=1)
-clusters[min.pos[2]] = clusters[min.pos[1]]
-```
-
-## Single Linkage Example
-
-```{r, echo=FALSE}
-unique.clusters = unique(clusters)
-
-par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
-plot(rpoints, xlab=expression("x"[1]), ylab=expression("x"[2]))
-point.count = nrow(rpoints)
-
-edist = function(x,y) {
-    return(sqrt(sum((x - y)^2)))
-}
-sing.link.dist = function(y, z) {
-    return(apply(z, 1,  edist, y))
-}
-all.sing.link.dist = function(y, z) {
-    return(apply(y, 1, sing.link.dist, z))
-}
-
-
-
-closest.pos = function(clusters, a, b, rpoints) {
-    y = rpoints[which(clusters == a),, drop=FALSE]
-    y.pos = which(clusters == a)
-    z = rpoints[which(clusters == b),, drop=FALSE]
-    z.pos = which(clusters == b)
-    d = as.matrix(all.sing.link.dist(z,y))
-    min.pos = arrayInd(which.min(d), dim(d))
-    return(c(y.pos[min.pos[1]],z.pos[min.pos[2]]))
-}
-
-
-for (a in unique.clusters[1:(length(unique.clusters)-1)]) {
-    for (b in unique.clusters[2:length(unique.clusters)]) {
-    	pos = closest.pos(clusters, a, b, rpoints)
-        segments(rpoints[pos[1],1],rpoints[pos[1],2],rpoints[pos[2],1],rpoints[pos[2],2], col=2, lty=3)
-    }
-}
-segments(rpoints[min.pos[1],1],rpoints[min.pos[1],2],rpoints[min.pos[2],1],rpoints[min.pos[2],2], col=2, lty=1)
-```
 
 ## Single Linkage using a Distance Matrix
 
@@ -473,74 +658,19 @@ The distance between points $x_1$, $x_2$, $x_3$, $x_4$ and $x_5$.
 
 
 \begin{center}
-\only<1-6>{
-\newcolumntype{A}{c}
-\newcolumntype{A}{>{\columncolor{blue!20}}c}
-%\rowcolors{2}{gray!25}{white}
-\begin{tabular}{|A|c|c|c|c|c|}
+%\newcolumntype{B}{c}
+\newcolumntype{B}{>{\columncolor{blue!20}}c}
+\rowcolors{2}{gray!25}{white}
+\begin{tabular}{|B|c|c|c|c|c|}
 \hline
 \rowcolor{blue!20}
       & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ \\\hline
-\only<1>{%
-$x_1$ & 0 & \alert{1} & 7 & 5 & 3 \\
-\hline
-$x_2$ & \alert{1} & 0 & 4 & 2 & 6 \\
-}%
-\only<2>{%
-$x_1$ & \multirow{2}{*}{0} & \alert{1} & 7 & 5 & 3 \\
-$x_2$ &  & 0 & 4 & 2 & 6 \\
-}%
-\only<3>{%
-$x_1$ & \multirow{2}{*}{0} & \multirow{2}{*}{0} & 7 & 5 & 3 \\
-$x_2$ &  &  & 4 & 2 & 6 \\
-}%
-\only<4>{%
-$x_1$ & \multirow{2}{*}{0} & \multirow{2}{*}{0} & \multirow{2}{*}{4} & 5 & 3 \\
-$x_2$ &  &  &  & 2 & 6 \\
-}%
-\only<5>{%
-$x_1$ & \multirow{2}{*}{0} & \multirow{2}{*}{0} & \multirow{2}{*}{4} & \multirow{2}{*}{2} & 3 \\
-$x_2$ &  &  &  &  & 6 \\
-}%
-\only<6>{%
-$x_1$ & \multirow{2}{*}{0} & \multirow{2}{*}{0} & \multirow{2}{*}{4} & \multirow{2}{*}{2} & \multirow{2}{*}{3} \\
-$x_2$ &  &  &  &  &  \\
-}%
-%\hline
-$x_3$ & 7 & 4 & 0 & 9 & 8 \\\hline
-$x_4$ & 5 & 5 & 9 & 0 & 4 \\\hline
-$x_5$ & 3 & 6 & 8 & 4 & 0 \\\hline
+$x_1$ & 0 & 1 & 7 & 5 & 6 \\
+$x_2$ & 1 & 0 & 4 & 8 & 6 \\
+$x_3$ & 7 & 4 & 0 & 2 & 8 \\
+$x_4$ & 5 & 8 & 2 & 0 & 3 \\
+$x_5$ & 6 & 6 & 8 & 3 & 0 \\\hline
 \end{tabular}
-}
-\only<7>{
-\newcolumntype{A}{c}
-\newcolumntype{A}{>{\columncolor{blue!20}}c}
-%\rowcolors{2}{gray!25}{white}
-\begin{tabular}{|A|c|c|c|c|c|}
-\hline
-\rowcolor{blue!20}
-      & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ \\\hline
-$x_1$ & \multirow{2}{*}{0} & \alert{1} & 7 & 5 & 3 \\
-$x_2$ &  & 0 & 4 & 2 & 6 \\\hline
-$x_3$ & 7 & 4 & 0 & 9 & 8 \\\hline
-$x_4$ & 5 & 5 & 9 & 0 & 4 \\\hline
-$x_5$ & 3 & 6 & 8 & 4 & 0 \\\hline
-\end{tabular}
-}
-\only<8>{
-\newcolumntype{A}{c}
-\newcolumntype{A}{>{\columncolor{blue!20}}c}
-%\rowcolors{2}{gray!25}{white}
-\begin{tabular}{|A|c|c|c|c|}
-\hline
-\rowcolor{blue!20}
-      & $x_1$,$x_2$ & $x_3$ & $x_4$ & $x_5$ \\\hline
-$x_1$,$x_2$ & 0 & 4 & 2 & 3 \\\hline
-$x_3$       & 4 & 0 & 9 & 8 \\\hline
-$x_4$       & 5 & 9 & 0 & 4 \\\hline
-$x_5$       & 3 & 8 & 4 & 0 \\\hline
-\end{tabular}
-}
 \end{center}
 
 The table is symmetric since the distance between $x_i$ and $x_j$ is
@@ -550,9 +680,28 @@ the same as the distance between $x_j$ and $x_i$.
 2. Merge the associated points.
 
 
+## Single Linkage Distance Matrix Problem
 
+### Problem
 
-# Choosing the number of clusters
+Find the hierarchy of clusters from the following dissimilarity matrix
+using single linkage clustering.
+
+\begin{center}
+%\newcolumntype{B}{c}
+\newcolumntype{B}{>{\columncolor{blue!20}}c}
+\rowcolors{2}{gray!25}{white}
+\begin{tabular}{|B|c|c|c|c|c|}
+\hline
+\rowcolor{blue!20}
+      & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ \\\hline
+$x_1$ & 0 & 3 & 7 & 8 & 9 \\
+$x_2$ & 3 & 0 & 5 & 7 & 6 \\
+$x_3$ & 7 & 5 & 0 & 2 & 1 \\
+$x_4$ & 8 & 7 & 2 & 0 & 3 \\
+$x_5$ & 9 & 6 & 1 & 3 & 0 \\\hline
+\end{tabular}
+\end{center}
 
 
 ## Summary
