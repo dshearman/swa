@@ -292,8 +292,8 @@ points(means[,1], means[,2], pch=22, bg=c(1:4))
 Five two dimensional data points. Let's find two clusters.
 
 ```{r, echo=FALSE}
-X = matrix(c(1,1,2,4,4,1,2,1,4,5),5,2)
-print(X)
+Y = matrix(c(1,1,2,4,4,1,2,1,4,5),5,2)
+print(Y)
 ```
 \pause
 
@@ -346,6 +346,24 @@ For each cluster $k$:
 $$
 	\vec{m}_k = \frac{\sum_{C(i) = k} \vec{z}_i}{\norm{\sum_{C(i) = k} \vec{z}_i}}
 $$
+
+## Spherical K-means numerical Example
+
+Five two dimensional data points. Let's find two clusters using Spherical K-means.
+
+```{r, echo=FALSE}
+Y = matrix(c(1,1,2,4,4,1,2,1,4,5),5,2)
+print(Y)
+```
+\pause
+
+### Problem
+
+Find 3 clusters using the initial centres:
+```{r, echo=FALSE}
+centers = matrix(c(1,2,3,1,2,3),3,2)
+print(centers)
+```
 
 
 # Choosing the number of clusters
@@ -488,7 +506,7 @@ Therefore, if SSB increases, SSW must decrease.
 
 ## Comparing SSW and SSB
 
-For the previous set of points, we SSB and SSW:
+For the previous set of points, we have SSB and SSW:
 
 ```{r, echo=FALSE, fig.width=4.4, fig.height=2.8}
 wss <- (nrow(X.large)-1)*sum(apply(X.large,2,var))
@@ -503,6 +521,25 @@ plot(1:15, wss, type="b", xlab="Number of Clusters", ylab="Sum of squares")
 points(1:15, bss, type="b", col=2, pch=2)
 legend("right", c("SSW","SSB"), pch=c(1,2), col=c(1,2))
 ```
+
+## Computing SSW
+
+### Problem
+
+Compute SST, SSW and SSB for the following five data points:
+
+```{r, echo=FALSE}
+Y = matrix(c(1,1,2,4,4,1,2,1,4,5),5,2)
+print(Y)
+```
+
+using the cluster centres:
+
+```{r, echo=FALSE}
+centers = matrix(c(1.33, 4.00, 1.33, 4.50),2,2)
+print(centers)
+```
+
 
 
 ## Elbow method
@@ -530,6 +567,28 @@ plot(1:15, wss, type="b", xlab="Number of Clusters", ylab="Sum of squares")
 points(1:15, bss, type="b", col=2, pch=2)
 legend("right", c("SSW","SSB"), pch=c(1,2), col=c(1,2))
 ```
+
+## Elbow method problems
+
+How many clusters should we find based on these elbow plots?
+
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.8}
+clusters = c(1:10)
+ssw1 = c(10, 5, 3, 2.5, 2, 1.8, 1.6, 1.4, 1.2, 1)
+ssw2 = c(10, 5, 3, 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4)
+ssw3 = c(10, 6, 4, 3, 1.8, 0.8, 0.7, 0.6, 0.5, 0.4)
+ssw4 = c(10, 6, 4, 2.5, 1.5, 1, 0.7, 0.5, 0.4, 0.35)
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), mfrow=c(2,2))
+par(cex=0.6)
+plot(clusters, ssw1, type="b", xlab="Number of Clusters", ylab="SSW")
+plot(clusters, ssw2, type="b", xlab="Number of Clusters", ylab="SSW")
+plot(clusters, ssw3, type="b", xlab="Number of Clusters", ylab="SSW")
+plot(clusters, ssw4, type="b", xlab="Number of Clusters", ylab="SSW")
+```
+
+
+
+
 
 # Hierarchical Clustering
 
@@ -720,4 +779,4 @@ From this lecture, we have learnt:
 
 ## Next Week
 
-Graphs 2: Page Rank
+Graphs 2: Link Analysis
