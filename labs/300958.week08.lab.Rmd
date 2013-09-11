@@ -3,86 +3,110 @@
 % Week 8 Lab
 
 
-# Requirements
+# Preliminaries
 
+Before we can begin the lab work, we must obtain a text data set and
+convert it into a document term matrix.
+
+## Requirements
+
+For this lab, we will be clustering the text from a set of tweets.
+Before we can begin, we must load the relevant libraries.
+```{r eval=FALSE}
 # Use to access Twitter and the twitteR class
 library("twitteR")
 # Use to convert tweets to a term frequency matrix
 library("tm")
 # Use to stem the tweet text
 library("SnowballC")
-
+```
 
 ## Prepare data
 
+We will use the set of tweets obtained in the Visualisation lab. First
+load the tweets: Download the tweet file
+[Tweets.Rdata](http://staff.scm.uws.edu.au/~lapark/300958/labs/Tweets.RData)
+to your **working directory**, and load the file:
+```{r eval=FALSE}
+load("Tweets.RData")
+```
+Extract the tweets into data frames and combine the tweet text into a vector:
+```{r eval=FALSE}
 df1 = twListToDF(tweets1)
 df2 = twListToDF(tweets2)
 df3 = twListToDF(tweets3)
 tweet.text = c(df1$text, df2$text, df3$text)
-
-
+```
+Now that we have the text in a vector, we can create a corpus:
+```{r eval=FALSE}
 tweet.corpus = Corpus(VectorSource(tweet.text))
-
-
+```
 then convert the characters to UTF8:
-
-
+```{r eval=FALSE}
 tweet.corpus = tm_map(tweet.corpus, 
          function(x) iconv(enc2utf8(x), sub = "byte")) # for Windows
 tweet.corpus = tm_map(tweet.corpus, 
          function(x) iconv(x, to='UTF-8-MAC', sub='byte')) # for OS X
-
-
+```
+Finally, we will remove unwanted characters, remove stopwords and stem the words:
+```{r eval=FALSE}
 tweet.corpus = tm_map(tweet.corpus, removeNumbers)
 tweet.corpus = tm_map(tweet.corpus, removePunctuation)
 tweet.corpus = tm_map(tweet.corpus, stripWhitespace)
 tweet.corpus = tm_map(tweet.corpus, tolower)
 tweet.corpus = tm_map(tweet.corpus, removeWords, stopwords('english'))
 tweet.corpus = tm_map(tweet.corpus, stemDocument)
-
+```
+To perform clustering, we must obtain the document vectors, contained in the document term matrix.
+So we extract the matrix and apply TFIDF weighting:
+```{r eval=FALSE}
 tweet.dtm = DocumentTermMatrix(tweet.corpus)
 tweet.wdtm = weightTfIdf(tweet.dtm)
 tweet.matrix = as.matrix(tweet.wdtm)
+```
+We now have the set of weighted document vectors as rows of the matrix `tweet.matrix`.
 
-tweet.2d = cmdscale(dist(tweet.matrix))
+# K-means
 
-plot(tweet.2d, col=c(rep(1,nrow(df1)),rep(2,nrow(df2)),rep(3,nrow(df3))))
-
-
-
-vec.norm = function(x) {
-  # compute the norm of vector x
-  return(sqrt(x %*% x))
-}
-
-normalise.vector = function(x) {
-  # scale the vector x to be unit length
-  return(x/vec.norm(x))
-}
-
-cosine.similarity = function(A) {
-  # normalise row vector lengths
-  norm.A = apply(A, 1, normalise.vector)
-  # return inner product of the normalised vectors
-  return(t(norm.A) %*% norm.A)
-}
-
-# compute the similarity matrix
-S = cosine.similarity(tweet.matrix)
-# convert S to a dissimilarity matrix to be given to dist
-D = 1 - S
-
-tweet.2d.cos = cmdscale(D)
-plot(tweet.2d.cos, col=c(rep(1,nrow(df1)),rep(2,nrow(df2)),rep(3,nrow(df3))))
-
-plot(tweet.2d.cos, col=SK$cluster)
-
-
-## Euclidean K-means
+In this section, we will examine the capability of k-means clustering
+to produce meaningful clusters for our document term matrix.
 
 R provides the function `kmeans` to perform k-means clustering. Read
 the help page for `kmeans` to examine its arguments and what it
 returns.
+
+## Clustering Irises
+
+To begin, we will cluster a small data set called `iris` that comes
+packaged with R. To view the data:
+```{r eval=FALSE}
+print(iris)
+```
+We know this data is a sample of three types of irises, so we will use
+k-means to obtain three clusters. The last column of the data is the
+type of iris, so we will remove it so that k-means is not given the
+answer to the clustering. The function `kmeans` take the data and the
+number of clusters as its arguments.
+```{r eval=FALSE}
+K = kmeans(iris[,-5],3)
+```
+To visualise the clustering, we will use multidimensional scaling to
+project the data into a 2d space.
+```{r eval=FALSE}
+iris.2d = cmdscale(dist(iris[,-5]))
+```
+We plot the data, using the computed clusters to colour the data, and
+set the plot symbols using the real iris types.
+```{r eval=FALSE}
+plot(iris.2d, col = K$cluster, pch = as.numeric(iris[,5]))
+legend("bottomright", levels(iris[,5]), pch = c(1,2,3))
+```
+Note that we also added a plot legend using the `legend` command.
+
+**How** did k-means perform? Did it the iris types cluster well?
+
+
+## Euclidean K-means
 
 We can perform k-means clustering on our tweets. To perform the
 clustering, we provide the data as a matrix and the number of clusters
@@ -103,8 +127,21 @@ allocation, to see how many tweets are associated to each cluster:
 ```{r eval=FALSE}
 table(K$cluster)
 ```
-It is likely that there is one cluster that contains most of the
-tweets. This implies that we have a poor clustering of the data.
+For this case, it is likely that there is one cluster that contains
+most of the tweets. This implies that we have a poor clustering of the
+data.
+
+Let's visualise the data (using Multidimensional scaling from a
+previous lab) to examine our assumption. First, we will project the
+data into a 2d space.
+```{r eval=FALSE}
+tweet.matrix.2d = cmdscale(dist(tweet.matrix))
+```
+Then plot it, and colour the points according to the given clusters.
+```{r eval=FALSE}
+plot(tweet.matrix.2d, col = K$cluster)
+```
+Are the clusters well separated?
 
 
 ## Number of clusters
@@ -120,7 +157,8 @@ clustering for a set of cluster sizes, and obtain the SSW value.
 
 We can compute a clustering with one cluster:
 ```{r eval=FALSE}
-K = kmeans(tweet.matrix, 1)
+number.of.clusters = 1
+K = kmeans(tweet.matrix, number.of.clusters)
 ```
 and obtain the SSW value:
 ```{r eval=FALSE}
@@ -164,13 +202,14 @@ k-means clusters. We use the function `skmeans` instead of `kmeans`.
 To perform the clustering, we provide the data as a matrix and the
 number of clusters we want.
 ```{r eval=FALSE}
-SK = skmeans(tweet.matrix, 10)
+SK = skmeans(tweet.matrix, 3)
 ```
 Rather than centres, `skmeans` provides us with prototype points,
 which are the centre vectors using cosine similarity. We can view the
 prototype for the first cluster:
 ```{r eval=FALSE}
-SK$prototypes[1,]
+cluster.number = 1
+SK$prototypes[cluster.number,]
 ```
 We can also view the cluster allocation of each tweet:
 ```{r eval=FALSE}
@@ -179,37 +218,205 @@ SK$cluster
 Since there are so many tweets, we can tabulate the cluster
 allocation, to see how many tweets are associated to each cluster:
 ```{r eval=FALSE}
-table(K$cluster)
+table(SK$cluster)
 ```
 We should find that each of the clusters contain a similar number of
 points, showing that spherical k-means is more suited to this data
 than k-means.
 
-
-ssw = function(x, d) {
-  K = kmeans(d, x)
-  return(K$tot.withinss)
+To identify an appropriate number of clusters, we must compute the
+within sum of squares using the cosine dissimilarity. The function below
+`cosine.dissimilarity` computes the dissimilarity between two vectors.
+```{r eval=FALSE}
+vec.norm = function(x) {
+  # compute the norm of vector x
+  return(sqrt(x %*% x))
 }
-SSW = pbsapply(1:15, ssw, tweet.matrix)
+
+normalise.vector = function(x) {
+  # scale the vector x to be unit length
+  return(x/vec.norm(x))
+}
+
+cosine.dissimilarity = function(x,y) {
+  # normalise row vector lengths
+  norm.x = normalise.vector(x)
+  norm.y = normalise.vector(y)
+  # return 1 - inner product of the normalised vectors
+  return(1 - (x %*% y))
+}
+```
+To compute SSW, we need to compute the dissimilarity between each
+tweet vector and its cluster prototype. To compute the dissimilarity
+between the first tweet vector and its cluster prototype:
+```{r eval=FALSE}
+tweet.number = 1
+cosine.dissimilarity(tweet.matrix[tweet.number,], SK$prototype[SK$cluster[tweet.number],])
+```
+
+**Write** and run the function `ssw.cosine`, containing a for loop, to compute
+  the dissimilarity between each tweet vector and its cluster
+  prototype, then sum the values to obtain the within sum of squares.
+
+We now need to find the elbow in the SSW values.
+
+**Write** the for loop to compute the SSW value (using the above
+  function `ssw.cosine`) for spherical k-means using 2 to 15 clusters.
+
+**Plot** the set of SSW values against the cluster number. Can any
+  elbows be seen the plot?
 
 
-K$betweenss
+To finish this section, we will visualise the data using multidimensional scaling.
+To perform multidimensional scaling,we need to compute the distance matrix containing
+the cosine dissimilarities.
+To use the cosine dissimilarity function, we can take advantage of the
+fact that the cosine of two vectors is the inner product of the
+normalised vectors. So to compute the distance matrix, we normalise
+all document vectors using the `normalise.vector` function we wrote above:
+```{r eval=FALSE}
+norm.tweet.matrix = apply(tweet.matrix, 1, normalise.vector)
+```
+Then the inner product of all vectors is the matrix multiplied with
+itself. We want dissimilarity, so we subtract it from 1.
+```{r eval=FALSE}
+D = 1 - norm.tweet.matrix %*% t(norm.tweet.matrix)
+```
+We then perform the multidimensional scaling and plot the tweets with their cluster colour.
+```{r eval=FALSE}
+tweet.matrix.2d.cosine = cmdscale(D)
+plot(tweet.matrix.2d.cosine, col = SK$cluster)
+```
+**Are** the clusters visible after performing the multidimesional scaling?
 
 
 
-library("skmeans")
 
-SK = skmeans(tweet.matrix, 3)
-table(SK$cluster)
-sort(SK$prototypes[3,], decreasing=TRUE)[1:10]
+## Examining the cluster contents.
 
+To begin this section, we will run spherical k-means on our data, using five clusters.
+```{r eval=FALSE}
+SK = skmeans(tweet.matrix, 5)
+```
+We can now examine the top ten words associated to each cluster by
+selecting the cluster prototype and ordering the words by the
+prototype weight. For the first cluster, we use:
+```{r eval=FALSE}
+cluster.number = 1
+sort(SK$prototypes[cluster.number,], decreasing=TRUE)[1:10]
+```
+**Examine** the top ten words for the other four clusters. Can you
+  identify any themes associated to the clusters?
 
+Looking at the top ten words gives us some information about the
+cluster, but it is only a small fraction of the cluster information.
 
-
-
-
-# K-means Clustering
-
+**Generate** a word cloud (as done in the Visualisation lab) to
+  visualise the words in a cluster. Was this more helpful in
+  identifying the cluster topics?
 
 # Hierarchical Clustering
+
+Hierarchical clustering us a useful tool to allow us to visualise how
+clusters are formed in our data. But, with a large number of data
+points, the hierarchy becomes crowed and difficult to visualise.
+
+## Clustering Cars
+
+For this first section, we will use a data set that comes packaged
+with R, called `mtcars`. Read the help file for `mtcars` to get an
+understanding of how the data was created.
+
+To perform hierarchical clustering, we must first obtain the distance matrix:
+```{r eval=FALSE}
+D = dist(mtcars)
+```
+Then we provide the distance matrix to the hierarchical clustering function:
+```{r eval=FALSE}
+h = hclust(D)
+```
+To view the clustering, plot the output variable.
+```{r eval=FALSE}
+plot(h)
+```
+The default method is *complete linkage* clustering. To obtain *single
+linkage* clustering, we must provide an additional argument to
+`hclust`.
+```{r eval=FALSE}
+h = hclust(D, method="single")
+plot(h)
+```
+**Look** at the dendrogram produced from each of the two clusterings
+  and identify if they make sense.
+
+## Clustering words
+
+The twitter data we have has many words. If we examine the dimensions
+of the matrix, the first value is the number of rows (documents), the
+second value is the number of columns (words).
+```{r eval=FALSE}
+dim(twitter.matrix)
+```
+
+For this section, we will select the set of words that appear most
+often and examine how they are clustered.
+
+We will choose the set of words that appear in at least 50 tweets and
+store their index in the variable `frequent.words`.
+```{r eval=FALSE}
+frequent.words = which(apply(tweet.matrix > 0,2,sum) > 50)
+```
+We now extract only those columns from the tweet matrix.
+```{r eval=FALSE}
+sub.tweet.matrix = tweet.matrix[,frequent.words]
+```
+
+Let's first examine the clusters produced using Euclidean
+distance. Note that we must transpose `sub.tweet.matrix` using the
+function `t` to compute the distances between words, instead of
+distances between tweets.
+```{r eval=FALSE}
+D = dist(t(sub.tweet.matrix))
+h = hclust(D)
+plot(h)
+```
+**Examine** the dendrogram produced. Do the clusters make sense?
+
+**Perform** clustering using single linkage clustering instead. Which
+  of the two method provides more reasonable clusters?
+
+
+## Hierarchical clustering with the Cosine distance.
+
+The hierarchical clustering function take a distance matrix. So we can
+compute the distance using any metric, then provide the computed
+distance matrix to `hclust`.
+
+As we did before, to use the cosine dissimilarity function, we can
+take advantage of the fact that the cosine of two vectors is the inner
+product of the normalised vectors. So to compute the distance matrix,
+we normalise all word vectors (note: in the previous section we
+normalised the documents, in this section we are normalising the words
+because we want to cluster the words) using the `normalise.vector`
+function we wrote above:
+```{r eval=FALSE}
+norm.sub.tweet.matrix = apply(sub.tweet.matrix, 2, normalise.vector)
+```
+Then the inner product of all vectors is the matrix multiplied with
+itself. We subtract it from 1 to get the dissimilarities.
+```{r eval=FALSE}
+D = 1 - t(norm.sub.tweet.matrix) %*% norm.sub.tweet.matrix
+```
+We then convert the distance matrix to the `dist` type, so it can be used with `hclust`:
+```{r eval=FALSE}
+D = as.dist(D)
+```
+We can now cluster the words and plot them:
+```{r eval=FALSE}
+h = hclust(D)
+plot(h)
+```
+
+**After** viewing the dendrograms based on Euclidean and Cosine
+  distance, which do you think provded a better clustering?
 
