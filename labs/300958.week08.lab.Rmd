@@ -1,0 +1,215 @@
+% Text Mining 2: Clustering
+% 300958 Social Web Analysis 
+% Week 8 Lab
+
+
+# Requirements
+
+# Use to access Twitter and the twitteR class
+library("twitteR")
+# Use to convert tweets to a term frequency matrix
+library("tm")
+# Use to stem the tweet text
+library("SnowballC")
+
+
+## Prepare data
+
+df1 = twListToDF(tweets1)
+df2 = twListToDF(tweets2)
+df3 = twListToDF(tweets3)
+tweet.text = c(df1$text, df2$text, df3$text)
+
+
+tweet.corpus = Corpus(VectorSource(tweet.text))
+
+
+then convert the characters to UTF8:
+
+
+tweet.corpus = tm_map(tweet.corpus, 
+         function(x) iconv(enc2utf8(x), sub = "byte")) # for Windows
+tweet.corpus = tm_map(tweet.corpus, 
+         function(x) iconv(x, to='UTF-8-MAC', sub='byte')) # for OS X
+
+
+tweet.corpus = tm_map(tweet.corpus, removeNumbers)
+tweet.corpus = tm_map(tweet.corpus, removePunctuation)
+tweet.corpus = tm_map(tweet.corpus, stripWhitespace)
+tweet.corpus = tm_map(tweet.corpus, tolower)
+tweet.corpus = tm_map(tweet.corpus, removeWords, stopwords('english'))
+tweet.corpus = tm_map(tweet.corpus, stemDocument)
+
+tweet.dtm = DocumentTermMatrix(tweet.corpus)
+tweet.wdtm = weightTfIdf(tweet.dtm)
+tweet.matrix = as.matrix(tweet.wdtm)
+
+tweet.2d = cmdscale(dist(tweet.matrix))
+
+plot(tweet.2d, col=c(rep(1,nrow(df1)),rep(2,nrow(df2)),rep(3,nrow(df3))))
+
+
+
+vec.norm = function(x) {
+  # compute the norm of vector x
+  return(sqrt(x %*% x))
+}
+
+normalise.vector = function(x) {
+  # scale the vector x to be unit length
+  return(x/vec.norm(x))
+}
+
+cosine.similarity = function(A) {
+  # normalise row vector lengths
+  norm.A = apply(A, 1, normalise.vector)
+  # return inner product of the normalised vectors
+  return(t(norm.A) %*% norm.A)
+}
+
+# compute the similarity matrix
+S = cosine.similarity(tweet.matrix)
+# convert S to a dissimilarity matrix to be given to dist
+D = 1 - S
+
+tweet.2d.cos = cmdscale(D)
+plot(tweet.2d.cos, col=c(rep(1,nrow(df1)),rep(2,nrow(df2)),rep(3,nrow(df3))))
+
+plot(tweet.2d.cos, col=SK$cluster)
+
+
+## Euclidean K-means
+
+R provides the function `kmeans` to perform k-means clustering. Read
+the help page for `kmeans` to examine its arguments and what it
+returns.
+
+We can perform k-means clustering on our tweets. To perform the
+clustering, we provide the data as a matrix and the number of clusters
+we want.
+```{r eval=FALSE}
+K = kmeans(tweet.matrix, 10)
+```
+When the k-means process has finished, we can examine the cluster centres:
+```{r eval=FALSE}
+K$centers
+```
+and the cluster allocation of each tweet:
+```{r eval=FALSE}
+K$cluster
+```
+Since there are so many tweets, we can tabulate the cluster
+allocation, to see how many tweets are associated to each cluster:
+```{r eval=FALSE}
+table(K$cluster)
+```
+It is likely that there is one cluster that contains most of the
+tweets. This implies that we have a poor clustering of the data.
+
+
+## Number of clusters
+
+We found in the last section that the clustering was poor, since most
+of the tweets were allocated to the same cluster. In this section, we
+will use the Elbow method to examine the number of clusters that are
+suitable for our tweet data.
+
+The Elbow method requires us to plot the within sum of squares (SSW)
+against the number of clusters. Therefore, we must compute a
+clustering for a set of cluster sizes, and obtain the SSW value.
+
+We can compute a clustering with one cluster:
+```{r eval=FALSE}
+K = kmeans(tweet.matrix, 1)
+```
+and obtain the SSW value:
+```{r eval=FALSE}
+K$tot.withinss
+```
+Note that when we compute one cluster, the within sum of squares (SSW)
+is equal to the total sum of squares (SST).
+```{r eval=FALSE}
+K$totss
+```
+We want to compute the SSW for cluster sizes from 1 to 15. First we will allocate
+a vector variable to store the value of SSW:
+```{r eval=FALSE}
+SSW = rep(0,15)
+```
+**Write** a for loop that performs k-means for 1 to 15 clusters and stores the 
+SSW value for each clustering in the variable `SSW`.
+
+Once we have the values of SSW for 1 to 15 clusters, we can view the elbow plot:
+```{r eval=FALSE}
+plot(1:15,SSW, type="b")
+```
+From the plot, we will see that there is no elbow (the SSW does not flatten out).
+This means the we are not clustering the data correctly.
+
+A likely cause of the poor clustering is that k-means uses Euclidean distance,
+which is not appropriate for document vectors. We need to use k-means with the
+cosine similarity function, also known as Spherical k-means.
+
+
+## Spherical K-means
+
+First download and install the Spherical k-means package:
+```{r eval=FALSE}
+install.packages("skmeans")
+library("skmeans")
+```
+
+Computing spherical k-means clusters is very similar to computing
+k-means clusters. We use the function `skmeans` instead of `kmeans`.
+To perform the clustering, we provide the data as a matrix and the
+number of clusters we want.
+```{r eval=FALSE}
+SK = skmeans(tweet.matrix, 10)
+```
+Rather than centres, `skmeans` provides us with prototype points,
+which are the centre vectors using cosine similarity. We can view the
+prototype for the first cluster:
+```{r eval=FALSE}
+SK$prototypes[1,]
+```
+We can also view the cluster allocation of each tweet:
+```{r eval=FALSE}
+SK$cluster
+```
+Since there are so many tweets, we can tabulate the cluster
+allocation, to see how many tweets are associated to each cluster:
+```{r eval=FALSE}
+table(K$cluster)
+```
+We should find that each of the clusters contain a similar number of
+points, showing that spherical k-means is more suited to this data
+than k-means.
+
+
+ssw = function(x, d) {
+  K = kmeans(d, x)
+  return(K$tot.withinss)
+}
+SSW = pbsapply(1:15, ssw, tweet.matrix)
+
+
+K$betweenss
+
+
+
+library("skmeans")
+
+SK = skmeans(tweet.matrix, 3)
+table(SK$cluster)
+sort(SK$prototypes[3,], decreasing=TRUE)[1:10]
+
+
+
+
+
+
+# K-means Clustering
+
+
+# Hierarchical Clustering
+

@@ -301,8 +301,8 @@ print(Y)
 
 Find 3 clusters using the initial centres:
 ```{r, echo=FALSE}
-centers = matrix(c(1,2,3,1,2,3),3,2)
-print(centers)
+centres = matrix(c(1,3,4,1,2,3),3,2)
+print(centres)
 ```
 
 
