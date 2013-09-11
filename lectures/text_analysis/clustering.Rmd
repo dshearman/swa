@@ -622,10 +622,10 @@ plot(h, xlab="x")
 
 ### Divisive Clustering (top down)
 
-1. Treat all points as begin in one cluster
-2. Iteratively split the cluster with the largest gap, until app points are in their own cluster.
+1. Treat all points as being in one cluster
+2. Iteratively split the cluster with the largest gap, until all points are in their own cluster.
 
-We will not examine Divisive Clustering in this Unit.
+We will not further examine Divisive Clustering in this Unit.
 
 
 ## Types of Agglomerative Clustering
@@ -673,8 +673,6 @@ $$
 where $d_{ij}$ is the distance between points $\vec{x}_i$ and
 $\vec{x}_j$, and $N_G$ and $N_H$ are the number of points in clusters
 $G$ and $H$ respectively.
-
-write
 
 
 ## Single Linkage Example
