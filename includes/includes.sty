@@ -29,8 +29,12 @@
   \mode<article>{\title{\insertlecture}}
   \mode<beamer>{\title{\insertlecture}}
   \frame[plain]{\titlepage}
-%  \section*{Outline} 
-%  \frame{\tableofcontents} 
+  %\section*{Outline} 
+  %\frame{\tableofcontents} 
+  \begin{frame}<beamer>
+    \frametitle{Outline}
+    \tableofcontents
+  \end{frame}
 }
 
 \AtBeginSection[] % Do nothing for \section*

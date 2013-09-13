@@ -23,8 +23,8 @@ yaml.out <- function(question, parameters = "") {
 
 yaml.NUM.out <- function(question, parameters) {
   cat("    - type: '", question$type, "'\n", sep="")
-  cat("      known.parameters: '", question$known.parameters, "'\n", sep="")
   cat("      set.parameters: '`r ", parameters, "`'\n", sep="")
+  cat("      known.parameters: '", question$known.parameters, "'\n", sep="")
   cat("      question: '", question$question, "'\n", sep="")
   cat("      answer: '", question$answer, "'\n", sep="")
   cat("      tolerance: '", question$tolerance, "'\n\n", sep="")
