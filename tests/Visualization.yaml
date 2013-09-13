@@ -1,0 +1,83 @@
+%YAML 1.2
+---
+
+questions:
+    - type: MC
+      question: "<p>Which of the following best describes a Word Cloud.</p>"
+      choices:
+       - "A visualisation of the set of words in a document"
+       - "A low dimensional representation of a collection of documents that maximises variance"
+       - "A visualisation of the frequencies with which words occur in a corpus of documents"
+       - "A low dimensional representation of a collection of documents that matches distances in high dimensions closely"
+      correct_answer: 3
+
+    - type: MC
+      question: "<p>Which of the following best describes Principal Components Analysis.</p>"
+      choices:
+       - "A visualisation of the set of words in a document"
+       - "A low dimensional representation of a collection of documents that maximises variance"
+       - "A visualisation of the frequencies with which words occur in a corpus of documents"
+       - "A low dimensional representation of a collection of documents that matches distances in high dimensions closely"
+      correct_answer: 2
+
+    - type: MC
+      question: "<p>Which of the following best describes Multidimensional Scaling.</p>"
+      choices:
+       - "A visualisation of the set of words in a document"
+       - "A low dimensional representation of a collection of documents that maximises variance"
+       - "A visualisation of the frequencies with which words occur in a corpus of documents"
+       - "A low dimensional representation of a collection of documents that matches distances in high dimensions closely"
+      correct_answer: 4
+
+    - type: MC
+      question: "<p>The Binary Metric is a distance measure that compares two documents by; </p>"
+      choices:
+       - "taking the sum of the differences in word frequencies squared, then taking a square root"
+       - "taking the number of distinct words in NOT in common in the documents divided the number of distinct words in total"
+       - "visualising the frequencies with which words occur in the documents"
+       - "using a Frobenius norm"
+      correct_answer: 2
+
+    - type: NUM
+      question: "<p>After stoplist processing etc, Tweet A has 7 distinct words and Tweet B has 11. There are 4 words in common. What is the Binary Metric distance between Tweets A and B (to 2 decimal places)?</p>"
+      answer: "0.71"
+      tolerance: "0.01"
+
+    - type: NUM
+      question: "<p>After stoplist processing etc, Tweet A has 9 distinct words and Tweet B has 10. There are 2 words in common. What is the Binary Metric distance between Tweets A and B (to 2 decimal places)?</p>"
+      answer: "0.88"
+      tolerance: "0.01"
+
+    - type: NUM
+      question: "<p>After stoplist processing etc, Tweet A has 8 distinct words and Tweet B has 12. There are 6 words in common. What is the Binary Metric distance between Tweets A and B (to 2 decimal places)?</p>"
+      answer: "0.57"
+      tolerance: "0.01"
+
+    - type: NUM
+      question: "<p>After stoplist processing etc, Tweet A has 11 distinct words and Tweet B has 7. There are 6 words in common. What is the Binary Metric distance between Tweets A and B (to 2 decimal places)?</p>"
+      answer: "0.50"
+      tolerance: "0.01"
+
+    - type: NUM
+      question: '<p>R produces the following output from a principal components analysis. What PERCENTAGE of variation is explained by the first TWO principal components (to 2 decimal places)?</p>
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> PC1 </TH> <TH> PC2 </TH> <TH> PC3 </TH> <TH> PC4 </TH> <TH> PC5 </TH> <TH> PC6 </TH> <TH> PC7 </TH>  </TR>
+  <TR> <TD align="right"> Standard deviation </TD> <TD align="right"> 22.7990 </TD> <TD align="right"> 11.5819 </TD> <TD align="right"> 9.8521 </TD> <TD align="right"> 9.2325 </TD> <TD align="right"> 6.4043 </TD> <TD align="right"> 5.0735 </TD> <TD align="right"> 4.6684 </TD> </TR>
+  <TR> <TD align="right"> Proportion of Variance </TD> <TD align="right"> 0.5621 </TD> <TD align="right"> 0.1451 </TD> <TD align="right"> 0.1050 </TD> <TD align="right"> 0.0922 </TD> <TD align="right"> 0.0444 </TD> <TD align="right"> 0.0278 </TD> <TD align="right"> 0.0236 </TD> </TR>
+  <TR> <TD align="right"> Cumulative Proportion </TD> <TD align="right"> 0.5621 </TD> <TD align="right"> 0.7071 </TD> <TD align="right"> 0.8121 </TD> <TD align="right"> 0.9042 </TD> <TD align="right"> 0.9486 </TD> <TD align="right"> 0.9764 </TD> <TD align="right"> 1.0000 </TD> </TR>
+   </TABLE>'
+      answer: "70.71"
+      tolerance: "0.1" 
+    
+    - type: NUM
+      question: '<p>R produces the following output from a principal components analysis. What PERCENTAGE of variation is explained by the first THREE principal components (to 2 decimal places)?</p>
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> PC1 </TH> <TH> PC2 </TH> <TH> PC3 </TH> <TH> PC4 </TH> <TH> PC5 </TH> <TH> PC6 </TH> <TH> PC7 </TH>  </TR>
+  <TR> <TD align="right"> Standard deviation </TD> <TD align="right"> 22.7990 </TD> <TD align="right"> 11.5819 </TD> <TD align="right"> 9.8521 </TD> <TD align="right"> 9.2325 </TD> <TD align="right"> 6.4043 </TD> <TD align="right"> 5.0735 </TD> <TD align="right"> 4.6684 </TD> </TR>
+  <TR> <TD align="right"> Proportion of Variance </TD> <TD align="right"> 0.5621 </TD> <TD align="right"> 0.1451 </TD> <TD align="right"> 0.1050 </TD> <TD align="right"> 0.0922 </TD> <TD align="right"> 0.0444 </TD> <TD align="right"> 0.0278 </TD> <TD align="right"> 0.0236 </TD> </TR>
+  <TR> <TD align="right"> Cumulative Proportion </TD> <TD align="right"> 0.5621 </TD> <TD align="right"> 0.7071 </TD> <TD align="right"> 0.8121 </TD> <TD align="right"> 0.9042 </TD> <TD align="right"> 0.9486 </TD> <TD align="right"> 0.9764 </TD> <TD align="right"> 1.0000 </TD> </TR>
+   </TABLE>'
+      answer: "81.21"
+      tolerance: "0.1" 
+    
+
