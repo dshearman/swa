@@ -102,7 +102,7 @@ marking criteria:
 
 26-30 Report contains all of the analysis requested by the
       specification, with reasonable explanations of why the chosen
-      analysis was performed.  Further investigation was also
+      analysis was performed.  Further useful investigation was also
       performed that reduced any uncertainty in the previous analysis.
 ---------------------------------------------------------------------
 
@@ -162,8 +162,8 @@ OSB are particularly interested in using Twitter and so have asked
 your group to perform the following analysis on Twitter.
 
 To begin, find a company that has a Twitter handle with over 10,000
-followers, then perform the following tasks using the chosen Twitter
-handle.
+followers and 1000 tweets, then perform the following tasks using the
+chosen Twitter handle.
 
 ## What to tweet
 
@@ -194,9 +194,13 @@ about, but we are unsure if this is true. To examine this:
 
 a. locate 10 friends of the chosen Twitter handle,
 
-b. download the last 100 tweets of each friend,
+b. download the last 100 tweets of each friend, and for the chosen
+   twitter handle.
 
-c. examine if there is a significant difference in the words used
+c. construct a frequency table of words for each of the 11 twitter
+   handles (one table per handle).
+
+d. examine if there is a significant difference in the words used
    between the chosen Twitter handle and each of the ten friends.
 
 
@@ -223,7 +227,7 @@ d. examine if there is a correlation between a handle's centrality
 OSB want the analysis performed by your group to be submitted to them
 as a written report, where each part of the analysis is clearly
 explained, so that the directors of the company can understand what
-was done.
+was done. OSB do not want pages of R code or R output in the report.
 
 The report should be divided into sections and logically laid out, so
 that the reader can quickly find wanted information.
