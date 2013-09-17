@@ -7,6 +7,19 @@ opts_chunk$set(dev = 'pdf', fig.cap="")
 library("igraph")
 ```
 
+## Motivation
+
+Similar to centrality measures, link analysis methods allow us to
+identify the popularity of a vertex, based on the structure of the
+whole graph.
+
+Google uses the link analysis method *PageRank* to compute the
+popularity score for each Web page. This score is provided as an
+indicator as to how high the Web page should be ranked in search
+results.
+
+
+# Random walk on a Graph
 
 ## Random Walk
 
@@ -41,8 +54,8 @@ layout=layout.fruchterman.reingold, vertex.size = 35)
 
 By taking a random walk of length 1, we choose an edge at random that
 is connected to the current vertex and follow it. The probability of
-following a particular edge is equal to $1/\text{degree}(v)$, where
-$v$ is the staring vertex.
+following a particular edge is equal to $1/\text{degree}(v)$, starting at
+vertex $v$.
 
 ### Probability of arriving at vertex.
 ```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
@@ -79,7 +92,8 @@ After a random walk of length 1:
 
 The state of a random walk is the vertex in which the walk has ended
 on.  After a random walk of length $n$, there is a chance of being in
-multiple states, where each state has a probability.
+multiple states (arriving at multiple vertices), where each state has
+a probability.
 
 The collection of probabilities forms a distribution over the set of
 states.
@@ -93,17 +107,288 @@ V(g)$label.cex = 0.8
 plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]),expression("v"[4])),
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
-After a random walk of length n, we have the state distribution:
+A random walk of length n, starting at $v_1$ gives the state distribution:
 
 \begin{center}
 \begin{tabular}{lcccc}
 \toprule
 State       & $v_1$ & $v_2$ & $v_3$ & $v_4$ \\
 \midrule
-Probability (n = 1) & 0     & 1/3   & 1/3   & 1/3   \\
-Probability (n = 2) & 1     & 0   & 0   & 0   \\
-Probability (n = 3) & 0     & 1/3   & 1/3   & 1/3   \\
+$\vec{p}_1$ & 0     & 1/3   & 1/3   & 1/3   \\
+\only<2-3>{$\vec{p}_2$ & 1     & 0   & 0   & 0}   \\
+\only<3>{$\vec{p}_3$ & 0     & 1/3   & 1/3   & 1/3}   \\
 \bottomrule
 \end{tabular}
 \end{center}
+
+## State distribution
+
+### Problem
+
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+g = graph.formula(A-B, B-C, C-D, D-A)
+par(mar = c(0,0,0,0))
+V(g)$label.cex = 0.8
+plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]),expression("v"[4])),
+layout=layout.fruchterman.reingold, vertex.size = 35)
+```
+
+Compute the state distribution after a length $n = 1, 2, 3$ random walk, when starting at $v_1$.
+
+
+## Probability Transition
+
+We find that the state distribution of a length $n$ random walk can be
+computed using the graph and the knowledge of the previous state
+distribution (for a random walk of length $n-1$).
+
+Therefore the state distribution is a [Markov Chain](http://en.wikipedia.org/wiki/Markov_chain) (the current
+state $n$ depends only on the previous state $n-1$, not on any other states
+before it).
+
+We can compute the probability of a given state of a Markov Chain using
+its transition probability matrix $T$, where
+$$
+	\vec{p}_{n} = T\vec{p}_{n-1}
+$$
+where $\vec{p}_n$ is the state distribution after a length $n$ random walk.
+
+
+## Transition Probability Matrix
+
+The transition probability matrix $T$ of graph $G$ provides us with
+the probability of moving to state, given the probability of the
+current state.
+
+$T$ is a matrix with elements $t_{i,j}$ ($i$th row, $j$th column), where:
+$$
+	t_{i,j} = \left \{
+	\begin{array}{ll}
+		1/\text{degree}(v_j) & \text{if } e_{i,j} \in E \\
+		0 & \text{otherwise}
+	\end{array}\right .
+$$
+All of the columns of $T$ should sum to 1.
+
+## Transition Probability Matrix
+
+### Example
+
+Write the transition probability matrix for the following graph:
+
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+g = graph.formula(A-B, B-C, C-D, D-A, A-E, B-D, B-E)
+par(mar = c(0,0,0,0))
+V(g)$label.cex = 0.8
+plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]),expression("v"[4]),expression("v"[5])),
+layout=layout.fruchterman.reingold, vertex.size = 35)
+```
+
+## Transition Probability Matrix
+
+### Problem
+
+Write the transition probability matrix for the following graph:
+
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+g = graph.formula(A-B, A-C, A-D, B-E, C-E, A-E)
+par(mar = c(0,0,0,0))
+V(g)$label.cex = 0.8
+plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]),expression("v"[4]),expression("v"[5])),
+layout=layout.fruchterman.reingold, vertex.size = 35)
+```
+
+## One Step Transition
+
+Given any state distribution, we can take a random step by multiplying
+the state with the transition probability matrix. Let's examine the previous example.
+
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+g = graph.formula(A-B, B-C, C-D, D-A)
+par(mar = c(0,0,0,0))
+V(g)$label.cex = 0.8
+plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]),expression("v"[4])),
+layout=layout.fruchterman.reingold, vertex.size = 35)
+```
+
+We begin at $v_1$, so the initial state distribution is:
+$$
+	\vec{p} = [~1~0~0~0~]
+$$
+Let's find the state distribution after $n = 1$, 2 and 3 steps.
+
+
+
+## Infinite Random Walk on a Graph
+
+The probability of arriving at vertex $v$ after a random walk is a
+good measure of the vertex's popularity or influence in the graph.
+
+We are able to compute the state distribution $\vec{p}_n$ using
+a random walk, but we have to provide an initial state $\vec{p}_0$ , and
+the length of the random walk $n$. The probability will change
+depending on $n$ and $\vec{p}_0$.
+
+To avoid the problem of having to choose $n$ and $\vec{p}$, we can
+instead examine the probability of arriving at vertex $v$ after an
+infinite number of steps in a random walk. Using $n = \infty$, the
+state distribution $\vec{p}_{\infty}$ becomes independent of the
+initial state $\vec{p}_0$.
+
+
+## Stationary Distribution
+
+The state distribution of a random walk on a graph converges, therefore:
+$$
+	\vec{p}_{\infty} = T\vec{p}_{\infty}
+$$
+This implies that the state distribution at $n = \infty$ is the
+stationary distribution.
+
+The stationary distribution $\vec{p}$ of graph $G$ is defined as:
+$$
+	\vec{p} = T\vec{p}
+$$
+where $T$ is the graph transition probability matrix.
+
+The stationary distribution is the probability distribution over the set of
+vertices, where taking a random step on the graph does not change the
+distribution (it is stationary).
+
+## Stationary Distribution Example
+
+### Example 
+
+Find the stationary distribution of the following graph:
+
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+g = graph.formula(A-B, A-C, B-C)
+par(mar = c(0,0,0,0))
+V(g)$label.cex = 0.8
+plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3])),
+layout=layout.fruchterman.reingold, vertex.size = 35)
+```
+
+## Stationary Distribution Solution
+
+We are able to find the stationary distribution, when given an
+undirected graph. Before we present the solution, we must first define
+the Volume of a graph.
+
+
+## Graph Volume
+
+### Volume of an Undirected Graph
+
+The volume of an undirected graph $G = (V,E)$ is equal to the sum of the
+degree of all vertices.
+$$
+	\text{vol}(G) = {\sum_{v \in V} \text{deg}(v)}
+$$
+
+### Volume of a Directed  Graph
+
+The volume of a directed graph $G = (V,E)$ is equal to the sum of the
+in or out degree of all vertices.
+$$
+	\text{vol}(G) = {\sum_{v \in V} \text{indeg}(v)} = {\sum_{v \in V} \text{outdeg}(v)}
+$$
+
+Note that the sum of all vertices in degree is equal to the out degree sum
+since each edge in the graph has one in and one out end.
+
+
+
+## Undirected Graph Stationary Distribution
+
+Let $\vec{p}$ be a vector containing the probability of arriving at each vertex after a random walk, where
+$$
+	\vec{p} = \left [~\frac{\text{deg}(v_1)}{\text{vol}(G)} ~ \frac{\text{deg}(v_2)}{\text{vol}(G)} \ldots \frac{\text{deg}(v_{\norm{V}})}{\text{vol}(G)} \right ]
+$$
+
+Using the transition probability matrix $T$, we can take a random step
+on the graph by multiplying $T\vec{p}$. If we examine the probability
+of moving to vertex $v_j$:
+$$
+\begin{aligned}
+	(T\vec{p})_j &= {\sum_{v_i \rightarrow v_j} p_{v_i} T_{v_i,v_j}} \\
+	         &= {\sum_{v_i \rightarrow v_j} \frac{\text{deg}(v_i)}{\text{vol}(G)} \frac{1}{\text{deg}(v_i)}} \\
+	         &= {\sum_{v_i \rightarrow v_j} \frac{1}{\text{vol}(G)}}
+	         = \frac{\text{deg}(v_j)}{\text{vol}(G)}
+	         = p_j
+\end{aligned}
+$$
+
+## Undirected Graph Stationary Distribution
+
+So, if we begin with the vertex state probability $\vec{p}$, given by
+$$
+	\vec{p} = \left [~\frac{\text{deg}(v_1)}{\text{vol}(G)} ~ \frac{\text{deg}(v_2)}{\text{vol}(G)} \ldots \frac{\text{deg}(v_{\norm{V}})}{\text{vol}(G)} \right ]
+$$
+and take a random step, the vertex state probability does not change.
+Therefore, the above defined vector $\vec{p}$ is the stationary
+distribution of undirected graph $G$.
+
+## Undirected Graph Stationary Distribution
+
+### Example
+
+For the following graph:
+
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+g = graph.formula(A-B, B-C, C-D, D-A, A-C)
+par(mar = c(0,0,0,0))
+V(g)$label.cex = 0.8
+plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]),expression("v"[4])),
+layout=layout.fruchterman.reingold, vertex.size = 35)
+```
+
+1. Find the transition probability matrix $T$
+2. Compute the stationary distribution $\vec{p}$
+3. Show that $\vec{p} = T\vec{p}$
+
+
+## Undirected Graph Stationary Distribution
+
+### Problem
+
+For the following graph:
+
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+g = graph.formula(A-B, B-C, C-D, D-B)
+par(mar = c(0,0,0,0))
+V(g)$label.cex = 0.8
+plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]),expression("v"[4])),
+layout=layout.fruchterman.reingold, vertex.size = 35)
+```
+
+1. Find the transition probability matrix $T$
+2. Compute the stationary distribution $\vec{p}$
+3. Show that $\vec{p} = T\vec{p}$
+
+
+
+## Random Walk on an Undirected Graph
+
+We have seen how to perform a random walk on an undirected graph and
+compute the stationary distribution.
+
+We will now examine random walks on directed graphs.
+
+The edges in a directed graph are one way, meaning that when
+performing the random walk, we may only follow edges in the direction
+they are pointing.
+
+
+## Random Walk on a Directed Graph
+
+
+Walk sinks
+
+# Page Rank
+
+
+# HITS
+
+
 
