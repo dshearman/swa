@@ -1,0 +1,303 @@
+% Graphs 2: Link Analysis
+% 300958 Social Web Analysis 
+% Week 10 Lab
+
+```{r setup, include=FALSE}
+opts_chunk$set(dev = 'png')
+library("igraph")
+show.answers=FALSE
+```
+
+
+# Requirements
+
+For this lab, we will be using the `igraph` package. Install the
+package before beginning the lab:
+
+```{r eval=FALSE}
+install.packages("igraph")
+```
+
+If the package does not download due to the UWS proxy server, see [Lab
+5](300958.week05.lab.html) for further information on installing
+packages.
+
+Once installed. Load the library:
+```{r}
+library("igraph")
+```
+
+You can review the basics of using igraph in the [Graphs 1 lab
+notes](300958.week06.lab.html).
+
+
+# Random walk on an Undirected Graph
+
+The state distribution after a random walk on a graph can be found
+using the transition probability matrix.
+
+Let's examine the following graph.
+```{r la-undirected-rw, fig.cap="The graph `g1`"}
+g1 = graph.formula(1-2,1-3,1-4,2-3)
+plot(g1)
+```
+We can obtain the adjacency matrix of `g1`:
+```{r message=FALSE}
+A = get.adjacency(g1)
+print(A)
+```
+
+## Transition probability matrix
+
+The transition probability matrix is the adjacency matrix, with all
+columns scaled so they sum to 1.
+
+To create the transition probability matrix, we will write the function
+`adjacency.to.probability` that takes the adjacency matrix `A` and
+divides each column by its sum.
+```{r}
+adjacency.to.probability = function(A) {
+    cols = ncol(A)
+    for (a in 1:cols) {
+        A[,a] = normalise(A[,a])
+    }
+    return(A)
+}
+```
+This function uses the function `normalise` on each column, but this
+function does not exist yet.
+
+> Write the function `normalise` that takes a vector `x` and returns
+> the vector `x` divided by its sum.
+```{r echo=show.answers}
+normalise = function(x) return(x/sum(x))
+```
+
+
+Now compute the transition probability matrix `T`:
+```{r}
+T = adjacency.to.probability(A)
+```
+Examine `T` to make sure that the columns sum to 1.
+
+## Stationary distribution using the Power Method
+
+We can now use `T` to take a step in a random walk on the graph `g1`.
+
+We will start our random walk on vertex `1`, which means the
+probability of being on vertex `1` is 1, and the probability of being
+on all other vertices is 0. Therefore, our initial state is:
+```{r}
+p = c(1,0,0,0)
+```
+
+To take a random step, we multiply the matrix `T` with the state
+`p`. Matrix multiplication in R is performed using the operator `%*%`:
+
+```{r}
+p = T %*% p
+print(p)
+```
+> Does the new state distribution `p` make sense?
+
+To take another step, multiply the new state distribution by `T`:
+```{r}
+p = T %*% p
+print(p)
+```
+And another:
+```{r}
+p = T %*% p
+print(p)
+```
+If we repeat this process, we find that the state distribution starts
+to converge. The distribution it converges to is the stationary
+distribution.
+
+Rather than running the code manually, we can write a `while` loop
+that repetitively runs the code, while there is a change in the state
+distribution.
+
+Let's write a function that contains the `while` loop, called
+`stationary.distribution`.
+
+```{r}
+stationary.distribution = function(T) {
+    # first create the initial state distribution
+    n = ncol(T)
+    p = rep(0,n)
+    p[1] = 1
+
+    # now take a random walk until the state distribution reaches the
+    # stationary distribution.
+    p.old = rep(0,n)
+    while(difference(p,p.old) > 1e-6) {
+        p.old = p
+        p = T %*% p.old
+    }
+    return(p)
+}
+```
+The above function requires us to write the missing function
+`difference`, that returns the Euclidean distance between two vectors.
+
+> Write the function `difference`, that returns the Euclidean distance
+> between two vectors.
+```{r echo=show.answers}
+difference = function(x,y) {
+    return(sqrt(sum((x - y)^2)))
+}
+```
+
+Now compute the stationary distribution:
+```{r}
+p = stationary.distribution(T)
+print(p)
+```
+
+The stationary distribution should satisfy the equation:
+$$
+	\vec{p} = T\vec{p}
+$$
+
+> Check if the computed stationary distribution satisfies the
+> stationary distribution equation.
+
+## Stationary distribution using the Eigenvalue Decomposition
+
+We can also compute the stationary distribution using the eigenvalue
+decomposition.
+
+Remember that and eigenvalue $\lambda$, eigenvector $\vec{v}$ pair of
+the square matrix $A$ satisfy the equation:
+$$
+    \lambda\vec{v} = A\vec{v}
+$$
+In our case, we want the vector $\vec{p}$ that satisfies:
+$$
+	\vec{p} = T\vec{p}
+$$
+Therefore, $\vec{p}$ is an eigenvector of $T$, with eigenvalue $1$.
+
+We can compute the eigenvalue decomposition in R using the function
+`eigen`:
+```{r}
+e = eigen(T)
+print(e)
+```
+The eigenvalue decomposition has found four eigenvalues and four
+associated eigenvectors (the columns of `e$vectors`).  We want the
+eigenvector associated to the eigenvalue of 1.  We can see that the
+eigenvalue equal to 1 is the first in the list of eigenvalues, so we
+want the first eigenvector.
+```{r}
+p = e$vectors[,1]
+print(p)
+```
+
+> Does the value of `p` look like the stationary distribution?
+
+The stationary distribution must sum to 1 (for it to be a
+distribution). Therefore we normalise the chosen eigenvector to obtain
+the stationary distribution of graph `g1`. We wrote the function to
+perform this normalisation, so we can use it again.
+```{r}
+p = normalise(e$vectors[,1])
+```
+
+> Examine `p` to make sure it is the stationary distribution.
+
+> Create a new graph `g2` and compute its stationary distribution
+> using the Power Method and the Eigenvalue decomposition.
+
+
+# Random walk on a Directed Graph
+
+A random walk on a directed graph is the same as on an undirected
+graph, but we must obey the edge directions.
+
+To create a directed graph, we use the notation `-+` to show direction
+in the graph formula.
+```{r la-directed1, fig.cap="The graph `gd1`", tidy=FALSE}
+gd1 = graph.formula(1-+2, 1-+3, 1-+4, 4-+3, 2-+3, 3-+1)
+plot(gd1)
+```
+We can obtain the adjacency matrix of `gd1`:
+```{r message=FALSE}
+A = t(get.adjacency(gd1))
+print(A)
+```
+Note: the function `t` used above, transposes the adjacency matrix so
+that the column values are directed to the row values in the directed
+graph. We do not need to do this for an undirected matrix since there
+is no direction. Including it in the undirected calculations would not
+matter, since the adjacency matrix for an undirected graph is symmetric.
+
+> Compute the stationary distribution of `gd1`
+
+The above graph is ergodic (we can find a path from each vertex to
+every other vertex). Let's examine the stationary distributions for
+non-ergodic graphs.
+
+> For each of the following graphs, plot them, identify why they are
+> non-ergodic, then try to compute the stationary distribution. Take
+> note of the eigenvalues of each transition probability matrix.
+
+```{r tidy=FALSE}
+gd2 = graph.formula(1-+2, 2-+3, 4-+3, 3-+1)
+gd3 = graph.formula(1+-2, 2-+3, 2-+4, 4-+3, 3-+1)
+gd4 = graph.formula(1-+2, 2-+3, 3-+1, 4+-+5)
+```
+
+# PageRank
+
+
+The PageRank algorithm from Google uses the random surfer model to
+ensure that we can obtain an ergodic transition probability matrix
+from any directed graph.
+
+The step to computing PageRank are:
+
+1. Obtain the directed graph probability transition matrix `T`
+2. Create the random jump matrix `J`
+3. Combine the `T` and `J` to obtain the matrix `M`
+4. Normalise the columns of `M` to obtain an ergodic transition probability matrix.
+
+If we take `gd2` from above, we can see that it has 4 vertices,
+therefore the random jump matrix `J` will be a $4\times 4$ matrix with values 1/4.
+```{r}
+J = matrix(rep(1/4, 4*4),4,4)
+```
+```{r echo=show.answers}
+A = t(get.adjacency(gd2))
+T = adjacency.to.probability(A)
+```
+We can then linearly combine transition probability matrix `T` and `J`
+of `gd2` using the parameter $\alpha$:
+```{r}
+alpha = 0.8
+M = alpha*T + (1-alpha)*J
+print(M)
+```
+Note, $\alpha$ can be any value between 0 and 1. It is the probability
+of following a link vs. a random jump.
+
+We then make sure the columns sum to 1. We can reuse the function
+we make `adjacency.to.probability` to do this.
+```{r}
+M = adjacency.to.probability(M)
+print(M)
+```
+We can see that the last step made no difference since the columns already summed to 1.
+
+Using `M` as out transition probability matrix, we can compute the
+stationary distribution, giving us the PageRank of graph `gd2`.
+```{r}
+p = stationary.distribution(M)
+print(p)
+```
+
+> Are the PageRank values greater for vertices that are more popular
+  (more paths flowing through them)?
+
+> Compute the PageRank for `gd3` and `gd4`.
