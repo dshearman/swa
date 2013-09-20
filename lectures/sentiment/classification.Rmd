@@ -1,0 +1,45 @@
+% Sentiment Analysis
+% Laurence A. F. Park
+% 20th of September 2013
+
+```{r setup, include=FALSE}
+opts_chunk$set(dev = 'pdf', fig.cap="")
+```
+
+
+# Sentiment
+
+<http://en.wikipedia.org/wiki/Sentiment_analysis>
+
+
+# Sentiment Analysis
+
+Classifying the polarity of a piece of text (positive, neutral or
+negative).
+
+Advanced sentiment analysis examines the emotion behind the text
+(e.g. excited, annoyed, surprised).
+
+
+
+
+
+
+# Classification of Sentiment
+
+
+It is difficult to identify what part of text sets the sentiment.
+
+Therefore to perform sentiment analysis, we will use a machine
+learning to learn from a set of examples and automatically classify
+new pieces of text.
+
+Machine learning methods require a set of objects each with a set of
+measured features and a class.  We want to examine the features and
+make a prediction of the class.  To do this, we obtain many examples
+of objects with their classes and learn the relationships between
+them.
+
+
+## Naive Bayes Classsifier
+http://en.wikipedia.org/wiki/Naive_bayes
