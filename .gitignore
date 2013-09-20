@@ -1,4 +1,5 @@
 ## Ignore all latex processing files
+auto
 *.aux
 *.log
 *.out
