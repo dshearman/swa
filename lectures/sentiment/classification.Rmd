@@ -22,7 +22,52 @@ Advanced sentiment analysis examines the emotion behind the text
 
 
 
+## Classification
 
+Classification is the task of assigning a class (category) to an
+object based on its attributes (variables, features).
+
+Classification is a similar task to regression, but regression
+predicts a real value for each object.
+
+### Example
+
+Classification:
+$$
+	[~0.3~1.2~-4.3~2~] \rightarrow \text{Spam}
+$$
+Regression:
+$$
+	[~0.3~1.2~-4.3~2~] \rightarrow 4.4
+$$
+
+## Binary Classification
+
+Classification is to assign a class to an object. Binary
+classification is assigning a class to an object where there are only
+two classes to choose from. Binary classification is the most common
+form of classification, since it is less complex than multi-class
+classification, and it allows us to predict answers to Yes/No
+(True/False) questions.
+
+### Example
+
+If we want to classify if an email is spam, we would construct a
+classifier that takes attributes of an email as its parameters, and
+returns True or False:
+$$
+	\text{is.spam}(\text{email}) \rightarrow \{True, False\}
+$$
+
+## Classifier Construction
+
+
+
+## Training
+
+## Testing
+
+## Maximum Likelihood
 
 
 # Classification of Sentiment
