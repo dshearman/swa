@@ -2,7 +2,7 @@
 PROJ := exam-2010A-final.pdf exam-2010A-deferred.pdf
 DOC := 	${PROJ}.Rtex
 OUT := 	${PROJ}.pdf
-R_PROG := /usr/bin/R
+R_PROG := /opt/local/bin/R
 TEX := xelatex
 
 build:	$(PROJ)
