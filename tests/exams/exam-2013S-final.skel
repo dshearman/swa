@@ -1,8 +1,9 @@
 % -*- mode: Rnw;-*-
+%documentclass[hideanswers]{uwsexam}
+\documentclass{uwsexam}
+
 m4_include(`exam_question.pool.m4')
 
-\documentclass[hideanswers]{uwsexam}
-%\documentclass{uwsexam}
 
 
 %% These effects the font!
@@ -28,7 +29,7 @@ m4_include(`exam_question.pool.m4')
 _precision(4)
 
 
-\question{Question 1}{2 marks}
+\question{Question 1}{1 + 1 + 2 + 1 = 5 marks}
 
 \begin{questions}[]
 
@@ -37,7 +38,7 @@ _precision(4)
 \end{questions}
 
 
-\question{Question 2}{2 marks}
+\question{Question 2}{2 + 2 + 1 = 5 marks}
 
 
 \begin{questions}[]
@@ -47,7 +48,7 @@ _precision(4)
 \end{questions}
 
 
-\question{Question 2}{2 marks}
+\question{Question 3}{1 + 1 + 1 + 2  = 5 marks}
 
 \begin{questions}[]
 
@@ -55,7 +56,7 @@ _precision(4)
 
 \end{questions}
 
-\question{Question 2}{2 marks}
+\question{Question 4}{1 + 1 + 2 + 1 = 5 marks}
 
 \begin{questions}[]
 
@@ -63,7 +64,7 @@ _link_analysis_q1()
 
 \end{questions}
 
-\question{Question 2}{2 marks}
+\question{Question 5}{4 + 1 = 5 marks}
 
 \begin{questions}[]
 

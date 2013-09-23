@@ -352,7 +352,7 @@
 ~\vspace{-5em}
 
 \begin{flushright}
-\scalebox{0.3}{\includegraphics{../../information/uws_cymk}} \\[1em]
+\scalebox{0.2}{\includegraphics{../../information/uws_cymk}} \\[1em]
 \end{flushright}
 
 {\Large

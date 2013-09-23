@@ -31,12 +31,10 @@ m4_define(_q1,<[
  Using the following graph:
 
  \begin{center}
-  \scalebox{0.6}{
-    % begin.rcode echo=FALSE,results="asis",fig=TRUE, width=2, height=2
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
     par(mar = c(0,0,0,0))
     plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:n])
     % end.rcode 
-  }
   \end{center}
 
   \begin{enumerate}
@@ -52,7 +50,7 @@ m4_define(_q1,<[
     
   \begin{enumerate}
   \item The adjacency matrix is:
-    % begin.rcode echo=FALSE,results="verbatim"
+    % begin.rcode echo=FALSE,results="verbatim", message=FALSE
     print(as.matrix(get.adjacency(g)))
     % end.rcode 
 
@@ -64,8 +62,8 @@ m4_define(_q1,<[
   \item The closeness centrality for each vertex is:
     \begin{center}
       \begin{tabular}{\rinline{paste(rep('c',n),collapse='')}}
-        \rinline{print(paste(names(d),collapse=" & "))} \\
-        \rinline{print(paste(close,collapse=" & "))}
+        \rinline{paste(names(d),collapse=" & ")} \\
+        \rinline{paste(close,collapse=" & ")}
       \end{tabular}
     \end{center}
   \item The most central vertex is vertex \rinline{names(which.min(close))}.
@@ -80,6 +78,7 @@ m4_define(_q2,<[
 
 %%%% Mean, standard deviation, mode, median, quantiles
 
+
 \squestion
   
   % begin.rcode echo=FALSE,results="hide", message=FALSE
@@ -91,11 +90,12 @@ m4_define(_q2,<[
 latex.matrix = function(X) {
   nc = ncol(X)
   nr = nrow(X) 
-  cat("\\begin{array}{", paste(rep('c',nc),collapse=''), "}\n", sep="")
+  text = c("\\begin{array}{", paste(rep('c',nc),collapse=''), "}\n")
   for (a in 1:nr) {
-    cat(paste(format(X[a,]),collapse=" & "), " \\\\\n", sep="")
+    text = c(text, paste(format(X[a,]),collapse=" & "), " \\\\\n", sep="")
   }
-  cat("\\end{array}\n", sep="")
+  text = c(text, "\\end{array}\n", sep="")
+  return(paste(text, collapse=" "))
 }
 
 set.seed(1)
@@ -140,9 +140,9 @@ colnames(A) = c("x1","x2","Cluster")
  have the within cluster sum of squares (SSW) values:
     \begin{center}
       \begin{tabular}{c|\rinline{paste(rep('c',cluster.count),collapse='')}}
-        $k$ & \rinline{print(paste(1:cluster.count,collapse=" & "))} \\
+        $k$ & \rinline{paste(1:cluster.count,collapse=" & ")} \\
 	\hline
-        SSW & \rinline{print(paste(wssf,collapse=" & "))}
+        SSW & \rinline{paste(wssf,collapse=" & ")}
       \end{tabular}
     \end{center}
  and the total sum of squares value (SST) \rinline{format(tss)}.
@@ -172,12 +172,10 @@ giving SSB = \rinline{format(sum(diag(table(z$cluster)) %*% z$centers^2))}, ther
 
  \item Plot the elbow bend plot for this data.
  \begin{center}
-  \scalebox{0.9}{
-    % begin.rcode echo=FALSE,results="asis",fig=TRUE, width=5, height=4
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=5, fig.height=4
     #par(mar = c(0,0,0,0))
     plot(1:cluster.count,rwss, xlab="Number of clusters", ylab="SSW")
     % end.rcode 
-  }
   \end{center}
 
  \item Determine how many clusters is the most suitable for the data.
@@ -300,12 +298,10 @@ m4_define(_link_analysis_q1,<[
  Using the following graph:
 
  \begin{center}
-  \scalebox{0.6}{
-    % begin.rcode echo=FALSE,results="asis",fig=TRUE, width=2, height=2
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
     par(mar = c(0,0,0,0))
     plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:N])
     % end.rcode 
-  }
   \end{center}
 
   \begin{enumerate}
@@ -391,8 +387,11 @@ unhash = function(result) gsub("#", "\\#", result, fixed = TRUE)
  \begin{itemize}
  \rinline{unhash(paste(item, negative, collapse = " "))}
  \end{itemize}
- compute the log likelihood ratio of the tweet ``\rinline{print(test)}'' being positive versus it being negative using Naive Bayes classification.
-
+  \begin{enumerate} 
+  \item compute the log likelihood ratio of the tweet ``\rinline{test}'' being positive versus it being negative using Naive Bayes classification.,
+  \item determine if the tweet has positive or negative sentiment, based on the log likelihood ratio.
+  \end{enumerate}
+  
   \begin{workingbox}
 
   The frequency of each word given its sentiment (positive or negative) is:
@@ -415,7 +414,7 @@ unhash = function(result) gsub("#", "\\#", result, fixed = TRUE)
     print(log(p.p/n.p))
     % end.rcode 
 
-  The log likelihood ratio of the tweet ``\rinline{print(test)}'' is:
+  The log likelihood ratio of the tweet ``\rinline{test}'' is:
   \begin{align*}
   \log{\frac{P(S|D)}{P(S'|D)}} &= \log{\frac{P(S)}{P(S')}} + {\sum_{i} \log{\frac{P(w_i|S)}{P(w_i|S')}}} \\
   &= \log{\frac{\rinline{P.p}}{\rinline{P.n}}} + \rinline{format(sum(log(p.p/n.p)[pos]))} \\
