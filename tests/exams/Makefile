@@ -14,12 +14,12 @@ bib:
 	xelatex $<
 
 %.tex:	%.Rtex exam_question.pool.m4 uwsexam.cls
-	echo "library(tools); Sweave('$<')" | ${R_PROG} --vanilla --silent
-	#Rscript -e "library(knitr); knit('$<', output='$*.tex')"
+	#echo "library(tools); Sweave('$<')" | ${R_PROG} --vanilla --silent
+	Rscript -e "library(knitr); knit('$<', output='$*.tex')"
 
 
 %.R:	%.Rtex
 	echo "library(tools); Stangle('$<')" | ${R_PROG} --vanilla --silent 
 
-%.Rtex:	%.skel
+%.Rtex:	%.skel exam_question.pool.m4 uwsexam.cls
 	m4 -P $< > $@

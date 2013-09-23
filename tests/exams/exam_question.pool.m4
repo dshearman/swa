@@ -1,9 +1,15 @@
 m4_changequote(`<[', `]>')
 
 m4_define(_precision,<[
-\begin{Scode}{echo=false,results=hide}
+% begin.rcode setup, echo=FALSE
   options(digits=$1)
-\end{Scode}]>)
+  opts_chunk$set(comment=NA, highlight=FALSE)
+knit_hooks$set(document = function(x) {
+  gsub('(\\\\end\\{knitrout\\})\n', '\\1', x)
+})
+% end.rcode 
+]>)
+
 
 
 m4_define(_q1,<[
@@ -12,7 +18,7 @@ m4_define(_q1,<[
 
 \squestion
   
-  \begin{Scode}{echo=false,results=hide}
+  % begin.rcode echo=FALSE, results="hide", message=FALSE
     require("igraph")
     $@
     #g = graph.formula(A-B, A-C, A-D, B-D)
@@ -20,16 +26,16 @@ m4_define(_q1,<[
     close = 1/closeness(g)
     n = length(d)
     names(d) = LETTERS[1:n]
- \end{Scode}
+ % end.rcode 
 
  Using the following graph:
 
  \begin{center}
   \scalebox{0.6}{
-    \begin{Scode}{echo=false,results=tex,fig=true, width=2, height=2}
+    % begin.rcode echo=FALSE,results="asis",fig=TRUE, width=2, height=2
     par(mar = c(0,0,0,0))
     plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:n])
-    \end{Scode}
+    % end.rcode 
   }
   \end{center}
 
@@ -46,23 +52,23 @@ m4_define(_q1,<[
     
   \begin{enumerate}
   \item The adjacency matrix is:
-    \begin{Scode}{echo=false,results=verbatim}
+    % begin.rcode echo=FALSE,results="verbatim"
     print(as.matrix(get.adjacency(g)))
-    \end{Scode}
+    % end.rcode 
 
   \item	The degree distribution is:
-    \begin{Scode}{echo=false,results=verbatim}
+    % begin.rcode echo=FALSE,results="verbatim"
     table(degree(g))
-    \end{Scode}
+    % end.rcode 
 
   \item The closeness centrality for each vertex is:
     \begin{center}
-      \begin{tabular}{\Sexpr{paste(rep('c',n),collapse='')}}
-        \Sexpr{print(paste(names(d),collapse=" & "))} \\
-        \Sexpr{print(paste(close,collapse=" & "))}
+      \begin{tabular}{\rinline{paste(rep('c',n),collapse='')}}
+        \rinline{print(paste(names(d),collapse=" & "))} \\
+        \rinline{print(paste(close,collapse=" & "))}
       \end{tabular}
     \end{center}
-  \item The most central vertex is vertex \Sexpr{names(which.min(close))}.
+  \item The most central vertex is vertex \rinline{names(which.min(close))}.
   
   \end{enumerate}
 
@@ -76,7 +82,7 @@ m4_define(_q2,<[
 
 \squestion
   
-  \begin{Scode}{echo=false,results=hide}
+  % begin.rcode echo=FALSE,results="hide", message=FALSE
     require("mvtnorm")
     require("xtable")
     $@
@@ -124,27 +130,27 @@ colnames(A) = c("x1","x2","Cluster")
 # wss
 # z$totss - sum(diag(table(z$cluster)) %*% (z$centers)^2)
 
- \end{Scode}
+ % end.rcode 
 
- The following \Sexpr{n} centred data points ($\bar{x} = [ 0 ~ 0 ]$)
+ The following \rinline{n} centred data points ($\bar{x} = [ 0 ~ 0 ]$)
  and their associated cluster:
- \begin{Scode}{echo=false,results=verbatim}
+ % begin.rcode echo=FALSE,results="verbatim"
  print(A)
- \end{Scode}
+ % end.rcode 
  have the within cluster sum of squares (SSW) values:
     \begin{center}
-      \begin{tabular}{c|\Sexpr{paste(rep('c',cluster.count),collapse='')}}
-        $k$ & \Sexpr{print(paste(1:cluster.count,collapse=" & "))} \\
+      \begin{tabular}{c|\rinline{paste(rep('c',cluster.count),collapse='')}}
+        $k$ & \rinline{print(paste(1:cluster.count,collapse=" & "))} \\
 	\hline
-        SSW & \Sexpr{print(paste(wssf,collapse=" & "))}
+        SSW & \rinline{print(paste(wssf,collapse=" & "))}
       \end{tabular}
     \end{center}
- and the total sum of squares value (SST) \Sexpr{format(tss)}.
+ and the total sum of squares value (SST) \rinline{format(tss)}.
 
  Given that the cluster centres for $k = 2$ are:
- \begin{Scode}{echo=false,results=verbatim}
+ % begin.rcode echo=FALSE,results="verbatim"
  print(z$centers)
- \end{Scode}
+ % end.rcode 
  \begin{enumerate}
  \item Compute the SSW for $k = 2$.
  \item Plot the elbow bend plot for this data.
@@ -156,33 +162,21 @@ colnames(A) = c("x1","x2","Cluster")
  \begin{enumerate}
  \item SSW = SST - SSB. SSB = 
 \begin{align*}
- A = \left [
- \begin{Scode}{echo=false,results=tex}
- latex.matrix(diag(table(z$cluster)))
- \end{Scode}
- \right ]
- \left [
- \begin{Scode}{echo=false,results=tex}
- latex.matrix(z$centers^2)
- \end{Scode}
- \right ] = 
- \left [
- \begin{Scode}{echo=false,results=tex}
- latex.matrix(diag(table(z$cluster)) %*% z$centers^2)
- \end{Scode}
- \right ]
+ A = \left [ \rinline{latex.matrix(diag(table(z$cluster)))}  \right ]
+ \left [ \rinline{latex.matrix(z$centers^2)} \right ] = 
+ \left [ \rinline{latex.matrix(diag(table(z$cluster)) %*% z$centers^2)} \right ]
 \end{align*}
-giving SSB = \Sexpr{format(sum(diag(table(z$cluster)) %*% z$centers^2))}, therefore SSW = \Sexpr{format(tss)} - 
-\Sexpr{format(sum(diag(table(z$cluster)) %*% z$centers^2))} = 
-\Sexpr{format(tss - sum(diag(table(z$cluster)) %*% z$centers^2))}.
+giving SSB = \rinline{format(sum(diag(table(z$cluster)) %*% z$centers^2))}, therefore SSW = \rinline{format(tss)} - 
+\rinline{format(sum(diag(table(z$cluster)) %*% z$centers^2))} = 
+\rinline{format(tss - sum(diag(table(z$cluster)) %*% z$centers^2))}.
 
  \item Plot the elbow bend plot for this data.
  \begin{center}
   \scalebox{0.9}{
-    \begin{Scode}{echo=false,results=tex,fig=true, width=5, height=4}
+    % begin.rcode echo=FALSE,results="asis",fig=TRUE, width=5, height=4
     #par(mar = c(0,0,0,0))
     plot(1:cluster.count,rwss, xlab="Number of clusters", ylab="SSW")
-    \end{Scode}
+    % end.rcode 
   }
   \end{center}
 
@@ -204,7 +198,7 @@ m4_define(_text_index_q1,<[
 
 \squestion
   
-  \begin{Scode}{echo=false,results=hide}
+  % begin.rcode echo=FALSE,results="hide", message=FALSE
     require("tm")
     $@
     docs <- c("Go dog, go!", "Stop cat, stop", "The dog stops the cat and the bird.")
@@ -224,55 +218,55 @@ m4_define(_text_index_q1,<[
     inner.prod = apply(W[,qcols],1,sum)
     doc.length = sqrt(apply(W^2,1,sum))
     query.length = sqrt(sum(length(query)))
- \end{Scode}
+ % end.rcode 
 
   Using the three documents:
 
   \begin{enumerate}[i.]
-  \item \Sexpr{docs[1]}
-  \item \Sexpr{docs[2]}
-  \item \Sexpr{docs[3]}
+  \item \rinline{docs[1]}
+  \item \rinline{docs[2]}
+  \item \rinline{docs[3]}
   \end{enumerate}
 
   \begin{enumerate}
 
   \item Write out the contents of each document after removing
   puctuation, casefolding, stopword removal and stemming has been
-  performed. Use the stopword list \{\Sexpr{paste(stop, collapse=", ")}\}.
+  performed. Use the stopword list \{\rinline{paste(stop, collapse=", ")}\}.
 
   \item Construct the document-term index containing term frequencies.
 
   \item Construct the document-term index containing TF-IDF weights.
  
-  \item Calculate the query score for each document using the query ``\Sexpr{paste(query, collapse=" ")}''.
+  \item Calculate the query score for each document using the query ``\rinline{paste(query, collapse=" ")}''.
   \end{enumerate}
 
   \begin{workingbox}
     \begin{enumerate}
     \item The pre-processed documents are:
         \begin{enumerate}
-	\item \Sexpr{corp.pp[[1]]}
-	\item \Sexpr{corp.pp[[2]]}
-	\item \Sexpr{corp.pp[[3]]}
+	\item \rinline{corp.pp[[1]]}
+	\item \rinline{corp.pp[[2]]}
+	\item \rinline{corp.pp[[3]]}
 	\end{enumerate}
     
     \item Document-term index containing frequencies is:
-    \begin{Scode}{echo=false,results=verbatim}
+    % begin.rcode echo=FALSE,results="verbatim"
     print(A)
-    \end{Scode}
+    % end.rcode 
 
     \item TF-IDF weighting is $w_{d,t} = \log(f_{d,t} + 1)\log(N/f_t)$. 
-    $N = \Sexpr{N}$, $f_t = [~\Sexpr{paste(ft, collapse="~")}~]$.
+    $N = \rinline{N}$, $f_t = [~\rinline{paste(ft, collapse="~")}~]$.
     Document-term index containing TF-IDF weights is:
-    \begin{Scode}{echo=false,results=verbatim}
+    % begin.rcode echo=FALSE,results="verbatim"
     print(W)
-    \end{Scode}
+    % end.rcode 
     
     \item The query score for each document using the query ``stop dog'' is:
     \begin{enumerate}
-    \item $\Sexpr{format(inner.prod[1])}/(\Sexpr{format(doc.length[1])}\times\Sexpr{format(query.length)}) = \Sexpr{format(inner.prod[1]/(doc.length[1]*query.length))}$
-    \item $\Sexpr{format(inner.prod[2])}/(\Sexpr{format(doc.length[2])}\times\Sexpr{format(query.length)}) = \Sexpr{format(inner.prod[2]/(doc.length[2]*query.length))}$
-    \item $\Sexpr{format(inner.prod[3])}/(\Sexpr{format(doc.length[3])}\times\Sexpr{format(query.length)}) = \Sexpr{format(inner.prod[3]/(doc.length[3]*query.length))}$
+    \item $\rinline{format(inner.prod[1])}/(\rinline{format(doc.length[1])}\times\rinline{format(query.length)}) = \rinline{format(inner.prod[1]/(doc.length[1]*query.length))}$
+    \item $\rinline{format(inner.prod[2])}/(\rinline{format(doc.length[2])}\times\rinline{format(query.length)}) = \rinline{format(inner.prod[2]/(doc.length[2]*query.length))}$
+    \item $\rinline{format(inner.prod[3])}/(\rinline{format(doc.length[3])}\times\rinline{format(query.length)}) = \rinline{format(inner.prod[3]/(doc.length[3]*query.length))}$
     \end{enumerate}
 
   \end{enumerate}
@@ -287,7 +281,7 @@ m4_define(_link_analysis_q1,<[
 
 \squestion
   
-  \begin{Scode}{echo=false,results=hide}
+  % begin.rcode echo=FALSE,results="hide"
     require("igraph")
     $@
     g = graph.formula(A+-+B, A+-C, A+-D, A+-E, B+-C, B+-D, D+-+E)
@@ -300,43 +294,43 @@ m4_define(_link_analysis_q1,<[
     e = eigen(R)
     pos = which(abs(e$values - 1) < 1e-8)
     station = e$vectors[,pos]/sum(e$vectors[,pos])
- \end{Scode}
+ % end.rcode 
 
 
  Using the following graph:
 
  \begin{center}
   \scalebox{0.6}{
-    \begin{Scode}{echo=false,results=tex,fig=true, width=2, height=2}
+    % begin.rcode echo=FALSE,results="asis",fig=TRUE, width=2, height=2
     par(mar = c(0,0,0,0))
     plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:N])
-    \end{Scode}
+    % end.rcode 
   }
   \end{center}
 
   \begin{enumerate}
   \item Contruct the probability transition matrix.
   \item State if the graph ergodic and why or why not.
-  \item Contruct the random surfer probability transition matrix using $\alpha = \Sexpr{alpha}$.
-  \item Determine if the stationary distribution for the random surfer transition matrix is $\vec{p} = [~\Sexpr{paste(format(station), collapse="~")}~]$.
+  \item Contruct the random surfer probability transition matrix using $\alpha = \rinline{alpha}$.
+  \item Determine if the stationary distribution for the random surfer transition matrix is $\vec{p} = [~\rinline{paste(format(station), collapse="~")}~]$.
   \end{enumerate}
 
   \begin{workingbox}
 
  \begin{enumerate}
  \item The probability transition matrix is:
-    \begin{Scode}{echo=false,results=verbatim}
+    % begin.rcode echo=FALSE,results="verbatim"
     print(T)
-    \end{Scode}
+    % end.rcode 
  \item The graph is ergodic if there is a path from all vertices to all other vertices.
- \item The random surfer probability transition matrix using $\alpha = \Sexpr{alpha}$ is:
-    \begin{Scode}{echo=false,results=verbatim}
+ \item The random surfer probability transition matrix using $\alpha = \rinline{alpha}$ is:
+    % begin.rcode echo=FALSE,results="verbatim"
     print(R)
-    \end{Scode}
+    % end.rcode 
  \item The stationary distribution satisfies $\vec{p} = T\vec{p}$. By multiplying $T$ and $\vec{p}$, we get:
-    \begin{Scode}{echo=false,results=verbatim}
+    % begin.rcode echo=FALSE,results="verbatim"
     print(R %*% station)
-    \end{Scode}
+    % end.rcode 
     If this is equal to $\vec{p}$, then $\vec{p}$ is the stationary distribution.
 
  \end{enumerate}
@@ -352,7 +346,7 @@ m4_define(_sentiment_q1,<[
 
 \squestion
   
-  \begin{Scode}{echo=false,results=hide}
+  % begin.rcode echo=FALSE,results="hide"
     require("tm")
     $@
 positive = c("My teeth shine #funfun","#funfun I love my teeth","#funfun is fun fun")
@@ -383,51 +377,51 @@ rownames(freqs) = c("Positive","Negative")
 probs = rbind(p.p,n.p)
 rownames(probs) = c("Positive","Negative")
 
-item = "\\\\item"
+item = "\\item"
 
-unhash = function(result) gsub("#", "\\\\#", result, fixed = TRUE)
+unhash = function(result) gsub("#", "\\#", result, fixed = TRUE)
 
- \end{Scode}
+ % end.rcode 
 
  Given the following set of labelled tweets:
 
  Positive tweets:
- \begin{itemize} \Sexpr{unhash(paste(item, positive, collapse=" "))}  \end{itemize}
+ \begin{itemize} \rinline{unhash(paste(item, positive, collapse=" "))}  \end{itemize}
  Negative Tweets:
  \begin{itemize}
- \Sexpr{unhash(paste(item, negative, collapse = " "))}
+ \rinline{unhash(paste(item, negative, collapse = " "))}
  \end{itemize}
- compute the log likelihood ratio of the tweet ``\Sexpr{print(test)}'' being positive versus it being negative using Naive Bayes classification.
+ compute the log likelihood ratio of the tweet ``\rinline{print(test)}'' being positive versus it being negative using Naive Bayes classification.
 
   \begin{workingbox}
 
   The frequency of each word given its sentiment (positive or negative) is:
-    \begin{Scode}{echo=false,results=verbatim}
+    % begin.rcode echo=FALSE,results="verbatim"
     print(freqs)
-    \end{Scode}
+    % end.rcode 
 
   The probability of each word given its sentiment (positive or negative) is:
-    \begin{Scode}{echo=false,results=verbatim}
+    % begin.rcode echo=FALSE,results="verbatim"
     print(probs)
-    \end{Scode}
+    % end.rcode 
 
   The probability ratios are:
-    \begin{Scode}{echo=false,results=verbatim}
+    % begin.rcode echo=FALSE,results="verbatim"
     print(p.p/n.p)
-    \end{Scode}
+    % end.rcode 
 
   And the log probability ratios are:
-    \begin{Scode}{echo=false,results=verbatim}
+    % begin.rcode echo=FALSE,results="verbatim"
     print(log(p.p/n.p))
-    \end{Scode}
+    % end.rcode 
 
-  The log likelihood ratio of the tweet ``\Sexpr{print(test)}'' is:
+  The log likelihood ratio of the tweet ``\rinline{print(test)}'' is:
   \begin{align*}
   \log{\frac{P(S|D)}{P(S'|D)}} &= \log{\frac{P(S)}{P(S')}} + {\sum_{i} \log{\frac{P(w_i|S)}{P(w_i|S')}}} \\
-  &= \log{\frac{\Sexpr{P.p}}{\Sexpr{P.n}}} + \Sexpr{format(sum(log(p.p/n.p)[pos]))} \\
-  &= \Sexpr{format(log(P.p/P.n) + sum(log(p.p/n.p)[pos]))}
+  &= \log{\frac{\rinline{P.p}}{\rinline{P.n}}} + \rinline{format(sum(log(p.p/n.p)[pos]))} \\
+  &= \rinline{format(log(P.p/P.n) + sum(log(p.p/n.p)[pos]))}
   \end{align*}
-  Therefore the tweet is classified as \Sexpr{tweet.class}.
+  Therefore the tweet is classified as \rinline{tweet.class}.
 
 
   \end{workingbox}]>)

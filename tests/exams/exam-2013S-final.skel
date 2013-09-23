@@ -1,11 +1,12 @@
 % -*- mode: Rnw;-*-
 m4_include(`exam_question.pool.m4')
 
-%\documentclass[hideanswers]{uwsexam}
-\documentclass{uwsexam}
+\documentclass[hideanswers]{uwsexam}
+%\documentclass{uwsexam}
+
 
 %% These effects the font!
-\usepackage[noae]{/Library/Frameworks/R.framework/Versions/Current/Resources/share/texmf/tex/latex/Sweave}
+%\usepackage[noae]{/Library/Frameworks/R.framework/Versions/Current/Resources/share/texmf/tex/latex/Sweave}
 
 % Set up class variables
 \testtitle{Final Examination}
