@@ -355,16 +355,79 @@ m4_define(_sentiment_q1,<[
   \begin{Scode}{echo=false,results=hide}
     require("tm")
     $@
-    positive <- c("This is the best!","I like it a lot.")
-    negative <- c()
-    test = "Getting one next week."
+positive = c("My teeth shine #funfun","#funfun I love my teeth","#funfun is fun fun")
+negative = c("No shine #funfun","No love for fun fun","Where is my teeth shine #funfun")
+
+all.terms = names(table(strsplit(tolower(paste(positive, negative, collapse=" ")),split=" ")))
+p = table(factor(strsplit(tolower(paste(positive, collapse=" ")),split=" ")[[1]],all.terms))
+n = table(factor(strsplit(tolower(paste(negative, collapse=" ")),split=" ")[[1]],all.terms))
+p.p = p/sum(p)
+n.p = n/sum(n)
+
+test = "my fun teeth shine"
+tests = strsplit(tolower(test),split=" ")[[1]]
+pos = which(all.terms %in% tests)
+
+
+P.d.p = prod(p.p[pos])
+P.d.n = prod(n.p[pos])
+P.p = length(positive)/(length(positive) + length(negative))
+P.n = length(negative)/(length(positive) + length(negative))
+
+llr = log(P.p/P.n) + sum(log(p.p/n.p)[pos])
+tweet.class = "positive"
+if (llr < 0) tweet.class = "negative"
+
+freqs = rbind(p,n)
+rownames(freqs) = c("Positive","Negative")
+probs = rbind(p.p,n.p)
+rownames(probs) = c("Positive","Negative")
+
+item = "\\\\item"
+
+unhash = function(result) gsub("#", "\\\\#", result, fixed = TRUE)
+
  \end{Scode}
 
- Compute the log likelihood ratio for positive versus negative
- sentiment of the tweet ``\Sexpr{print(test)}'' using the training set:
+ Given the following set of labelled tweets:
+
+ Positive tweets:
+ \begin{itemize} \Sexpr{unhash(paste(item, positive, collapse=" "))}  \end{itemize}
+ Negative Tweets:
+ \begin{itemize}
+ \Sexpr{unhash(paste(item, negative, collapse = " "))}
+ \end{itemize}
+ compute the log likelihood ratio of the tweet ``\Sexpr{print(test)}'' being positive versus it being negative using Naive Bayes classification.
 
   \begin{workingbox}
 
+  The frequency of each word given its sentiment (positive or negative) is:
+    \begin{Scode}{echo=false,results=verbatim}
+    print(freqs)
+    \end{Scode}
 
-  
+  The probability of each word given its sentiment (positive or negative) is:
+    \begin{Scode}{echo=false,results=verbatim}
+    print(probs)
+    \end{Scode}
+
+  The probability ratios are:
+    \begin{Scode}{echo=false,results=verbatim}
+    print(p.p/n.p)
+    \end{Scode}
+
+  And the log probability ratios are:
+    \begin{Scode}{echo=false,results=verbatim}
+    print(log(p.p/n.p))
+    \end{Scode}
+
+  The log likelihood ratio of the tweet ``\Sexpr{print(test)}'' is:
+  \begin{align*}
+  \log{\frac{P(S|D)}{P(S'|D)}} &= \log{\frac{P(S)}{P(S')}} + {\sum_{i} \log{\frac{P(w_i|S)}{P(w_i|S')}}} \\
+  &= \log{\frac{\Sexpr{P.p}}{\Sexpr{P.n}}} + \Sexpr{format(sum(log(p.p/n.p)[pos]))} \\
+  &= \Sexpr{format(log(P.p/P.n) + sum(log(p.p/n.p)[pos]))}
+  \end{align*}
+  Therefore the tweet is classified as \Sexpr{tweet.class}.
+
+
   \end{workingbox}]>)

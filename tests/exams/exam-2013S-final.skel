@@ -62,6 +62,13 @@ _link_analysis_q1()
 
 \end{questions}
 
+\question{Question 2}{2 marks}
+
+\begin{questions}[]
+
+	_sentiment_q1()
+
+\end{questions}
 
 \testend
 
