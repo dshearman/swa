@@ -1,6 +1,6 @@
 % -*- mode: Rnw;-*-
-%documentclass[hideanswers]{uwsexam}
-\documentclass{uwsexam}
+\documentclass[hideanswers]{uwsexam}
+%documentclass{uwsexam}
 
 m4_include(`exam_question.pool.m4')
 
@@ -15,7 +15,7 @@ m4_include(`exam_question.pool.m4')
 \unitname{Social Web Analytics}
 \unitcode{300958}
 \testtime{2 hours includes reading time}
-\questioncount{9}
+\questioncount{10}
 \lecturername{Laurence Park, Glenn Stone}
 \studentinstructions{\studentinstructionstesttwo}
 
@@ -33,7 +33,7 @@ _precision(4)
 
 \begin{questions}[]
 
-  _q1(<[ g = graph.formula(A-B, A-C, A-D, B-D) ]>)
+  _graphs_q1(<[ g = graph.formula(A-B, A-C, A-D, B-D) ]>)
 
 \end{questions}
 
@@ -43,12 +43,12 @@ _precision(4)
 
 \begin{questions}[]
 
-  _q2(<[ g = graph.formula(A-B, A-C, A-D, B-D) ]>)
+  _clustering_q1(<[ g = graph.formula(A-B, A-C, A-D, B-D) ]>)
 
 \end{questions}
 
 
-\question{Question 3}{1 + 1 + 1 + 2  = 5 marks}
+\question{Question 3}{1 + 1 + 2 + 1  = 5 marks}
 
 \begin{questions}[]
 
