@@ -104,7 +104,7 @@
 \pagestyle{fancy} 
 %\fancyhf{} 
 \cfoot{Page \thepage\ of \pageref{LastPage}}
-\lhead{\unitcode~\unitname}
+\lhead{\@unitcode~\@unitname}
 \rhead{\@testtitle}
 %\renewcommand\headrulewidth{0pt} % Removes funny header line 
 

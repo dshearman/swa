@@ -5,20 +5,24 @@
 m4_include(`exam_question.pool.m4')
 
 
-
-%% These effects the font!
-%\usepackage[noae]{/Library/Frameworks/R.framework/Versions/Current/Resources/share/texmf/tex/latex/Sweave}
-
 % Set up class variables
-\testtitle{Final Examination}
+\testtitle{Final exams}
 \unitsession{Spring Session 2013}
 \unitname{Social Web Analytics}
 \unitcode{300958}
 \testtime{2 hours includes reading time}
 \questioncount{10}
 \lecturername{Laurence Park, Glenn Stone}
-\studentinstructions{\studentinstructionstesttwo}
-
+\studentinstructions{
+\begin{enumerate}
+\item Write your name and student number on the top of this exam paper and on all answer booklets.
+\item All exams include reading time, which allows you to spend some time at the start of the examination composing yourself, reading the exam paper, and planning which questions to answer, and how. We advise you to read the instructions and questions carefully, before you begin writing. \textbf{However, you are allowed to begin writing straight away if you wish}.
+\item This is an ``open book'' exam. Any written or printed material may be brought into the exam.
+\item Scientific, non-programmable hand held calculators are permitted.
+\item Answer all questions in the answer booklet provided.
+\item There are 50 marks available. Each question is worth 5 marks. All working must be shown to gain full marks.
+\item You should answer 9 of the 10 questions. If all 10 questions are answered only the first 9 will be marked.
+\end{enumerate}}
 
 
 \begin{document}
