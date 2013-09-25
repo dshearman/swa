@@ -76,6 +76,38 @@ _link_analysis_q1()
 
 \end{questions}
 
+\question{Question 6}{X + X = 5 marks}
+
+\begin{questions}[]
+
+	_SimpleExposure_q1(<[ SEED=12345 ]>)
+
+\end{questions}
+
+\question{Question 7}{X + X = 5 marks}
+
+\begin{questions}[]
+
+	_BACI_q1(<[ SEED=1245 ]>)
+
+\end{questions}
+
+\question{Question 8}{X + X = 5 marks}
+
+\begin{questions}[]
+
+	_Trend_q1(<[ SEED=56235 ]>)
+
+\end{questions}
+
+\question{Question 9}{X + X = 5 marks}
+
+\begin{questions}[]
+
+	_Visual_q1(<[ SEED=66245 ]>)
+
+\end{questions}
+
 \testend
 
 \end{document}

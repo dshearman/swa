@@ -228,6 +228,7 @@ m4_define(_text_index_q1,<[
   
   % begin.rcode echo=FALSE,results="hide", message=FALSE
   require("tm")
+  require("SnowballC")
   $@
   docs <- c("Go dog, go!", "Stop cat, stop", "The dog stops the cat and the bird.")
   query = c("stop", "dog")
@@ -497,4 +498,191 @@ m4_define(_sentiment_q1,<[
     
     
   \end{workingbox}
+]>)
+
+m4_define(_SimpleExposure_q1,<[
+\squestion
+
+The table below shows the counts of \emph{reach} by age group and gender for a particular facebook page.
+
+\begin{center}
+   % begin.rcode echo=FALSE, results="asis"
+require(xtable, quietly=TRUE)
+ages = c("13--17","18--24","25--34","35--44","45--54","55--65","65+")
+genders = c("F","M")
+
+pM = c(0.1,0.2,0.2,0.15,0.15,0.1,0.1)
+pF = c(0.1,0.15,0.15,0.2,0.2,0.1,0.1)
+
+#SEED = 12345
+$@
+set.seed(SEED)
+x = t(cbind(rmultinom(1,44,pF), rmultinom(1,96,pM)))
+
+dimnames(x) = list(genders, ages)
+
+x = cbind(x, Total = rowSums(x))
+x = rbind(x, Total=colSums(x))
+
+algn = c(rep("r", ncol(x)), "|", "r")
+print(xtable(x, digits=0, align=algn), floating=FALSE, hline.after=c(-1,0, nrow(x)-1, nrow(x)))
+% end.rcode
+\end{center}
+
+
+The owner of this page is interested in determining whether the age profile of reach varies by gender.
+
+\begin{enumerate}
+\item Identify one problem with using a $\chi^2$ (Chi-squared) test
+  with this data.
+\item Write down a reduced table using new age groups 13--24, 25--34, 35--44,
+  and 45+.
+\item Find expected counts for each entry in the reduced table
+  assuming gender and age group are independent.
+\item Calculate a $\chi^2$ statistic for testing whether the age
+  profile varies by gender, and state its degrees of freedom.
+\end{enumerate}
+
+]>)
+
+
+m4_define(_BACI_q1,<[
+\squestion
+
+A major bank is about that to start an
+advertising campaign. Before doing so 
+it decides to collect information about mentions
+on Twitter to measure the impact of the campaign. 
+Using a search the company collects the number of
+mentions of their product for 3 randomly chosen days before the
+campaign and 3 randomly chosen days shortly
+after the campaign begins. They also collect the number of mentions for
+their main competitor on the same number of days before and after
+the campaign. The data are in the left table below. The right table contains the
+sums of the square roots of the data.
+
+
+\begin{center}
+% begin.rcode echo=FALSE, results="asis"
+require(xtable, quietly=TRUE)
+mu = c(100, 130, 70, 70)
+n =3
+X = factor(rep(c("Company","Competitor"), 2*c(n,n)))
+Z = factor(rep(rep(c("Before","After"), c(n,n)),2), levels=c("Before","After"))
+$@
+set.seed(SEED)
+Y = rpois(4*n, rep(mu, rep(n,4)))
+
+tab=tapply(Y, list(X,Z), FUN=paste, collapse=",")
+print(xtable(tab, align="|l|c|c|"), floating=FALSE, hline.after=c(-1,0,1,2))
+
+cat("\\hspace{1cm}")
+xtab = xtabs(sqrt(Y)~X+Z)
+print(xtable(xtab, align="|l|r|r|", digits=2), floating=FALSE, hline.after=c(-1,0,1,2))
+% end.rcode
+\end{center}
+
+\begin{enumerate}
+\item Explain why using a square root transformation is advisable for
+  count data.
+\item Calculate the \emph{contrast} for the interaction between
+  company and time.
+\item Calculate the \emph{Sum of Squares} for the interaction between
+  company and time.
+\item Given that the sum of squares for error is 1.820, find the
+  $F$-statistic for the interaction between
+  company and time, and state its degrees of freedom.
+\end{enumerate}
+
+
+]>)
+
+m4_define(_Trend_q1,<[
+\squestion
+
+The jTele mobile phone company is looking at the tweet count containing their hash-tag, in the three days after the release
+of a new model. The counts are aggregated into four time periods; midnight to 6am, 6am to noon, noon to 6pm and 6pm to midnight.
+The data are below.
+
+\begin{center}
+% begin.rcode echo=FALSE, results="asis"
+s = c(10,20,30,15)
+trend = seq(20, 70, length=12)
+
+$@
+#set.seed(56235)
+set.seed(SEED)
+xx = rpois(length(trend), trend + s)
+tmp = matrix(xx, ncol=4, byrow=TRUE)
+dimnames(tmp) = list(paste("Day",1:3), paste("Period", 1:4))
+print(xtable(tmp), floating=FALSE)
+% end.rcode
+\end{center}
+
+The company decides to estimate the trend in the data, after a square root transformation, and allowing for a 
+periodic (seasonal) effect. The tables below shows the estimated moving average trend, and periodic components.
+
+\begin{center}
+{\bf Trend}\\[1ex]
+% begin.rcode echo=FALSE, results="asis"
+d = decompose(ts(sqrt(xx), freq=4))
+et = as.numeric(d$trend)
+etc = formatC(et, format="f", digits=2)
+etc[etc==" NA"] = ""
+tmp = matrix(etc, ncol=4, byrow=TRUE)
+dimnames(tmp) = list(paste("Day",1:3), paste("Period", 1:4))
+
+tmp[1,4] = "$\\star$"
+print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
+% end.rcode
+
+{\bf Periodic}\\[1ex]
+% begin.rcode echo=FALSE, results="asis"
+ss = d$figure
+ssc = formatC(ss, format="f", digits=3)
+tmp = matrix(ssc, ncol=4, byrow=TRUE)
+dimnames(tmp) = list("Periodic", paste("Period", 1:4))
+
+tmp[1,4] = "$\\star$"
+print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
+% end.rcode
+\end{center}
+
+\begin{enumerate}
+\item Compute the missing trend component marked with a $\star$.
+\item Compute the missing periodic component marked with a $\star$.
+\end{enumerate}
+]>)
+
+m4_define(_Visual_q1,<[
+\squestion
+
+\begin{enumerate}
+\item In conducting a principal component analysis R produces the following summary output.
+
+% begin.rcode echo=FALSE, results="asis"
+require(clusterGeneration, quietly=TRUE)
+require(mvtnorm, quietly=TRUE)
+#set.seed(66245)
+$@
+set.seed(SEED)
+
+S = genPositiveDefMat(8)
+X = rmvnorm(50, sigma=S$Sigma)
+tab = summary(prcomp(X))$importance
+tab = formatC(tab, format="f", digits=3)
+tab[3,c(1,4)] = "$\\star$"
+print(xtable(tab), floating=FALSE, sanitize.text.function=function(x) x)
+% end.rcode
+Compute the missing entries marked $\star$.
+
+\item Compute the binary metric between the following two tweets (stop lists already applied).
+\begin{center}
+\begin{tabular}{lc}
+Tweet 1&assault assistance disadvantaged university students begins\\
+Tweet 2&believe more students doing university better
+\end{tabular}
+\end{center}
+\end{enumerate}
+
 ]>)
