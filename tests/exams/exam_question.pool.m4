@@ -6,11 +6,11 @@ m4_define(_precision,<[
   % begin.rcode setup, echo=FALSE
   options(digits=$1)
   opts_chunk$set(comment=NA, highlight=FALSE)
+
+  missing.symbol = "$\\star$"
   % end.rcode 
 ]>)
 
-
-m4_define(_missing_symbol,<[$\\star$]>)
 
 m4_define(_graphs_q1,<[
 
@@ -65,7 +65,7 @@ m4_define(_graphs_q1,<[
       \begin{center}
         \begin{minipage}{0.5\textwidth}
           % begin.rcode echo=FALSE,results="verbatim"
-          table(degree(g))
+          table(factor(degree(g), c(0,1,2,3,4,5)))
           % end.rcode 
         \end{minipage}
         \xmark{1}
@@ -81,7 +81,7 @@ m4_define(_graphs_q1,<[
       \end{center}
 
       
-    \item The most central vertex is vertex \rinline{names(which.min(close))}.
+    \item The most central vertex is vertex \rinline{names(which(close == min(close)))}.
       \xmark{1}
       
     \end{enumerate}
@@ -133,7 +133,7 @@ m4_define(_clustering_q1,<[
   rwss = wss
   wss[2] = NA
   wssf = format(wss)
-  wssf[is.na(wss)] = "_missing_symbol"
+  wssf[is.na(wss)] = missing.symbol
   z = kmeans(Z, centers=2)
   A = cbind(Z,z$cluster)
   colnames(A) = c("x1","x2","Cluster")
@@ -296,7 +296,7 @@ m4_define(_text_index_q1,<[
       \end{center}
       
     \item The query vector is $\vec{q} = [~\rinline{paste(query.vec, collapse="~")}~]$.
-    Therefore the query score for each document using the query ``stop dog'' is:
+    Therefore the query score for each document using the query ``\rinline{paste(query, collapse=" ")}'' is:
       \begin{enumerate}
       \item $\rinline{format(inner.prod[1])}/(\rinline{format(doc.length[1])}\times\rinline{format(query.length)}) = \rinline{format(inner.prod[1]/(doc.length[1]*query.length))}$
       \item $\rinline{format(inner.prod[2])}/(\rinline{format(doc.length[2])}\times\rinline{format(query.length)}) = \rinline{format(inner.prod[2]/(doc.length[2]*query.length))}$
@@ -625,7 +625,7 @@ etc[etc==" NA"] = ""
 tmp = matrix(etc, ncol=4, byrow=TRUE)
 dimnames(tmp) = list(paste("Day",1:3), paste("Period", 1:4))
 
-tmp[1,4] = "_missing_symbol"
+tmp[1,4] = missing.symbol
 print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
 
@@ -636,14 +636,14 @@ ssc = formatC(ss, format="f", digits=3)
 tmp = matrix(ssc, ncol=4, byrow=TRUE)
 dimnames(tmp) = list("Periodic", paste("Period", 1:4))
 
-tmp[1,4] = "_missing_symbol"
+tmp[1,4] = missing.symbol
 print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
 \end{center}
 
 \begin{enumerate}
-\item Compute the missing trend component marked with a _missing_symbol.
-\item Compute the missing periodic component marked with a _missing_symbol.
+\item Compute the missing trend component marked with a \rinline{missing.symbol}.
+\item Compute the missing periodic component marked with a \rinline{missing.symbol}.
 \end{enumerate}
 ]>)
 
@@ -664,16 +664,16 @@ S = genPositiveDefMat(7)
 X = rmvnorm(50, sigma=S$Sigma)
 tab = summary(prcomp(X))$importance
 tab = formatC(tab, format="f", digits=3)
-tab[3,c(1,4)] = "_missing_symbol"
+tab[3,c(1,4)] = missing.symbol
 print(xtable(tab), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
-Compute the missing entries marked _missing_symbol.
+Compute the missing entries marked \rinline{missing.symbol}.
 
 \item Compute the binary metric between the following two tweets.
 \begin{center}
-\begin{tabular}{lc}
-Tweet 1&assault assistance disadvantaged university students begins\\
-Tweet 2&believe more students doing university better
+\begin{tabular}{ll}
+Tweet 1: & assault assistance disadvantaged university students begins\\
+Tweet 2: & believe more students doing university better
 \end{tabular}
 \end{center}
 \end{enumerate}

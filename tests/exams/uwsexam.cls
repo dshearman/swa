@@ -389,9 +389,9 @@
 \hline
 \textbf{Student Family Name:} & \\
 \hline
-\textbf{Student Given Names:} & \\
+\textbf{Student Given Name/s:} & \\
 \hline
-\textbf{Student Number:} & \\
+\textbf{Student ID Number:} & \\
 \hline
 % \textbf{Tutorial Day and Time:} & \\
 % \hline

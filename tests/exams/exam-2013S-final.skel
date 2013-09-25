@@ -72,7 +72,7 @@ _precision(4)
   _text_index_q1(<[
     docs <- c("Go dog, go!", "Stop cat, stop", 
     "The dog stops the cat and the bird.");
-    query = c("stop", "dog");
+    query = c("stop", "cat");
     stop = c("a", "the", "is", "to", "it", "and", "go") ]>)
   
 \end{questions}
