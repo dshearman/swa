@@ -42,29 +42,15 @@ m4_include(`exam_question.pool.m4')
 % Set the precision of the results
 _precision(4)
 
-
-\question{Question 1}{1 + 1 + 2 + 1 = 5 marks}
-
-\begin{questions}[]
-  
-  _graphs_q1(<[ g = graph.formula(A-B, A-C, C-D, B-D, C-B) ]>)
-  
-\end{questions}
-
-
-\question{Question 2}{2 + 2 + 1 = 5 marks}
+\question{Question 1}{X + X = 5 marks}
 
 \begin{questions}[]
-  
-  _clustering_q1(<[ 
-    cluster1 = rmvnorm(5, mean = c(5,5), sigma = matrix(c(1,0,0,1),2,2));
-    cluster2 = rmvnorm(5, mean = c(2,12), sigma = matrix(c(1,0,0,1),2,2));
-    X = rbind(cluster1, cluster2) ]>)
-  
+
+	_SimpleExposure_q1(<[ SEED=12345 ]>)
+
 \end{questions}
 
-
-\question{Question 3}{1 + 1 + 2 + 1  = 5 marks}
+\question{Question 2}{1 + 1 + 2 + 1  = 5 marks}
 
 \begin{questions}[]
   
@@ -76,7 +62,39 @@ _precision(4)
   
 \end{questions}
 
-\question{Question 4}{1 + 1 + 2 + 1 = 5 marks}
+
+
+\question{Question 3}{1 + 1 + 2 + 1 = 5 marks}
+
+\begin{questions}[]
+  
+  _graphs_q1(<[ g = graph.formula(A-B, A-C, C-D, B-D, C-B) ]>)
+  
+\end{questions}
+
+\question{Question 4}{X + X = 5 marks}
+
+\begin{questions}[]
+
+	_Visual_q1(<[ SEED=66245 ]>)
+
+\end{questions}
+
+
+\question{Question 5}{2 + 2 + 1 = 5 marks}
+
+\begin{questions}[]
+  
+  _clustering_q1(<[ 
+    cluster1 = rmvnorm(5, mean = c(5,5), sigma = matrix(c(1,0,0,1),2,2));
+    cluster2 = rmvnorm(5, mean = c(2,12), sigma = matrix(c(1,0,0,1),2,2));
+    X = rbind(cluster1, cluster2) ]>)
+
+\end{questions}
+
+
+
+\question{Question 6}{1 + 1 + 2 + 1 = 5 marks}
 
 \begin{questions}[]
   
@@ -87,7 +105,25 @@ _precision(4)
   
 \end{questions}
 
-\question{Question 5}{4 + 1 = 5 marks}
+
+\question{Question 7}{X + X = 5 marks}
+
+\begin{questions}[]
+
+	_Trend_q1(<[ SEED=56235 ]>)
+
+\end{questions}
+
+\question{Question 8}{X + X = 5 marks}
+
+\begin{questions}[]
+
+	_BACI_q1(<[ SEED=1245 ]>)
+
+\end{questions}
+
+
+\question{Question 9}{4 + 1 = 5 marks}
 
 \begin{questions}[]
   
@@ -101,37 +137,6 @@ _precision(4)
 
 \end{questions}
 
-\question{Question 6}{X + X = 5 marks}
-
-\begin{questions}[]
-
-	_SimpleExposure_q1(<[ SEED=12345 ]>)
-
-\end{questions}
-
-\question{Question 7}{X + X = 5 marks}
-
-\begin{questions}[]
-
-	_BACI_q1(<[ SEED=1245 ]>)
-
-\end{questions}
-
-\question{Question 8}{X + X = 5 marks}
-
-\begin{questions}[]
-
-	_Trend_q1(<[ SEED=56235 ]>)
-
-\end{questions}
-
-\question{Question 9}{X + X = 5 marks}
-
-\begin{questions}[]
-
-	_Visual_q1(<[ SEED=66245 ]>)
-
-\end{questions}
 
 \testend
 

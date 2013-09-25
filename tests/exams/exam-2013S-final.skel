@@ -43,7 +43,28 @@ m4_include(`exam_question.pool.m4')
 _precision(4)
 
 
-\question{Question 1}{1 + 1 + 2 + 1 = 5 marks}
+\question{Question 1}{X + X = 5 marks}
+
+\begin{questions}[]
+
+	_SimpleExposure_q1(<[ SEED=12345 ]>)
+
+\end{questions}
+
+\question{Question 2}{1 + 1 + 2 + 1  = 5 marks}
+
+\begin{questions}[]
+  
+  _text_index_q1(<[
+    docs <- c("Go dog, go!", "Stop cat, stop", 
+    "The dog stops the cat and the bird.");
+    query = c("stop", "cat");
+    stop = c("a", "the", "is", "to", "it", "and", "go") ]>)
+  
+\end{questions}
+
+
+\question{Question 3}{1 + 1 + 2 + 1 = 5 marks}
 
 \begin{questions}[]
   
@@ -51,8 +72,16 @@ _precision(4)
   
 \end{questions}
 
+\question{Question 4}{X + X = 5 marks}
 
-\question{Question 2}{2 + 2 + 1 = 5 marks}
+\begin{questions}[]
+
+	_Visual_q1(<[ SEED=66245 ]>)
+
+\end{questions}
+
+
+\question{Question 5}{2 + 2 + 1 = 5 marks}
 
 \begin{questions}[]
   
@@ -65,19 +94,8 @@ _precision(4)
 \end{questions}
 
 
-\question{Question 3}{1 + 1 + 2 + 1  = 5 marks}
 
-\begin{questions}[]
-  
-  _text_index_q1(<[
-    docs <- c("Go dog, go!", "Stop cat, stop", 
-    "The dog stops the cat and the bird.");
-    query = c("stop", "cat");
-    stop = c("a", "the", "is", "to", "it", "and", "go") ]>)
-  
-\end{questions}
-
-\question{Question 4}{1 + 1 + 2 + 1 = 5 marks}
+\question{Question 6}{1 + 1 + 2 + 1 = 5 marks}
 
 \begin{questions}[]
   
@@ -87,7 +105,26 @@ _precision(4)
   
 \end{questions}
 
-\question{Question 5}{4 + 1 = 5 marks}
+
+\question{Question 7}{X + X = 5 marks}
+
+\begin{questions}[]
+
+	_Trend_q1(<[ SEED=56235 ]>)
+
+\end{questions}
+
+
+\question{Question 8}{X + X = 5 marks}
+
+\begin{questions}[]
+
+	_BACI_q1(<[ SEED=1245 ]>)
+
+\end{questions}
+
+
+\question{Question 9}{4 + 1 = 5 marks}
 
 \begin{questions}[]
   
@@ -101,37 +138,6 @@ _precision(4)
 
 \end{questions}
 
-\question{Question 6}{X + X = 5 marks}
-
-\begin{questions}[]
-
-	_SimpleExposure_q1(<[ SEED=12345 ]>)
-
-\end{questions}
-
-\question{Question 7}{X + X = 5 marks}
-
-\begin{questions}[]
-
-	_BACI_q1(<[ SEED=1245 ]>)
-
-\end{questions}
-
-\question{Question 8}{X + X = 5 marks}
-
-\begin{questions}[]
-
-	_Trend_q1(<[ SEED=56235 ]>)
-
-\end{questions}
-
-\question{Question 9}{X + X = 5 marks}
-
-\begin{questions}[]
-
-	_Visual_q1(<[ SEED=66245 ]>)
-
-\end{questions}
 
 \testend
 
