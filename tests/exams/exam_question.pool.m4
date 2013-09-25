@@ -1,3 +1,5 @@
+% -*- Rnw -*-
+
 m4_changequote(`<[', `]>')
 
 m4_define(_precision,<[
