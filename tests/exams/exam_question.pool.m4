@@ -8,6 +8,7 @@ m4_define(_precision,<[
 ]>)
 
 
+m4_define(_missing_symbol,<[$\\star$]>)
 
 m4_define(_graphs_q1,<[
 
@@ -95,8 +96,6 @@ m4_define(_clustering_q1,<[
   % begin.rcode echo=FALSE,results="hide", message=FALSE
   require("mvtnorm")
   require("xtable")
-  $@
-  #g = graph.formula(A-B, A-C, A-D, B-D)
   
   latex.matrix = function(X) {
     nc = ncol(X)
@@ -110,10 +109,8 @@ m4_define(_clustering_q1,<[
   }
   
   set.seed(1)
-  cluster1 = rmvnorm(4, mean = c(5,5), sigma = matrix(c(1,0,0,1),2,2))
-  cluster2 = rmvnorm(4, mean = c(2,12), sigma = matrix(c(1,0,0,1),2,2))
-  cluster3 = rmvnorm(2, mean = c(15,9), sigma = matrix(c(1,0,0,1),2,2))
-  X = rbind(cluster1, cluster2, cluster3)
+  $@
+
   m = apply(X,2,mean)
   zero.mean = function(x, m) { return(x - m) }
   Z = t(apply(X,1,zero.mean, m))
@@ -134,7 +131,7 @@ m4_define(_clustering_q1,<[
   rwss = wss
   wss[2] = NA
   wssf = format(wss)
-  wssf[is.na(wss)] = "-"
+  wssf[is.na(wss)] = "_missing_symbol"
   z = kmeans(Z, centers=2)
   A = cbind(Z,z$cluster)
   colnames(A) = c("x1","x2","Cluster")
@@ -230,9 +227,7 @@ m4_define(_text_index_q1,<[
   require("tm")
   require("SnowballC")
   $@
-  docs <- c("Go dog, go!", "Stop cat, stop", "The dog stops the cat and the bird.")
-  query = c("stop", "dog")
-  stop = c("a", "the", "is", "to", "it", "and", "go")
+
   corp = Corpus(VectorSource(docs))
   corp.pp = tm_map(corp, removePunctuation)
   corp.pp = tm_map(corp.pp, casefold)
@@ -331,7 +326,7 @@ m4_define(_link_analysis_q1,<[
   % begin.rcode echo=FALSE,results="hide"
   require("igraph")
   $@
-  g = graph.formula(A+-+B, A+-C, A+-D, A+-E, B+-C, D+-+E)
+
   V(g)$color = "white"
   E(g)$color = "black"
   alpha = 0.8
@@ -343,7 +338,7 @@ m4_define(_link_analysis_q1,<[
   e = eigen(R)
   pos = which(abs(e$values - 1) < 1e-8)
   station = e$vectors[,pos]/sum(e$vectors[,pos])
-  non.station = c(0.49, 0.34, 0.10, 0.04, 0.03)
+
   % end.rcode 
   
 
@@ -413,8 +408,6 @@ m4_define(_sentiment_q1,<[
   % begin.rcode echo=FALSE,results="hide"
   require("tm")
   $@
-  positive = c("My teeth shine #funfun","#funfun love my teeth","#funfun is fun fun")
-  negative = c("No shine #funfun","No love fun fun","Where is my teeth shine #funfun")
   
   all.terms = names(table(strsplit(tolower(paste(positive, negative, collapse=" ")),split=" ")))
   p = table(factor(strsplit(tolower(paste(positive, collapse=" ")),split=" ")[[1]],all.terms))
@@ -422,10 +415,8 @@ m4_define(_sentiment_q1,<[
   p.p = p/sum(p)
   n.p = n/sum(n)
   
-  test = "fun teeth shine"
   tests = strsplit(tolower(test),split=" ")[[1]]
   pos = which(all.terms %in% tests)
-  
   
   P.d.p = prod(p.p[pos])
   P.d.n = prod(n.p[pos])
@@ -632,7 +623,7 @@ etc[etc==" NA"] = ""
 tmp = matrix(etc, ncol=4, byrow=TRUE)
 dimnames(tmp) = list(paste("Day",1:3), paste("Period", 1:4))
 
-tmp[1,4] = "$\\star$"
+tmp[1,4] = "_missing_symbol"
 print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
 
@@ -643,14 +634,14 @@ ssc = formatC(ss, format="f", digits=3)
 tmp = matrix(ssc, ncol=4, byrow=TRUE)
 dimnames(tmp) = list("Periodic", paste("Period", 1:4))
 
-tmp[1,4] = "$\\star$"
+tmp[1,4] = "_missing_symbol"
 print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
 \end{center}
 
 \begin{enumerate}
-\item Compute the missing trend component marked with a $\star$.
-\item Compute the missing periodic component marked with a $\star$.
+\item Compute the missing trend component marked with a _missing_symbol.
+\item Compute the missing periodic component marked with a _missing_symbol.
 \end{enumerate}
 ]>)
 
@@ -671,10 +662,10 @@ S = genPositiveDefMat(7)
 X = rmvnorm(50, sigma=S$Sigma)
 tab = summary(prcomp(X))$importance
 tab = formatC(tab, format="f", digits=3)
-tab[3,c(1,4)] = "$\\star$"
+tab[3,c(1,4)] = "_missing_symbol"
 print(xtable(tab), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
-Compute the missing entries marked $\star$.
+Compute the missing entries marked _missing_symbol.
 
 \item Compute the binary metric between the following two tweets.
 \begin{center}

@@ -15,13 +15,23 @@ m4_include(`exam_question.pool.m4')
 \lecturername{Laurence Park, Glenn Stone}
 \studentinstructions{
 \begin{enumerate}
-\item Write your name and student number on the top of this exam paper and on all answer booklets.
-\item All exams include reading time, which allows you to spend some time at the start of the examination composing yourself, reading the exam paper, and planning which questions to answer, and how. We advise you to read the instructions and questions carefully, before you begin writing. \textbf{However, you are allowed to begin writing straight away if you wish}.
-\item This is an ``open book'' exam. Any written or printed material may be brought into the exam.
-\item Scientific, non-programmable hand held calculators are permitted.
+\item Write your name and student number on the top of this exam paper
+  and on all answer booklets.
+\item All exams include reading time, which allows you to spend some
+  time at the start of the examination composing yourself, reading the
+  exam paper, and planning which questions to answer, and how. We
+  advise you to read the instructions and questions carefully, before
+  you begin writing. \textbf{However, you are allowed to begin writing
+    straight away if you wish}.
+\item This is an ``open book'' exam. Any written or printed material
+  may be brought into the exam.
+\item Scientific, non-programmable hand held calculators are
+  permitted.
 \item Answer all questions in the answer booklet provided.
-\item There are 50 marks available. Each question is worth 5 marks. All working must be shown to gain full marks.
-\item You should answer 9 of the 10 questions. If all 10 questions are answered only the first 9 will be marked.
+\item There are 50 marks available. Each question is worth 5
+  marks. All working must be shown to gain full marks.
+\item You should answer 9 of the 10 questions. If all 10 questions are
+  answered only the first 9 will be marked.
 \end{enumerate}}
 
 
@@ -36,43 +46,58 @@ _precision(4)
 \question{Question 1}{1 + 1 + 2 + 1 = 5 marks}
 
 \begin{questions}[]
-
+  
   _graphs_q1(<[ g = graph.formula(A-B, A-C, A-D, B-D) ]>)
-
+  
 \end{questions}
 
 
 \question{Question 2}{2 + 2 + 1 = 5 marks}
 
-
 \begin{questions}[]
-
-  _clustering_q1(<[ g = graph.formula(A-B, A-C, A-D, B-D) ]>)
-
+  
+  _clustering_q1(<[ 
+    cluster1 = rmvnorm(4, mean = c(5,5), sigma = matrix(c(1,0,0,1),2,2));
+    cluster2 = rmvnorm(4, mean = c(2,12), sigma = matrix(c(1,0,0,1),2,2));
+    cluster3 = rmvnorm(2, mean = c(15,9), sigma = matrix(c(1,0,0,1),2,2));
+    X = rbind(cluster1, cluster2, cluster3) ]>)
+  
 \end{questions}
 
 
 \question{Question 3}{1 + 1 + 2 + 1  = 5 marks}
 
 \begin{questions}[]
-
-  _text_index_q1()
-
+  
+  _text_index_q1(<[
+    docs <- c("Go dog, go!", "Stop cat, stop", 
+    "The dog stops the cat and the bird.");
+    query = c("stop", "dog");
+    stop = c("a", "the", "is", "to", "it", "and", "go") ]>)
+  
 \end{questions}
 
 \question{Question 4}{1 + 1 + 2 + 1 = 5 marks}
 
 \begin{questions}[]
-
-_link_analysis_q1()
-
+  
+  _link_analysis_q1(<[
+    g = graph.formula(A+-+B, A+-C, A+-D, A+-E, B+-C, D+-+E);
+    non.station = c(0.49, 0.34, 0.10, 0.04, 0.03) ]>)
+  
 \end{questions}
 
 \question{Question 5}{4 + 1 = 5 marks}
 
 \begin{questions}[]
-
-	_sentiment_q1()
+  
+  _sentiment_q1(<[
+    positive = c("My teeth shine #funfun","#funfun love my teeth",
+        "#funfun is fun fun");
+    negative = c("No shine #funfun","No love fun fun",
+        "Where is my teeth shine #funfun");
+    test = "fun teeth shine"
+    ]>)
 
 \end{questions}
 
