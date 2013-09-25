@@ -667,7 +667,7 @@ require(mvtnorm, quietly=TRUE)
 $@
 set.seed(SEED)
 
-S = genPositiveDefMat(8)
+S = genPositiveDefMat(7)
 X = rmvnorm(50, sigma=S$Sigma)
 tab = summary(prcomp(X))$importance
 tab = formatC(tab, format="f", digits=3)
@@ -676,7 +676,7 @@ print(xtable(tab), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
 Compute the missing entries marked $\star$.
 
-\item Compute the binary metric between the following two tweets (stop lists already applied).
+\item Compute the binary metric between the following two tweets.
 \begin{center}
 \begin{tabular}{lc}
 Tweet 1&assault assistance disadvantaged university students begins\\
