@@ -24,6 +24,7 @@ m4_define(_graphs_q1,<[
   close = 1/closeness(g)
   n = length(d)
   V(g)$color = "white"
+  V(g)$label.color = "black"
   E(g)$color = "black"
   names(d) = LETTERS[1:n]
   % end.rcode 
@@ -330,6 +331,7 @@ m4_define(_link_analysis_q1,<[
   $@
 
   V(g)$color = "white"
+  V(g)$label.color = "black"
   E(g)$color = "black"
   alpha = 0.8
   A = t(as.matrix(get.adjacency(g)))
