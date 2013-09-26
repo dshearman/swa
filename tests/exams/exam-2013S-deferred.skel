@@ -46,7 +46,7 @@ _precision(4)
 
 \begin{questions}[]
 
-	_SimpleExposure_q1(<[ SEED=12345 ]>)
+	_SimpleExposure_q1(<[ SEED=8876 ]>)
 
 \end{questions}
 
@@ -76,7 +76,7 @@ _precision(4)
 
 \begin{questions}[]
 
-	_Visual_q1(<[ SEED=66245 ]>)
+	_Visual_q1(<[ SEED=5342 ]>)
 
 \end{questions}
 
@@ -110,7 +110,7 @@ _precision(4)
 
 \begin{questions}[]
 
-	_Trend_q1(<[ SEED=56235 ]>)
+	_Trend_q1(<[ SEED=7723 ]>)
 
 \end{questions}
 
@@ -118,7 +118,7 @@ _precision(4)
 
 \begin{questions}[]
 
-	_BACI_q1(<[ SEED=1245 ]>)
+	_BACI_q1(<[ SEED=99331 ]>)
 
 \end{questions}
 
