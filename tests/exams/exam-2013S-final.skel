@@ -74,9 +74,10 @@ _precision(4)
 
 \question{Question 4}{X + X = 5 marks}
 
-\begin{questions}[]
+\begin{questions}[(a)]
 
 	_Visual_q1(<[ SEED=66245 ]>)
+        _Visual_q2(<[ SEED=66245 ]>)
 
 \end{questions}
 

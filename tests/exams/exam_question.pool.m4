@@ -43,7 +43,7 @@ m4_define(_graphs_q1,<[
   \item Construct the adjacency matrix.
   \item Calculate the degree distribution.
   \item Calculate the closeness centrality for each vertex.
-  \item Identify which soft drink company is the most central.
+  \item Using the above results, identify which soft drink company is the most central.
   \end{enumerate}
   
   \begin{workingbox}
@@ -452,7 +452,7 @@ m4_define(_sentiment_q1,<[
     \rinline{unhash(paste(item, negative, collapse = " "))}
   \end{itemize}
   \begin{enumerate} 
-  \item compute the log likelihood ratio of the tweet ``\rinline{test}'' being positive versus it being negative using Naive Bayes classification.,
+  \item compute the log likelihood ratio of the tweet ``\rinline{test}'' being positive versus it being negative, using Naive Bayes classification.
   \item determine if the tweet has positive or negative sentiment, based on the log likelihood ratio.
   \end{enumerate}
   
@@ -652,8 +652,7 @@ print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 m4_define(_Visual_q1,<[
 \squestion
 
-\begin{enumerate}
-\item In conducting a principal component analysis R produces the following summary output.
+In conducting a principal component analysis R produces the following summary output.
 
 % begin.rcode echo=FALSE, results="asis"
 require(clusterGeneration, quietly=TRUE)
@@ -670,14 +669,23 @@ tab[3,c(1,4)] = missing.symbol
 print(xtable(tab), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
 Compute the missing entries marked \rinline{missing.symbol}.
+]>)
 
-\item Compute the binary metric between the following two tweets.
+m4_define(_Visual_q2,<[
+\squestion
+
+% begin.rcode echo=FALSE, results="asis"
+#set.seed(66245)
+$@
+set.seed(SEED)
+% end.rcode
+
+Compute the binary metric between the following two tweets.
 \begin{center}
 \begin{tabular}{ll}
 Tweet 1: & assault assistance disadvantaged university students begins\\
 Tweet 2: & believe more students doing university better
 \end{tabular}
 \end{center}
-\end{enumerate}
 
 ]>)
