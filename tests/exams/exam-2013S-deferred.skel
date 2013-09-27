@@ -6,7 +6,7 @@ m4_include(`exam_question.pool.m4')
 
 
 % Set up class variables
-\testtitle{Deferred exams}
+\testtitle{Deferred Examination}
 \unitsession{Spring Session 2013}
 \unitname{Social Web Analytics}
 \unitcode{300958}
@@ -72,7 +72,7 @@ _precision(4)
   
 \end{questions}
 
-\question{Question 3}{2 + 2 = 5 marks}
+\question{Question 3}{2 + 2 = 4 marks}
 
 \begin{questions}[(a)]
 

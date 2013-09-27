@@ -6,7 +6,7 @@ m4_include(`exam_question.pool.m4')
 
 
 % Set up class variables
-\testtitle{Final exams}
+\testtitle{Final Examination}
 \unitsession{Spring Session 2013}
 \unitname{Social Web Analytics}
 \unitcode{300958}
