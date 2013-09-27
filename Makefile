@@ -97,6 +97,7 @@ ${TEMPLATE_DIR}/week05.tex:	${LECTURE_DIR}/graphs/graphs_intro.tex
 ${TEMPLATE_DIR}/week06.tex:	${LECTURE_DIR}/visualization/Viz.tex
 ${TEMPLATE_DIR}/week07.tex:	${LECTURE_DIR}/text_analysis/clustering.tex
 ${TEMPLATE_DIR}/week08.tex:	${LECTURE_DIR}/graphs/link_analysis.tex
+${TEMPLATE_DIR}/week10.tex:	${LECTURE_DIR}/trends/Trend.tex
 
 # Rules for construction
 %.md.png:	%.Rmd

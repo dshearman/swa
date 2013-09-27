@@ -1,0 +1,178 @@
+## Looking for Trends
+
+Looking for Trends in Facebook reach or Twitter mentions can relate to imporntant business problems.
+For example,
+
+* Is our online profile increasing or decreasing.
+* Are our competitors profiles increasing or decreasing.
+* What are the *trending* topics? Twiiter do this.
+* Did some event have an impact? (Advertising campaign, product release?)
+
+Focussing on Twitter, the first two relate to looking at the number of mentions over time. The third, Twitter already do, and we will look at how. The fourth, event impact, will be looked at in another lecture.
+
+# Twitter Trending Topics
+
+## Twitter Trending Topics
+
+\begin{columns}
+  \begin{column}{0.6\textwidth}
+Twitter produce a list of Trending topics. These can be made location specific eg. Australian trends. But the basic 
+technique for determining them is the same.
+
+Taken from a presentation by [Kostas Tsioutsioulikis, Twitter]
+(https://www.youtube.com/watch?v=duHxpSTmwW0)
+  \end{column}
+  \begin{column}{0.4\textwidth}
+\includegraphics[width=0.8\linewidth]{TwitterTrends.pdf}
+\end{column}
+\end{columns}
+
+## What is a Topic?
+
+Firstly, though we need to decide what is a topic?
+
+* Can be a simple commonly occurring word or phrase
+    * Of course, we would ignore stop words etc.
+    * There is a problem, becuase there are a large number of possibilities.
+* Another possibility is to use a dictionary.
+    * Extract common phrases from  other sources eg. wikipedia, usernames, sources specific to an application.
+  
+Given a (large) list of topics, what is trending?
+
+## What is Trending? Simple counting.
+
+* Count the number of times a topic occurs (in Australia?) in a fixed time period.
+* Look at the ratio of current frequency to the past.
+* High ratios, mean a trend
+
+Problems
+
+* What about a *new* topic? Past frequency will zero (or close)
+* What about overall frequency? Is an increase from 10 to 20 the same as 10,000 to 20,000?
+* What is a high ratio?
+
+## Trends using a $\chi^2$-test
+
+Alternative is to establish an *expected* frequency using historical data, and compare the observed frequency (current)
+to the expected frequency (past). We can compare observed to expected using a $\chi^2$ statistic
+
+$$\chi^2 = \sum \frac{(O-E)^2}{E}$$
+
+For a chi-squared test we need to consider a fixed number of tweets and compare those containing various topics.
+
+Topic | A | B | C 
+-- | -- | -- | --
+Num. tweets Current| 201 | 323 | 241 
+Num. tweets Past| 181 | 299 | 254
+
+## Trends using a $\chi^2$-test
+
+There are problems with this approach, not least, some tweets may contain multiple topics.
+So Twitter use a simplified version.
+
+Num Tweets | Tweet contains topic | Tweet doesn't contain topic
+-- | -- | -- 
+Current| 201 | 323 
+Past| 181 | 299 
+
+(This is equavalent to Proportion test, but Twiiter uses $\chi^2$)
+
+## Trends using a $\chi^2$-test
+
+Procedure; 
+
+* collect $N$ tweets from past, and $N$ tweets from today. (In fact $N$ needn't be the same)
+* See which past tweets contains topic of interest, say $X$ of them.
+* See which of current tweets contains topic of interest say $Y$ of them.
+* Calculate $\chi^2$ statistic (treats past as *expected*)
+
+$$
+\chi^2 = \frac{(Y-X)^2}{X} + \frac{((N-Y) - (N-X))^2}{(N-X)}
+$$
+
+$$
+\chi^2 = \frac{(Y-X)^2}{X} + \frac{(X-Y)^2}{(N-X)}
+$$
+
+If $N >> X ,Y$ then the second term can be ignored.
+
+## Trends using a $\chi^2$-test
+
+Twitter could use the $p$-value from the $\chi^2$ test to say if a topic *is* trending.
+
+_Null hypotthesis_ is that its not.
+
+But more usual to do ranking based on the statistic.
+
+What if the Expected count is zero. Simply add 1.
+
+# Issues with Twitter's method
+
+## Issues with Twitter's method
+
+As a statistician, I have some issues with Twitter's method. 
+
+Firstly, their expected counts are based on an historical *sample*. Secondly, they treat the low count case in pretty ad-hoc ways.
+
+## Issues with Twitter's method
+
+An alternative would be a two-sample proportion test.
+
+* Proportion of Tweets with topic before is estimated as $X/N$.
+* Proportion of Tweets with topic after is estimated as $Y/N$.
+* Compare proportions
+    * $z$-test if $N$ is large and proportions not too small
+    * Binomial test otherwise.
+
+Twitter may have chosen their approach for computational reasons, and it may not matter.
+
+# Other methods for Trends
+
+## Regression
+
+Another possible way to think about trends in Twitter counts is via a model for each topic.
+
+For example, if $Y_t$ is the count of tweets on a topic in time period $t$ we _might_ model this as
+
+$$ Y_t = \alpha + \beta t + \varepsilon$$
+
+Where $\alpha$ represents the tweet count at time zero, $\beta$ is the slope --- the change in count per unit time.
+
+The term $\varepsilon$ represents an additive random noise element. 
+
+__This is an example of Simple Linear Regression__
+
+## Simple Linear Regression in one slide.
+
+\begin{align*}
+y=\alpha+\beta x + \varepsilon && \varepsilon \sim N(0,\sigma^2) \text{ independent}\\
+SS_X = \sum (x_i-\bar{x})^2 && SS_{XY} = \sum (y_i-\bar{y})(x_i-\bar{x})\\
+\hat{\beta} = SS_{XY}/SS_X && \hat{\alpha} = \bar{y} - \hat{\beta} \bar{x}\\
+RSS = \sum (y_i - \hat{y}_i)^2 && s^2 = RSS/(n-2)\\
+\frac{\hat{\beta}-\beta}{s/\sqrt{SS_X}} \sim t_{n-2}
+\end{align*}
+
+## Simple Linear Regression for Twitter data?
+
+For tweets there are problems. 
+
+* Counts are rarely Normally distributed, and their variance $sigma^2$ is not constant.
+* Also the errors might occur in runs ie be over the line in a group then under the line. This means they are NOT independent.
+* The trend may not be very linear.
+
+The first can often be fixed with a transformation --- typically a log or square root. 
+Taking logs or square roots usually has the effect of making count data more Normally distributed and stabilising the variance.
+
+In fact, for Poisson counts, the square root is the _Variance Stabilising Transformation_ and doesn't have an issue with zero counts.
+
+## Variance Stabilising Transformation
+
+```{r, echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Variance of 10000 Poisson RV (right=square root)"}
+lambda = exp(seq(-1, 3, length=10))
+v1 = sapply(lambda, function(x) var(rpois(10000,x)))
+v2 = sapply(lambda, function(x) var(sqrt(rpois(10000,x))))
+par(mfrow=c(1,2), mar=c(4,3,1,1), cex=0.5)
+plot(lambda, v1, type="l", lty=1, lwd=2, col="blue", xlab="mean")
+plot(lambda, v2, type="l", lty=1, lwd=2, col="green", xlab="mean")
+#box("outer")
+```
