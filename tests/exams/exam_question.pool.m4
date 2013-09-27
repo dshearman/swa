@@ -41,7 +41,7 @@ m4_define(_graphs_q1,<[
   Using this graph:
   \begin{enumerate}
   \item Construct the adjacency matrix.
-  \item Calculate the degree distribution.
+  \item Tabulate the degree distribution.
   \item Calculate the closeness centrality for each vertex.
   \item Using the above results, identify which soft drink company is the most central.
   \end{enumerate}
@@ -167,7 +167,7 @@ m4_define(_clustering_q1,<[
   \begin{enumerate}
   \item Compute the SSW for $k = 2$.
   \item Plot the elbow bend plot for this data.
-  \item Determine how many clusters are the most suitable for the data.
+  \item Determine how many clusters are the most suitable for the data and explain why.
   \end{enumerate}
   
   \begin{workingbox}
@@ -409,7 +409,7 @@ m4_define(_sentiment_q1,<[
 
   \squestion
   
-  % begin.rcode echo=FALSE,results="hide"
+  % begin.rcode echo=FALSE,results="hide",message=FALSE
   require("tm")
   $@
   
@@ -452,8 +452,9 @@ m4_define(_sentiment_q1,<[
     \rinline{unhash(paste(item, negative, collapse = " "))}
   \end{itemize}
   \begin{enumerate} 
+  \item calculate and tabulate the word distribution for both positive and negative sentiment.
   \item compute the log likelihood ratio of the tweet ``\rinline{test}'' being positive versus it being negative, using Naive Bayes classification.
-  \item determine if the tweet has positive or negative sentiment, based on the log likelihood ratio.
+  \item determine if the tweet ``\rinline{test}'' has positive or negative sentiment, based on the log likelihood ratio.
   \end{enumerate}
   
   \begin{workingbox}

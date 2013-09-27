@@ -1,6 +1,6 @@
 % -*- Rnw -*-
-%documentclass[hideanswers]{uwsexam}
-\documentclass{uwsexam}
+\documentclass[hideanswers]{uwsexam}
+%documentclass{uwsexam}
 
 m4_include(`exam_question.pool.m4')
 
@@ -11,7 +11,7 @@ m4_include(`exam_question.pool.m4')
 \unitname{Social Web Analytics}
 \unitcode{300958}
 \testtime{2 hours includes reading time}
-\questioncount{10}
+\questioncount{8}
 \lecturername{Laurence Park, Glenn Stone}
 \studentinstructions{
 \begin{enumerate}
@@ -28,10 +28,10 @@ m4_include(`exam_question.pool.m4')
 \item Scientific, non-programmable hand held calculators are
   permitted.
 \item Answer all questions in the answer booklet provided.
-\item There are 50 marks available. Each question is worth 5
-  marks. All working must be shown to gain full marks.
-\item You should answer 9 of the 10 questions. If all 10 questions are
-  answered only the first 9 will be marked.
+\item There are 56 marks available. The marks assigned to each problem
+  are presented at the top of the problem. All working must be shown
+  to gain full marks.
+\item All 8 questions must be answered to obtain full marks.
 \end{enumerate}}
 
 
@@ -42,7 +42,7 @@ m4_include(`exam_question.pool.m4')
 % Set the precision of the results
 _precision(4)
 
-\question{Question 1}{X + X = 5 marks}
+\question{Question 1}{1 + 2 + 2 + 3 = 8 marks}
 
 \begin{questions}[]
 
@@ -50,21 +50,21 @@ _precision(4)
 
 \end{questions}
 
-\question{Question 2}{1 + 1 + 2 + 1  = 5 marks}
+% \question{Question 2}{1 + 1 + 2 + 1  = 5 marks}
+%
+% \begin{questions}[]
+%  
+%   text_index_q1(<[
+%     docs <- c("Stop dog, stop!", "Stop cat, stop", 
+%     "Go dog, cat and bird.");
+%     query = c("bird", "dog");
+%     stop = c("a", "the", "is", "to", "it", "and", "go") ]>)
+%  
+% \end{questions}
 
-\begin{questions}[]
-  
-  _text_index_q1(<[
-    docs <- c("Stop dog, stop!", "Stop cat, stop", 
-    "Go dog, cat and bird.");
-    query = c("bird", "dog");
-    stop = c("a", "the", "is", "to", "it", "and", "go") ]>)
-  
-\end{questions}
 
 
-
-\question{Question 3}{1 + 1 + 2 + 1 = 5 marks}
+\question{Question 2}{2 + 2 + 2 + 2 = 8 marks}
 
 \begin{questions}[]
   
@@ -72,7 +72,7 @@ _precision(4)
   
 \end{questions}
 
-\question{Question 4}{X + X = 5 marks}
+\question{Question 3}{2 + 2 = 5 marks}
 
 \begin{questions}[(a)]
 
@@ -82,7 +82,7 @@ _precision(4)
 \end{questions}
 
 
-\question{Question 5}{2 + 2 + 1 = 5 marks}
+\question{Question 4}{4 + 2 + 2 = 8 marks}
 
 \begin{questions}[]
   
@@ -95,7 +95,7 @@ _precision(4)
 
 
 
-\question{Question 6}{1 + 1 + 2 + 1 = 5 marks}
+\question{Question 5}{2 + 2 + 2 + 2 = 8 marks}
 
 \begin{questions}[]
   
@@ -107,7 +107,7 @@ _precision(4)
 \end{questions}
 
 
-\question{Question 7}{X + X = 5 marks}
+\question{Question 6}{4 + 2 = 6 marks}
 
 \begin{questions}[]
 
@@ -115,7 +115,7 @@ _precision(4)
 
 \end{questions}
 
-\question{Question 8}{X + X = 5 marks}
+\question{Question 7}{1 + 2 + 2 + 3 = 8 marks}
 
 \begin{questions}[]
 
@@ -123,8 +123,7 @@ _precision(4)
 
 \end{questions}
 
-
-\question{Question 9}{4 + 1 = 5 marks}
+\question{Question 8}{2 + 3 + 1 = 6 marks}
 
 \begin{questions}[]
   
