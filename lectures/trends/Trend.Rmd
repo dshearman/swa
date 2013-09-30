@@ -126,7 +126,7 @@ An alternative would be a two-sample proportion test.
 
 Twitter may have chosen their approach for computational reasons, and it may not matter.
 
-# Other methods for Trends
+# Other methods for Trends --- Simple Linear Regression
 
 ## Regression
 
@@ -167,7 +167,7 @@ In fact, for Poisson counts, the square root is the _Variance Stabilising Transf
 
 ## Variance Stabilising Transformation
 
-```{r, echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Variance of 10000 Poisson RV (right=square root)"}
+```{r, echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Variance of 10000 Poisson RV (right=square root) Scales are not equal"}
 lambda = exp(seq(-1, 3, length=10))
 v1 = sapply(lambda, function(x) var(rpois(10000,x)))
 v2 = sapply(lambda, function(x) var(sqrt(rpois(10000,x))))
@@ -175,4 +175,170 @@ par(mfrow=c(1,2), mar=c(4,3,1,1), cex=0.5)
 plot(lambda, v1, type="l", lty=1, lwd=2, col="blue", xlab="mean")
 plot(lambda, v2, type="l", lty=1, lwd=2, col="green", xlab="mean")
 #box("outer")
+``` 
+
+## Simple Linear Regression for Twitter data?
+
+The second problem is that the counts are probably not independent. 
+
+* It is likely that a high tweet count has an impact on the next time period. 
+* There are ways to deal with this (beyond the scope of this unit)
+
+The third problem is nonlinear trends
+
+* For example, exponential growth in counts?
+* To some extent, transformation makes the trend in counts nonlinear
+    * Log --- exponential
+    * Sqrt --- quadratic
+* This has limited use.
+* Other methods are beyond the scope of this unit.
+
+## Example of simple linear regression
+Data collected by *ScraperWiki* (may be sampled?)
+
+```{r, echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Counts of #iPhone5 tweets for a period in 2013"}
+df = data.frame( count = c(1042, 1409, 1325, 1189, 1229, 1277, 
+427, 135, 145, 133, 102, 105, 108, 128, 144, 149, 130, 107, 106, 
+83, 117, 123, 104, 116, 127, 75, 128, 136, 145, 120, 127, 110, 
+109, 122, 136, 125, 143, 177, 142, 134, 153, 173, 151, 174, 168, 
+158, 156, 128, 156, 140, 133, 132, 4), day = c(203, 204, 205, 
+206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 
+219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 
+232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 
+245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255))
+par(mar=c(4,4,1,1), cex=0.7)
+df2 = subset(df, day>209 & day<255)
+plot(count~day, data=df2, pch=16)
+#box("outer")
 ```
+
+## Example of simple linear regression
+
+```{r, echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Square root Counts of #iPhone5 tweets for a period in 2013"}
+par(mar=c(4,4,1,1), cex=0.7)
+plot(sqrt(count)~day, data=df2, pch=16)
+#box("outer")
+```
+
+## Example of simple linear regression
+
+```{r echo=FALSE}
+Xbar = mean(df2$day)
+Ybar = mean(sqrt(df2$count))
+SSX = sum((df2$day-Xbar)^2)
+SSXY = with(df2, sum((day-Xbar)*(sqrt(count)-Ybar)))
+bhat = SSXY/SSX
+ahat = Ybar - bhat*Xbar
+RSS = with(df2, sum((sqrt(count)- ahat - bhat*day)^2))
+s2 = RSS/(nrow(df2)-2)
+```
+
+Results of simple linear regression of $\sqrt{count}$ against day. ($n= `r nrow(df2)`)
+
+\begin{align*}
+SS_X = `r SSX` && SS_{XY} = `r SSXY` \\
+\hat{\beta} = `r bhat` && \hat{\alpha} = `r ahat` \\
+RSS = `r RSS` && s^2 = `r s2`
+\end{align*}
+
+Is slope non-zero ($\beta\ne 0$)? 
+
+$$t=\frac{\hat{\beta}}{s/\sqrt{SS_X}} = `r bhat/sqrt(s2/SSX)` \text{ and } t_{0.025, `r nrow(df2)-2`} = `r qt(0.975, nrow(df2)-2)`$$
+
+so yes!
+
+# Other methods for Trends --- Trend and Seasonality
+
+## Twiiter counts as a time series
+
+If we are counting the number of tweets in a fixed time period, 
+for a sequence of equally spaced times, this is an example of a __time series__ in statistics.
+
+There are many models for time series data that allow for all the issues. (Normality, Independence, nonlinear trend)
+
+Here we will look at a simple (descriptive) technique.
+
+## Trend, Seasonal and Irregular components
+
+The basic idea is that a time series can be broken down into 3 components.
+$$ Y_t = T_t + S_t +\varepsilon_t$$
+where
+
+* $Y_t$ is the data
+* $T_t$ is the (possibly nonlinear) trend. This represent the movement in the mean over time.
+* $S_t$ is the seasonal component. (See below)
+* $\varepsilon_t$ is the irregular or random component.
+
+## Trend, Seasonal and Irregular components
+
+The trend is a smooth component that varies slowly and represents how the mean value of the data changes over time.
+
+The seasonal component consist of any periodic/cyclical behaviour in the data. For example, 
+in temperature data, we expect certain months to be hotter than others in a systematic way.
+
+If the seasonal cycle consists of $m$ time periods, (eg. $m=12$ for monthly weather data with an annual seasonal cycle), then we have two properties of the seasonal component. 
+
+* $S_{t+m} = S_t$ --- the seasonal component is __periodic__
+* $\sum_{t=1}^m S_t = 0$ --- the seasonal component over one cycle __sums to zero__ --- this means, the mean seasonal effect is zero.
+
+## Trend, Seasonal and Irregular components
+
+Other examples of _seasonal_ cycles are;
+
+* An annual cycle in monthly recorded data --- temperatures, etc. ($m=12$)
+* An anuual cycle in quarterly data --- often used for sales data. ($m=4$)
+* A weekly cycle in daily recorded data --- car traffic, share prices(?), ($m=7$)
+* A daily cycle in hourly data --- emergency phone calls, traffic, ... ($m=24$)
+
+The irregular component represents random variation not explained by trend and seasonal components. 
+It has mean (expected value) zero.
+
+## Moving Averages
+
+One way to estimate the trend in the above _model_ is to use a moving average. 
+
+A moving using a window of $k<n$ points takes an average over the first $k$ points, 
+then moves one space and averages over the $k$ points.
+
+```{r echo=FALSE, dev="pdf", fig.width=4, fig.height=2, fig.cap="3pt moving average"}
+plot.new()
+par(mar=rep(1,4))
+plot.window(c(1,10), c(1.5,2.5))
+yi = 2
+for(i in 1:10) text(i, yi, bquote(x[.(i)]))
+fun = function(x, col) {
+  jit = 0.1*runif(1)
+  rect(x-1.2, yi+jit-0.2, x+1.2, yi+jit+0.2, border=col, lwd=2)
+  }
+fun(2, "blue")
+fun(3, "green")
+fun(4, "cyan")
+```
+
+## Moving Averages
+
+The central point of the window is then replaced by the moving average. 
+
+In mathematical notation this can be written, for an odd sized window, say $k=2\times j + 1$
+$$Z_t = \sum_{i= -j}^j Y_{t+i} \qquad \forall \quad j < t \le n-j \qquad \text{undefined for other } t$$
+
+For an even sized window $k = 2\times j$, we do not have an obvious central point so we make it an odd window, 
+but use a half weight at the end points, so the sum of the weights is still $k$.
+
+$$Z_t = \frac{1}{2} Y_{t-j} + \sum_{i= -j+1}^{j-1} Y_{t+i} + \frac{1}{2} Y_{t+j}
+\qquad \forall \quad j < t \le n-j$$
+
+## Moving Averages for Trend estimation
+
+Since $\sum_{i=1}^m S_i =0$, if we take a moving average with window size $m$, we eliminate the seasonal component.
+
+$$ Y_t = T_t + S_t +\varepsilon_t$$
+
+So (for $m = 2j+1$ odd) 
+
+$$ Z_t = \sum_{i= -j}^j Y_{t+i} = \sum_{i= -j}^j T_{t+i} + \sum_{i= -j}^j S_{t+i} + \sum_{i= -j}^j \varepsilon_{t+i}$$
+
+And the middle term disappears since $S_{t+m} = S_t$ and $\sum_{i=1}^m S_i =0$
+
+$Z_t$ is then taken as an _estimate_ of $T_t$. If $T_t$ is _smooth_ it will be a good estimate.
+
