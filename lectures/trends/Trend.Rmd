@@ -1,6 +1,6 @@
 ## Looking for Trends
 
-Looking for Trends in Facebook reach or Twitter mentions can relate to imporntant business problems.
+Looking for Trends in Facebook reach or Twitter mentions can relate to important business problems.
 For example,
 
 * Is our online profile increasing or decreasing.
@@ -19,8 +19,8 @@ Focussing on Twitter, the first two relate to looking at the number of mentions 
 Twitter produce a list of Trending topics. These can be made location specific eg. Australian trends. But the basic 
 technique for determining them is the same.
 
-Taken from a presentation by [Kostas Tsioutsioulikis, Twitter]
-(https://www.youtube.com/watch?v=duHxpSTmwW0)
+Taken from a presentation by 
+[Kostas Tsioutsioulikis, Twitter](https://www.youtube.com/watch?v=duHxpSTmwW0)
   \end{column}
   \begin{column}{0.4\textwidth}
 \includegraphics[width=0.8\linewidth]{TwitterTrends.pdf}
@@ -320,12 +320,12 @@ fun(4, "cyan")
 The central point of the window is then replaced by the moving average. 
 
 In mathematical notation this can be written, for an odd sized window, say $k=2\times j + 1$
-$$Z_t = \sum_{i= -j}^j Y_{t+i} \qquad \forall \quad j < t \le n-j \qquad \text{undefined for other } t$$
+$$Z_t = \frac{1}{k} \sum_{i= -j}^j Y_{t+i} \qquad \forall \quad j < t \le n-j \qquad \text{undefined for other } t$$
 
 For an even sized window $k = 2\times j$, we do not have an obvious central point so we make it an odd window, 
 but use a half weight at the end points, so the sum of the weights is still $k$.
 
-$$Z_t = \frac{1}{2} Y_{t-j} + \sum_{i= -j+1}^{j-1} Y_{t+i} + \frac{1}{2} Y_{t+j}
+$$Z_t = \frac{1}{k} (\frac{1}{2} Y_{t-j} + \sum_{i= -j+1}^{j-1} Y_{t+i} + \frac{1}{2} Y_{t+j})
 \qquad \forall \quad j < t \le n-j$$
 
 ## Moving Averages for Trend estimation
@@ -336,9 +336,149 @@ $$ Y_t = T_t + S_t +\varepsilon_t$$
 
 So (for $m = 2j+1$ odd) 
 
-$$ Z_t = \sum_{i= -j}^j Y_{t+i} = \sum_{i= -j}^j T_{t+i} + \sum_{i= -j}^j S_{t+i} + \sum_{i= -j}^j \varepsilon_{t+i}$$
+$$ Z_t = \frac{1}{m} (\sum_{i= -j}^j Y_{t+i} = \sum_{i= -j}^j T_{t+i} + \sum_{i= -j}^j S_{t+i} + \sum_{i= -j}^j \varepsilon_{t+i})$$
 
 And the middle term disappears since $S_{t+m} = S_t$ and $\sum_{i=1}^m S_i =0$
 
 $Z_t$ is then taken as an _estimate_ of $T_t$. If $T_t$ is _smooth_ it will be a good estimate.
+
+## IPhone5 hastag
+```{r, echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Square root Counts of #iPhone5 tweets for a period in 2013"}
+par(mar=c(4,4,1,1), cex=0.7)
+plot(sqrt(count)~day, data=df2, pch=16)
+#box("outer")
+```
+
+## IPhone5 hashtag
+
+This data is counts on 45 consequetive days in the middle of 2013. 
+
+If there is a seasonal component it is probably weekly, that is, $m=7$.
+
+```{r echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Trend for #iphone5 tweets"}
+par(mar=c(4,4,1,1)+.1, cex=0.7)
+Y = ts(sqrt(df2$count), freq=7, start=min(df2$day))
+plot(cbind(Y,T<-filter(Y, rep(1/7,7))), plot.type="single", col=c("blue", "green"), lwd=2, ylab=expression(sqrt(count)), xlab="day")
+legend("bottomright", lty=1, col=c("blue", "green"), lwd=2, legend=c("Data", "Moving average trend m=7"))
+```
+ 
+## IPhone5 hashtag
+
+For this data $Y_t$ the response is the __square root__ of counts of tweets at each day, starting at day 210, finishing at day 254.
+So for a 7-point moving average we can start at day 213, and go up to day 251.
+
+For example, the trend at day 213, is $$ (Y_{210}+Y_{211}+Y_{212}+Y_{213}+Y_{214}+Y_{215}+Y_{216})/7 $$
+
+```{r echo=FALSE, results="asis"}
+require(xtable, quietly=TRUE)
+print(xtable(t(df2[1:7,c(2,1)]), digits=0),floating=FALSE, include.colnames=FALSE, comment=FALSE)
+```
+
+$$T_{213}= (`r paste(formatC(Y[1:7], digits=2, format="f"), collapse="+")`)/7 = `r round(sum(round(Y[1:7],2))/7,2)`$$
+
+## Moving average with an Even window
+
+If $m$ is even, wec use the adjusted version, so that the moving average 
+is over an odd number of points
+
+$$ T_t =\frac{1}{m} (\frac{1}{2} Y_{t-j} + \sum_{i= -j+1}^{j-1} Y_{t+i} + \frac{1}{2} Y_{t+j})$$
+
+For example, if $m=4$ in the above data, trend at day 213 becomes 
+
+$$ (\frac{1}{2} Y_{211}+Y_{212}+Y_{213}+Y_{214}+\frac{1}{2}Y_{215})/4 $$
+
+So the moving average is actually over 5 points, but the _weights_ add up to 4.
+
+
+## Seasonal Component
+
+The above has assumed a 7-day seasonal or period component. How do we estimate this component?
+
+Simply, subtract the trend, then average over each time corresponding to the same part of the cycle.
+
+$$\tilde{S}_t = \frac{1}{n_t} \sum_j (Y_{t+jm} - T_{t+jm})   \qquad \forall \quad t=1,\ldots,m$$  
+
+where the sum is over all $j$ such that $t+jm$ is in the data, and $n_t$ is the number of terms that occur.
+
+Unfortunately, these $\tilde{S}_t$ do not necessary __sum to zero__, which a seasonal component should do, so we subtract the mean, and set $$ S_t = \tilde{S}_t - \frac{1}{m} \sum_{j=1}^m \tilde{S}_j \qquad \forall \quad t=1,\ldots,m$$  
+
+## Seasonal Component
+
+One way to think about this is to configure the data as a table/matrix, with $m$ rows and $n/m$ columns, 
+with _time_ running down each column.
+
+The seasonal is the average along the rows after the trend is subtracted.
+
+### Iphone5 hashtag
+
+The data has $n=45$ data points and $m=7$ for a weekly cycle.
+
+```{r echo=FALSE, results="asis"}
+mmat = function(x, m, d=0) {
+  tmp = c(x, rep(NA, m - length(x)%%m))
+  print(xtable((M=matrix(tmp, nrow=7)), digits=d), floating=FALSE, include.colnames=FALSE, comment=FALSE)
+  invisible(M)
+}
+mmat(df2$count,7)
+```
+
+## Iphone5 hashtag
+
+We are using the square roots of the counts.
+
+### Data
+```{r echo=FALSE, results="asis"}
+mmat(as.numeric(Y),7, 2)
+```
+
+## Iphone5 hashtag
+
+Trend is a 7 point moving average
+
+### Trend
+```{r echo=FALSE, results="asis"}
+mmat(as.numeric(T),7, 2)
+```
+
+## Iphone5 hashtag
+
+### Difference
+```{r echo=FALSE, results="asis"}
+M=mmat(as.numeric(Y-T),7, 2)
+```
+
+## Iphone5 hashtag
+
+$\tilde{S}_t$
+```{r echo=FALSE, results="asis"}
+St = apply(M,1,mean,na.rm=TRUE)
+print(xtable(matrix(St,nrow=1), digits=3),floating=FALSE, include.rownames=FALSE, comment=FALSE)
+```
+
+$S_t = \frac{1}{m} \sum_{j=1}^m \tilde{S}_j$
+```{r echo=FALSE, results="asis"}
+St = St - mean(St)
+print(xtable(matrix(St,nrow=1), digits=3),floating=FALSE, include.rownames=FALSE, comment=FALSE)
+```
+
+### Irregular component 
+
+The irregular component is simply everything that is left over.
+
+$$ Y_t - T_t - S_t$$ 
+
+## Summary
+
+So in this lecture we looked at
+
+* Twitter's method for finding _Twitter Trends_
+* Revised _Simple Linear Regression_ as a simple way to look at trends
+* Saw how moving averages can be used to estimate trends and seasonality 
+     * We will look at how to do this in R in the lab.
+
+Next time, _Events_
+
+
+
+
 
