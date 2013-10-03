@@ -1,0 +1,171 @@
+% Looking for Trends 
+% 300958 Social Web Analysis 
+% Week 11 Lab
+
+`r opts_chunk$set(prompt=TRUE, comment=NA)`
+
+# Twitter Trends
+
+Complete the following R-code to write a function to compute Twitter's $\chi^2$ statistic for trends.
+
+```{r eval=FALSE, prompt=FALSE}
+TwitterChi = function(tweetsBefore, tweetsNow, N) {
+  ## tweetsBefore is the number of tweets out of N on a topic of interest in a previous period
+  ## tweetsNow is the number of tweets out of N on a topic of interest in the current period
+  ## N is the number of tweets the samples 
+  
+  
+}
+```
+
+Test your code on the following 3 data sets.
+
+```{r echo=FALSE, results="asis"}
+require(xtable, quietly=TRUE)
+set.seed(5272)
+sim = function(p1,p2,N) {
+  X = matrix(c(rbinom(2, N, c(p1,p2)),N), nrow=1)
+  dimnames(X) = list("Number of Tweets", c("Before", "Now", "Sample Size"))
+  print(xtable(X, digits=0), type="html")
+  invisible(X)
+}
+x1 = sim(0.05,0.07, 1000)
+
+x2 = sim(0.02,0.05, 10000)
+
+x3 = sim(0.02,0.05, 20000)
+```
+
+You should be able to compute $\chi^2$ statistics with a calculator, so this would be a good time to practice!
+
+## more R
+
+The R function `chisq.test` can be used to calculate this value (including the second term from lectures). 
+But it is done in a slightly odd way, because Twitter assumes that the tweet count before __is__ the expected (ie. is not from a sample).
+If `X` and `Y` are the tweet counts from before and now (as in lectures) and `N` is the sample size. The R-code is below, try it on the above examples to check your function.
+
+```{r eval=FALSE}
+chisq.test(c(Y,N-Y), p= c(X,N-X)/N)
+```
+
+Perhaps a better way is to acknowledge that both are samples. Then the $\chi^2$ statistic would be computed using (for example).
+```{r eval=FALSE}
+chisq.test(cbind(c(Y,N-Y),c(X,N-X)), correct=FALSE)
+```
+
+Or using the `prop.test` (proportions test) function.
+
+```{r eval=FALSE}
+prop.test(c(X,Y), n=c(N,N), correct=FALSE)
+```
+
+Compare the results of this method to those above. 
+
+## Which method is _correct_?
+
+Since Twitter probably only use these $\chi^2$ statistics for ranking, it probably doesn't matter which is used.
+
+# Linear Regression in R
+
+Of course we can do all the calculations for simple linear regression in R. For example, 
+the mean of a vector `x` is given by `mean(x)`, and a sum of squares for `x` can be computed with `sum((x-mean(x))^2)`.
+
+## Tweet count data
+
+Using the data below (from lectures) compute $\bar{x}$, $\bar{y}$, $SS_X$, $SS_{XY}$ and 
+therefore $\hat{\beta}$ and $\hat{\alpha}$. You should use, $x=\text{day}$ and  $y=\sqrt{\text{count}}$.
+
+```{r prompt=FALSE, results="hide"}
+count = c(135, 145, 133, 102, 105, 108, 128, 144, 
+149, 130, 107, 106, 83, 117, 123, 104, 116, 127, 75, 128, 136, 
+145, 120, 127, 110, 109, 122, 136, 125, 143, 177, 142, 134, 153, 
+173, 151, 174, 168, 158, 156, 128, 156, 140, 133, 132)
+day = c(210, 
+211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 
+224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 
+237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 
+250, 251, 252, 253, 254)
+```
+
+
+## R linear regression function
+
+Of course, R has a specific function for linear regression called `lm`. It produces a fit object that can then be interogated.
+Here is an example using some data included with R. The data has two variables, the stopping distance of cars and the speed.
+
+```{r}
+x = cars$speed
+y = cars$dist    ### Actually no need to do this
+fit = lm(y~x)    ### Equivalently,  fit = lm(dist~speed, data=cars)
+summary(fit)
+```
+
+Use the `lm` function to check your results on the Twitter counts from above.
+
+# Trend, Seasonality, Irregular decomposition
+
+In lectures, we looked at a simple method using moving averages, to compute trend and seasonal components.
+Here we will look at how to do this in R. The data from lectures are the counts given above, but we will work with square roots.
+
+```{r}
+Y = sqrt(count)
+```
+
+Again you should be able to do this with a calculator.
+
+## Moving averages using a loop
+
+The following is a moving average (as defined in lectures) function using a `for` loop.
+
+```{r prompt=FALSE}
+moving.average = function(x, m) {
+  if( m%%2 ) { 
+     ## m is odd
+     w = rep(1,m)/m
+   } else { 
+    ## m is even
+    w = c(0.5, rep(1,m-1), 0.5)/m
+  }
+  j = floor(m/2)
+  offsets = (-j):j
+  n = length(x)
+  res = rep(NA, n)
+  for(i in (j+1):(n-j)) {
+    res[i] = sum(w*x[i+offsets])
+    }
+  return(res)
+}
+```
+
+Make sure you understand this function and use it to compute the 7 point moving average of the tweet count data. Remember to square root first.
+
+## Seasonal component
+
+The following function computes a seasonal component by averaging over all observations that are $m$ apart.
+
+```{r prompt=FALSE}
+seasonal = function(x ,m) {
+  ## extend the data so it is a multiple of m long
+  tmp = c(x, rep(NA, m - length(x)%%m))
+  ## convert to a matrix
+  mat = matrix(tmp, nrow=m)
+  ## Calculate the row means to get the seasonal component (excluding missing entries)
+  seas = rowMeans(mat, na.rm=TRUE)
+  seas = seas - mean(seas)
+  return(seas)
+}
+```
+
+Make sure you understand this function and use it to compute the seasonal component for the tweet count data. Remember to subtract the trend first.
+
+## R function
+
+Of course, R has all this functionality built in, using the function `decompose`. R expects the data to be a _time series_ 
+which is a special R data structure. 
+
+```{r fig.width=7, fig.height=5, fig.cap=""}
+Yts = ts(sqrt(count), freq=7)
+plot(decompose(Yts), xlab="Week")
+```
+
+ 

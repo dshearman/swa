@@ -100,7 +100,7 @@ If $N >> X ,Y$ then the second term can be ignored.
 
 Twitter could use the $p$-value from the $\chi^2$ test to say if a topic *is* trending.
 
-_Null hypotthesis_ is that its not.
+_Null hypothesis_ is that its not.
 
 But more usual to do ranking based on the statistic.
 
@@ -357,8 +357,8 @@ If there is a seasonal component it is probably weekly, that is, $m=7$.
 
 ```{r echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Trend for #iphone5 tweets"}
 par(mar=c(4,4,1,1)+.1, cex=0.7)
-Y = ts(sqrt(df2$count), freq=7, start=min(df2$day))
-plot(cbind(Y,T<-filter(Y, rep(1/7,7))), plot.type="single", col=c("blue", "green"), lwd=2, ylab=expression(sqrt(count)), xlab="day")
+Y = ts(sqrt(df2$count), freq=7)
+plot(cbind(Y,T<-filter(Y, rep(1/7,7))), plot.type="single", col=c("blue", "green"), lwd=2, ylab=expression(sqrt(count)), xlab="week")
 legend("bottomright", lty=1, col=c("blue", "green"), lwd=2, legend=c("Data", "Moving average trend m=7"))
 ```
  
@@ -416,7 +416,7 @@ The data has $n=45$ data points and $m=7$ for a weekly cycle.
 ```{r echo=FALSE, results="asis"}
 mmat = function(x, m, d=0) {
   tmp = c(x, rep(NA, m - length(x)%%m))
-  print(xtable((M=matrix(tmp, nrow=7)), digits=d), floating=FALSE, include.colnames=FALSE, comment=FALSE)
+  print(xtable((M=matrix(tmp, nrow=m)), digits=d), floating=FALSE, include.colnames=FALSE, comment=FALSE)
   invisible(M)
 }
 mmat(df2$count,7)
@@ -455,17 +455,27 @@ St = apply(M,1,mean,na.rm=TRUE)
 print(xtable(matrix(St,nrow=1), digits=3),floating=FALSE, include.rownames=FALSE, comment=FALSE)
 ```
 
-$S_t = \frac{1}{m} \sum_{j=1}^m \tilde{S}_j$
+$S_t =  \tilde{S}_t - \frac{1}{m} \sum_{j=1}^m \tilde{S}_j$
 ```{r echo=FALSE, results="asis"}
 St = St - mean(St)
 print(xtable(matrix(St,nrow=1), digits=3),floating=FALSE, include.rownames=FALSE, comment=FALSE)
 ```
+
 
 ### Irregular component 
 
 The irregular component is simply everything that is left over.
 
 $$ Y_t - T_t - S_t$$ 
+
+## Iphone5 hashtag
+
+```{r, echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Seasonal component for iphone5 hashtag"}
+par(mar=c(4,4,1,1), cex=0.7)
+plot(St, type="b", xlab="day", ylab="Seasonal")
+text(1,-0.7, "Day 1 is actually Tuesday", pos=4)
+#box("outer")
+``` 
 
 ## Summary
 
