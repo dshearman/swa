@@ -5,7 +5,7 @@ For example,
 
 * Is our online profile increasing or decreasing.
 * Are our competitors profiles increasing or decreasing.
-* What are the *trending* topics? Twiiter do this.
+* What are the *trending* topics? Twitter do this.
 * Did some event have an impact? (Advertising campaign, product release?)
 
 Focussing on Twitter, the first two relate to looking at the number of mentions over time. The third, Twitter already do, and we will look at how. The fourth, event impact, will be looked at in another lecture.
@@ -75,7 +75,7 @@ Num Tweets | Tweet contains topic | Tweet doesn't contain topic
 Current| 201 | 323 
 Past| 181 | 299 
 
-(This is equavalent to Proportion test, but Twiiter uses $\chi^2$)
+(This is equivalent to Proportion test, but Twitter uses $\chi^2$)
 
 ## Trends using a $\chi^2$-test
 
@@ -156,7 +156,7 @@ RSS = \sum (y_i - \hat{y}_i)^2 && s^2 = RSS/(n-2)\\
 
 For tweets there are problems. 
 
-* Counts are rarely Normally distributed, and their variance $sigma^2$ is not constant.
+* Counts are rarely Normally distributed, and their variance $\sigma^2$ is not constant.
 * Also the errors might occur in runs ie be over the line in a group then under the line. This means they are NOT independent.
 * The trend may not be very linear.
 
@@ -249,7 +249,7 @@ so yes!
 
 # Other methods for Trends --- Trend and Seasonality
 
-## Twiiter counts as a time series
+## Twitter counts as a time series
 
 If we are counting the number of tweets in a fixed time period, 
 for a sequence of equally spaced times, this is an example of a __time series__ in statistics.
@@ -286,7 +286,7 @@ If the seasonal cycle consists of $m$ time periods, (eg. $m=12$ for monthly weat
 Other examples of _seasonal_ cycles are;
 
 * An annual cycle in monthly recorded data --- temperatures, etc. ($m=12$)
-* An anuual cycle in quarterly data --- often used for sales data. ($m=4$)
+* An annual cycle in quarterly data --- often used for sales data. ($m=4$)
 * A weekly cycle in daily recorded data --- car traffic, share prices(?), ($m=7$)
 * A daily cycle in hourly data --- emergency phone calls, traffic, ... ($m=24$)
 
@@ -342,7 +342,7 @@ And the middle term disappears since $S_{t+m} = S_t$ and $\sum_{i=1}^m S_i =0$
 
 $Z_t$ is then taken as an _estimate_ of $T_t$. If $T_t$ is _smooth_ it will be a good estimate.
 
-## IPhone5 hastag
+## IPhone5 hashtag
 ```{r, echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Square root Counts of #iPhone5 tweets for a period in 2013"}
 par(mar=c(4,4,1,1), cex=0.7)
 plot(sqrt(count)~day, data=df2, pch=16)
@@ -351,7 +351,7 @@ plot(sqrt(count)~day, data=df2, pch=16)
 
 ## IPhone5 hashtag
 
-This data is counts on 45 consequetive days in the middle of 2013. 
+This data is counts on 45 consecutive days in the middle of 2013. 
 
 If there is a seasonal component it is probably weekly, that is, $m=7$.
 
@@ -378,7 +378,7 @@ $$T_{213}= (`r paste(formatC(Y[1:7], digits=2, format="f"), collapse="+")`)/7 = 
 
 ## Moving average with an Even window
 
-If $m$ is even, wec use the adjusted version, so that the moving average 
+If $m$ is even, we use the adjusted version, so that the moving average 
 is over an odd number of points
 
 $$ T_t =\frac{1}{m} (\frac{1}{2} Y_{t-j} + \sum_{i= -j+1}^{j-1} Y_{t+i} + \frac{1}{2} Y_{t+j})$$
