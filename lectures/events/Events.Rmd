@@ -1,0 +1,461 @@
+## Testing for Impact 
+
+Twitter could be regarded as information about the _buzz_ surrounding
+a product, brand or service. 
+
+For example, a large number of tweets about a new phone may indicate a lot of interest in that phone.
+
+Of course, this may be negative or positive _interest_. Sentiment will discussed in another lecture.
+
+In this lecture, we focus on the impact of an intervention, For example, 
+
+* Does an advertising campaign produce a _buzz_ about a product?
+* Does a product release by a competitor, decrease interest in our product?
+* Does an external event, affect the tweet stream about our brand?
+
+# Comparing Tweet rates
+
+## What is an impact?
+
+For the purposes of this unit we think of an impact as a change in tweet rates caused by some event.
+
+Events might be planned or unplanned, but they are chosen externally to the tweet data.
+
+That is, we __don't__ look for a change in tweet rate and then test it. This would be a biased approach.
+
+As far as the event is concerned we need to think about _before_ and _after_ the event and compare (usually) tweet rates.
+
+Obviously, this is applicable to Facebook like rates and reach, before and after an event
+
+## What do we compare?
+
+Tweet rates are one obvious thing to compare.
+
+In detail this means the number of tweets returned by a particular search in a fixed period of time.
+
+For example, 
+
+* the number of tweets with the hashtag #iphone after the release of a new model may increase.
+* the number of tweets may decrease when a competitor releases a new model.
+
+
+## Example --- Optophone Mobile Company
+
+The Optophone Mobile Company, is going to revamp its website. In order to justify the expense
+they will monitor the hit rate on the website before and after the switch-over to the new site. Additionally, they 
+try to assess the buzz around their product they will also monitor the number tweets _referring to the company_.
+
+They collect the number of tweets (ignoring sentiment) for five randomly chosen days before the switch-over and five randomly
+chosen days shortly after the switch-over.
+
+The following counts were obtained.
+
+```{r echo=FALSE, results="asis"}
+options(scipen=1, digits=2)
+require(xtable, quietly=TRUE)
+set.seed(56223)
+n = 5
+before = rpois(n, 140)
+after = rpois(n, 175)
+mm = rbind(before, after)
+dimnames(mm) = list(c("Before", "After"), paste("day", 1:n))
+print(xtable(mm, digits=0), floating=FALSE, comment=FALSE)
+```
+
+Has the website switch over had an impact on tweet rate?
+
+## Example --- Optophone Mobile Company
+
+```{r include=FALSE}
+mb = mean(before)
+ma = mean(after)
+```
+
+The average number of tweets  is `r mb`  before and `r ma` after, so it _looks_ like an increase.
+
+But could this have occurred by chance? Or how _likely_ is it to have occurred by chance?
+
+That is, what is the chance that even if the true underlying tweet rates were the same before and after, we could see
+a mean after, this much larger than the mean before?
+
+If this chance is small, we could argue that its likely that the underlying tweet rate has changed.
+
+## Comparing means in two groups --- $t$-test
+
+Comparing means in two groups like this is a $t$-test.
+
+If the data are (approximately) Normally distributed, and $\mu_B$ is the mean before and
+$\mu_A$ is the mean after (unknown _population_ means) then we are asking is $\mu_B \ne \mu_A$.
+
+We _test_ this using samples; if $\bar{y}_B$ is sample mean __before__ the event, $s_B$ is the 
+sample standard deviation, and $n_B$ is the sample size; and the $\bar{y}_A$, $s_A$ and $n_A$ are the 
+equivalent __after__ the event.
+
+The we want to see if $\bar{y}_A - \bar{y}_B$ is consistent with no change in tweet rate at the time of the event.
+
+## Comparing means in two groups --- $t$-test
+
+\begin{align*}
+H_0 :& \mu_A = \mu_B\\
+H_A :&  \mu_A \neq \mu_B\\
+\text{test statistic }& t = \frac{\bar{y}_A - \bar{y}_B}{s_p \sqrt{\left ( \frac{1}{n_A}+ \frac{1}{n_B}\right) }}\\
+\text{where }& s_p^2 = \frac{(n_A-1)s_A^2 + (n_B-1)s_B^2}{n_A+n_B-2}\\
+\text{rejection region } & \text{reject } H_0 \text{ if } t > t_{\alpha/2, n_A+n_B-2} \text{ or }
+t < - t_{\alpha/2, n_A+n_B-2}
+\end{align*}
+
+## Comparing means in two groups --- $t$-test
+
+Usually $\alpha = 0.05$ and the relevant $t_{\alpha/2, n_A+n_B-2}$ for values of $n_A+n_B-2$ are
+
+```{r echo=FALSE, results="asis"}
+require(xtable, quietly=TRUE)
+xtab = function(n, alpha){
+  tab = matrix(qt(1-alpha/2, n), nrow=1)
+  colnames(tab)=n
+  print(xtable(tab, digits=3), floating=FALSE, include.rownames=FALSE, comment=FALSE)
+}
+xtab(4:11, 0.05)
+xtab(12:19, 0.05)
+xtab(20:27, 0.05)
+xtab(28:35, 0.05)
+```
+
+And it approaches $1.960$ as $n_A+n_B-2$ gets larger.
+
+## Example --- Optophone Mobile Company
+
+Tweets before and After revamp
+
+```{r echo=FALSE, results="asis"}
+print(xtable(mm, digits=0), floating=FALSE, comment=FALSE)
+```
+
+Are these Normally distributed? As they are counts, probably not! Again take a square root transformation.
+
+Summary Statistics (after square root)
+
+```{r echo=FALSE}
+mm = sqrt(mm)
+mB = mean(mm[1,])
+sB = round(sd(mm[1,]),2)
+nB = length(mm[1,])
+mA = mean(mm[2,])
+sA = round(sd(mm[2,]),2)
+nA = length(mm[2,])
+sP2 = ((nA-1)*sA^2 + (nB-1)*sB^2)/(nA+nB-2)
+sP = round(sqrt(sP2),2)
+tt = round((mA-mB)/(sP*sqrt(1/nA+1/nB)),3)
+```
+
+Sample | Mean | Std. Dev. | n
+---|---|---|---
+Before | `r mB` | `r sB` | `r nB`
+After | `r mA` | `r sA` | `r nA`
+
+## Example --- Optophone Mobile Company
+
+Therefore
+$$ s_p^2 = \frac{(n_A-1)s_A^2 + (n_B-1)s_B^2}{n_A+n_B-2} = `r sP2`$$
+$$ s_p = `r sP`$$
+
+Test Statistic 
+
+$$t = \frac{\bar{y}_A - \bar{y}_B}{s_p \sqrt{\left ( \frac{1}{n_A}+ \frac{1}{n_B}\right) }}
+= \frac{`r mA` - `r mB`}{`r sP` \sqrt{\left ( \frac{1}{`r nA`}+ \frac{1}{`r nB`}\right) }}$$
+$$= `r tt`$$
+
+$t_{0.025,8} = `r round(qt(1-0.025, 8),3)`$ so we reject $H_0$ ie there is a difference.
+
+
+# Example --- Commonpoverty Bank
+
+## Example --- Commonpoverty Bank
+```{r include=FALSE}
+set.seed(86755)
+n = 4
+BIx = rpois(n, 96)
+AIx = rpois(n, 129)
+BCx = rpois(n, 52)
+ACx = rpois(n, 85)
+```
+
+The Commonpoverty Bank is starting an advertising campaign. They beleive that the Twitter buzz around the 
+campaign may be a lead indicator to increased sales of mortgages. 
+
+They decide to collect data before and after the campaign on the number of tweets per day relating to their bank.
+
+```{r results="asis", echo=FALSE}
+mm = rbind(BIx, AIx)
+dimnames(mm) = list(c("Before", "After"), paste("day", 1:n))
+print(xtable(mm, digits=0), floating=FALSE, comment=FALSE)
+```
+
+## Example --- Commonpoverty Bank
+
+After a square root transformation the following summary statistics were found.
+
+```{r echo=FALSE}
+mm = sqrt(mm)
+mB = round(mean(mm[1,]),2)
+sB = round(sd(mm[1,]),2)
+nB = length(mm[1,])
+mA = round(mean(mm[2,]),2)
+sA = round(sd(mm[2,]),2)
+nA = length(mm[2,])
+sP2 = ((nA-1)*sA^2 + (nB-1)*sB^2)/(nA+nB-2)
+sP = round(sqrt(sP2),2)
+tt = round((mA-mB)/(sP*sqrt(1/nA+1/nB)),3)
+```
+
+Sample | Mean | Std. Dev. | n
+---|---|---|---
+Before | `r mB` | `r sB` | `r nB`
+After | `r mA` | `r sA` | `r nA`
+
+1. Compute the pooled standard deviation $s_p$
+2. Compute the $t$-statistic
+3. Test whether there has been a significant change in tweet rate
+
+# Introducing a control
+
+## Introducing a control
+
+How do we know that the difference is due to the event?
+
+Maybe the tweet rate increased for everyone. Or at least for people in the same industry.
+
+One way to get more information would be to collect tweet data on a similar business or entity.
+
+Ideally, this business would not be affected by the event, but would be affected by all other factors, that might affect the primary business.
+
+## Introducing a control
+
+This type of entity is called a control. We would collect tweet numbers _before_ and _after_ the event
+on both the potentially _impacted_ company and the _control_ company.
+
+```{r echo=FALSE, results="asis"}
+require(xtable, quietly=TRUE)
+set.seed(56223)
+n = 5
+before = rpois(n, 140)
+after = rpois(n, 175)
+cbefore = rpois(n, 75)
+cafter = rpois(n, 75)
+m2 = rbind(cbefore, cafter,before, after )
+mtmp = matrix(apply(m2, 1, paste, collapse=","), ncol=2)
+dimnames(mtmp) = list(c("Before", "After"), c("Control", "Impact"))
+print(xtable(mtmp, digits=0), floating=FALSE, comment=FALSE)
+```
+Desings like this are used a lot in _environmental_ data. They are called __BACI__ designs
+after the initial letters of _before_, _after_, _control_, _impact_.
+
+## Analysis of BACI designs
+
+We assume that the number in each of the four cells is the same. ($n$) This simplifies the analysis. We just add up the numbers in each cell.
+
+|| Control | Impact
+---|---|---
+Before | BC | BI
+After | AC | AI
+
+
+In a BACI design;
+
+* the difference in row totals is called a contrast for the before/after effect.
+    * (AC+AI) - (BC+BI) 
+* the difference in column totals is the contrast for the control/impact effect.
+    * (AI+BI) - (AC+BC)
+
+
+
+## Analysis of BACI designs
+
+We are not really interested in these contrasts. 
+They relate to the overall change before/after and the overall difference between companies
+
+We are interested in whether the impacted company after, 
+can be predicted as simply the combination of difference between companies and the  before/after difference.
+
+If it _cannot_ then the event has had an impact
+
+## Analysis of BACI designs
+
+Mathematically we can write this as
+
+|| Control | Impact
+---|---|---
+Before | $\mu$ | $\mu+\alpha$
+After | $\mu+\beta$ | $\mu + \alpha+\beta+\gamma$
+
+Does $\gamma = 0$?
+
+We use  a contrast in estimating $\gamma$
+
+Interaction contrast is (BC+AI) - (AC+BI) --- difference in diagonals.
+
+## Analysis of BACI designs
+
+Contrasts
+
+* before/after --- (AC+AI) - (BC+BI) 
+* companies --- (AI+BI) - (AC+BC)
+* interaction --- (BC+AI) - (AC+BI)
+
+For each contrast,
+
+$$\text{Effects} =  \frac{\text{contrast}}{2n}$$
+$$\text{Sum of Squares} = \frac{\text{contrast}^2}{4n}$$
+
+There are three contrasts so three sums of squares. We call them $SS_{BA}$, $SS_{CI}$ and $SS_{Int}$ 
+
+## _Sum of squares for error_ ($SS_E$)  
+
+The total sum of squares ($SS_{Total}$) is  the sum of all the data points minus there mean squared.
+
+$$SS_{Total} = \sum_{ij} (y_{ij} - \bar{y})^2$$
+
+And then the Sum of Squares for error $SS_{E}$ is the difference,
+
+$$SS_E= SS_{Total} - SS_{BA} - SS_{CI} - SS_{Int}$$
+
+Also Mean Square for error is $MS_E = SS_E/ (4\times(n-1))$
+
+## Is the interaction different from zero?
+
+We use the fact that the $F$ statistic 
+
+$$ F = \frac{SS_{Int}}{MS_E}$$ 
+
+Has an _$F$ distribution_ on 1 and $4(n-1)$ degrees of freedom so reject $H_0$ (no interaction)
+if $F$ exceeds the critical value.
+
+Table of $\alpha=0.05$ critical values for degrees of freedom $= 1$ and $4(n-1)$
+
+```{r echo=FALSE, results="asis"}
+ftab = matrix(qf(1-0.025, 1, 4*(1:5)), nrow=1)
+colnames(ftab) = 4*(1:5)
+print(xtable(ftab, digits=3), floating=FALSE, comment=FALSE, include.rownames=FALSE)
+```
+
+## Example --- Optophone Mobile Company
+
+```{r echo=FALSE, results="asis"}
+m2 = round(sqrt(m2),3)
+SStotal = sum( (m2-mean(m2))^2)
+sums = apply(m2, 1, sum)
+BC = sums[1]; AC= sums[2]; BI = sums[3]; AI = sums[4]
+CBA = (AC+AI) - (BC+BI) 
+CCI = (AI+BI) - (AC+BC)
+CInt = (BC+AI) - (AC+BI) 
+SSE = SStotal - (CBA^2+CCI^2+CInt^2)/20
+options(scipen=1)
+print(xtable(mtmp, digits=0), floating=FALSE, comment=FALSE)
+```
+
+For the same reasons as before we use a square root transformation
+
+```{r echo=FALSE, results="asis"}
+mtmp2 = matrix(apply(formatC(m2, digits=2, format="f"), 1, paste, collapse=","), ncol=2)
+dimnames(mtmp2) = list(c("Before", "After"), c("Control", "Impact"))
+print(xtable(mtmp2, digits=0), floating=FALSE, comment=FALSE)
+```
+
+## Example --- Optophone Mobile Company
+
+Total sum of squares is `r SStotal`.
+
+Totals
+
+|| Control | Impact
+---|---|---
+Before | `r BC` | `r BI`
+After | `r AC` | `r AI`
+
+Test for an impact of the website revamp.
+
+## Example --- Optophone Mobile Company
+
+Solution 
+
+Source | Contrast | Effect | SSQ
+---|---|---|---
+before/after |  (AC+AI) - (BC+BI) = `r CBA`| `r CBA/10` |`r CBA^2/20`
+companies |(AI+BI) - (AC+BC) = `r CCI`| `r CCI/10` |`r CCI^2/20`
+interaction |  (BC+AI) - (AC+BI) =`r CInt`| `r CInt/10`| `r CInt^2/20`
+
+So
+$$SS_E= SS_{Total} - SS_{BA} - SS_{CI} - SS_{Int} = `r SSE`$$
+
+```{r include=FALSE}
+tmp = c(t(m2))
+ba = rep(c(rep("before",5), rep("after",5)),2)
+ci = c(rep("control", 10), rep("impact",10))
+summary(aov(tmp~ba*ci))
+```
+
+## Example --- Optophone Mobile Company
+
+$F$ statistic for the interaction
+
+$$ F = \frac{SS_{Int}}{MS_E} = \frac{`r CInt^2/20`}{`r SSE`/16} = `r round(CInt^2/20/(SSE/16),2)`$$
+
+Using the table the $\alpha=0.05$, $F$ critical value for 1 and 16 degrees of freedom is 
+`r round(qf(1-0.025,1,16),3)`
+
+# Example --- Commonpoverty Bank revisited
+
+## Example --- Commonpoverty Bank and Not Another Bank
+
+A company executive points out that all the banks were in the news around the time of the advertising campaign,
+and that maybe this was responsible for the Tweet increase?
+
+Luckily, they had also collected tweet count data on their competitor _Not Another Bank_. 
+
+```{r results="asis", echo=FALSE}
+mm = rbind(BCx, ACx)
+dimnames(mm) = list(c("Before", "After"), paste("day", 1:4))
+print(xtable(mm, digits=0), floating=FALSE, comment=FALSE)
+```
+
+```{r include=FALSE}
+tmp = sqrt(c(BCx,ACx, BIx, AIx))
+ba = rep(c(rep("before",4), rep("after",4)),2)
+ci = c(rep("control", 8), rep("impact",8))
+summary(aov(tmp~ba*ci))
+
+SStotal = round(sum( (tmp-mean(tmp))^2),2)
+sumBI = round(sum(sqrt(BIx)),2)
+sumAI = round(sum(sqrt(AIx)),2)
+sumBC = round(sum(sqrt(BCx)),2)
+sumAC = round(sum(sqrt(ACx)),2)
+```
+
+## Example --- Commonpoverty Bank and Not Another Bank
+
+After a square root transformation the following summaries were obtained.
+
+Total sum of square ($SS_{Total}$) = `r SStotal`
+
+Sums of square roots of counts.
+
+||Not Another Bank| Commonpoverty Bank
+---|---|---
+Before| `r sumBC` | `r sumBI`
+After| `r sumAC`| `r sumAI`
+
+## Example --- Commonpoverty Bank and Not Another Bank
+
+1. Compute the contrasts for Before/After, between banks, and the interaction.
+2. Compute the sums of squares for the same as above.
+3. Compute the sum of squares for error.
+4. Test whether the advertising campaign really had an impact.
+
+# Summary
+
+## Summary
+
+Today we looked at a two-sample $t$-test to compare tweet rates before and after an _event_.
+
+We also looked at including a _control_ organisation to eliminate external effects.
+

@@ -96,6 +96,13 @@ $$
 
 If $N >> X ,Y$ then the second term can be ignored.
 
+## Example
+
+Out of five hundred tweets, 17 mention topic A in a past period, and 27 in the current what is the $\chi^2$ statistic
+
+$$\chi^2 = \frac{(Y-X)^2}{X} + \frac{(X-Y)^2}{(N-X)} = \frac{(27-17)^2}{17} + \frac{(17-27)^2}{(500-17)}$$
+$$ = `r (27-17)^2/17` + `r (17-27)^2/(500-17)` = `r (27-17)^2/17+(17-27)^2/(500-17)`$$
+
 ## Trends using a $\chi^2$-test
 
 Twitter could use the $p$-value from the $\chi^2$ test to say if a topic *is* trending.
@@ -142,7 +149,7 @@ The term $\varepsilon$ represents an additive random noise element.
 
 __This is an example of Simple Linear Regression__
 
-## Simple Linear Regression in one slide.
+## Simple Linear Regression in one slide!
 
 \begin{align*}
 y=\alpha+\beta x + \varepsilon && \varepsilon \sim N(0,\sigma^2) \text{ independent}\\
@@ -233,9 +240,24 @@ RSS = with(df2, sum((sqrt(count)- ahat - bhat*day)^2))
 s2 = RSS/(nrow(df2)-2)
 ```
 
-Results of simple linear regression of $\sqrt{count}$ against day. ($n= `r nrow(df2)`)
+Simple linear regression of $\sqrt{count}$ against day. ($n= `r nrow(df2)`$)
+
+Given that 
 
 \begin{align*}
+\bar{x} = `r Xbar` && \bar{y} = `r Ybar`\\
+SS_X = `r SSX` && SS_{XY} = `r SSXY` \\
+RSS = `r RSS`
+\end{align*}
+
+What are $\hat{\beta}$ and $\hat{\alpha}$?
+
+## Example of simple linear regression
+
+Results of simple linear regression of $\sqrt{count}$ against day. ($n= `r nrow(df2)`$)
+
+\begin{align*}
+\bar{x} = `r Xbar` && \bar{y} = `r Ybar`\\
 SS_X = `r SSX` && SS_{XY} = `r SSXY` \\
 \hat{\beta} = `r bhat` && \hat{\alpha} = `r ahat` \\
 RSS = `r RSS` && s^2 = `r s2`
@@ -376,6 +398,9 @@ print(xtable(t(df2[1:7,c(2,1)]), digits=0),floating=FALSE, include.colnames=FALS
 
 $$T_{213}= (`r paste(formatC(Y[1:7], digits=2, format="f"), collapse="+")`)/7 = `r round(sum(round(Y[1:7],2))/7,2)`$$
 
+Trend at 214 would be
+$$ (Y_{211}+Y_{212}+Y_{213}+Y_{214}+Y_{215}+Y_{216}+Y_{217})/7 $$
+
 ## Moving average with an Even window
 
 If $m$ is even, we use the adjusted version, so that the moving average 
@@ -386,6 +411,11 @@ $$ T_t =\frac{1}{m} (\frac{1}{2} Y_{t-j} + \sum_{i= -j+1}^{j-1} Y_{t+i} + \frac{
 For example, if $m=4$ in the above data, trend at day 213 becomes 
 
 $$ (\frac{1}{2} Y_{211}+Y_{212}+Y_{213}+Y_{214}+\frac{1}{2}Y_{215})/4 $$
+
+$$T_{213}= (\frac{1}{2} \times `r formatC(Y[2], digits=2, format="f")` + 
+`r paste(formatC(Y[3:5], digits=2, format="f"), collapse="+")` +
+\frac{1}{2} \times `r formatC(Y[5], digits=2, format="f")`
+)/4 = `r round(sum(c(0.5,1,1,1,0.5)*round(Y[2:6],2))/4,2)`$$
 
 So the moving average is actually over 5 points, but the _weights_ add up to 4.
 
