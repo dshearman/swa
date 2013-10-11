@@ -423,12 +423,18 @@ tmp = sqrt(c(BCx,ACx, BIx, AIx))
 ba = rep(c(rep("before",4), rep("after",4)),2)
 ci = c(rep("control", 8), rep("impact",8))
 summary(aov(tmp~ba*ci))
-
 SStotal = round(sum( (tmp-mean(tmp))^2),2)
 sumBI = round(sum(sqrt(BIx)),2)
 sumAI = round(sum(sqrt(AIx)),2)
 sumBC = round(sum(sqrt(BCx)),2)
 sumAC = round(sum(sqrt(ACx)),2)
+CBA = (sumAI+sumAC) - (sumBI+sumBC)
+CCI = (sumAI+sumBI) - (sumAC+sumBC)
+CInt = (sumBC+sumAI) - (sumBI+sumAC)
+SSBA = CBA^2/16
+SSCI = CCI^2/16
+SSInt = CInt^2/16
+SSE = SStotal - SSBA-SSCI -SSInt
 ```
 
 ## Example --- Commonpoverty Bank and Not Another Bank

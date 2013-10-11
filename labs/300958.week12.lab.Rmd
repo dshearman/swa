@@ -1,0 +1,201 @@
+% Assessing for Impact
+% 300958 Social Web Analysis 
+% Week 12 Lab
+
+`r opts_chunk$set(prompt=TRUE, comment=NA, fig.cap="")`
+
+
+# Two Sample t-test
+
+Complete the following R-code to write a function to compute the two sample $t$-statistic.
+
+```{r eval=FALSE, prompt=FALSE}
+tStat = function(before, after) {
+  ## before - vector of the number of tweets per day before the event
+  ## after - vector of the number of tweets per day after the event
+  mean.before = mean(before)
+  sd.before = sd(before)
+  n.before = length(before)  
+  
+  
+  
+}
+```
+
+Test your code on the following 3 data sets.
+
+```{r echo=FALSE}
+options(scipen=1, digits=2)
+require(xtable, quietly=TRUE)
+set.seed(56223)
+sim.one = function(mb, ma, n) {
+before = rpois(n, mb)
+after = rpois(n, ma)
+cat("before = ")
+dput(before, control=NULL)
+cat("after = ")
+dput(after, control=NULL)
+}
+sim.one(140,175,5)
+sim.one(220, 240, 4)
+sim.one(100,197, 6)
+```
+
+You should also be comfortable doing these computations with a calculator.
+
+## R code
+
+R has a built in function to do $t$-tests. The form that we
+have used, requires a call like the following,
+
+```{r eval=FALSE}
+t.test(sqrt(before), sqrt(after), var.equal=TRUE)
+```
+
+Use this code to check your answers from above.
+
+# BACI designs 
+
+Write an R function to compute the contrasts, sums of squares and $F$-statistic for a BACI design. The template below will give you a start.
+
+```{r eval=FALSE, prompt=FALSE}
+tStat = function(before.control, after.control, before.impact, after.impact) {
+  ## before.control - vector of the number of tweets per day before the event for the control entity
+  ## after.impact - vector of the number of tweets per day after the event for the impacted entity (etc)
+  ## all should be vectors of the same length (we dont bother to check this)
+  n = length(before.control)
+  ## tmp will contain all the square root tranformed data
+  tmp = sqrt(c(before.control, after.control, before.impact, after.impact))
+  SStotal = sum((tmp-mean(tmp))^2)
+  BC = sum(sqrt(before.control))
+  AC = sum(sqrt(after.control))
+  BI = sum(sqrt(before.impact))
+  AI = sum(sqrt(after.impact))
+  
+  contrastBA = (AC+AI) - (BC+BI)
+  
+  
+  SSBA = contrastBA^2/(4*n)
+  
+  
+  
+}
+```
+
+Test your code on the following 3 data sets.
+
+```{r echo=FALSE}
+set.seed(86755)
+sim.two = function(BIm, AIm, BCm, ACm, n) {
+BIx = rpois(n, 96)
+AIx = rpois(n, 129)
+BCx = rpois(n, 52)
+ACx = rpois(n, 85)
+cat("before.control = ")
+dput(BCx, control=NULL)
+cat("after.control = ")
+dput(ACx, control=NULL)
+cat("before.impact = ")
+dput(BIx, control=NULL)
+cat("after.impact = ")
+dput(AIx, control=NULL)
+}
+sim.two(96,129,52,85, 4)
+sim.two(140, 175, 75,75, 5)
+sim.two(200,210, 150,145, 6)
+```
+
+You should also be comfortable doing these computations with a calculator.
+
+## R code
+
+R has built in functions to analyse this kind of data. It is a special case of a statistical technique
+called _analysis of variance_. To set the data up for the R function `aov` we need to use the following;
+
+```{r eval=FALSE, prompt=FALSE}
+data = sqrt(c(before.control, after.control, before.impact, after.impact))
+n = length(before.control)
+when = c(rep("before", n), rep("after",n), rep("before", n), rep("after",n))
+company = c( rep("control", 2*n), rep("impact", 2*n))
+summary(aov(data~when*company))
+```
+
+This produces output, like the following,
+
+```{r echo=1:4}
+before.control = c(43, 47, 58, 61)
+after.control = c(81, 78, 90, 79)
+before.impact = c(99, 116, 107, 93)
+after.impact = c(129, 143, 119, 120)
+data = sqrt(c(before.control, after.control, before.impact, after.impact))
+n = length(before.control)
+when = c(rep("before", n), rep("after", n), rep("before", n), rep("after", n))
+company = c(rep("control", 2 * n), rep("impact", 2 * n))
+summary(aov(data ~ when * company))
+```
+
+The result we are interested in, is the row corresponding to `when:company` in this table. 
+It has the $F$-statistic and the $p$ value `Pr(>F)` for the interaction.
+
+Check your results using this code.
+
+# Broken Stick models   (Extra material for those interested)
+
+All of the above has ignored any _trend_ in the count data. Last week we looked at estimating trend, 
+and this weeek we looked at detecting impact ignoring any trend. Can we detect an impact in data that has a trend?
+
+In the simplest case think of a linear trend (straight line), on the square root scale. 
+Suppose the impact changes the slope of the line. ie. after the event (advertisng etc.), 
+the trend in tweets increases.
+
+```{r echo=FALSE}
+day = 1:45
+int = 20
+mu = 10+ 0.04*day + 0.04*pmax(day-int,0)
+plot(day, mu, ylab="trend", lwd=2, type="l")
+abline(v=int, col="red", lwd=2)
+text(int, par("usr")[4]-1, paste("Event at day", int), adj=0.5)
+```
+
+Tweet count data sampled from this might look like;
+
+```{r echo=FALSE}
+set.seed(12245)
+count = rpois(length(day), mu^2)
+plot(day, count, pch=16)
+```
+
+
+And if we fit a linear trend (ignoring the event) we get (on a square root scale)
+
+```{r echo=FALSE}
+plot(day, sqrt(count), pch=16)
+abline((fit0 = lm(sqrt(count)~day)), lwd=2, col="blue")
+```
+
+
+Remember that the equation of line can be written
+
+$$y = \alpha + \beta t$$
+
+and $\beta$ is the slope. If we want to have a different slope after an event that occurs at time $t_0$ we can use,
+
+$$y = \alpha + \beta t  + \gamma \max(t-t_0,0)$$
+
+The last term here is zero for times $t$ less than $t_0$ and linear afterwards.
+
+```{r echo=FALSE}
+plot(day, pmax(day-int,0), type="l", lwd=2, ylab=expression(paste("max(", t-t[0], ",0)")))
+```
+
+We can fit this in R using the following.
+
+```{r echo=c(1,5)}
+fit = lm(sqrt(count)~day + I(pmax(day-20,0)))
+plot(day, sqrt(count), pch=16)
+abline(lm(sqrt(count)~day), lwd=2, col="blue")
+lines(day, fitted(fit), lwd=2, col="red")
+summary(fit)
+```
+
+Notice that the term for `I(pmax(day-20,0))` is significant ($p$-value less than 0.05)
