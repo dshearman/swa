@@ -163,7 +163,7 @@ Make sure you understand this function and use it to compute the seasonal compon
 Of course, R has all this functionality built in, using the function `decompose`. R expects the data to be a _time series_ 
 which is a special R data structure. 
 
-```{r fig.width=7, fig.height=5, fig.cap=""}
+```{r lab11-yts, fig.width=7, fig.height=5, fig.cap=""}
 Yts = ts(sqrt(count), freq=7)
 plot(decompose(Yts), xlab="Week")
 ```
