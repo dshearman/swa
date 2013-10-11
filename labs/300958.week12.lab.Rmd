@@ -11,13 +11,13 @@ Complete the following R-code to write a function to compute the two sample $t$-
 
 ```{r eval=FALSE, prompt=FALSE}
 tStat = function(before, after) {
-  ## before - vector of the number of tweets per day before the event
-  ## after - vector of the number of tweets per day after the event
+  # before - vector of the number of tweets per day before the event
+  # after - vector of the number of tweets per day after the event
   mean.before = mean(before)
   sd.before = sd(before)
   n.before = length(before)  
   
-  
+  # Insert code here.
   
 }
 ```
@@ -58,13 +58,15 @@ Use this code to check your answers from above.
 
 Write an R function to compute the contrasts, sums of squares and $F$-statistic for a BACI design. The template below will give you a start.
 
-```{r eval=FALSE, prompt=FALSE}
+```{r eval=FALSE, prompt=FALSE, tidy=FALSE, tidy=FALSE}
 tStat = function(before.control, after.control, before.impact, after.impact) {
-  ## before.control - vector of the number of tweets per day before the event for the control entity
-  ## after.impact - vector of the number of tweets per day after the event for the impacted entity (etc)
-  ## all should be vectors of the same length (we dont bother to check this)
+  # before.control - vector of the number of tweets per day before the event 
+  #   for the control entity
+  # after.impact - vector of the number of tweets per day after the event 
+  #   for the impacted entity (etc)
+  # all should be vectors of the same length (we dont bother to check this)
   n = length(before.control)
-  ## tmp will contain all the square root tranformed data
+  # tmp will contain all the square root transformed data
   tmp = sqrt(c(before.control, after.control, before.impact, after.impact))
   SStotal = sum((tmp-mean(tmp))^2)
   BC = sum(sqrt(before.control))
@@ -74,10 +76,9 @@ tStat = function(before.control, after.control, before.impact, after.impact) {
   
   contrastBA = (AC+AI) - (BC+BI)
   
-  
   SSBA = contrastBA^2/(4*n)
   
-  
+  # Insert code here
   
 }
 ```
@@ -148,7 +149,7 @@ In the simplest case think of a linear trend (straight line), on the square root
 Suppose the impact changes the slope of the line. ie. after the event (advertisng etc.), 
 the trend in tweets increases.
 
-```{r echo=FALSE}
+```{r lab12-sl, echo=FALSE}
 day = 1:45
 int = 20
 mu = 10+ 0.04*day + 0.04*pmax(day-int,0)
@@ -159,7 +160,7 @@ text(int, par("usr")[4]-1, paste("Event at day", int), adj=0.5)
 
 Tweet count data sampled from this might look like;
 
-```{r echo=FALSE}
+```{r lab12-tc, echo=FALSE}
 set.seed(12245)
 count = rpois(length(day), mu^2)
 plot(day, count, pch=16)
@@ -168,7 +169,7 @@ plot(day, count, pch=16)
 
 And if we fit a linear trend (ignoring the event) we get (on a square root scale)
 
-```{r echo=FALSE}
+```{r lab12-lt, echo=FALSE}
 plot(day, sqrt(count), pch=16)
 abline((fit0 = lm(sqrt(count)~day)), lwd=2, col="blue")
 ```
@@ -184,13 +185,13 @@ $$y = \alpha + \beta t  + \gamma \max(t-t_0,0)$$
 
 The last term here is zero for times $t$ less than $t_0$ and linear afterwards.
 
-```{r echo=FALSE}
+```{r lab12-zero, echo=FALSE}
 plot(day, pmax(day-int,0), type="l", lwd=2, ylab=expression(paste("max(", t-t[0], ",0)")))
 ```
 
 We can fit this in R using the following.
 
-```{r echo=c(1,5)}
+```{r lab12-sm, echo=c(1,5)}
 fit = lm(sqrt(count)~day + I(pmax(day-20,0)))
 plot(day, sqrt(count), pch=16)
 abline(lm(sqrt(count)~day), lwd=2, col="blue")

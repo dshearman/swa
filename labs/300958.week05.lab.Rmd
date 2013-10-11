@@ -94,7 +94,19 @@ cred <- OAuthFactory$new(consumerKey="insert here",
      requestURL="https://api.twitter.com/oauth/request_token",
      accessURL="https://api.twitter.com/oauth/access_token",
      authURL="https://api.twitter.com/oauth/authorize")
+```
+
+Then perform the handshake:
+
+```{.r}
 cred$handshake()
+```
+
+If an error is received when performing the handshake, we may have to
+provide additional options to the RCurl library.
+
+```{.r}
+options(RCurlOptions = list(verbose = FALSE, capath = system.file("CurlSSL", "cacert.pem", package = "RCurl"), ssl.verifypeer = FALSE))
 ```
 
 Once the handshake is performed, R will ask you to visit a URL to get
