@@ -21,6 +21,21 @@ Advanced sentiment analysis examines the emotion behind the text
 (e.g. excited, annoyed, surprised).
 
 
+## Data Mining Methods
+
+In this unit we have seen:
+
+- Regression: predicting a real value $y$
+- Clustering: gathering similar objects into groups
+
+In this lecture we will introduce:
+
+- Classification: predicting an ordinal value from a set.
+
+We will focus on binary classification, meaning the set of ordinal
+values is of size 2. These values are usually $\{True, False\}$,
+$\{Yes, No\}$, or $\{0,1\}$.
+
 
 ## Classification
 
@@ -29,6 +44,15 @@ object based on its attributes (variables, features).
 
 Classification is a similar task to regression, but regression
 predicts a real value for each object.
+
+Classification problems:
+
+- Classify if this email is spam, given the words in the email.
+- Classify if a patient has cancer, given the patients attributes.
+- Classify if it will rain today, given the humidity of the past few days.
+- Classify if there is a tank in this satellite image, given the pixel intensities and positions.
+- Classify if a person is suitable for a job, given the contents of their Facebook page.
+
 
 ### Example
 
@@ -86,5 +110,21 @@ of objects with their classes and learn the relationships between
 them.
 
 
-## Naive Bayes Classsifier
+# Naive Bayes Classsifier
 http://en.wikipedia.org/wiki/Naive_bayes
+
+
+
+
+
+
+# Decision Tree
+
+# Evaluation
+
+
+False Positive Rate
+False Negative Rate
+True Positive Rate
+True Negative Rate
+
