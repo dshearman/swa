@@ -53,7 +53,6 @@ Classification problems:
 - Classify if there is a tank in this satellite image, given the pixel intensities and positions.
 - Classify if a person is suitable for a job, given the contents of their Facebook page.
 
-
 ### Example
 
 Classification:
@@ -64,6 +63,108 @@ Regression:
 $$
 	[~0.3~1.2~-4.3~2~] \rightarrow 4.4
 $$
+
+
+## Classification is Supervised Learning
+
+To classify the class of a data object $x$, we need to compute a
+function $c = f(x)$, where $c$ is the class of $x$.
+
+We compute the function $f(\cdot)$ using existing data labelled with
+its class. Computing this model based on data is called \alert{training}.
+
+Once we construct the function, we are able to apply the function to
+new data to determine its class.
+
+
+## Common Classification Methods
+
+There are different methods of classification that have different
+levels of accuracy and varying computation times. The choice of
+classification method depends on the classification problem.
+
+Classification methods include:
+
+- Logistic Regression
+- Support Vector Machines
+- Neural Networks
+- Decision Trees
+
+Each method draws one (or more) line(s) in the data space that best
+separates the two classes.
+
+## Classification Example
+
+### Problem: Bran for Breakfast
+
+We surveyed six people and obtained the following information about
+their age, gender, hair colour and if they have bran for breakfast.
+
+\begin{center}
+\toprule
+\begin{tabular}{|A|c|c|c|c|c|}
+\midrule
+\rowcolor{blue!20}
+                          & Age & Gender & Hair Colour & Bran  \\\hline
+\firstrowcolour  Person 1 & 7   & Male   & Brown       & No  \\\hline
+\secondrowcolour Person 2 & 5   & Female & Black       & No  \\\hline
+\thirdrowcolour  Person 3 & 12  & Male   & Black       & No  \\\hline
+\fourthrowcolour Person 4 & 32  & Female & Brown       & Yes \\\hline
+\fifthrowcolour  Person 5 & 45  & Female & Blonde      & Yes \\\hline
+\sixthrowcolour  Person 6 & 28  & Male   & Brown       & Yes \\\hline
+\bottomrule
+\end{tabular}
+\end{center}
+
+Using this data, can we predict if a newly surveyed person has bran
+for breakfast based on their age, gender and hair colour?
+
+### Problem: Bran for Dinner
+
+We surveyed six people and obtained the following information about
+their age, gender, hair colour and if they have bran for dinner.
+
+\begin{center}
+\toprule
+\begin{tabular}{|A|c|c|c|c|c|}
+\midrule
+\rowcolor{blue!20}
+                          & Age & Gender & Hair Colour & Bran  \\\hline
+\firstrowcolour  Person 1 & 7   & Male   & Brown       & No  \\\hline
+\secondrowcolour Person 2 & 5   & Female & Black       & No  \\\hline
+\thirdrowcolour  Person 3 & 12  & Male   & Black       & No  \\\hline
+\fourthrowcolour Person 4 & 32  & Female & Brown       & No \\\hline
+\fifthrowcolour  Person 5 & 45  & Female & Blonde      & Yes \\\hline
+\sixthrowcolour  Person 6 & 28  & Male   & Brown       & No \\\hline
+\bottomrule
+\end{tabular}
+\end{center}
+
+Using this data, can we predict if a newly surveyed person has bran
+for breakfast based on their age, gender and hair colour?
+
+
+## Gathering Data for Classification Training
+
+In the previous example, we could have used the classification functions:
+
+- age > 32
+- hair colour == blonde
+- (age > 32) & (hair colour == blonde)
+
+The model was ambiguous because we had only 1 sample for the ``Bran
+for Dinner == Yes'' class.
+
+To obtain a useful model, we generally require:
+
+- as many samples that can be obtained (the more the better)
+- balanced sample (similar number of samples for each of the positive
+  and negative classes)
+
+
+
+
+
 
 ## Binary Classification
 
@@ -112,6 +213,51 @@ them.
 
 # Naive Bayes Classsifier
 http://en.wikipedia.org/wiki/Naive_bayes
+
+
+## Density Estimation
+
+If our training samples cover most of the data space we can use
+density estimation to compute the probability of each class in a given
+position of the space.
+
+We will be examining the density estimation methods:
+
+- $K$ nearest neighbours
+- Naive Bayes
+
+
+
+## $K$ Nearest Neighbours
+
+The $K$ Nearest Neighbours classifier is one of the simplest
+classifiers. It computes the class of a point as the \alert{mode} of
+the classes of the $k$ nearest points from the training set.
+
+The parameter $k$ is a positive integer, and must be chosen based on
+the data being used.
+
+
+## $K$ Nearest Neighbours example
+
+```{r}
+plot(cmdscale(dist(iris[,c(1:4)])), col=c(rep(1,50),rep(2,50),rep(3,50)))
+```
+
+
+
+
+## $K$ Nearest Neighbours features
+
+$K$ nearest neighbours is considered one of the extreme classifiers,
+since its prediction depends on all of the training set, not just
+statistics from the training set.
+
+- It requires no training, but does require a training data set.
+- All of the computation is performed when predicting the class of a
+  point.
+- We must store and access all of the training points in order to
+  perform prediction.
 
 
 
