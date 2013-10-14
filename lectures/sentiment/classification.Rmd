@@ -211,9 +211,6 @@ of objects with their classes and learn the relationships between
 them.
 
 
-# Naive Bayes Classsifier
-http://en.wikipedia.org/wiki/Naive_bayes
-
 
 ## Density Estimation
 
@@ -260,6 +257,151 @@ statistics from the training set.
   perform prediction.
 
 
+
+
+
+## Naive Bayes Classifier
+
+If we know the distribution of each class, we can use knowledge of
+each distribution and the sample size from each class, to predict the
+class label.
+
+### One dimensional example
+
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.7}
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+curve(dnorm(x, mean=-2, sd=1), from = -5, to = 5, col = 4)
+curve(dnorm(x, mean=2, sd=1), from = -3, to = 3, add=TRUE, col = 2)
+```
+
+We have two distributions (they are Normal, but they do not have to
+be). If we know the distribution equation for class $C = 1$ and $C =
+0$, we have:
+$$
+	P(X|C = 1) \text{ and } P(X|C = 0)
+$$
+If we obtain a new sample $x$, we want to compute:
+$$
+	P(C = 1|X = x) \text{ and } P(C = 0|X = x)
+$$
+both giving a probability (between 0 and 1). The class with the
+largest probability is the most likely class for the sample $x$.
+
+We can also examine:
+$$
+	L = \log{\left (\frac{P(C = 1|X = x)}{P(C = 0|X = x)}\right )}
+$$
+If $L > 0$, then $x$ is like to belong to class 1.
+If $L < 0$, then $x$ is like to belong to class 0.
+
+
+## Using Bayes' rule
+
+To perform the classification, we need the distributions:
+$$
+	P(C = 1|X = x) \text{ and } P(C = 0|X = x)
+$$
+but we have:
+$$
+	P(X|C = 1) \text{ and } P(X|C = 0)
+$$
+Therefore, we use Bayes' rule:
+$$
+	P(C = 1|X = x)  = \frac{P(X|C = 0)P(C = 0)}{P(X = x)}
+$$
+
+- $P(C = 1|X = x)$: Probability class 1, given the sample $x$.
+- $P(X = x|C = 1)$: Probability of sampling $x$, given the class of the sample is 1.
+- $P(C = 1)$: Probability of a sample being of class 1.
+- $P(X = x)$: Probability of sampling the value $x$.
+
+
+## Log Likelihood Equation
+
+Using Bayes' rule on $L$, we obtain the log likelihood equation:
+Giving us:
+$$
+	L = \log{\left (\frac{P(C = 1|X = x)}{P(C = 0|X = x)}\right )} = 
+	\log{\left (\frac{P(X = x|C = 1)P(C = 1)}{P(X = x|C = 0)P(C = 0)}\right )}
+$$
+which can be separated into:
+$$
+	L = \log{\left (\frac{P(C = 1)}{P(C = 0)}\right )} + 
+	\log{\left (\frac{P(X = x|C = 1)}{P(X = x|C = 0)}\right )}
+$$
+The first term is based on the probability of sampling from each of
+the distributions. If the probabilities are equal $P(C = 1) = P(C =
+0)$, then the first term is 0.
+
+
+## Estimating the Distributions.
+
+In most situations, we will not know the distribution of each
+class. Therefore, we will have to estimate the distribution by
+sampling from it.
+
+### Estimating the class distribution for class 1
+
+1. Pick a sample size $n$
+2. Take a sample of size $n$ from class 1.
+3. $P(X = x|C = 1)$ = number of times $x$ occurred in the sample/$n$
+
+
+## Problem when estimating from continuous distributions
+
+We saw that the probability estimate $P(X = x|C = 1)$ was computed as
+the proportion of occurrences of $x$ in a sample from class 1.
+
+If the distribution of $X$ is continuous, then we would not expect to
+obtain a sample of exactly $x$, meaning that our estimate of $P(X =
+x|C = 1)$ is $0$ for most values of $x$.
+
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.7}
+x = rnorm(20)
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+plot(x,rep(1,length(x)), type="h")
+```
+
+## Creating regions for continuous distributions
+
+To obtain a better estimate of the probability, we must divide the
+sample space into equal sized regions (just as when we plot a
+histogram). Rather than computing the proportion of $x$ in the sample,
+we compute the proportion of the sample that falls in a given region.
+
+The smaller the regions, the closer the estimate will be to the true
+probability, but we will require more samples to make sure the many
+regions have a chance of being sampled from.
+
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.7}
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+hist(x)
+```
+
+## Number of samples for distribution estimation
+
+In any situation, the larger the sample size, the better. The number
+of samples depends on the number of discrete regions of each variable
+being measured.
+
+If each item has a class label (e.g. $C = 1$) and one variable (e.g
+age = 28), and the variable can take has 10 possibles values (e.g. 21
+to 30), then we need at least a sample size of 10. A sample size of
+less than 10 will not cover the 10 possible values for age. A sample
+of size 10 will probably not cover the space either, but it might.
+
+
+## Curse of Dimensionallity
+
+If we have more than one variable
+
+
+
+
+http://en.wikipedia.org/wiki/Curse_of_dimensionality
+
+
+http://en.wikipedia.org/wiki/Naive_bayes
 
 
 
