@@ -1,4 +1,4 @@
-% Sentiment Analysis
+% Text Mining 3: Sentiment Analysis
 % Laurence A. F. Park
 % 20th of September 2013
 
@@ -7,34 +7,60 @@ opts_chunk$set(dev = 'pdf', fig.cap="")
 ```
 
 
-# Sentiment
-
-<http://en.wikipedia.org/wiki/Sentiment_analysis>
-
-
 # Sentiment Analysis
 
-Classifying the polarity of a piece of text (positive, neutral or
-negative).
+## Sentiment
 
-Advanced sentiment analysis examines the emotion behind the text
+Our sentiment towards something is our opinion of it. In its simplest
+form, sentiment can be positive or negative.
+
+Tweets with positive sentiment:
+
+- Team Austria Wins the 2013 Solar Decathlon With Their Net-Zero LISI House
+- Bonus link, too cool to pass up ... two delicious fruit-named computers in one cool package.
+- Who's excited for this Thursday's #TableTop?
+
+Tweets with negative sentiment:
+
+- Gravity: Can Film Ever Get the Science Right?
+- Nobel Winners Illustrate Israel's "Brain Drain"
+- Why Small-Scale Biomass Energy Projects Aren't a Solution To Climate Change
+
+
+## Sentiment Analysis
+
+Sentiment analysis is the process of labelling a piece of text with
+its sentiment level. 
+
+- Simple sentiment analysis classifies the polarity of a piece of text
+(positive or negative).
+- Advanced sentiment analysis examines the emotion behind the text
 (e.g. excited, annoyed, surprised).
 
 
-## Data Mining Methods
+We will examine how to perform sentiment analysis using \alert{machine
+learning}. More information on sentiment analysis:
+<http://en.wikipedia.org/wiki/Sentiment_analysis>
+
+
+## Machine Learning methods
+
+Machine Learning is the process of providing a machine (computer) with
+sample data, allowing it to learn from the data.
 
 In this unit we have seen:
 
-- Regression: predicting a real value $y$
-- Clustering: gathering similar objects into groups
+- Regression: learn how to predict a real value $y$ from a sample set of $y$ and $x$.
+- Clustering: learn how to organise data from a sample $x$.
 
 In this lecture we will introduce:
 
-- Classification: predicting an ordinal value from a set.
+- Classification: learn how to predict a class $c$, from a sample set $c$ and $x$.
 
-We will focus on binary classification, meaning the set of ordinal
-values is of size 2. These values are usually $\{True, False\}$,
-$\{Yes, No\}$, or $\{0,1\}$.
+We will focus on binary classification, meaning there are two possible
+classes.  These values are usually $\{True, False\}$, $\{\text{Yes},
+\text{No}\}$, $\{0,1\}$. For sentiment analysis, they will be
+$\{\text{Positive},\text{Negative}\}$.
 
 
 ## Classification
@@ -53,16 +79,19 @@ Classification problems:
 - Classify if there is a tank in this satellite image, given the pixel intensities and positions.
 - Classify if a person is suitable for a job, given the contents of their Facebook page.
 
-### Example
+## Classification or Regression?
 
-Classification:
-$$
-	[~0.3~1.2~-4.3~2~] \rightarrow \text{Spam}
-$$
-Regression:
-$$
-	[~0.3~1.2~-4.3~2~] \rightarrow 4.4
-$$
+### Problem
+
+Which of the following prediction problems are classification problems and which are regression?
+
+- Predict the number of days before it rains.
+- Predict the colour of the rain.
+- Predict the team to win the grand final.
+- Predict the number of points scored in the grand final.
+- Predict the words in the next tweet.
+- Predict the increase in tweets per day.
+
 
 
 ## Classification is Supervised Learning
@@ -70,28 +99,13 @@ $$
 To classify the class of a data object $x$, we need to compute a
 function $c = f(x)$, where $c$ is the class of $x$.
 
-We compute the function $f(\cdot)$ using existing data labelled with
-its class. Computing this model based on data is called \alert{training}.
+We compute the function $f(\cdot)$ using examples of existing data labelled with
+its class. Computing this model using examples is called \alert{training}.
 
 Once we construct the function, we are able to apply the function to
 new data to determine its class.
 
 
-## Common Classification Methods
-
-There are different methods of classification that have different
-levels of accuracy and varying computation times. The choice of
-classification method depends on the classification problem.
-
-Classification methods include:
-
-- Logistic Regression
-- Support Vector Machines
-- Neural Networks
-- Decision Trees
-
-Each method draws one (or more) line(s) in the data space that best
-separates the two classes.
 
 ## Classification Example
 
@@ -101,23 +115,23 @@ We surveyed six people and obtained the following information about
 their age, gender, hair colour and if they have bran for breakfast.
 
 \begin{center}
-\toprule
-\begin{tabular}{|A|c|c|c|c|c|}
-\midrule
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
 \rowcolor{blue!20}
                           & Age & Gender & Hair Colour & Bran  \\\hline
-\firstrowcolour  Person 1 & 7   & Male   & Brown       & No  \\\hline
-\secondrowcolour Person 2 & 5   & Female & Black       & No  \\\hline
-\thirdrowcolour  Person 3 & 12  & Male   & Black       & No  \\\hline
-\fourthrowcolour Person 4 & 32  & Female & Brown       & Yes \\\hline
-\fifthrowcolour  Person 5 & 45  & Female & Blonde      & Yes \\\hline
-\sixthrowcolour  Person 6 & 28  & Male   & Brown       & Yes \\\hline
-\bottomrule
+Person 1 & 7   & Male   & Brown       & No  \\\hline
+Person 2 & 5   & Female & Black       & No  \\\hline
+Person 3 & 12  & Male   & Black       & No  \\\hline
+Person 4 & 32  & Female & Brown       & Yes \\\hline
+Person 5 & 45  & Female & Blonde      & Yes \\\hline
+Person 6 & 28  & Male   & Brown       & Yes \\\hline
 \end{tabular}
 \end{center}
 
 Using this data, can we predict if a newly surveyed person has bran
 for breakfast based on their age, gender and hair colour?
+
+## Another Classification Example
 
 ### Problem: Bran for Dinner
 
@@ -125,23 +139,21 @@ We surveyed six people and obtained the following information about
 their age, gender, hair colour and if they have bran for dinner.
 
 \begin{center}
-\toprule
-\begin{tabular}{|A|c|c|c|c|c|}
-\midrule
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
 \rowcolor{blue!20}
                           & Age & Gender & Hair Colour & Bran  \\\hline
-\firstrowcolour  Person 1 & 7   & Male   & Brown       & No  \\\hline
-\secondrowcolour Person 2 & 5   & Female & Black       & No  \\\hline
-\thirdrowcolour  Person 3 & 12  & Male   & Black       & No  \\\hline
-\fourthrowcolour Person 4 & 32  & Female & Brown       & No \\\hline
-\fifthrowcolour  Person 5 & 45  & Female & Blonde      & Yes \\\hline
-\sixthrowcolour  Person 6 & 28  & Male   & Brown       & No \\\hline
-\bottomrule
+Person 1 & 7   & Male   & Brown       & No  \\\hline
+Person 2 & 5   & Female & Black       & No  \\\hline
+Person 3 & 12  & Male   & Black       & No  \\\hline
+Person 4 & 32  & Female & Brown       & No \\\hline
+Person 5 & 45  & Female & Blonde      & Yes \\\hline
+Person 6 & 28  & Male   & Brown       & No \\\hline
 \end{tabular}
 \end{center}
 
 Using this data, can we predict if a newly surveyed person has bran
-for breakfast based on their age, gender and hair colour?
+for dinner based on their age, gender and hair colour?
 
 
 ## Gathering Data for Classification Training
@@ -162,54 +174,38 @@ To obtain a useful model, we generally require:
   and negative classes)
 
 
+## Classification of Sentiment
 
 
+Given one thousand (or one million) tweets, it is difficult for us to
+examine the tweet contents and determine rules that determine the
+sentiment.
 
+Therefore to perform sentiment analysis, we will use machine learning
+to learn from a training set of examples, so we can then automatically
+classify new pieces of text.
 
-## Binary Classification
-
-Classification is to assign a class to an object. Binary
-classification is assigning a class to an object where there are only
-two classes to choose from. Binary classification is the most common
-form of classification, since it is less complex than multi-class
-classification, and it allows us to predict answers to Yes/No
-(True/False) questions.
-
-### Example
-
-If we want to classify if an email is spam, we would construct a
-classifier that takes attributes of an email as its parameters, and
-returns True or False:
-$$
-	\text{is.spam}(\text{email}) \rightarrow \{True, False\}
-$$
-
-## Classifier Construction
-
-
-
-## Training
-
-## Testing
-
-## Maximum Likelihood
-
-
-# Classification of Sentiment
-
-
-It is difficult to identify what part of text sets the sentiment.
-
-Therefore to perform sentiment analysis, we will use a machine
-learning to learn from a set of examples and automatically classify
-new pieces of text.
-
-Machine learning methods require a set of objects each with a set of
+Machine learning methods require a set of objects, each with a set of
 measured features and a class.  We want to examine the features and
-make a prediction of the class.  To do this, we obtain many examples
-of objects with their classes and learn the relationships between
-them.
+make a prediction of the class.  When using tweets, the features are
+the word frequencies (as we have used before) and the class is the
+positive or negative sentiment.
 
+## Common Classification Methods
+
+There are different methods of classification that have different
+levels of accuracy and varying computation times. The choice of
+classification method depends on the classification problem.
+
+Classification methods include:
+
+- Logistic Regression
+- Support Vector Machines
+- Neural Networks
+- Decision Trees
+
+Each method draws one (or more) line(s) in the data space that best
+separates the two classes.
 
 
 ## Density Estimation
@@ -220,47 +216,14 @@ position of the space.
 
 We will be examining the density estimation methods:
 
-- $K$ nearest neighbours
 - Naive Bayes
+- $K$ nearest neighbours
 
 
-
-## $K$ Nearest Neighbours
-
-The $K$ Nearest Neighbours classifier is one of the simplest
-classifiers. It computes the class of a point as the \alert{mode} of
-the classes of the $k$ nearest points from the training set.
-
-The parameter $k$ is a positive integer, and must be chosen based on
-the data being used.
+# Naive Bayes Classifier
 
 
-## $K$ Nearest Neighbours example
-
-```{r}
-plot(cmdscale(dist(iris[,c(1:4)])), col=c(rep(1,50),rep(2,50),rep(3,50)))
-```
-
-
-
-
-## $K$ Nearest Neighbours features
-
-$K$ nearest neighbours is considered one of the extreme classifiers,
-since its prediction depends on all of the training set, not just
-statistics from the training set.
-
-- It requires no training, but does require a training data set.
-- All of the computation is performed when predicting the class of a
-  point.
-- We must store and access all of the training points in order to
-  perform prediction.
-
-
-
-
-
-## Naive Bayes Classifier
+## Prediction based on the class distribution
 
 If we know the distribution of each class, we can use knowledge of
 each distribution and the sample size from each class, to predict the
@@ -268,17 +231,19 @@ class label.
 
 ### One dimensional example
 
-```{r, echo=FALSE, fig.width=4.4, fig.height=2.7}
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.0}
 par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
-curve(dnorm(x, mean=-2, sd=1), from = -5, to = 5, col = 4)
-curve(dnorm(x, mean=2, sd=1), from = -3, to = 3, add=TRUE, col = 2)
+curve(dnorm(x, mean=-2, sd=1), from = -5, to = 5, col = 4, ylab = "P(X = x|C = c)")
+curve(dnorm(x, mean=2, sd=1), from = -5, to = 5, add=TRUE, col = 2)
 ```
 
-We have two distributions (they are Normal, but they do not have to
-be). If we know the distribution equation for class $C = 1$ and $C =
+## Class Probability
+
+We have two distributions (they do not have to be Normal)
+. If we know the distribution equation for class $C = 1$ and $C =
 0$, we have:
 $$
-	P(X|C = 1) \text{ and } P(X|C = 0)
+	P(X = x|C = 1) \text{ and } P(X = x|C = 0)
 $$
 If we obtain a new sample $x$, we want to compute:
 $$
@@ -287,12 +252,6 @@ $$
 both giving a probability (between 0 and 1). The class with the
 largest probability is the most likely class for the sample $x$.
 
-We can also examine:
-$$
-	L = \log{\left (\frac{P(C = 1|X = x)}{P(C = 0|X = x)}\right )}
-$$
-If $L > 0$, then $x$ is like to belong to class 1.
-If $L < 0$, then $x$ is like to belong to class 0.
 
 
 ## Using Bayes' rule
@@ -307,7 +266,7 @@ $$
 $$
 Therefore, we use Bayes' rule:
 $$
-	P(C = 1|X = x)  = \frac{P(X|C = 0)P(C = 0)}{P(X = x)}
+	P(C = 1|X = x)  = \frac{P(X|C = 1)P(C = 1)}{P(X = x)}
 $$
 
 - $P(C = 1|X = x)$: Probability class 1, given the sample $x$.
@@ -316,10 +275,66 @@ $$
 - $P(X = x)$: Probability of sampling the value $x$.
 
 
-## Log Likelihood Equation
+## Bayes Classifier Example
 
-Using Bayes' rule on $L$, we obtain the log likelihood equation:
-Giving us:
+### Example
+
+The distribution for positive and negative sentiment over the words $\{\text{fun},
+\text{happy},\text{sad},\text{eat}\}$:
+
+\begin{center}
+\begin{tabular}{|c|cccc|}
+\hline
+\rowcolor{blue!20}
+$x$ & fun & happy & sad & eat \\
+\hline
+$P(X = x\vert C = \text{Positive})$ & 0.4 & 0.3 & 0.1 & 0.2 \\
+$P(X = x\vert C = \text{Negative})$ & 0.1 & 0.1 & 0.5 & 0.3 \\
+\hline
+\end{tabular}
+\end{center}
+
+We also know that $P(C = \text{Positive}) = 0.5$.
+
+If we sample the word ``eat'', what is the probability that it has
+positive or negative sentiment.
+
+
+## Bayes Classifier Problem
+
+### Problem
+
+The distribution for positive and negative sentiment over the words $\{\text{fun},
+\text{happy},\text{sad},\text{eat}\}$:
+
+\begin{center}
+\begin{tabular}{|c|cccc|}
+\hline
+\rowcolor{blue!20}
+$x$ & fun & happy & sad & eat \\
+\hline
+$P(X = x\vert C = \text{Positive})$ & 0.4 & 0.3 & 0.1 & 0.2 \\
+$P(X = x\vert C = \text{Negative})$ & 0.1 & 0.1 & 0.5 & 0.3 \\
+\hline
+\end{tabular}
+\end{center}
+
+We also know that $P(C = \text{Positive}) = 0.3$.
+
+If we sample the word ``happy'', what is the probability that it has
+positive or negative sentiment.
+
+
+
+## Log Ratio Equation
+
+In the previous example, we had to compare the probability for
+positive and negative sentiment. We can combine the probabilities to
+obtain a single score. If the score is greater than 0, the sentiment
+is positive, if the score is less than zero, then sentiment is
+negative.
+
+The log ratio equation is:
 $$
 	L = \log{\left (\frac{P(C = 1|X = x)}{P(C = 0|X = x)}\right )} = 
 	\log{\left (\frac{P(X = x|C = 1)P(C = 1)}{P(X = x|C = 0)P(C = 0)}\right )}
@@ -336,9 +351,9 @@ the distributions. If the probabilities are equal $P(C = 1) = P(C =
 
 ## Estimating the Distributions.
 
-In most situations, we will not know the distribution of each
-class. Therefore, we will have to estimate the distribution by
-sampling from it.
+In most situations (especially for sentiment analysis), we will not
+know the distribution of each class $P(X = x|C = c)$. Therefore, we will have to
+estimate the distribution by sampling from it.
 
 ### Estimating the class distribution for class 1
 
@@ -356,10 +371,10 @@ If the distribution of $X$ is continuous, then we would not expect to
 obtain a sample of exactly $x$, meaning that our estimate of $P(X =
 x|C = 1)$ is $0$ for most values of $x$.
 
-```{r, echo=FALSE, fig.width=4.4, fig.height=2.7}
+```{r, echo=FALSE, fig.width=4.4, fig.height=1.7}
 x = rnorm(20)
 par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
-plot(x,rep(1,length(x)), type="h")
+plot(x,rep(1,length(x)), type="h", ylim=c(0,1.3), ylab="Frequency")
 ```
 
 ## Creating regions for continuous distributions
@@ -373,12 +388,38 @@ The smaller the regions, the closer the estimate will be to the true
 probability, but we will require more samples to make sure the many
 regions have a chance of being sampled from.
 
-```{r, echo=FALSE, fig.width=4.4, fig.height=2.7}
+```{r, echo=FALSE, fig.width=4.4, fig.height=1.7}
 par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
-hist(x)
+hist(x, main="")
 ```
 
+## The distribution over tweets
+
+To obtain an estimate of the distribution of tweets with positive
+sentiment and the distribution of tweets with negative sentiment, we
+must sample tweets from each class.
+
+The process is:
+
+1. Grab a bunch of tweets (training set).
+2. Manually label them as positive or negative.
+
+When we obtain a new tweet $x$, we can compute $P(X = x|C =
+\text{Positive})$ by computing the proportion of times that tweet
+occurs in the positive training set. 
+$P(X = x|C = \text{Negative})$ is the proportion of times that tweet
+occurs in the positive training set. 
+
+Also $P(C = \text{Positive})$ is the proportion of positive tweets in
+the training set. $P(C = \text{Negative}) = 1 - P(C = \text{Positive})$
+
+
+
 ## Number of samples for distribution estimation
+
+To compute the probability of sentiment of a tweet it must be in our
+training set. Therefore, our training set must be large enough to
+contain any tweet that we could observe in the future.
 
 In any situation, the larger the sample size, the better. The number
 of samples depends on the number of discrete regions of each variable
@@ -393,26 +434,382 @@ of size 10 will probably not cover the space either, but it might.
 
 ## Curse of Dimensionallity
 
-If we have more than one variable
+If we have more than one variable, the number of samples we require to
+cover the space increases.
+
+- If we have two variables, each with 10 levels, there are $10^2$
+combinations of each pair of levels.
+- If we have three variables, each with 10 levels, there are $10^3$
+combinations of levels.
+- If we have $m$ variables, each with $l$ levels, there are $l^m$
+  combinations of levels.
+
+
+## Curse of Dimensionallity for tweets
+
+If we are working with text (tweets), each word is a variable and the
+number of levels is the number of times a word can appear. Let's say we
+have $1000$ unique words obtained from $100$ tweets, and each word
+appears from 0 to 1 times in a tweet. This gives $m = 1000$, $l = 2$,
+meaning that there are $2^{1000} = 1.07\times 10^{301}$ combinations.
+
+To put this in perspective:
+
+- There are $2.5\times 10^{89}$ elementary particles in the observable universe.
+- Expected life span of the Sun is $10^{10}$ years.
+- If we took one sample every microsecond, it would take us
+  $3.40\times 10^{287}$ years to obtain all samples.
+
+We can't cover the space. So we must approximate the probability of
+each combination.
+
+
+## Naive Bayes Classifier
+
+Rather than computing the probability of each tweet (every combination of
+words), the Naive Bayes classifier makes the assumption that all
+variables (words) are independent. This give us:
+$$
+\begin{aligned}
+	P(X_1 = x_1, X_2, = x_2, \ldots, X_m = x_m) =&
+	P(X_1 = x_1)P(X_2, = x_2) \\ & \times \ldots \times P(X_m = x_m)
+\end{aligned}
+$$
+Therefore, the probability of a tweet (joint probability) $P(X_1 = x_1, X_2, = x_2, \ldots, X_m
+= x_m)$ is approximated by the product of its word probabilities (marginal probabilities)
+$P(X_i = x_i)$.
+
+By treating the variables as independent, we can sample for each
+word separately, so the number of combinations becomes $ml$. For 1000
+unique words, each with two levels, $ml = 2000$, which is achievable.
+
+
+## Naive Bayes Classifier
+
+The Bayes classifier over multivariate distributions (distributions of
+many variables)
+$$
+	L = \log{\left (\frac{P(C = 1)}{P(C = 0)}\right )} + 
+	\log{\left (\frac{P(X_1 = x_1, X_2 = x_2, \ldots, X_m = x_m|C = 1)}{P(X_1 = x_1, X_2 = x_2, \ldots, X_m = x_m|C = 0)}\right )}
+$$
+We can only compute $P(X_1 = x_1, X_2 = x_2, \ldots, X_m = x_m|C =
+c)$, where $c = 1$ or $0$, if we have a sample where $X_1 = x_1$, $X_2
+= x_2$, \ldots, $X_m = x_m$.
+
+By inserting the independence assumption into the Bayes classifier, we
+obtain the Naive Bayes classifier:
+$$
+\begin{aligned}
+	L &= \log{\left (\frac{P(C = 1)}{P(C = 0)}\right )} + 
+	\log{\left ({\prod_{i = 1}^{m} \frac{P(X_i = x_i|C = 1)}{P(X_i = x_i|C = 0)}}\right )} \\
+	&= \log{\left (\frac{P(C = 1)}{P(C = 0)}\right )} + 
+	{\sum_{i = 1}^{m} \log{\left (\frac{P(X_i = x_i|C = 1)}{P(X_i = x_i|C = 0)}\right )}} \\
+\end{aligned}
+$$
+
+## Naive Bayes Classifier Example
+
+### Example
+
+Given the set of positive sentiment tweets:
+
+- Having a fun time.
+- Lost track of time, excited half of the day.
+- Cats are enjoying themselves.
+
+and the set of negative sentiment tweets:
+
+- Lost the game. Sad day for cats.
+- We lost at about half time.
+- The half time whistle scared my cats.
+
+
+Compute the sentiment of the tweet ``half time day''.
+
+## Naive Bayes Classifier Problem
+
+### Problem
+
+Given the set of positive sentiment tweets:
+
+- Having a fun time.
+- Lost track of time, excited half of the day.
+- Cats are enjoying themselves.
+
+and the set of negative sentiment tweets:
+
+- Lost the game. Sad day for cats.
+- We lost at about half time.
+- The half time whistle scared my cats.
+
+Compute the sentiment of the tweet ``lost cats time''.
+
+
+# K Nearest Neighbours
+
+
+## $K$ Nearest Neighbours
+
+The $K$ Nearest Neighbours classifier is one of the simplest
+classifiers. It computes the class of a point as the \alert{mode} of
+the classes of the $k$ nearest points from the training set.
+
+The parameter $k$ is a positive integer, and must be chosen based on
+the data being used.
+
+To perform K nearest neighbours, we have to measure the difference in
+the objects, so we must decide on an appropriate metric.
+
+
+## $K$ Nearest Neighbours: Iris example
+
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.8}
+I = cmdscale(dist(iris[,c(1:4)]))
+C = c(rep(1,50),rep(2,50),rep(3,50)) + 1
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+plot(I, col=C, xlab="", ylab = "")
+```
+
+## $K$ Nearest Neighbours: Iris example
+
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.8}
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+x = c(-1,1)
+k = 50
+disty = function(x, y) { return(sqrt(sum((x - y)^2))) }
+d = apply(I,1,disty, y = x)
+topk = order(d, decreasing=FALSE)[1:k]
+plot(I, col=C, xlab="", ylab = "")
+points(x[1],x[2], col=1)
+```
+
+## $K$ Nearest Neighbours: Iris example
+
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.8}
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+x = c(-1,1)
+k = 50
+disty = function(x, y) { return(sqrt(sum((x - y)^2))) }
+d = apply(I,1,disty, y = x)
+topk = order(d, decreasing=FALSE)[1:k]
+plot(I, col=C, xlab="", ylab = "")
+points(I[topk,1],I[topk,2], col=C[topk], pch=3)
+points(x[1],x[2], col=1)
+```
+
+## $K$ Nearest Neighbours: Iris example
+
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.8}
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+x = c(-1,1)
+k = 50
+m = as.numeric(names(which.max(table(C[topk]))))
+disty = function(x, y) { return(sqrt(sum((x - y)^2))) }
+d = apply(I,1,disty, y = x)
+topk = order(d, decreasing=FALSE)[1:k]
+plot(I, col=C, xlab="", ylab = "")
+points(I[topk,1],I[topk,2], col=C[topk], pch=3)
+points(x[1],x[2], col=m)
+```
+
+## $K$ Nearest Neighbours: Iris example $k = 1$
+
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.8}
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+
+k = 1
+knn = function(x, I, C, k) {
+    d = apply(I,1,disty, y = x)
+    topk = order(d, decreasing=FALSE)[1:k]
+    return(as.numeric(names(which.max(table(C[topk])))))
+}
+x1 = rep(seq(from=-3,by=0.1,to=4),21)
+x2 = rep(seq(from=-1,by=0.1,to=1),each = 71)
+X = cbind(x1,x2)
+Xc = apply(X,1,knn, I, C, k)
+plot(I, col=C, xlab="", ylab = "", pch=".")
+points(x1,x2, col=Xc)
+```
+
+## $K$ Nearest Neighbours: Iris example $k = 10$
+
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.8}
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+
+k = 10
+x1 = rep(seq(from=-3,by=0.1,to=4),21)
+x2 = rep(seq(from=-1,by=0.1,to=1),each = 71)
+X = cbind(x1,x2)
+Xc = apply(X,1,knn, I, C, k)
+plot(I, col=C, xlab="", ylab = "", pch=".")
+points(x1,x2, col=Xc)
+```
+
+
+## $K$ Nearest Neighbours features
+
+$K$ nearest neighbours is considered one of the extreme classifiers,
+since its prediction depends on all of the training set, not just
+statistics from the training set.
+
+- It requires no training, but does require a training data set.
+- All of the computation is performed when predicting the class of a
+  point.
+- We must store and access all of the training points in order to
+  perform prediction.
+
+## Classifying tweets with $k$ nearest neighbour
+
+To classify a set of tweets, we need a set of training tweets labelled
+with their sentiment. We then represent each tweet as a vector of
+words (as done with Naive Bayes). We then choose an appropriate
+dissimilarity function for the tweets (e.g. 1 - cosine or binary
+metric) to compute the distance between tweet vectors.
+
+To classify a new tweet:
+
+1. Compute the distance between the new tweet and all of the training tweets.
+2. Locate the $k$ training tweets with the smallest distances (closest).
+3. The new tweet is classified with the mode of the $k$ closest tweets.
+
+## kNN Problem
+
+### Problem
+
+The distance of a new tweet to a set of classified tweets is shown below:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\rowcolor{blue!20}
+Tweet ID & Sentiment & Distance to new tweet \\
+\hline
+42342 & Positive & 5 \\
+23423 & Positive & 6 \\
+85867 & Positive & 4 \\
+12315 & Positive & 5 \\
+\hline
+23232 & Negative & 10 \\
+46564 & Negative & 2 \\
+26454 & Negative & 7 \\
+66755 & Negative & 3 \\
+\hline
+\end{tabular}
+\end{center}
+What is the class of the new tweet using kNN with $k = 1$. Classify
+using $k = 3$ and $5$ as well.
+
+# Classification Evaluation
+
+## Evaluating a classification model
+
+To evaluate a classifier, we can examine:
+
+- Storage and memory required
+- Computation time
+- Accuracy of prediction
+
+Of these three, accuracy is usually the most important. If a
+classifier is not accurate, then it is useless.
+
+## Evaluating classifier accuracy
+
+A classifier is used to predict the class of objects. To evaluate the classifier, we:
+
+1. Obtain a set of objects that have been manually labelled with their class
+2. Compute the class of the objects using the classifier
+3. Compare the computed class to the manually labelled class
+
+We want the classifier to perform well for all future predictions.
+Therefore, it is important that the data used to evaluate the
+classifier is different to the data used to train the classifier.
+We call this new data set \alert{validation data}.
+
+## Comparing binary results
+
+The manual and computed set of labels are a sequence of binary values.
+Therefore, when comparing them there are four possible combinations
+
+- True Positive (classifier: positive, manual: positive)
+- True Negative (classifier: negative, manual: negative)
+- False Positive (classifier: positive, manual: negative)
+- False Negative (classifier: negative, manual: positive)
+
+Using these, we can compute:
+
+- Sensitivity (True positive rate: of all that are positive, what proportion were classified as positive).
+- Specificity (True negative rate: of all that are negative, what proportion were classified as negative).
+
+
+## Receiver operating characteristic
+
+The Receiver operating characteristic, or ROC curve is a visualisation
+of the accuracy of a classifier as its parameters are varied.
+
+
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.5}
+x = c(0,1)
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+plot(x,x, type="l", lty=2, xlim=x, ylim=x, xlab="1 - Specificity", ylab = "Sensitivity")
+points(0,1)
+legend("bottomright", c("Perfect","Random Guess"), pch=c(1,NA), lty=c(0,2))
+```
 
 
 
-
-http://en.wikipedia.org/wiki/Curse_of_dimensionality
-
-
-http://en.wikipedia.org/wiki/Naive_bayes
+## Evaluating kNN for different $k$
 
 
 
+```{r, echo=FALSE, fig.width=4.4, fig.height=2.8}
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
 
-# Decision Tree
+I = I[51:150,]
+C = C[51:150]
 
-# Evaluation
+train.pos = sample(100,20)
+
+I.train = I[train.pos,]
+I.test = I[-train.pos,]
+C.train = C[train.pos]
+C.test = C[-train.pos]
+
+sensitivity = c()
+specificity = c()
+
+for (k in 1:9) {
+    C.pred = apply(I.test, 1, knn, I.train, C.train, k)
+
+    sensitivity = c(sensitivity, mean(C.pred[C.test == 4] == 4))
+    specificity = c(specificity, mean(C.pred[C.test == 3] == 3))
+}
+
+plot(1 - specificity, sensitivity, xlim=c(0,1), ylim=c(0,1), pch=as.character(1:9),  xlab="1 - Specificity", ylab = "Sensitivity")
+lines(c(0,1), c(0,1), lty=2)
+```
 
 
-False Positive Rate
-False Negative Rate
-True Positive Rate
-True Negative Rate
+
+## Summary
+
+- Sentiment analysis allows us to identify the sentiment behind text.
+
+- Simple sentiment analysis on tweets allows us to identify if a tweet
+  has positive or negative sentiment.
+
+- Simple sentiment analysis can be performed using the machine
+  learning method of classification.
+
+- Classification requires us to have a training set containing a
+  sample set of tweets and their associated sentiment.
+
+- We examined the Naive Bayes classifier and k Nearest Neighbour
+  classifier.
+
+- We also examined how to assess the accuracy of classification using
+  Sensitivity and Specificity.
+
+
+## Next Week
+
+Spatial Analysis
 
