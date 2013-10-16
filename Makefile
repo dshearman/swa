@@ -36,6 +36,9 @@ $(LAB_DIR)/%: FORCE
 $(INFORMATION_DIR)/%: FORCE
 	$(MAKE) -C $(INFORMATION_DIR) $*
 
+$(TEMPLATE_DIR)/%: FORCE
+	$(MAKE) -C $(TEMPLATE_DIR) $*
+
 %.notes:	${INCLUDE_DIR}/article.tex ${TEMPLATE_DIR}/%.tex
 	${TEX}  -jobname "${CODE}.$*.notes" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/article.tex}\input{${TEMPLATE_DIR}/$*.tex}"
 
@@ -51,7 +54,5 @@ each.slides:	week01.slides week02.slides week03.slides week04.slides week05.slid
 
 FORCE:
 
-$(TEMPLATE_DIR)/%: FORCE
-	$(MAKE) -C $(TEMPLATE_DIR) $*
-
 include $(TEMPLATE_DIR)/dependencies.mak
+

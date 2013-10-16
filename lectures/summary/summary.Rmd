@@ -1,0 +1,57 @@
+% Revision
+% Laurence A. F. Park
+% 20th of September 2013
+
+```{r setup, include=FALSE}
+opts_chunk$set(dev = 'pdf', fig.cap="")
+```
+
+# What have we learnt
+
+Go through and summarise each week.
+
+# Your Future
+
+## Where to go next
+
+If you are in your final year, you should have a good idea of what you want to
+do next year.
+
+The most likely choices are:
+
+- Get a job
+- Enroll in a higher degree.
+
+## Industry
+
+## Honours and PhD
+
+
+
+
+# Exam details
+
+## Date and Venue
+
+The date and venue of the final exam are set by University Timetabling.
+
+Check the exam timetable Web site to find when and where the exam will be held.
+
+Don't rely on a friend giving you this information, look it up yourself!
+
+
+## Duraion and Questions
+
+The exam will last two hours.
+
+It contains eight questions of varying marks.
+
+When reading through the exam, each question will be labelled with the number of marks allocated to it.
+The marks reflect the difficulty and time required to complete the question.
+
+## Sample Exam
+
+## Thanks
+
+Thank-you to all students. We had fun setting up and teaching this unit, we
+hope you all enjoyed learning about Social Web Analytics.
