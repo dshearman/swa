@@ -1,0 +1,77 @@
+% Text Mining 3: Sentiment Analysis
+% 300958 Social Web Analysis 
+% Week 13 Lab
+
+
+# Preliminaries
+
+To perform sentiment analysis of tweets, we need a set of tweets,
+manually labelled with their sentiment.
+
+## Load the data
+
+## Arrange the data
+
+
+To evaluate each of the classification methods, we must split the data
+into a training and validataion sets.
+
+Let's randomly choose 50% of the tweets for training:
+```{r}
+train.positions = sample(ncol(A),round(0.5*ncol(A)))
+A.train = A[train.positions,]
+C.train = C[train.positions]
+```
+and the remaining 50% for validation.
+```{r}
+A.validate = A[-train.positions,]
+C.validate = C[-train.positions]
+```
+
+# Naive Bayes
+
+The Naive Bayes classifier treats all variables as independent. The
+variables of a tweet are the frequency of each word; if there are $m$
+unique words, we have $m$ variables.
+
+We showed in the lecture that a tweet can be classified using:
+$$
+	L = \log{\left (\frac{P(C = 1)}{P(C = 0)}\right )} + 
+	{\sum_{x_i \in \text{tweet}} \log{\left (\frac{P(X_i = x_i|C = 1)}{P(X_i = x_i|C = 0)}\right )}} \\
+$$
+
+
+The first term contain $P(C = 1)$, meaning the probability of a tweet
+having positive sentiment, and $P(C = 0)$, meaning the probability of
+a tweet having negative sentiment. $P(C = 1)$ is computed as:
+```{r}
+pC.1 = mean(C.train == "positive")
+```
+**Compute** $P(C = 1)$ and store the value in the variable `pC.0`.
+
+The probability $P(X = x_i|C = 1)$ is the probability of putting our
+hand in the positive sentiment bag and pulling out the word $x_i$.
+Therefore $P(X = x_i|C = 1)$ is given as:
+$$
+	P(X = x_i|C = 1) = \frac{\text{Frequency of $x_i$ in positive tweets}}{\text{Word count in positive tweets}}
+$$
+The word count in positive tweets is given as:
+```{r}
+total.positive.words = sum(A.train[C.train == "positive",])
+```
+**Compute the frequency of each of the $m$ words in the positive tweet collection and store the vector in the variable
+`total.each.positive.word`.
+
+The probability of each word in the set of positive tweets is computed as:
+```{r}
+pX.C.1 = total.each.positive.word/total.positive.words
+```
+
+**Use** the above information to compute $P(X = x_i|C = 0)$
+(probability of each word in the set of negative tweets), and store
+the result in the variable `pX.C.0`.
+
+# k Nearest Neighbours
+
+
+# Evaluation
