@@ -501,9 +501,9 @@ obtain the Naive Bayes classifier:
 $$
 \begin{aligned}
 	L &= \log{\left (\frac{P(C = 1)}{P(C = 0)}\right )} + 
-	\log{\left ({\prod_{i = 1}^{m} \frac{P(X_i = x_i|C = 1)}{P(X_i = x_i|C = 0)}}\right )} \\
+	\log{\left ({\prod_{x_i \in \text{tweet}} \frac{P(X_i = x_i|C = 1)}{P(X_i = x_i|C = 0)}}\right )} \\
 	&= \log{\left (\frac{P(C = 1)}{P(C = 0)}\right )} + 
-	{\sum_{i = 1}^{m} \log{\left (\frac{P(X_i = x_i|C = 1)}{P(X_i = x_i|C = 0)}\right )}} \\
+	{\sum_{x_i \in \text{tweet}} \log{\left (\frac{P(X_i = x_i|C = 1)}{P(X_i = x_i|C = 0)}\right )}} \\
 \end{aligned}
 $$
 
