@@ -15,9 +15,10 @@ manually labelled with their sentiment.
 ## Load the data
 
 The variable `tweet.sentiment` is available in the file
-`tweet_sentiment.Rdata`. Load the file using:
+[tweet_sentiment.Rdata](http://staff.scm.uws.edu.au/~lapark/300958/labs/tweet_sentiment.Rdata). Download
+the file to the working directory and load the file using:
 ```{r eval=FALSE}
-load("http://staff.scm.uws.edu.au/~lapark/300958/labs/tweet_sentiment.Rdata")
+load("tweet_sentiment.Rdata")
 ```
 
 **NOTE**: These tweets have been posted by real twitter users and so
