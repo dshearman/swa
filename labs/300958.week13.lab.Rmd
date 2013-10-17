@@ -2,6 +2,10 @@
 % 300958 Social Web Analysis 
 % Week 13 Lab
 
+```{r setup, include=FALSE}
+opts_chunk$set(dev = 'png', fig.cap="", eval=FALSE)
+```
+
 
 # Preliminaries
 
@@ -10,23 +14,68 @@ manually labelled with their sentiment.
 
 ## Load the data
 
+The variable `tweet.sentiment` is available in the file
+`tweet_sentiment.Rdata`. Load the file using:
+```{r eval=FALSE}
+load("http://staff.scm.uws.edu.au/~lapark/300958/labs/tweet_sentiment.Rdata")
+```
+
+**NOTE**: These tweets have been posted by real twitter users and so
+  many contain offensive or inappropriate content. If you feel that
+  this content may upset you, you may use an alternative tweet set
+  (e.g. twitter data used in previous labs).
+
+
+
+Examine the contents of `tweet.sentiment` using the functions:
+
+- `names` (to identify the table names)
+- `dim` (to see the size of the table)
+
+We find that the variable is a data.frame containing tweet text and
+sentiment. To examine the levels of sentiment, use the function
+`table` on `tweet.sentiment$sentiment`.
+
+## Extract the wanted tweets
+
+We find that there are more than two sentiment classes, but we want
+only positive and negative. We can extract the positive and negative
+sentiment tweets using the function `subset`:
+```{r}
+tweet.sentiment.pn = subset(tweet.sentiment, sentiment == "positive" | sentiment == "negative")
+```
+
 ## Arrange the data
 
+The tweets are given as text. Use functions in the library `tm` to
+convert the set of tweets into a document-term matrix called
+`tweet.text.matrix`. The details of this process are found in the
+[Text Mining section of lab
+5](http://staff.scm.uws.edu.au/~lapark/300958/labs/300958.week05.lab.html#text-mining).
+Note: we want a document-term matrix containing term frequencies, not
+weighted term frequencies. Do not use TF-IDF weights.
+
+
+## Training and Validation split
 
 To evaluate each of the classification methods, we must split the data
 into a training and validataion sets.
 
 Let's randomly choose 50% of the tweets for training:
 ```{r}
-train.positions = sample(ncol(A),round(0.5*ncol(A)))
-A.train = A[train.positions,]
-C.train = C[train.positions]
+tweet.count = ncol(tweet.text.matrix)
+train.positions = sample(tweet.count,round(0.5*tweet.count))
+A.train = tweet.text.matrix[train.positions,]
+C.train = tweet.sentiment.pn$sentiment[train.positions]
 ```
 and the remaining 50% for validation.
 ```{r}
-A.validate = A[-train.positions,]
-C.validate = C[-train.positions]
+A.validate = tweet.text.matrix[-train.positions,]
+C.validate = tweet.sentiment.pn$sentiment[-train.positions]
 ```
+
+We now have a set of vectors and classes for training and validation
+and can proceed to the classification task.
 
 # Naive Bayes
 
@@ -39,15 +88,13 @@ $$
 	L = \log{\left (\frac{P(C = 1)}{P(C = 0)}\right )} + 
 	{\sum_{x_i \in \text{tweet}} \log{\left (\frac{P(X_i = x_i|C = 1)}{P(X_i = x_i|C = 0)}\right )}} \\
 $$
-
-
-The first term contain $P(C = 1)$, meaning the probability of a tweet
+The first term contains $P(C = 1)$, meaning the probability of a tweet
 having positive sentiment, and $P(C = 0)$, meaning the probability of
 a tweet having negative sentiment. $P(C = 1)$ is computed as:
 ```{r}
 pC.1 = mean(C.train == "positive")
 ```
-**Compute** $P(C = 1)$ and store the value in the variable `pC.0`.
+**Compute** $P(C = 0)$ and store the value in the variable `pC.0`.
 
 The probability $P(X = x_i|C = 1)$ is the probability of putting our
 hand in the positive sentiment bag and pulling out the word $x_i$.
@@ -59,7 +106,8 @@ The word count in positive tweets is given as:
 ```{r}
 total.positive.words = sum(A.train[C.train == "positive",])
 ```
-**Compute the frequency of each of the $m$ words in the positive tweet collection and store the vector in the variable
+**Compute** the frequency of each of the $m$ words in the positive tweet
+collection and store the vector in the variable
 `total.each.positive.word`.
 
 The probability of each word in the set of positive tweets is computed as:
@@ -71,7 +119,126 @@ pX.C.1 = total.each.positive.word/total.positive.words
 (probability of each word in the set of negative tweets), and store
 the result in the variable `pX.C.0`.
 
+We can now compute the log ratio probability for each word. This value
+shows the contribution of each word toward the sentiment of the tweet.
+We compute these values as:
+$$
+	\text{sentiment weight}(x_i) = {\log{\left (\frac{P(X_i = x_i|C = 1)}{P(X_i = x_i|C = 0)}\right )}}
+$$
+store this vector of weights in `sentiment.weight`.
+We can also compute the bias:
+$$
+	b = \log{\left (\frac{P(C = 1)}{P(C = 0)}\right )}
+$$
+store this value in `bias`.
+
+**Examine** the sentiment weight for each word and the bias, making sure that they make sense.
+
+Were there problems with any of the scores? If there is a word that
+does not appear in the positive or negative sentiment set, then we
+find that it gets a score of $\infty$ or $-\infty$.
+
+To fix this problem, we can use the [Rule of
+Succession](http://en.wikipedia.org/wiki/Rule_of_Succession).  This
+requires us to add 1 to all values in `A.train` and then recompute the
+sentiment weights.
+
+We can now use the sentiment weight and bias to compute the sentiment of a new tweet.
+The first tweet vector in the validation set is `A.validate[1,]`
+The sentiment of the first validation tweet is computed as:
+```{r}
+tweet.number = 1
+word.positions = which(A.validate[tweet.number,] > 0)
+tweet.score = bias + sum(sentiment.weight[word.positions])
+```
+**Compare** the score to the actual sentiment class `C.validate[1]`. Does the score reflect the sentiment?
+
+**Write** a for loop to compute the sentiment score of all validation
+  tweets. Examine the scores and compare them to the actual sentiment.
+
+
+
 # k Nearest Neighbours
 
+k Nearest Neighbours (kNN) computes the class of a tweet as the mode of the
+$k$ nearest tweets. Therefore we have to define a distance metric over
+the tweets. For this lab we will use the Binary metric.
+
+kNN requires no training, therefore we can just go straight to the
+classification stage.
+
+We want to find the distance between a validation tweet and all of the training tweets. First we define the metric:
+```{r}
+binary.metric <- function(x,y) {
+  return(mean(xor(x,y)))
+}
+```
+
+Now we need to compute the distance between the tweet validation
+vector and all of the training vectors.
+
+**Complete** the function below:
+```{r}
+tweet.distance <- function(tweet, train.tweets) {
+  # tweet is a row vector from A.validate,
+  # train.tweets is A.train
+
+  # return a vector of distances between tweet and all vectors in 
+  # train.tweets measured using the function binary.metric
+}
+```
+Once we have the distances, we can compute the kNN class:
+```{r}
+kNN.classify <- function(tweet, train.tweets, train.classes, k) {
+  # identify the k closest tweets
+  d = tweet.distance(tweet, train.tweets)
+  closest.k.tweet.positions = order(d)[1:k]
+  
+  # select classes of closest tweets
+  close.classes = train.classes[closest.k.tweet.positions]
+  
+  # return the most frequently appearing class (the mode)
+  t = table(close.classes)
+  return(names(which.max(t)))
+}
+```
+
+The function `kNN.classify` computes the class of one tweet. **Write**
+a function to compute the class of all tweets in the matrix
+`A.validate`.
+
+
+**Examine** the classification for different values of $k$. Does $k$ vary the results?
 
 # Evaluation
+
+
+In this section, we will examine how accurate our classifiers are. We
+will examine the Sensitivity and Specificity.
+
+Sensitivity is the proportion of positive class objects that were classified as positive.
+We can compute this as:
+```{r}
+sensitivity <- function(predicted.class, actual.class) {
+  positive.positions = which(actual.class == "positive")]
+  return(mean(predicted.class[positive.positions] == "positive"))
+}
+```
+Specificity is the proportion of negative class objects that were classified as negative.
+
+**Write** the function `specificity` to compute the specificity of the prediction.
+
+Once these functions have been written, **examine** the sensitivity and
+specificity of the Naive Bayes and kNN results. Does one provide
+better results that the other?  Is there a specific value of $k$ that
+provides better classification?
+
+**Plot** an ROC plot (plot 1 - specificity vs sensitivity, with plot
+parameters xlim=c(0,1) and ylim=c(0,1)). Which classification
+method is closer to the top left corner?
+
+Remember that we randomly split the data into training and validation
+sets. Compare these ROC plots with your friends to see if their
+results from their random split is much different to ours.
+
+
