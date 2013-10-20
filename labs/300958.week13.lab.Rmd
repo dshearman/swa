@@ -64,7 +64,7 @@ into a training and validataion sets.
 
 Let's randomly choose 50% of the tweets for training:
 ```{r}
-tweet.count = ncol(tweet.text.matrix)
+tweet.count = nrow(tweet.text.matrix)
 train.positions = sample(tweet.count,round(0.5*tweet.count))
 A.train = tweet.text.matrix[train.positions,]
 C.train = tweet.sentiment.pn$sentiment[train.positions]
