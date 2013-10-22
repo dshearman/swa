@@ -49,7 +49,7 @@ each.notes:	week01.notes week02.notes week03.notes week04.notes week05.notes wee
 	week07.notes week08.notes week09.notes week10.notes week12.notes
 
 each.slides:	week01.slides week02.slides week03.slides week04.slides week05.slides week06.slides \
-	week07.slides week08.slides week09.slides week10.slides week12.slides
+	week07.slides week08.slides week10.slides week11.slides week12.slides
 
 
 FORCE:
