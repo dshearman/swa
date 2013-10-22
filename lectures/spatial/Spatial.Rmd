@@ -1,0 +1,378 @@
+## Spatial Analysis of Twitter
+
+Twitter collects the location of tweets and can provide this in the result of a search.
+
+Tweets can also be search for using a spatial location.
+
+Location or Spatial information can be useful in a number of ways, e.g..
+
+* Localising other analyses to a spatial location, for example, looking for trends in Sydney or Parramatta.
+* Detecting the spatial extent of the impact of an event or advertising campaign
+* Finding the spatial areas showing most interest to company for _on the ground_ targeting.
+
+
+# Twitter Geocoding
+
+## Twitter Geocoding
+
+Associating a spatial location with a piece of data is called _geocoding_.
+
+Twitter Geocodes tweets based on;
+
+* If the device (phone) is GPS enabled, and it is enabled in the device, the precise GPS coordinates are attached to the tweet.
+* Otherwise, if the from field of the Twitter users profile is completed (usually the city or origin), Twitter uses this location as the geocode for tweets
+* Otherwise, the location is  blank
+
+## Limitations of Twitter Geocoding
+
+The Twitter location data has a lot of limitations
+
+* A large proportion of people have neither GPS enabled devices (or have it turned off) nor have completed a home city in their profile.
+* Home location matching is problematic --- Newcastle --- NSW or UK?
+* Users with home locations who are away from home (on holidays) still get their tweets marked with their home location.
+
+## Twitter geocodes
+
+Set up OAuth, then,
+
+```{r eval=FALSE}
+st = searchTwitter("Kevin Bacon", n=1000, lang="en")
+df = twListToDF(st)
+```
+```{r echo= -1}
+load("KevinBacon.RData")
+dim(df)
+names(df)
+x = df$longitude
+y = df$latitude
+```
+
+## Twitter geocodes
+
+Find the number of tweets that don't have a missing longitude.
+
+```{r}
+sum(!is.na(x))
+```
+As a percentage...
+```{r}
+round(100*sum(!is.na(x))/nrow(df),2)
+```
+
+
+## Twitter geocodes
+
+```{r echo=-1,dev="pdf", fig.width=5, fig.height=2.5, fig.cap="Kevin Bacon Tweets"}
+par(mar=rep(0.1,4))
+library(maps)
+map("world")
+points(x,y,pch=16, col="red")
+```
+
+## Twitter geocodes
+
+In a larger dataset (run on ScraperWiki.com), we found that 2--3% of tweets had a usable geocode.
+
+This means that 
+
+* we need large datasets to get a reasonable sample of geocoded tweets.
+* we need to be certain that any bias is either irrelevant, or corrected for.
+
+# The DOLLY project
+
+## The DOLLY project
+
+> The DOLLY Project (Digital OnLine Life and You) is a repository of billions of geolocated 
+> tweets that allows for real-time research and analysis.
+
+* Department of Geography at the University of Kentucky
+* Collects all geocoded tweets (~8 million a day)
+* Only available in-house and to close collaborators at the moment.
+
+More info [http://www.floatingsheep.org/p/dolly.html](http://www.floatingsheep.org/p/dolly.html)
+
+## YouTube clips
+
+* "grits" in the US. [https://www.youtube.com/watch?v=Nh-nwLSMIPo](https://www.youtube.com/watch?v=Nh-nwLSMIPo)
+
+* "Sint maarten" in Europe [https://www.youtube.com/watch?v=pD9HWAaQGUA](https://www.youtube.com/watch?v=pD9HWAaQGUA)
+
+# A real application
+
+## The Geography of Hate
+
+__WARNING__ this web site contains words that some people may find offensive!
+
+> The Geography of Hate is part of project by Dr. Monica Stephens of Humboldt State University (HSU) identifying the geographic origins of online hate speech.
+
+\includegraphics[width=0.8\linewidth]{GeoHate.png}
+
+## The Geography of Hate
+
+* The map is based on every geocoded tweet in the United States from June 2012 - April 2013 containing one of the _hate words_. (>150,000 tweets)
+* From the DOLLY project based at the University of Kentucky. 
+* Students to read the tweet and coded the sentiment.  Only negative tweets were used.
+
+[http://users.humboldt.edu/mstephens/hate/hate_map.html](http://users.humboldt.edu/mstephens/hate/hate_map.html)
+
+## The Geography of Hate
+
+> To produce the map all tweets containing each 'hate word' were aggregated to the county level and normalized by the total twitter traffic in each county. 
+> Counties were reduced to their centroids and assigned a weight derived from this normalization process. 
+> This was used to generate a heat map that demonstrates the variability in the frequency of hateful tweets relative to all tweets over space. 
+> Where there is a larger proportion of negative tweets referencing a particular 'hate word' the region appears red on the map, where the proportion is moderate, the word was used less (although still more than the national average) and appears a pale blue on the map. 
+>Areas without shading indicate places that have a lower proportion of negative tweets relative to the national average.
+
+From the web site.
+
+## The Geography of Hate
+
+* Look at the distribution of _wetback_
+* Look at the distribution of _nigger_
+* Why do you think the _amount of hate_ seems to decrease the further west in the US?
+
+# Using R and Twitter to track epidemics
+
+## Tweets containing _flu_
+
+It might be interesting to look at the spatial distribution of tweets containing the word _flu_.
+
+We could look for epidemics etc.
+
+Using ScraperWiki we collected 27,000 tweets containing the word _flu_ over about a week in October 2013.
+
+We downloaded these and found that 815 had a latitude and longitude (ie. were geocoded)
+
+We can use the `maps` package in R to plot the tweets on a world map.
+
+## Tweets containing _flu_
+
+```{r echo=-1, dev="pdf", fig.width=5, fig.height=2.5, fig.cap="Tweets containing flu"}
+par(mar=rep(0.1,4))
+load("FluThe.RData")
+require(maps)
+map('world')
+points(flu.pts, pch=16, col=2)  ### use solid red circles
+```
+
+## Tweets containing _flu_
+
+We might like to estimate the _spatial intensity_ of tweets.
+
+One way to think of the spatial intensity at $(x,y)$ is as the mean of the number of tweets occurring in
+a box of unit area at the point $(x,y)$ 
+
+The statistical model underlying this is that the number of 
+tweets at the location $(x,y)$ has a Poisson distribution with some mean.
+
+$$N(x,y) = Poisson( \lambda(x,y))$$
+
+Given tweets, we see only their location $(x_i, y_i)$. What is this chance of seeing a tweet near here?
+
+## Intensity estimation
+
+The Geography of Hate project looked at counties in the US, and calculated averages over the counties.
+
+Another approach is to say that the intensity at any location is a local average around that location.
+
+$$\lambda_R(x,y) = \frac{\text{Number of Tweets within } R \text{ of } (x,y)}{\pi R^2}$$
+
+In fact, it is better to use a _weighted local average_
+
+## Weighted local average
+
+The local average can also be written
+
+$$\lambda_R(x,y) = \frac{1}{\pi R^2} \sum_i I(d_i(x,y) < R)$$
+
+where $d_i(x,y)$ is the distance of tweet $i$ to $(x,y)$ and $I(d_i(x,y) < R) = 1$ if
+$d_i(x,y) < R$ and zero otherwise.
+
+A weighted average replaces the $I(\ldots) = 1$ with a weight other than $1$.
+
+## Weighted local average
+
+$$\lambda_h(x,y) = \frac{1}{nh} \sum_i K(d_i(x,y)/h)$$
+
+and $K$ is a _Gaussian Kernel_ and $h$ is a bandwidth.
+
+$$ K(s) = \frac{1}{2\pi} e^{-s^2/2}$$
+
+```{r echo=FALSE,dev="pdf", fig.width=2, fig.height=2, fig.cap=""}
+par(mar=c(4,0,0,0)+0.1)
+curve(dnorm(x), from=-3, to=3, axes=FALSE, xlab="distance")
+box()
+```
+
+## Tweets containing _flu_
+
+In R we do this with a function called `density` and we need the `spatstat` package.
+
+First the lat and and long are converted to a spatstat _point process_
+```{r results="hide", message=FALSE}
+require(spatstat)
+```
+```{r tidy=FALSE}
+flu.pp = ppp(flu.pts$lng, flu.pts$lat, 
+             xrange=c(-180,180), yrange=c(-90,90))
+```
+
+Then we compute the density, specifying the bandwidth with `sigma`
+```{r eval=FALSE}
+den1 = density(flu.pp, sigma=5)
+plot(den1, ribbon=FALSE)
+map('world', add=TRUE)
+```
+
+## Tweets containing _flu_
+
+```{r echo=FALSE, dev="pdf", fig.width=4.5, fig.height=2.5, fig.cap="Tweets containing flu"}
+par(mar=rep(0.1,4))
+den1 = density(flu.pp, sigma=5)
+plot(den1, ribbon=FALSE, main="")
+map('world', add=TRUE)
+```
+
+## Tweets containing _flu_
+
+This data is __NOT__ normalised.  So there are possible problems.
+
+* We looked for the English word _flu_.
+* We have not corrected for population size or overall tweet frequency
+* So high counts for _flu_ may just mean a lot of tweets, not a lot of flu...
+
+How can we normalise?
+
+## Tweets containing _the_
+
+We do not have access to total number of tweets, by geocode. We can only search.
+
+Searched for tweets containing an unrelated non-specific word --- "the"
+
+Over a similar period, found 200,000+ tweets of which 3558 are geocoded.
+
+## Tweets containing _the_
+
+```{r echo=-1, dev="pdf", fig.width=5, fig.height=2.5, fig.cap="Tweets containing the"}
+par(mar=rep(0.1,4))
+map('world')
+points(the.pts, pch=16, col=2)  ### use solid red circles
+```
+
+## Tweets containing _the_
+
+Again we can estimate a density using the same procedure as before.
+
+```{r tidy=FALSE}
+the.pp = ppp(the.pts$lng, the.pts$lat, 
+             xrange=c(-180,180), yrange=c(-90,90))
+den2 = density(the.pp, sigma=5)
+```
+
+```{r eval=FALSE}
+plot(den2, ribbon=FALSE)
+map('world', add=TRUE)
+```
+
+## Tweets containing _the_
+
+```{r echo=FALSE, dev="pdf", fig.width=4.5, fig.height=2.5, fig.cap="Tweets containing the"}
+par(mar=rep(0.1,4))
+plot(den2, ribbon=FALSE, main="")
+map('world', add=TRUE)
+```
+
+## Tweets containing _the_
+
+* Note the very high use of "the" in the UK?
+* The _flu_ hotspot in Brazil (Rio de Janeiro?) is not there
+* Maybe _flu_ means something in Portuguese?
+* Perhaps _the_ is not the best word to normalise with?
+
+## Relative Risk
+
+To normalise we really want to say, 
+
+* if we pick a tweet at random from the location $(x,y)$ what is the probability it contains the word _flu_
+
+This will represent the normalised use of _flu_
+
+We would estimate this as 
+
+$$\frac{\text{Number tweets near } (x,y) \text{ containing flu}}{\text{Number tweets near } (x,y) 
+\text{ containing flu OR the}}$$
+
+This is called _Relative Risk_
+
+## Relative Risk
+
+Relative Risk is estimated in a similar way to the intensity.
+
+In R we can use the `relrisk` function.
+
+Firstly we put the two datasets together.
+
+So that the risk is HIGH for high occurring flu we need the names to be in the right 
+alphabetic order for this software.
+
+```{r }
+both = superimpose(Athe=the.pp, Bflu=flu.pp)
+r = relrisk(both, sigma=5)
+```
+
+sigma=5 is probably too much smoothing
+
+## Relative Risk
+
+```{r echo=FALSE, dev="pdf", fig.width=4.5, fig.height=2.5, fig.cap="Relative Risk sigma =5"}
+par(mar=rep(0.1,4))
+plot(r, ribbon=FALSE, main="")
+map('world', add=TRUE)
+```
+
+## Relative Risk
+
+```{r echo=FALSE, dev="pdf", fig.width=4.5, fig.height=2.5, fig.cap="Relative Risk sigma =1"}
+par(mar=rep(0.1,4))
+r = relrisk(both, sigma=1)
+plot(r, ribbon=FALSE, main="")
+map('world', add=TRUE)
+```
+
+## Relative Risk
+
+Still very difficult to see because of very speckley image.
+
+We can mask out areas where almost no tweets contain _the_
+
+We have to do this kind of manually.
+
+```{r}
+r$v[den2$v<0.0001] = NA
+```
+
+## Relative Risk
+
+```{r echo=FALSE, dev="pdf", fig.width=4.5, fig.height=2.5, fig.cap="Relative Risk masked"}
+par(mar=rep(0.1,4))
+plot(r, ribbon=FALSE, main="")
+map('world', add=TRUE)
+```
+
+## Issues
+
+* Use of the word _the_ to normalise
+* Still quite a small number of geocoded tweets for flu globally
+* Imagine a rare disease? Or a smaller geographic region
+* Cloud collect over a longer time (eg DOLLY), but then less useful for short-term events like epidemics
+
+## Summary
+
+We looked at 
+
+* Geocodes in Twitter
+* The DOLLY project
+* The _Geography of Hate_
+* How to do similar things using Twitter, ScraperWiki and R.
+
+
