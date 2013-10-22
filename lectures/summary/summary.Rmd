@@ -8,7 +8,231 @@ opts_chunk$set(dev = 'pdf', fig.cap="")
 
 # What have we learnt
 
-Go through and summarise each week.
+## What have we learnt
+
+
+We will go though each week and outline the main topics and what you
+are expected to know for the exam.
+
+## Week 1 - Topics
+
+Introduction to the Social Web
+
+- Social Networks
+- The Social Web
+- How can we analyse the Social Web?
+- Brief introduction to R
+
+## Week 1 - What should we know?
+
+- What is a social network?
+- Give examples of Web based social networks.
+- Why is social network analysis useful? Who is it useful for?
+
+## Week 2 - Topics
+
+Introduction to R and accessing Social Web data
+
+- Writing algorithms in R
+  - data types
+  - functions
+  - flow control (for, while)
+- Accessing information from the social web.
+  - scraping
+  - API
+  - API formats
+
+## Week 2 - What should we know?
+
+- Reading and writing algorithms in R
+- Accessing an API using a URL
+- Features and differences of API data formats
+
+## Week 3 - Topics
+
+Simple Exposure Analysis
+
+- Facebook Insights
+- Reach and Demographics
+- Key Metrics
+
+## Week 3 - What should we know?
+
+- Likes, Reach and Talking About definitions.
+- Useful demographics
+- What questions can we answer using demographics?
+- Confidence intervals and hypothesis testing of demographics.
+- Key Metric (daily reach, total reach, organic reach) definitions.
+
+## Week 4 - Topics
+
+Text Mining 1: Indexing and Querying Text
+
+- Why do we need text mining for social networks?
+- Document models
+- Word weight:
+  - Divergence from Randomness
+  - TF-IDF
+- Preprocessing text
+
+## Week 4 - What should we know?
+
+- Representing a document (tweet) as a vector.
+- Computing the similarity between documents (using Cosine similarity).
+- Weighting words using:
+  - Binomial Divergence from Randomness and
+  -  TFIDF
+- Preprocessing text by:
+  - Removing stop words
+  - case folding and punctuation removal
+  - stemming
+
+## Week 5 - Topics
+
+Graphs 1: Introduction to graphs and their parameters
+
+- Defining a graph, types of graphs (undirected, directed, weighted)
+- Representing graphs
+- Graph structures
+- Graph parameters
+- Centrality
+- Random graphs
+
+
+## Week 5 - What should we know?
+
+- Convert a graph to an adjacency matrix and vice versa.
+- Extracting subgraphs (cliques, egocentric graphs)
+- Compute graph parameters (degree, degree distribution, density, diameter)
+- Compute centrality (degree, closeness, betweenness)
+- How to generate a:
+  - Erdos-Renyi random graph
+  - Barabasi-Albert random graph  
+
+## Week 6 - Topics
+
+Visualisation of Social Web Data
+
+- Word Clouds
+- Principal component analysis
+- Multidimensional scaling
+
+## Week 6 - What should we know?
+
+- Concepts behind creating a word cloud
+- Why is dimension reduction useful?
+- What are principal components?
+- Computing the distance between document vectors (tweets) using:
+  - Binary metric
+  - Cosine dissimilarity (1 - Cosine similarity)
+  - Euclidean distance
+- Concepts behind Multidimensional Scaling
+
+## Week 7 - Topics
+
+Text Mining 2: Clustering
+
+- What is clustering?
+- K-means clustering
+- Choosing the number of clusters
+- Hierarchical clustering
+
+## Week 7 - What should we know?
+
+- What makes a good clustering?
+- How to perform K-means clustering
+- Computing SST, SSW and SSB
+- The elbow method
+- Reading a cluster dendrogram
+- How to perform hierarchical clustering using:
+  - Single linkage clustering
+  - Complete linkage clustering
+  - Group average clustering
+
+## Week 8 - Topics
+
+Graphs 2: Link Analysis
+
+- Random walk on a graph
+- Random walk on a directed graph
+- PageRank
+
+## Week 8 - What should we know?
+
+- How to perform a random walk on a graph
+- Constructing the probability transition matrix
+- Computing the state distribution after $n$ steps
+- Computing the stationary distribution of an undirected graph
+- Verifying the stationary distribution of a directed graph
+- Identifying an ergodic graph
+- Constructing the Random Surfer probability transition matrix
+- Verifying the PageRank of a graph.
+
+## Week 10 - Topics
+
+Looking for Trends
+
+- Twitter trending topics
+- Issues with Twitter's method
+- Computing trends using Simple Linear Regression
+- Trend and Seasonality
+
+## Week 10 - What should we know?
+
+- How Twitter computes trending topics using the $\chi^2$ approximation.
+- Computing trends using a proportion test.
+- Square root transformation for counts
+- Computing the regression parameters $a$ and $b$ of the occurrence of a word, for an interval of tweets
+- Computing the trend parameter using moving averages (using even and odd windows)
+- Computing Seasonality of a trend.
+
+
+## Week 11 - Topics
+
+Testing for Impact
+
+- Comparing tweet rates
+- Comparing means using a $t$-test
+- Introducing a control
+- Analysis of BACI designs
+
+
+## Week 11 - What should we know?
+
+- What is impact?
+- Square root transformation
+- Performing a $t$-test for a difference in means
+- The importance of a control
+- Computing the $F$ statistic and degrees of freedom for a BACI design
+
+
+## Week 12 - Topics
+
+Sentiment Analysis
+
+- Sentiment Analysis
+- Naive Bayes classifier
+- K nearest neighbours classifier
+- Classifier evaluation
+
+## Week 12 - What should we know?
+
+- What is sentiment and sentiment analysis?
+- Curse of dimensionallity and its affect on text classification
+- Computing a Naive Bayes classifier and making class predictions
+- Predicting the class using K nearest neighbours
+- Computing the sensitivity and specificity of a set of predictions
+- Evaluation using the Receiver operating characteristic
+
+
+## Week 13 - Topics
+
+Spatial Analysis
+
+## Week 13 - What should we know?
+
+
+
 
 # Your Future
 
@@ -24,9 +248,34 @@ The most likely choices are:
 
 ## Industry
 
+There are many business within Australia and overseas that have large
+amounts of data, but do not know how to analyse it (or are using very
+simple analysis methods) to improve their business.
+
+- Banks
+- Supermarkets
+- Insurance Companies
+
+
 ## Honours and PhD
 
+Honours and PhD degrees are research degrees. Research degrees have no
+lectures, but require the student to investigate and research a new
+topic in the field of choice. Research commonly leads to:
 
+- new discoveries, 
+- publishing the discoveries in international journals, and
+- being set overseas to present the new discoveries to an international audience.
+
+After you finish a PhD, you get to be called Doctor!
+
+Social Web Analysis is a thriving research topic in the domains of
+Data Mining and Machine Learning.
+
+If you are interested in further study in this field (or similar fields) speak to Laurence and Glenn.
+
+Current research can be found using Google Scholar:
+<http://scholar.google.com.au/>
 
 
 # Exam details
@@ -40,7 +289,7 @@ Check the exam timetable Web site to find when and where the exam will be held.
 Don't rely on a friend giving you this information, look it up yourself!
 
 
-## Duraion and Questions
+## Duration and Questions
 
 The exam will last two hours.
 
@@ -55,3 +304,5 @@ The marks reflect the difficulty and time required to complete the question.
 
 Thank-you to all students. We had fun setting up and teaching this unit, we
 hope you all enjoyed learning about Social Web Analytics.
+
+We hope we don't see you next year!

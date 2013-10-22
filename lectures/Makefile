@@ -12,7 +12,7 @@ R_SCRIPT := /opt/local/bin/Rscript
 %.md:	%.Rmd
 	Rscript -e "library(knitr); knit('$<', output='$*.md')"
 
-%.tex:	%.md
+%.tex:	%.md figure/*
 	pandoc -f markdown+grid_tables -t beamer --slide-level=2 $< -o $*.tex
 
 %.web: 	%.md
