@@ -255,6 +255,10 @@ simple analysis methods) to improve their business.
 - Banks
 - Supermarkets
 - Insurance Companies
+- Telecommunication Companies
+
+Businesses with large customer databases are crying out for people with data
+mining skills.
 
 
 ## Honours and PhD
