@@ -690,3 +690,211 @@ Tweet 2: & believe more students doing university better
 \end{center}
 
 ]>)
+
+
+
+m4_define(_graphs_q2,<[
+
+  \squestion
+  
+  % begin.rcode echo=FALSE, results="hide", message=FALSE
+  require("igraph")
+  $@
+  #g = graph.formula(A-B, A-C, A-D, B-D)
+  d = degree(g)
+  b = betweenness(g)
+  close = 1/closeness(g)
+  n = length(d)
+  V(g)$color = "white"
+  V(g)$label.color = "black"
+  E(g)$color = "black"
+  names(d) = LETTERS[1:n]
+  % end.rcode 
+
+  The following graph shows the relationships between a set of YouTube clips.
+
+  \begin{center}
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
+    par(mar = c(0,0,0,0))
+    plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:n])
+    % end.rcode 
+  \end{center}
+
+  Using this graph:
+  \begin{enumerate}
+  \item Construct the adjacency matrix.
+  \item Compute the graph diameter.
+  \item Calculate the betweenness centrality for each vertex.
+  \item Identify if this graph is more similar to an Erdös-Renyi graph or a Barabasi-Albert graph.
+  \end{enumerate}
+  
+  \begin{workingbox}
+    \marknote{For each of these four questions, give 1 mark for the correct
+      working and 1 mark for the right answer.}
+    
+    \begin{enumerate}
+    \item The adjacency matrix is:
+      \begin{center}
+        \begin{minipage}{0.5\textwidth}
+          % begin.rcode echo=FALSE,results="verbatim", message=FALSE
+          print(as.matrix(get.adjacency(g)))
+          % end.rcode 
+        \end{minipage}
+        \xmark{1}
+      \end{center}
+
+      
+    \item The diameter is the longest shortest path. For this graph, the diameter is \rinline{diameter(g)}.
+      \begin{center}
+        \begin{minipage}{0.5\textwidth}
+          % begin.rcode echo=FALSE,results="verbatim"
+          table(factor(degree(g), c(0,1,2,3,4,5)))
+          % end.rcode 
+        \end{minipage}
+        \xmark{1}
+      \end{center}
+      
+    \item The betweenness centrality is a sum of the proportion of shortest paths that pass through the vertex. The betweenness centrality for each vertex is:
+      \begin{center}
+        \begin{tabular}{\rinline{paste(rep('c',n),collapse='')}}
+          \rinline{paste(names(b),collapse=" & ")} \\
+          \rinline{paste(b,collapse=" & ")}
+        \end{tabular}
+      \xmark{2}
+      \end{center}
+
+      
+    \item The degree distribution must be examined and compared to
+      each of the random graph degree distributions. The one with the
+      more similar distribution is the more similar graph.  \xmark{1}
+      
+    \end{enumerate}
+    
+  \end{workingbox}
+]>)
+
+
+m4_define(_clustering_q2,<[
+  
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide", message=FALSE
+  require("mvtnorm")
+  require("xtable")
+  
+  latex.matrix = function(X) {
+    nc = ncol(X)
+    nr = nrow(X) 
+    text = c("\\begin{array}{", paste(rep('c',nc),collapse=''), "}\n")
+    for (a in 1:nr) {
+      text = c(text, paste(format(X[a,]),collapse=" & "), " \\\\\n", sep="")
+    }
+    text = c(text, "\\end{array}\n", sep="")
+    return(paste(text, collapse=" "))
+  }
+  
+  set.seed(1)
+  $@
+
+  m = apply(X,2,mean)
+  zero.mean = function(x, m) { return(x - m) }
+  Z = t(apply(X,1,zero.mean, m))
+  n = nrow(Z)
+  wss <- (nrow(Z)-1)*sum(apply(Z,2,var))
+  bss = 0
+  cluster.count = 6
+  for (i in 2:cluster.count) {
+    z = kmeans(Z, centers=i)
+    wss[i] <- z$tot.withinss
+    bss[i] <- z$betweenss
+  }
+  tss = z$totss
+  i = 2
+  z = kmeans(Z, centers=i)
+  wss[i] <- z$tot.withinss
+  bss[i] <- z$betweenss
+  rwss = wss
+  wss[2] = NA
+  bss[2] = NA
+  wssf = format(wss)
+  bssf = format(bss)
+  wssf[is.na(wss)] = missing.symbol
+  bssf[is.na(bss)] = missing.symbol
+  z = kmeans(Z, centers=2)
+  A = cbind(Z,z$cluster)
+  colnames(A) = c("x1","x2","Cluster")
+  colnames(z$centers) = c("x1","x2")
+
+  ssb = sum(diag(table(z$cluster)) %*% z$centers^2)
+  
+  # wss
+  # z$totss - sum(diag(table(z$cluster)) %*% (z$centers)^2)
+  
+  % end.rcode 
+
+  The following \rinline{n} centred data points ($\bar{x} = [ 0 ~ 0 ]$)
+  and their associated cluster for $k = 2$:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(A)
+  % end.rcode 
+  have the between cluster sum of squares (SSB) values:
+  \begin{center}
+    \begin{tabular}{c|\rinline{paste(rep('c',cluster.count),collapse='')}}
+      $k$ & \rinline{paste(1:cluster.count,collapse=" & ")} \\
+      \hline
+      SSB & \rinline{format(paste(bssf,collapse=" & "))}
+    \end{tabular}
+  \end{center}
+  and the total sum of squares value (SST) \rinline{format(tss)}.
+  
+  Given that the cluster centres for $k = 2$ are:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(z$centers)
+  % end.rcode 
+  \begin{enumerate}
+  \item Compute the SSB for $k = 2$.
+  \item Plot the elbow bend plot for this data.
+  \item Determine how many clusters are the most suitable for the data and explain why.
+  \end{enumerate}
+  
+  \begin{workingbox}
+    
+    \begin{enumerate}
+    \item SSB is the sum of squares of all distances from the centre
+      of the points to the cluster centres.
+      
+      SSB = 
+      \begin{align*}
+        A = \left [ \rinline{latex.matrix(diag(table(z$cluster)))}  \right ]
+        \left [ \rinline{latex.matrix(z$centers^2)} \right ] = 
+        \left [ \rinline{latex.matrix(diag(table(z$cluster)) %*% z$centers^2)} \right ]
+      \end{align*}
+      giving SSB = \rinline{format(ssb)}.
+        \xmark{2}
+        
+      \item Plot the elbow bend plot for this data.
+      \begin{center}
+        \begin{minipage}{0.9\textwidth}
+          \begin{center}
+          % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=5, fig.height=4
+          #par(mar = c(0,0,0,0))
+          plot(1:cluster.count,ssb, xlab="Number of clusters", ylab="SSB")
+          % end.rcode 
+
+        \end{center}
+        \end{minipage}
+        \xmark{2}
+      \end{center}
+        
+      \item Determine how many clusters is the most suitable for the data.
+            
+        The number of clusters is determined by where the elbow occurs.
+        Therefore the student should report the position of the elbow.
+        \xmark{1}
+        
+    \end{enumerate}
+
+
+  
+  \end{workingbox}
+]>)

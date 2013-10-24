@@ -1,0 +1,133 @@
+% -*- Rnw -*-
+\documentclass[hideanswers]{uwsexam}
+%documentclass{uwsexam}
+
+m4_include(`exam_question.pool.m4')
+
+
+% Set up class variables
+\testtitle{Sample Examination}
+\unitsession{Spring Session}
+\unitname{Social Web Analytics}
+\unitcode{300958}
+\testtime{2 hours includes reading time}
+\questioncount{8}
+\lecturername{Laurence Park, Glenn Stone}
+\studentinstructions{
+\begin{enumerate}
+\item Write your name and student number on the top of this exam paper
+  and on all answer booklets.
+\item All exams include reading time, which allows you to spend some
+  time at the start of the examination composing yourself, reading the
+  exam paper, and planning which questions to answer, and how. We
+  advise you to read the instructions and questions carefully, before
+  you begin writing. \textbf{However, you are allowed to begin writing
+    straight away if you wish}.
+\item This is an ``open book'' exam. Any written or printed material
+  may be brought into the exam.
+\item Scientific, non-programmable hand held calculators are
+  permitted.
+\item Answer all questions in the answer booklet provided.
+\item There are 56 marks available. The marks assigned to each problem
+  are presented at the top of the problem. All working must be shown
+  to gain full marks.
+\item All 8 questions must be answered to obtain full marks.
+\end{enumerate}}
+
+
+
+\begin{document}
+
+\coversheet
+
+% Set the precision of the results
+_precision(4)
+
+
+\question{Question 1}{1 + 2 + 2 + 3 = 8 marks}
+
+%\begin{questions}[]
+
+
+
+%\end{questions}
+
+\question{Question 2}{1 + 1 + 2 + 1  = 5 marks}
+
+\begin{questions}[]
+ 
+   _text_index_q1(<[
+     docs <- c("Go dog, go!", "Stop cat, stop", 
+     "The dog stops the cat and the bird.");
+     query = c("stop", "cat");
+     stop = c("a", "the", "is", "to", "it", "and", "go") ]>)
+  
+\end{questions}
+
+
+\question{Question 2}{2 + 2 + 2 + 2 = 8 marks}
+
+\begin{questions}[]
+  
+    _graphs_q2(<[ g = graph.formula(A-B, B-C, B-D) ]>)
+  
+\end{questions}
+
+\question{Question 3}{2 + 2 = 4 marks}
+
+%\begin{questions}[(a)]
+
+
+%\end{questions}
+
+
+\question{Question 4}{4 + 2 + 2 = 8 marks}
+
+%\begin{questions}[]
+  
+  
+%\end{questions}
+
+
+
+\question{Question 5}{2 + 2 + 2 + 2 = 8 marks}
+
+%\begin{questions}[]
+  
+
+%\end{questions}
+
+
+\question{Question 6}{4 + 2 = 6 marks}
+
+\begin{questions}[]
+
+  _clustering_q2(<[ 
+    cluster1 = rmvnorm(5, mean = c(2,5), sigma = matrix(c(1,0,0,1),2,2));
+    cluster2 = rmvnorm(5, mean = c(12,2), sigma = matrix(c(1,0,0,1),2,2));
+    X = rbind(cluster1, cluster2) ]>)
+
+
+\end{questions}
+
+
+\question{Question 7}{1 + 2 + 2 + 3 = 8 marks}
+
+%\begin{questions}[]
+
+
+
+%\end{questions}
+
+
+\question{Question 8}{2 + 3 + 1 = 6 marks}
+
+%\begin{questions}[]
+  
+
+%\end{questions}
+
+
+\testend
+
+\end{document}
