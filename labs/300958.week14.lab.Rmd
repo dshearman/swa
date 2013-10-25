@@ -72,7 +72,7 @@ map('world', add=TRUE)
 
 # Iphone5 data
 
-The file [iphone.csv](iphone.csv) has the lat and long of the iphone 5 data. Try making an intensity plot of these tweets.
+The file [iphoneGEO.csv](iphoneGEO.csv) has the lat and long of the iphone 5 data. Try making an intensity plot of these tweets.
 
 ```{r include=FALSE, eval=FALSE}
 iphone = read.csv("iphoneGEO.csv")
