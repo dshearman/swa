@@ -4,7 +4,7 @@
 
 `r opts_chunk$set(prompt=TRUE, comment=NA, fig.cap="")`
 
-# Searching using twitteR
+# Searching using twitteR 
 
 Complete the usual OAuth regstration then conduct a twitter search for any string you like.
 Try and pick a string that returns a largish number of results.
