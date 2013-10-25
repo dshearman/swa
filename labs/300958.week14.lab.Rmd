@@ -1,6 +1,6 @@
-% Assessing for Impact
+% Spatial Analysis of Twitter
 % 300958 Social Web Analysis 
-% Week 12 Lab
+% Week 14 Lab
 
 `r opts_chunk$set(prompt=TRUE, comment=NA, fig.cap="")`
 
