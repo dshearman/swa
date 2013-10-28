@@ -1,6 +1,7 @@
 % -*- Rnw -*-
-\documentclass[hideanswers]{uwsexam}
-%documentclass{uwsexam}
+\documentclass{uwsexam}
+%documentclass[hideanswers]{uwsexam}
+
 
 m4_include(`exam_question.pool.m4')
 
@@ -113,11 +114,13 @@ _precision(4)
 
 \question{Question 7}{1 + 2 + 2 + 3 = 8 marks}
 
-%\begin{questions}[]
+\begin{questions}[]
+
+  _link_analysis_q2(<[
+  g = graph.formula(A-B, A-C, A-D, B-E, B-C, C-E); ]>)
 
 
-
-%\end{questions}
+\end{questions}
 
 
 \question{Question 8}{2 + 3 + 1 = 6 marks}

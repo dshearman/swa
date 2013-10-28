@@ -826,6 +826,9 @@ m4_define(_clustering_q2,<[
   colnames(z$centers) = c("x1","x2")
 
   ssb = sum(diag(table(z$cluster)) %*% z$centers^2)
+
+  bss.complete = bss
+  bss.complete[2] = ssb
   
   # wss
   # z$totss - sum(diag(table(z$cluster)) %*% (z$centers)^2)
@@ -878,7 +881,7 @@ m4_define(_clustering_q2,<[
           \begin{center}
           % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=5, fig.height=4
           #par(mar = c(0,0,0,0))
-          plot(1:cluster.count,ssb, xlab="Number of clusters", ylab="SSB")
+          plot(1:cluster.count,bss.complete, xlab="Number of clusters", ylab="SSB")
           % end.rcode 
 
         \end{center}
@@ -909,6 +912,7 @@ m4_define(_link_analysis_q2,<[
   
   % begin.rcode echo=FALSE,results="hide"
   require("igraph")
+  require("xtable")
   $@
 
   V(g)$color = "white"
@@ -922,8 +926,9 @@ m4_define(_link_analysis_q2,<[
   R = alpha*T + (1-alpha)*J
   e = eigen(R)
   pos = which(abs(e$values - 1) < 1e-8)
-  station = e$vectors[,pos]/sum(e$vectors[,pos])
-  #state.i
+  station = degree(g)/sum(degree(g))
+  begin.dist = rep(0,N)
+  begin.dist[1] = 1
   
   % end.rcode 
   
@@ -940,14 +945,10 @@ m4_define(_link_analysis_q2,<[
   \begin{enumerate}
   \item Contruct the probability transition matrix.
   \item State if the graph is ergodic and why or why not.
-  \item Given the current state distribution:
-    \begin{center}
-    $\vec{p}_i = [~\rinline{paste(format(state.i), collapse="~")}~]$
-    \end{center}
-    compute the state distribution after the next step ($\vec{p}_{i+1}$).
-    
-  \item Determine if the stationary distribution for the random surfer
-    transition matrix is $\vec{p} = [~\rinline{paste(format(non.station), collapse="~")}~]$.
+  \item Compute the state distribution after we begin on vertex 1 and
+    take two random steps.
+  \item Compute the stationary distribution for the graph and verify
+    that it is the stationary distribution.
   \end{enumerate}
   
   \begin{workingbox}
@@ -955,31 +956,37 @@ m4_define(_link_analysis_q2,<[
     \begin{enumerate}
     \item The probability transition matrix is:
       \begin{center}
-      \begin{minipage}{0.5\textwidth}
-      % begin.rcode echo=FALSE,results="verbatim"
-      print(T)
-      % end.rcode 
-      \end{minipage}
-      \xmark{1}
+        \begin{minipage}{0.5\textwidth}
+          % begin.rcode echo=FALSE,results="verbatim"
+          print(T)
+          % end.rcode 
+        \end{minipage}
+        \xmark{1}
       \end{center}
     \item The graph is ergodic if there is a path from all vertices to
       all other vertices. This student should report if all paths
       exist, and if not, where a path does not exist. \xmark{1}
       
-    \item The random surfer probability transition matrix using $\alpha = \rinline{alpha}$ is:
-      \begin{center}
-      \begin{minipage}{0.5\textwidth}
-      % begin.rcode echo=FALSE,results="verbatim"
-      print(R)
-      % end.rcode 
-      \end{minipage}
-      \xmark{2}
-      \end{center}
-    \item The stationary distribution satisfies $\vec{p} = T\vec{p}$. By multiplying $T$ and $\vec{p}$, we get:
-      % begin.rcode echo=FALSE,results="verbatim"
-      print(R %*% station)
-      % end.rcode 
-      If this is equal to $\vec{p}$, then $\vec{p}$ is the stationary distribution.
+    \item If we begin on vertex 1, the initial state distribution is:
+      \begin{align}
+        \vec{p}_0 = [~\rinline{paste(format(begin.dist), collapse="~")}~]
+      \end{align}
+      After one random step the state distribution is:
+      \begin{align}
+        \vec{p}_1 = T\vec{p}_0 = [~\rinline{paste(format(T %*% begin.dist), collapse="~")}~]
+      \end{align}
+      After two random steps the state distribution is:
+      \begin{align}
+        \vec{p}_2 = T\vec{p}_1 = [~\rinline{paste(format(T %*% T %*% begin.dist), collapse="~")}~]
+      \end{align}
+    \item The probability of each vertex in the stationary
+      distribution of an undirected graph is proportional to the
+      number of edges connected to the vertex. Therefore the
+      stationary distribution is:
+      \begin{align}
+        \vec{p} = [~\rinline{paste(format(station), collapse="~")}~]
+      \end{align}
+      We can verify that this is the stationary distribution by showing that $\vec{p} = T\vec{p}$
       \xmark{1}
       
     \end{enumerate}
