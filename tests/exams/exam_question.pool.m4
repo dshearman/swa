@@ -898,3 +898,93 @@ m4_define(_clustering_q2,<[
   
   \end{workingbox}
 ]>)
+
+
+
+m4_define(_link_analysis_q2,<[
+
+  %%%% Mean, standard deviation, mode, median, quantiles
+
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide"
+  require("igraph")
+  $@
+
+  V(g)$color = "white"
+  V(g)$label.color = "black"
+  E(g)$color = "black"
+  alpha = 0.8
+  A = t(as.matrix(get.adjacency(g)))
+  T = A %*% diag(1/apply(A,2,sum))
+  N = dim(A)[1]
+  J = matrix(rep(1/N, N*N), N, N)
+  R = alpha*T + (1-alpha)*J
+  e = eigen(R)
+  pos = which(abs(e$values - 1) < 1e-8)
+  station = e$vectors[,pos]/sum(e$vectors[,pos])
+  #state.i
+  
+  % end.rcode 
+  
+
+  Using the following graph:
+  
+  \begin{center}
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
+    par(mar = c(0,0,0,0))
+    plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:N])
+    % end.rcode 
+  \end{center}
+  
+  \begin{enumerate}
+  \item Contruct the probability transition matrix.
+  \item State if the graph is ergodic and why or why not.
+  \item Given the current state distribution:
+    \begin{center}
+    $\vec{p}_i = [~\rinline{paste(format(state.i), collapse="~")}~]$
+    \end{center}
+    compute the state distribution after the next step ($\vec{p}_{i+1}$).
+    
+  \item Determine if the stationary distribution for the random surfer
+    transition matrix is $\vec{p} = [~\rinline{paste(format(non.station), collapse="~")}~]$.
+  \end{enumerate}
+  
+  \begin{workingbox}
+    
+    \begin{enumerate}
+    \item The probability transition matrix is:
+      \begin{center}
+      \begin{minipage}{0.5\textwidth}
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(T)
+      % end.rcode 
+      \end{minipage}
+      \xmark{1}
+      \end{center}
+    \item The graph is ergodic if there is a path from all vertices to
+      all other vertices. This student should report if all paths
+      exist, and if not, where a path does not exist. \xmark{1}
+      
+    \item The random surfer probability transition matrix using $\alpha = \rinline{alpha}$ is:
+      \begin{center}
+      \begin{minipage}{0.5\textwidth}
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(R)
+      % end.rcode 
+      \end{minipage}
+      \xmark{2}
+      \end{center}
+    \item The stationary distribution satisfies $\vec{p} = T\vec{p}$. By multiplying $T$ and $\vec{p}$, we get:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(R %*% station)
+      % end.rcode 
+      If this is equal to $\vec{p}$, then $\vec{p}$ is the stationary distribution.
+      \xmark{1}
+      
+    \end{enumerate}
+    
+    
+  
+  \end{workingbox}
+]>)
