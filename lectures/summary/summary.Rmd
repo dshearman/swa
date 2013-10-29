@@ -34,13 +34,13 @@ Introduction to the Social Web
 Introduction to R and accessing Social Web data
 
 - Writing algorithms in R
-  - data types
-  - functions
-  - flow control (for, while)
+    + data types
+    + functions
+    + flow control (for, while)
 - Accessing information from the social web.
-  - scraping
-  - API
-  - API formats
+    + scraping
+    + API
+    + API formats
 
 ## Week 2 - What should we know?
 
@@ -71,8 +71,8 @@ Text Mining 1: Indexing and Querying Text
 - Why do we need text mining for social networks?
 - Document models
 - Word weight:
-  - Divergence from Randomness
-  - TF-IDF
+    + Divergence from Randomness
+    + TF-IDF
 - Preprocessing text
 
 ## Week 4 - What should we know?
@@ -80,12 +80,12 @@ Text Mining 1: Indexing and Querying Text
 - Representing a document (tweet) as a vector.
 - Computing the similarity between documents (using Cosine similarity).
 - Weighting words using:
-  - Binomial Divergence from Randomness and
-  -  TFIDF
+    + Binomial Divergence from Randomness and
+    + TFIDF
 - Preprocessing text by:
-  - Removing stop words
-  - case folding and punctuation removal
-  - stemming
+    + Removing stop words
+    + case folding and punctuation removal
+    + stemming
 
 ## Week 5 - Topics
 
@@ -106,8 +106,8 @@ Graphs 1: Introduction to graphs and their parameters
 - Compute graph parameters (degree, degree distribution, density, diameter)
 - Compute centrality (degree, closeness, betweenness)
 - How to generate a:
-  - Erdos-Renyi random graph
-  - Barabasi-Albert random graph  
+    + Erdos-Renyi random graph
+    + Barabasi-Albert random graph  
 
 ## Week 6 - Topics
 
@@ -123,9 +123,9 @@ Visualisation of Social Web Data
 - Why is dimension reduction useful?
 - What are principal components?
 - Computing the distance between document vectors (tweets) using:
-  - Binary metric
-  - Cosine dissimilarity (1 - Cosine similarity)
-  - Euclidean distance
+    + Binary metric
+    + Cosine dissimilarity (1 - Cosine similarity)
+    + Euclidean distance
 - Concepts behind Multidimensional Scaling
 
 ## Week 7 - Topics
@@ -145,9 +145,9 @@ Text Mining 2: Clustering
 - The elbow method
 - Reading a cluster dendrogram
 - How to perform hierarchical clustering using:
-  - Single linkage clustering
-  - Complete linkage clustering
-  - Group average clustering
+    + Single linkage clustering
+    + Complete linkage clustering
+    + Group average clustering
 
 ## Week 8 - Topics
 

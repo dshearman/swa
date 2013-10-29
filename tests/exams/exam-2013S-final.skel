@@ -1,6 +1,5 @@
 % -*- Rnw -*-
-\documentclass[hideanswers]{uwsexam}
-%documentclass{uwsexam}
+\documentclass{uwsexam}
 
 m4_include(`exam_question.pool.m4')
 

@@ -827,6 +827,9 @@ m4_define(_clustering_q2,<[
   colnames(z$centers) = c("x1","x2")
 
   ssb = sum(diag(table(z$cluster)) %*% z$centers^2)
+
+  bss.complete = bss
+  bss.complete[2] = ssb
   
   # wss
   # z$totss - sum(diag(table(z$cluster)) %*% (z$centers)^2)
@@ -879,7 +882,7 @@ m4_define(_clustering_q2,<[
           \begin{center}
           % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=5, fig.height=4
           #par(mar = c(0,0,0,0))
-          plot(1:cluster.count,ssb, xlab="Number of clusters", ylab="SSB")
+          plot(1:cluster.count,bss.complete, xlab="Number of clusters", ylab="SSB")
           % end.rcode 
 
         \end{center}
@@ -899,6 +902,7 @@ m4_define(_clustering_q2,<[
   
   \end{workingbox}
 ]>)
+
 
 
 m4_define(_SimpleExposure_qS,<[
@@ -1069,4 +1073,98 @@ print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 \item Compute the missing trend component marked with a \rinline{missing.symbol}.
 \item Compute the missing periodic component marked with a \rinline{missing.symbol}.
 \end{enumerate}
+]>)
+
+
+m4_define(_link_analysis_q2,<[
+
+  %%%% Mean, standard deviation, mode, median, quantiles
+
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide"
+  require("igraph")
+  require("xtable")
+  $@
+
+  V(g)$color = "white"
+  V(g)$label.color = "black"
+  E(g)$color = "black"
+  alpha = 0.8
+  A = t(as.matrix(get.adjacency(g)))
+  T = A %*% diag(1/apply(A,2,sum))
+  N = dim(A)[1]
+  J = matrix(rep(1/N, N*N), N, N)
+  R = alpha*T + (1-alpha)*J
+  e = eigen(R)
+  pos = which(abs(e$values - 1) < 1e-8)
+  station = degree(g)/sum(degree(g))
+  begin.dist = rep(0,N)
+  begin.dist[1] = 1
+  
+  % end.rcode 
+  
+
+  Using the following graph:
+  
+  \begin{center}
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
+    par(mar = c(0,0,0,0))
+    plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:N])
+    % end.rcode 
+  \end{center}
+  
+  \begin{enumerate}
+  \item Contruct the probability transition matrix.
+  \item State if the graph is ergodic and why or why not.
+  \item Compute the state distribution after we begin on vertex 1 and
+    take two random steps.
+  \item Compute the stationary distribution for the graph and verify
+    that it is the stationary distribution.
+  \end{enumerate}
+  
+  \begin{workingbox}
+    
+    \begin{enumerate}
+    \item The probability transition matrix is:
+      \begin{center}
+        \begin{minipage}{0.5\textwidth}
+          % begin.rcode echo=FALSE,results="verbatim"
+          print(T)
+          % end.rcode 
+        \end{minipage}
+        \xmark{1}
+      \end{center}
+    \item The graph is ergodic if there is a path from all vertices to
+      all other vertices. This student should report if all paths
+      exist, and if not, where a path does not exist. \xmark{1}
+      
+    \item If we begin on vertex 1, the initial state distribution is:
+      \begin{align}
+        \vec{p}_0 = [~\rinline{paste(format(begin.dist), collapse="~")}~]
+      \end{align}
+      After one random step the state distribution is:
+      \begin{align}
+        \vec{p}_1 = T\vec{p}_0 = [~\rinline{paste(format(T %*% begin.dist), collapse="~")}~]
+      \end{align}
+      After two random steps the state distribution is:
+      \begin{align}
+        \vec{p}_2 = T\vec{p}_1 = [~\rinline{paste(format(T %*% T %*% begin.dist), collapse="~")}~]
+      \end{align}
+    \item The probability of each vertex in the stationary
+      distribution of an undirected graph is proportional to the
+      number of edges connected to the vertex. Therefore the
+      stationary distribution is:
+      \begin{align}
+        \vec{p} = [~\rinline{paste(format(station), collapse="~")}~]
+      \end{align}
+      We can verify that this is the stationary distribution by showing that $\vec{p} = T\vec{p}$
+      \xmark{1}
+      
+    \end{enumerate}
+    
+    
+  
+  \end{workingbox}
+
 ]>)
