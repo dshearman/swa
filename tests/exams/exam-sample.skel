@@ -45,13 +45,13 @@ m4_include(`exam_question.pool.m4')
 _precision(4)
 
 
-\question{Question 1}{1 + 2 + 2 + 3 = 8 marks}
+\question{Question 1}{2 + 3 + 3 = 8 marks}
 
-%\begin{questions}[]
+\begin{questions}[]
 
+_SimpleExposure_qS(<[ SEED=8836 ]>)
 
-
-%\end{questions}
+\end{questions}
 
 \question{Question 2}{1 + 1 + 2 + 1  = 5 marks}
 
@@ -76,27 +76,29 @@ _precision(4)
 
 \question{Question 3}{2 + 2 = 4 marks}
 
-%\begin{questions}[(a)]
+\begin{questions}[(a)]
+
+	_Visual_q1(<[ SEED=9914 ]>)
+        _Visual_qS(<[ SEED=9276 ]>)
+
+\end{questions}
 
 
-%\end{questions}
+\question{Question 4}{4 + 2 = 6 marks}
 
-
-\question{Question 4}{4 + 2 + 2 = 8 marks}
-
-%\begin{questions}[]
+\begin{questions}[]
   
-  
-%\end{questions}
+  _Trend_qS(<[ SEED=88267 ]>)
+\end{questions}
 
 
 
-\question{Question 5}{2 + 2 + 2 + 2 = 8 marks}
+\question{Question 5}{2 + 4 + 2 = 8 marks}
 
-%\begin{questions}[]
-  
+\begin{questions}[]
+  	_BACI_qS(<[ SEED=6624 ]>)
 
-%\end{questions}
+\end{questions}
 
 
 \question{Question 6}{4 + 2 = 6 marks}
