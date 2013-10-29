@@ -496,6 +496,7 @@ m4_define(_sentiment_q1,<[
   \end{workingbox}
 ]>)
 
+
 m4_define(_SimpleExposure_q1,<[
 \squestion
 
@@ -542,6 +543,7 @@ The owner of this page is interested in determining whether the age profile of r
 ]>)
 
 
+
 m4_define(_BACI_q1,<[
 \squestion
 
@@ -575,6 +577,7 @@ print(xtable(tab, align="|l|c|c|"), floating=FALSE, hline.after=c(-1,0,1,2))
 cat("\\hspace{1cm}")
 xtab = xtabs(sqrt(Y)~X+Z)
 print(xtable(xtab, align="|l|r|r|", digits=2), floating=FALSE, hline.after=c(-1,0,1,2))
+RSS = sum(aov(sqrt(Y)~X*Z)$residuals^2)
 % end.rcode
 \end{center}
 
@@ -585,7 +588,7 @@ print(xtable(xtab, align="|l|r|r|", digits=2), floating=FALSE, hline.after=c(-1,
   company and time.
 \item Calculate the \emph{Sum of Squares} for the interaction between
   company and time.
-\item Given that the sum of squares for error is 1.820, find the
+\item Given that the sum of squares for error is \rinline{round(RSS,3)}, find the
   $F$-statistic for the interaction between
   company and time, and state its degrees of freedom.
 \end{enumerate}
@@ -690,8 +693,6 @@ Tweet 2: & believe more students doing university better
 \end{center}
 
 ]>)
-
-
 
 m4_define(_graphs_q2,<[
 
@@ -897,4 +898,175 @@ m4_define(_clustering_q2,<[
 
   
   \end{workingbox}
+]>)
+
+
+m4_define(_SimpleExposure_qS,<[
+\squestion
+
+The table below shows the counts of \emph{reach} by age group and gender for a particular facebook page.
+
+\begin{center}
+   % begin.rcode echo=FALSE, results="asis"
+require(xtable, quietly=TRUE)
+ages = c("13--24","25--34","35--44","45+")
+genders = c("F","M")
+
+pM = c(0.2,0.4,0.3,0.1)
+pF = c(0.1,0.3,0.5,0.1)
+
+#SEED = 12345
+$@
+set.seed(SEED)
+x = t(cbind(rmultinom(1,75,pF), rmultinom(1,125,pM)))
+
+dimnames(x) = list(genders, ages)
+
+x = cbind(x, Total = rowSums(x))
+x = rbind(x, Total=colSums(x))
+
+algn = c(rep("r", ncol(x)), "|", "r")
+print(xtable(x, digits=0, align=algn), floating=FALSE, hline.after=c(-1,0, nrow(x)-1, nrow(x)))
+% end.rcode
+\end{center}
+
+
+The owner of this page is interested in determining whether the age profile of reach varies by gender.
+
+\begin{enumerate}
+\item Find expected counts for each entry in the table
+  assuming gender and age group are independent.
+\item Calculate a $\chi^2$ statistic for testing whether the age
+  profile varies by gender, and state its degrees of freedom.
+\item Compute a 95\% confidence interval for the proportion of females. (Recall that $z_{0.025} = 1.960$)
+\end{enumerate}
+
+]>)
+
+
+
+m4_define(_Visual_qS,<[
+\squestion
+
+% begin.rcode echo=FALSE, results="asis"
+#set.seed(66245)
+$@
+set.seed(SEED)
+% end.rcode
+
+Compute the binary metric between the following two tweets, which have had stop words removed.
+\begin{center}
+\begin{tabular}{ll}
+Tweet 1: & Remembering Lou Reed lifes work rock musician\\
+Tweet 2: & Lou Reed proved career rock music mean striving publicity\\
+\end{tabular}
+\end{center}
+Would stemming change the result?
+]>)
+
+
+m4_define(_BACI_qS,<[
+\squestion
+
+A retail chain is about to start an
+advertising campaign. Before doing so 
+it collects information about mentions
+on Twitter to measure the impact of the campaign. 
+The company collects the number of
+mentions of their product for 4 randomly chosen days before the
+campaign and 4 randomly chosen days shortly
+after the campaign begins. They also collect the number of mentions for
+their main competitor. The data are in the first table below. The second table contains the
+sums of the square roots of the data.
+
+
+\begin{center}
+% begin.rcode echo=FALSE, results="asis"
+require(xtable, quietly=TRUE)
+mu = c(200,230,150,150)
+n =4
+X = factor(rep(c("Company","Competitor"), 2*c(n,n)))
+Z = factor(rep(rep(c("Before","After"), c(n,n)),2), levels=c("Before","After"))
+$@
+set.seed(SEED)
+Y = rpois(4*n, rep(mu, rep(n,4)))
+
+tab=tapply(Y, list(X,Z), FUN=paste, collapse=",")
+print(xtable(tab, align="|l|c|c|"), floating=FALSE, hline.after=c(-1,0,1,2))
+
+cat("\\\\[2ex]")
+xtab = xtabs(sqrt(Y)~X+Z)
+print(xtable(xtab, align="|l|r|r|", digits=2), floating=FALSE, hline.after=c(-1,0,1,2))
+RSS = sum(aov(sqrt(Y)~X*Z)$residuals^2)
+% end.rcode
+\end{center}
+
+\begin{enumerate}
+\item Explain why using a square root transformation is advisable for
+  count data.
+\item Calculate the \emph{Sum of Squares} for the interaction between
+  company and time.
+\item Given that the sum of squares for error is \rinline{round(RSS,3)} find the
+  $F$-statistic for the interaction between
+  company and time, and state its degrees of freedom.
+\end{enumerate}
+
+
+]>)
+
+m4_define(_Trend_qS,<[
+\squestion
+
+A mobile phone company is looking at the tweet count containing their hash-tag, in the three weeks after the release
+of a new model. The counts are aggregated to the daily level.
+The data are below.
+
+\begin{center}
+% begin.rcode echo=FALSE, results="asis"
+s = c(10,20,30,30,30,20,10)
+trend = seq(20, 130, length=21)
+
+$@
+#set.seed(782355)
+set.seed(SEED)
+xx = rpois(length(trend), trend + s)
+tmp = matrix(xx, ncol=7, byrow=TRUE)
+dimnames(tmp) = list(paste("Week",1:3), paste("Day", 1:7))
+print(xtable(tmp), floating=FALSE)
+% end.rcode
+\end{center}
+
+The company decides to estimate the trend in the data, after a square root transformation, and allowing for a 
+periodic (seasonal) effect. The tables below shows the estimated moving average trend, and periodic components.
+
+\begin{center}
+{\bf Trend}\\[1ex]
+% begin.rcode echo=FALSE, results="asis"
+d = decompose(ts(sqrt(xx), freq=7))
+et = as.numeric(d$trend)
+etc = formatC(et, format="f", digits=2)
+etc[etc==" NA"] = ""
+tmp = matrix(etc, ncol=7, byrow=TRUE)
+dimnames(tmp) = list(paste("Week",1:3), paste("Day", 1:7))
+
+tmp[2,4] = missing.symbol
+print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
+% end.rcode
+
+{\bf Periodic}\\[1ex]
+% begin.rcode echo=FALSE, results="asis"
+ss = d$figure
+ssc = formatC(ss, format="f", digits=3)
+tmp = matrix(ssc, ncol=7, byrow=TRUE)
+dimnames(tmp) = list("Periodic", paste("Day", 1:7))
+
+tmp[1,6] = missing.symbol
+print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
+% end.rcode
+\end{center}
+
+\begin{enumerate}
+\item Compute the missing trend component marked with a \rinline{missing.symbol}.
+\item Compute the missing periodic component marked with a \rinline{missing.symbol}.
+\end{enumerate}
 ]>)
