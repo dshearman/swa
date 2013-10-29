@@ -945,6 +945,38 @@ The owner of this page is interested in determining whether the age profile of r
 \item Compute a 95\% confidence interval for the proportion of females. (Recall that $z_{0.025} = 1.960$)
 \end{enumerate}
 
+  \begin{workingbox}
+    
+    \begin{enumerate}
+\item Expected counts are $\frac{Row\times Column}{Total}$ which gives;
+\begin{center}
+% begin.rcode echo=FALSE, results="asis"
+r = nrow(x)
+c = ncol(x)
+e = round(outer(x[-r,c], x[r,-c], "*")/ x[r,c],3)
+r = r-1
+c = c-1
+X2 = sum((x[1:r,1:c]-e)^2/e)
+df = (r-1)*(c-1)
+nF = x["F","Total"]
+nT = x["Total","Total"]
+p = nF/nT
+sp = sqrt(p*(1-p)/nT)
+algn = c(rep("r", ncol(e)), "r")
+print(xtable(e, digits=3, align=algn), floating=FALSE)#, hline.after=c(-1,0, nrow(x)-1, nrow(x)))
+% end.rcode
+\end{center}
+\xmark{2}
+\item $\chi^2$ statistic is $\sum \frac{(O-E)^2}{E}$ which gives \rinline{X2} on \rinline{df} degrees of freedom.\xmark{3}
+\item The proportion of females is \rinline{p} therefore a 95\% comfidemce interval is given by
+$$\hat{p} \pm z_{\alpha/2} \sqrt{\hat{p}(1-\hat{p})/N}$$
+which is
+$$\rinline{p} \pm 1.960 \times\sqrt{\rinline{p*(1-p)/nT}}$$
+that is,
+$$(\rinline{p-1.960*sp}, \rinline{p+1.960*sp})$$\xmark{3}
+\end{enumerate}
+
+\end{workingbox}
 ]>)
 
 
