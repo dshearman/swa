@@ -29,7 +29,7 @@ m4_include(`exam_question.pool.m4')
 \item Scientific, non-programmable hand held calculators are
   permitted.
 \item Answer all questions in the answer booklet provided.
-\item There are 56 marks available. The marks assigned to each problem
+\item There are 58 marks available. The marks assigned to each problem
   are presented at the top of the problem. All working must be shown
   to gain full marks.
 \item All 8 questions must be answered to obtain full marks.
@@ -53,7 +53,7 @@ _SimpleExposure_qS(<[ SEED=8836 ]>)
 
 \end{questions}
 
-\question{Question 2}{1 + 1 + 2 + 1  = 5 marks}
+\question{Question 2}{2 + 2 + 2 + 2  = 8 marks}
 
 \begin{questions}[]
  
@@ -66,7 +66,7 @@ _SimpleExposure_qS(<[ SEED=8836 ]>)
 \end{questions}
 
 
-\question{Question 2}{2 + 2 + 2 + 2 = 8 marks}
+\question{Question 3}{2 + 2 + 2 + 2 = 8 marks}
 
 \begin{questions}[]
   
@@ -74,7 +74,7 @@ _SimpleExposure_qS(<[ SEED=8836 ]>)
   
 \end{questions}
 
-\question{Question 3}{2 + 2 = 4 marks}
+\question{Question 4}{2 + 2 = 4 marks}
 
 \begin{questions}[(a)]
 
@@ -84,7 +84,7 @@ _SimpleExposure_qS(<[ SEED=8836 ]>)
 \end{questions}
 
 
-\question{Question 4}{4 + 2 = 6 marks}
+\question{Question 5}{4 + 2 = 6 marks}
 
 \begin{questions}[]
   
@@ -93,7 +93,7 @@ _SimpleExposure_qS(<[ SEED=8836 ]>)
 
 
 
-\question{Question 5}{2 + 4 + 2 = 8 marks}
+\question{Question 6}{2 + 4 + 2 = 8 marks}
 
 \begin{questions}[]
   	_BACI_qS(<[ SEED=6624 ]>)
@@ -101,7 +101,7 @@ _SimpleExposure_qS(<[ SEED=8836 ]>)
 \end{questions}
 
 
-\question{Question 6}{4 + 2 = 6 marks}
+\question{Question 7}{4 + 2 + 2 = 8 marks}
 
 \begin{questions}[]
 
@@ -114,7 +114,7 @@ _SimpleExposure_qS(<[ SEED=8836 ]>)
 \end{questions}
 
 
-\question{Question 7}{1 + 2 + 2 + 3 = 8 marks}
+\question{Question 8}{2 + 2 + 2 + 2 = 8 marks}
 
 \begin{questions}[]
 
@@ -123,15 +123,6 @@ _SimpleExposure_qS(<[ SEED=8836 ]>)
 
 
 \end{questions}
-
-
-\question{Question 8}{2 + 3 + 1 = 6 marks}
-
-%\begin{questions}[]
-  
-
-%\end{questions}
-
 
 \testend
 
