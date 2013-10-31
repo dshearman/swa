@@ -229,9 +229,14 @@ Sentiment Analysis
 
 Spatial Analysis
 
+- Twitter Geocoding
+- Tracking Epidemics
+
 ## Week 13 - What should we know?
 
-
+- How are geocodes stored?
+- Estimation of (unweighted/weighted) spatial intensity.
+- Computing relative risk of a location.
 
 
 # Your Future
@@ -244,7 +249,7 @@ do next year.
 The most likely choices are:
 
 - Get a job
-- Enroll in a higher degree.
+- Enrol in a higher degree.
 
 ## Industry
 
@@ -269,7 +274,7 @@ topic in the field of choice. Research commonly leads to:
 
 - new discoveries, 
 - publishing the discoveries in international journals, and
-- being set overseas to present the new discoveries to an international audience.
+- being sent overseas to present the new discoveries to an international audience.
 
 After you finish a PhD, you get to be called Doctor!
 
@@ -292,6 +297,22 @@ Check the exam timetable Web site to find when and where the exam will be held.
 
 Don't rely on a friend giving you this information, look it up yourself!
 
+For more information: <http://uws.edu.au/uws_students>
+
+## Open Book Exam
+
+The exam is open book, meaning that you can bring material into the exam room.
+
+However, you are restricted to 10 double sided pages of information
+(10 pieces of paper with information on each side of the paper).
+
+Therefore, you can't print out the wikibook and bring it to the exam
+(unless you can reduce it to ten double sided pages).
+
+Use the information given in this lecture as a guide on what should be
+included in your 10 pages.
+
+Note: no phones, computers or iPads are allowed in the exam room.
 
 ## Duration and Questions
 
@@ -305,6 +326,8 @@ The marks reflect the difficulty and time required to complete the question.
 ## Sample Exam
 
 A sample exam will be provided.
+
+The solutions to the exam will be available next week.
 
 ## Thanks
 
