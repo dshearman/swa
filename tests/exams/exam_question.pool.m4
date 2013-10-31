@@ -496,7 +496,7 @@ m4_define(_sentiment_q1,<[
   \end{workingbox}
 ]>)
 
-
+% GS
 m4_define(_SimpleExposure_q1,<[
 \squestion
 
@@ -543,7 +543,7 @@ The owner of this page is interested in determining whether the age profile of r
 ]>)
 
 
-
+% GS
 m4_define(_BACI_q1,<[
 \squestion
 
@@ -596,6 +596,7 @@ RSS = sum(aov(sqrt(Y)~X*Z)$residuals^2)
 
 ]>)
 
+% GS
 m4_define(_Trend_q1,<[
 \squestion
 
@@ -653,6 +654,7 @@ print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 \end{enumerate}
 ]>)
 
+% GS
 m4_define(_Visual_q1,<[
 \squestion
 
@@ -667,14 +669,22 @@ set.seed(SEED)
 
 S = genPositiveDefMat(7)
 X = rmvnorm(50, sigma=S$Sigma)
-tab = summary(prcomp(X))$importance
+tab = round(summary(prcomp(X))$importance,3)
+tab[3,] = cumsum(tab[2,])
 tab = formatC(tab, format="f", digits=3)
+ans = tab[3, c(1,4)]
 tab[3,c(1,4)] = missing.symbol
 print(xtable(tab), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
 Compute the missing entries marked \rinline{missing.symbol}.
+
+  \begin{workingbox}
+    Missing entries are \rinline{ans[1]} and \rinline{ans[2]} respectively.
+\xmark{2}
+  \end{workingbox}
 ]>)
 
+% GS
 m4_define(_Visual_q2,<[
 \squestion
 
@@ -904,7 +914,7 @@ m4_define(_clustering_q2,<[
 ]>)
 
 
-
+% GS
 m4_define(_SimpleExposure_qS,<[
 \squestion
 
@@ -980,7 +990,7 @@ $$(\rinline{p-1.960*sp}, \rinline{p+1.960*sp})$$\xmark{3}
 ]>)
 
 
-
+% GS
 m4_define(_Visual_qS,<[
 \squestion
 
@@ -988,19 +998,33 @@ m4_define(_Visual_qS,<[
 #set.seed(66245)
 $@
 set.seed(SEED)
+tweet1 = "Remembering Lou Reed lifes work rock musician"
+tweet2 = "Lou Reed proved career rock music mean striving publicity"
+fun = function(x) length(unique(unlist(strsplit(x," "))))
+n1 = fun(tweet1)
+n2 = fun(tweet2)
+n12 = fun(paste(tweet1,tweet2))
 % end.rcode
 
 Compute the binary metric between the following two tweets, which have had stop words removed.
 \begin{center}
 \begin{tabular}{ll}
-Tweet 1: & Remembering Lou Reed lifes work rock musician\\
-Tweet 2: & Lou Reed proved career rock music mean striving publicity\\
+Tweet 1: & \rinline{tweet1}\\
+Tweet 2: & \rinline{tweet2}\\
 \end{tabular}
 \end{center}
-Would stemming change the result?
+Would stemming change the result
+
+\begin{workingbox}
+Tweet1 has \rinline{n1} unique words and tweet2 has \rinline{n2} unique words. There are \rinline{n1+n2-n12} words in common.
+The binary metric is therefore, \rinline{(2*n12-n1-n2)/n12}. \xmark{1}
+
+In the case stemming would cchange the result as "musician" 
+would stem the same as "music" increasing the number of common words. \xmark{1}
+\end{workingbox}
 ]>)
 
-
+% GS
 m4_define(_BACI_qS,<[
 \squestion
 
@@ -1032,8 +1056,11 @@ print(xtable(tab, align="|l|c|c|"), floating=FALSE, hline.after=c(-1,0,1,2))
 
 cat("\\\\[2ex]")
 xtab = xtabs(sqrt(Y)~X+Z)
+cI = xtab[1,1]+xtab[2,2] - xtab[1,2] - xtab[2,1]
+SSI = cI^2/(4*n)
 print(xtable(xtab, align="|l|r|r|", digits=2), floating=FALSE, hline.after=c(-1,0,1,2))
 RSS = sum(aov(sqrt(Y)~X*Z)$residuals^2)
+MSE = round(RSS,3)/(4*(n-1))
 % end.rcode
 \end{center}
 
@@ -1047,9 +1074,18 @@ RSS = sum(aov(sqrt(Y)~X*Z)$residuals^2)
   company and time, and state its degrees of freedom.
 \end{enumerate}
 
+\begin{workingbox}
+\begin{enumerate}
+\item Count data would have a variance proportional (equal to) the mean. ie non-constant variance.
+The square root transformation is variance stabilising. \xmark{2}
+\item The sum of squares for the interaction is \rinline{SSI}. \xmark{4}
+\item The $F$-statistic is \rinline{SSI/MSE} on 1 and \rinline{4*(n-1)} degrees of freedom. \xmark{2}
+\end{enumerate}
+\end{workingbox} 
 
 ]>)
 
+% GS
 m4_define(_Trend_qS,<[
 \squestion
 
@@ -1084,7 +1120,7 @@ etc = formatC(et, format="f", digits=2)
 etc[etc==" NA"] = ""
 tmp = matrix(etc, ncol=7, byrow=TRUE)
 dimnames(tmp) = list(paste("Week",1:3), paste("Day", 1:7))
-
+adat = round(sqrt(xx)[8:14],3)
 tmp[2,4] = missing.symbol
 print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
@@ -1095,8 +1131,8 @@ ss = d$figure
 ssc = formatC(ss, format="f", digits=3)
 tmp = matrix(ssc, ncol=7, byrow=TRUE)
 dimnames(tmp) = list("Periodic", paste("Day", 1:7))
-
 tmp[1,6] = missing.symbol
+ansS = -sum(as.numeric(tmp[1,-6]))
 print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
 \end{center}
@@ -1105,6 +1141,19 @@ print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 \item Compute the missing trend component marked with a \rinline{missing.symbol}.
 \item Compute the missing periodic component marked with a \rinline{missing.symbol}.
 \end{enumerate}
+
+\begin{workingbox}
+\begin{enumerate}
+\item The trend is a 7-point moving average on the sqrt scale, so is
+\begin{center}
+\rinline{paste("(", paste(adat, collapse="+"), ")/7", sep="")} $=$ \rinline{sum(adat)/7}
+\end{center}
+\xmark{4}
+
+\item The seasonal component should sum to zero so the missing component is \rinline{ansS}
+\xmark{2}
+\end{enumerate}
+\end{workingbox}
 ]>)
 
 
