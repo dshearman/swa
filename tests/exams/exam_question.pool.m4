@@ -284,7 +284,7 @@ m4_define(_text_index_q1,<[
       \item \rinline{corp.pp[[2]]}
       \item \rinline{corp.pp[[3]]}
       \end{enumerate}
-      \xmark{1}
+      \xmark{2}
             
     \item Document-term index containing frequencies is:
       \begin{center}
@@ -293,7 +293,7 @@ m4_define(_text_index_q1,<[
       print(A)
       % end.rcode 
       \end{minipage}
-      \xmark{1}
+      \xmark{2}
       \end{center}
       
     \item The query vector is $\vec{q} = [~\rinline{paste(query.vec, collapse="~")}~]$.
@@ -312,7 +312,7 @@ m4_define(_text_index_q1,<[
       print(W[3,])
       % end.rcode 
       Showing that \rinline{colnames(W)[which.max(W[3,])]} has the greatest weight.
-      \xmark{1}
+      \xmark{2}
     \end{enumerate}
     
     
@@ -751,7 +751,7 @@ m4_define(_graphs_q2,<[
           print(as.matrix(get.adjacency(g)))
           % end.rcode 
         \end{minipage}
-        \xmark{1}
+        \xmark{2}
       \end{center}
 
       
@@ -762,7 +762,7 @@ m4_define(_graphs_q2,<[
           table(factor(degree(g), c(0,1,2,3,4,5)))
           % end.rcode 
         \end{minipage}
-        \xmark{1}
+        \xmark{2}
       \end{center}
       
     \item The betweenness centrality is a sum of the proportion of shortest paths that pass through the vertex. The betweenness centrality for each vertex is:
@@ -777,7 +777,7 @@ m4_define(_graphs_q2,<[
       
     \item The degree distribution must be examined and compared to
       each of the random graph degree distributions. The one with the
-      more similar distribution is the more similar graph.  \xmark{1}
+      more similar distribution is the more similar graph.  \xmark{2}
       
     \end{enumerate}
     
@@ -884,7 +884,7 @@ m4_define(_clustering_q2,<[
         \left [ \rinline{latex.matrix(diag(table(z$cluster)) %*% z$centers^2)} \right ]
       \end{align*}
       giving SSB = \rinline{format(ssb)}.
-        \xmark{2}
+        \xmark{4}
         
       \item Plot the elbow bend plot for this data.
       \begin{center}
@@ -904,7 +904,7 @@ m4_define(_clustering_q2,<[
             
         The number of clusters is determined by where the elbow occurs.
         Therefore the student should report the position of the elbow.
-        \xmark{1}
+        \xmark{2}
         
     \end{enumerate}
 
@@ -1214,33 +1214,33 @@ m4_define(_link_analysis_q2,<[
           print(T)
           % end.rcode 
         \end{minipage}
-        \xmark{1}
+        \xmark{2}
       \end{center}
     \item The graph is ergodic if there is a path from all vertices to
       all other vertices. This student should report if all paths
-      exist, and if not, where a path does not exist. \xmark{1}
+      exist, and if not, where a path does not exist. \xmark{2}
       
     \item If we begin on vertex 1, the initial state distribution is:
-      \begin{align}
+      \begin{align*}
         \vec{p}_0 = [~\rinline{paste(format(begin.dist), collapse="~")}~]
-      \end{align}
+      \end{align*}
       After one random step the state distribution is:
-      \begin{align}
+      \begin{align*}
         \vec{p}_1 = T\vec{p}_0 = [~\rinline{paste(format(T %*% begin.dist), collapse="~")}~]
-      \end{align}
+      \end{align*}
       After two random steps the state distribution is:
-      \begin{align}
+      \begin{align*}
         \vec{p}_2 = T\vec{p}_1 = [~\rinline{paste(format(T %*% T %*% begin.dist), collapse="~")}~]
-      \end{align}
+      \end{align*} \xmark{2}
     \item The probability of each vertex in the stationary
       distribution of an undirected graph is proportional to the
       number of edges connected to the vertex. Therefore the
       stationary distribution is:
-      \begin{align}
+      \begin{align*}
         \vec{p} = [~\rinline{paste(format(station), collapse="~")}~]
-      \end{align}
+      \end{align*}
       We can verify that this is the stationary distribution by showing that $\vec{p} = T\vec{p}$
-      \xmark{1}
+      \xmark{2}
       
     \end{enumerate}
     

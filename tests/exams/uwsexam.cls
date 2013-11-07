@@ -11,15 +11,26 @@
 
 % set up answer visibility
 \newif\if@showanswers
+%% Note that showmarks does nothing yet.
+\newif\if@showmarks
 \DeclareOption{showanswers}{\@showanswerstrue}
 \DeclareOption{hideanswers}{\@showanswersfalse}
-\ExecuteOptions{showanswers}
+\DeclareOption{showmarks}{\@showmarkstrue}
+\DeclareOption{hidemarks}{\@showmarksfalse}
+\ExecuteOptions{showanswers,showmarks}
+
 \ProcessOptions
 
 \if@showanswers
   \newcommand{\showanswers}{true}
 \else
   \newcommand{\showanswers}{false}
+\fi
+
+\if@showmarks
+  \newcommand{\showmarks}{true}
+\else
+  \newcommand{\showmarks}{false}
 \fi
 
 \newcommand{\testtitle}[1]{\gdef\@testtitle{#1}}%
@@ -374,12 +385,24 @@
   {\Large \textbf{\MakeUppercase{Marking Guide}}}
 \end{center}
 
-{\normalsize The marks allocated are shown as \showxmark{$x$} after the required text, where $x$ is the number
-  of marks allocated. Note this guid is to assist in marking. If a
-  student provides a correct solution with complete working, the student
-  should be awarded full marks for the question, even it it is
-  different to the solution provided in this guide.}
-}{}
+{\normalsize The marks allocated are shown as \showxmark{$x$} after
+  the required text, where $x$ is the number of marks allocated. Note
+  this guide is to assist in marking. If a student provides a correct
+  solution with complete working, the student should be awarded full
+  marks for the question, even if it is different to the solution
+  provided in this guide.}  }{}
+
+\ifthenelse{\equal{\showmarks}{false}}{
+\begin{center}
+  {\Large \textbf{\MakeUppercase{Example Solutions}}}
+\end{center}
+
+{\normalsize The marks allocated are shown as \showxmark{$x$} after
+  the required text, where $x$ is the number of marks allocated. Note
+  this guide is to assist in marking. If a student provides a correct
+  solution with complete working, the student should be awarded full
+  marks for the question, even if it is different to the solution
+  provided in this guide.}  }{}
 
 
 \ifthenelse{\equal{\showanswers}{true}}{}{
