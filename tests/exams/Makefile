@@ -1,5 +1,8 @@
 R_PROG := /opt/local/bin/R
 TEX := xelatex
+R_SCRIPT := /opt/local/bin/Rscript
+PANDOC := /opt/local/bin/pandoc
+STYLESHEET := buttondown.css
 
 build:	$(PROJ)
 
@@ -20,5 +23,13 @@ bib:
 
 %.Rtex:	%.skel exam_question.pool.m4 uwsexam.cls
 	m4 -P $< > $@
+
+%.md:	%.Rmd
+	${R_SCRIPT} -e "library(knitr); knit('$<', output='$*.md')"
+
+%.html: %.md
+	${PANDOC} --mathjax \
+	 --section-divs --slide-level=2 -s -c ${STYLESHEET} -f markdown -t html \
+	$< -o $*.html
 
 FORCE:

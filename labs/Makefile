@@ -13,3 +13,6 @@ STYLESHEET := buttondown.css
 	${PANDOC} --mathjax --table-of-contents --toc-depth=1 --number-sections \
 	 --section-divs --slide-level=2 -s -c ${STYLESHEET} -f markdown -t html \
 	$< -o $*.html
+
+%.tex:  %.md figure/*
+	pandoc -f markdown+grid_tables -t latex $< -o $*.tex
