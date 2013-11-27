@@ -55,4 +55,5 @@ each.slides:	week01.slides week02.slides week03.slides week04.slides week05.slid
 FORCE:
 
 include $(TEMPLATE_DIR)/dependencies.mak
+include $(TEMPLATE_DIR)/dependencies.notes.mak
 
