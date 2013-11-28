@@ -146,6 +146,7 @@ grade.skew <- function(grades) {
 
 
 withdrawal.rate(grades)
+cf.rate(grades)
 high.fail.rate(grades)
 grade.skew(grades)
 
