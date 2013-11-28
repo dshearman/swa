@@ -131,6 +131,11 @@ withdrawal.rate <- function(grades) {
   return(mean(grades == "AF"))
 }
 
+cf.rate <- function(grades) {
+  s = grades[grades != "AF"]
+  return(mean(s == "CF"))
+}
+
 high.fail.rate <- function(grades) {
   return(mean((grades == "F") | (grades == "CF")))
 }
@@ -154,8 +159,8 @@ if (admin == TRUE) {
 # produce desired table
 admin <- data.frame(student.number=results$Student.Number,
                     student.name=results$Student.Name,
-                    raw.assess.mark=results$raw.asssess.mark,
-                    raw.exam.mark=results$raw$exam.mark,
+                    raw.assess.mark=results$raw.assess.mark,
+                    raw.exam.mark=results$raw.exam.mark,
                     override.grade=as.character(""))
 
 name.order = order(admin$student.name)
