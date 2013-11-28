@@ -16,7 +16,7 @@ R_SCRIPT := /opt/local/bin/Rscript
 	pandoc -f markdown+grid_tables -t beamer --slide-level=2 $< -o $*.tex
 
 %.notes.tex:	%.md figure/*
-	pandoc -f markdown+grid_tables -t latex $< -o $*.tex
+	pandoc -f markdown -t latex $< -o $*.notes.tex
 
 %.web: 	%.md
 	pandoc --slide-level=2 -s -c buttondown.css -f markdown -t html $< -o ${OUTPUT_DIR}/$*.html
