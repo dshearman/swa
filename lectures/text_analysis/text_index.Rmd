@@ -2,6 +2,11 @@
 % Laurence A. F. Park
 % March 22, 2005
 
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/text_analysis-text_index-')
+opts_chunk$set(dev = 'pdf', fig.cap="")
+```
+
 
 
 # Motivation
@@ -352,7 +357,7 @@ to appear and it does, it is interesting.
 Remember that $log(1/x) = -log(x)$, so we can compute the weight of
 word $w$ in a document $d$ as:
 $$
-	w_{d,t} = -\log{\left ( P(w|d) \right )}
+	w_{d,t} = -\log{\left ( P(w\vert d) \right )}
 $$
 
 \pause
@@ -376,7 +381,7 @@ At the probability increases, $-\log{p}$ decreases:
 
 ```{r, echo=FALSE, fig.width=5, fig.height=4, dev="pdf"}
 x = (1:100)/100
-plot(x, -log(x), xlab="P(w|d)", ylab="-log(P(w|d))", type="l")
+plot(x, -log(x), xlab="P(w\vert d)", ylab="-log(P(w\vert d))", type="l")
 ```
 
 ## Using the Binomial distribution
@@ -403,7 +408,7 @@ the probability of successes $p$.
 
 A document collection contains 10 documents, each containing 100 words
 (total of 1000 words).  The word "the" appears 100 times in the
-collection, so its probability $P(w|C)$ is $p = 100/1000 = 0.1$.  In a
+collection, so its probability $P(w\vert C)$ is $p = 100/1000 = 0.1$.  In a
 given document of length 100, "the" appears 12 times. The probability
 of this occurring is:
 $$

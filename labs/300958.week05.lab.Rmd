@@ -132,6 +132,7 @@ register the credentials:
 ```{.r}
 load("twitter.Rdata")
 ```
+
 **NOTE**: If you performed the handshake in R, you can
   save the credential data, then open RStudio and load the credential
   data. This will allow you to continue working in RStudio.

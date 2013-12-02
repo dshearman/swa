@@ -58,6 +58,8 @@ marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17360210"] = 23
 marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17455132"] = 34
 marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17517270"] = 29
 marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17527330"] = 23
+marks$Exam..Total.Pts..56...103209[marks$Student.Number == "16972504"] = 23
+
 
 ## missing project
 marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17575788"] = 10

@@ -1,4 +1,5 @@
 TEX = xelatex --shell-escape
+PDFLATEX := pdflatex
 R_PROG := /opt/local/bin/R
 CODE = 300958
 TEMPLATE_DIR = templates
@@ -38,6 +39,9 @@ $(INFORMATION_DIR)/%: FORCE
 
 $(TEMPLATE_DIR)/%: FORCE
 	$(MAKE) -C $(TEMPLATE_DIR) $*
+
+%.handout:	${INCLUDE_DIR}/handout.tex ${TEMPLATE_DIR}/%.handout.tex
+	${PDFLATEX}  -jobname "${CODE}.$*.handout" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/handout.tex}\input{${TEMPLATE_DIR}/$*.handout.tex}"
 
 %.notes:	${INCLUDE_DIR}/article.tex ${TEMPLATE_DIR}/%.tex
 	${TEX}  -jobname "${CODE}.$*.notes" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/article.tex}\input{${TEMPLATE_DIR}/$*.tex}"

@@ -1,6 +1,8 @@
 TEX = xelatex --shell-escape
 R_PROG := /opt/local/bin/R
 R_SCRIPT := /opt/local/bin/Rscript
+#PANDOC := pandoc -f markdown+grid_tables
+PANDOC := pandoc -f markdown
 
 # Rules for construction
 %.md.png:	%.Rmd
@@ -10,13 +12,15 @@ R_SCRIPT := /opt/local/bin/Rscript
 	Rscript -e "library(knitr); opts_chunk[['set']](dev = 'pdf'); knit('$<', output='$*.md')"
 
 %.md:	%.Rmd
+	#mkdir -p "figure/$*"
+	#echo "opts_chunk$$set(fig.path='figure/text_analysis/text_index_');" | cat - $< | Rscript -e "f <- file('stdin'); open(f); library(knitr); knit(f, output='$*.md')"
 	Rscript -e "library(knitr); knit('$<', output='$*.md')"
 
 %.tex:	%.md figure/*
-	pandoc -f markdown+grid_tables -t beamer --slide-level=2 $< -o $*.tex
+	${PANDOC} -t beamer --slide-level=2 $< -o $*.tex
 
-%.notes.tex:	%.md figure/*
-	pandoc -f markdown -t latex $< -o $*.notes.tex
+%.handout.tex:	%.md figure/*
+	${PANDOC} -f markdown -t latex $< -o $*.handout.tex
 
 %.web: 	%.md
 	pandoc --slide-level=2 -s -c buttondown.css -f markdown -t html $< -o ${OUTPUT_DIR}/$*.html
