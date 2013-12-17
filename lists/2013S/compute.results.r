@@ -58,14 +58,41 @@ marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17360210"] = 23
 marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17455132"] = 34
 marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17517270"] = 29
 marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17527330"] = 23
-marks$Exam..Total.Pts..56...103209[marks$Student.Number == "16972504"] = 23
-
 
 ## missing project
 marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17575788"] = 10
 marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17423830"] = 10
 marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "16665037"] = 14
 marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "16861318"] = 14
+
+## to amend
+marks$Exam..Total.Pts..56...103209[marks$Student.Number == "16972504"] = 23
+marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17191917"] = 23
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "16993655"] = 17
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17344207"] = 17
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17413549"] = 17
+
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17533513"] = 16
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "16989492"] = 16
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "16985780"] = 16
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17196736"] = 16
+
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17517270"] = 10
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "16972504"] = 10
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17455132"] = 10
+
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17240244"] = 13
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17218955"] = 13
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17191917"] = 13
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17226530"] = 13
+
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17118750"] = 13
+
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17511793"] = 10
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17371810"] = 10
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17448358"] = 10
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "16901966"] = 10
+
 
 
 sum.top.5 <- function(quiz.marks) {
