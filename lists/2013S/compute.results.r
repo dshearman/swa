@@ -93,6 +93,13 @@ marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17371810"] 
 marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17448358"] = 10
 marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "16901966"] = 10
 
+## deferred exams
+marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17513223"] = 13
+marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17262675"] = 24
+marks$Exam..Total.Pts..56...103209[marks$Student.Number == "16861318"] = 31
+
+## to amend 2
+marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17497998"] = 22
 
 
 sum.top.5 <- function(quiz.marks) {
@@ -202,3 +209,14 @@ write.table(admin, file="300958.results.2013S.csv", sep=",", row.names=FALSE, na
 
 
 }
+
+
+
+
+ammend = c("16972504","17191917","16993655","17344207","17413549","17533513","16989492","16985780","17196736","17517270","16972504","17455132","17240244","17218955","17191917","17226530","17118750","17511793","17371810","17448358","16901966","17513223","17262675","16861318")
+
+
+write.table(subset(admin, student.number %in% ammend), file="300958.ammend.2013S.csv", sep=",", row.names=FALSE, na = "", col.names=c("Student Number","Student Name",
+              "Raw Assess Mark","Raw Exam Mark","Override Grade"))
+
+

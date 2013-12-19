@@ -471,6 +471,17 @@ layout=layout.fruchterman.reingold, vertex.size = 35)
 
 # Centrality
 
+## Requirements
+
+Requirements for a centrality score:
+
+\begin{enumerate}
+\item the centrality score of a vertex correlates with the
+  importance or popularity of the vertex,
+\item it is computable for large graphs in reasonable time, and
+\item it is difficult for individuals to manipulate for personal gain.
+\end{enumerate}
+
 
 ## Measures of Centrality
 
