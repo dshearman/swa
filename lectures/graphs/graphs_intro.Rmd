@@ -3,6 +3,7 @@
 % March 22, 2005
 
 ```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/graphs-intro-')
 opts_chunk$set(dev = 'pdf', fig.cap="")
 ```
 
@@ -25,7 +26,7 @@ basic graph theory, to allow us to analyse the social network.
 This was a graph when you were in high school.
 This is now called a *plot*.
 
-\vspace{-6em}
+\svspace{-6em}
 ```{r, echo=FALSE, fig.width=5, fig.height=4}
 x = (1:10)
 y = x^3 %% 10
@@ -38,7 +39,7 @@ plot(x, y, xlab="Some numbers", ylab="Some other numbers", type="b", cex.lab=0.8
 
 Now that you have passed high school, we can let you know that this is a graph.
 
-\vspace{-2em}
+\svspace{-2em}
 ```{r, echo=FALSE, fig.width=5, fig.height=2.8}
 library("igraph")
 par(mar = c(0,0,0,0))
@@ -51,7 +52,7 @@ plot(g, layout=layout.fruchterman.reingold, vertex.size = 15)
 
 An undirected graph has no direction on the edges.
 
-\vspace{-2em}
+\svspace{-2em}
 ```{r, echo=FALSE, fig.width=5, fig.height=2.8}
 par(mar = c(0,0,0,0))
 g = erdos.renyi.game(10,p=0.4)
@@ -63,7 +64,7 @@ plot(g, layout=layout.fruchterman.reingold, vertex.size = 15)
 
 An Directed graph has direction on the edges.
 
-\vspace{-2em}
+\svspace{-2em}
 ```{r, echo=FALSE, fig.width=5, fig.height=2.8}
 par(mar = c(0,0,0,0))
 g = erdos.renyi.game(10,p=0.4, directed=TRUE)
@@ -75,7 +76,7 @@ plot(g, layout=layout.fruchterman.reingold, vertex.size = 15)
 
 A Weighted Graph has weighted edges.
 
-\vspace{-2em}
+\svspace{-2em}
 ```{r, echo=FALSE, fig.width=5, fig.height=2.8}
 par(mar = c(0,0,0,0))
 g = erdos.renyi.game(10,p=0.4, directed=FALSE)
@@ -150,7 +151,7 @@ We define this graph as:
 
 ## Representing Graphs using an Adjacency Matrix
 
-An Adjacency Matrix $A$ is a $|V|\times|V|$ matrix (where $|V|$ is the
+An Adjacency Matrix $A$ is a $\vert V\vert\times\vert V\vert$ matrix (where $\vert V\vert$ is the
 number of vertices). The element $a_{i,j}$ in the $i$ row and $j$th
 column is 1 if there is an edge between the $i$the and $j$th vertice
 and 0 if there is no edge.
@@ -768,7 +769,7 @@ plot(g, layout=layout.fruchterman.reingold, vertex.size = 10)
 
 BA model: Many vertices with low degree, few with high degree.
 
-\vspace{-6em}
+\svspace{-6em}
 ```{r, echo=FALSE, fig.width=5, fig.height=4}
 plot((1/(1:10))/sum(1/(1:100)), ylim=c(0,0.21), xlab="Degree", ylab="Probability", pch=2, col=2)
 points(dbinom(1:10, 99, 0.05), col=1, pch=1)

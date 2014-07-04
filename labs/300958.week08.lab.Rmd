@@ -2,6 +2,10 @@
 % 300958 Social Web Analysis 
 % Week 8 Lab
 
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/week08-lab-')
+```
+
 
 # Preliminaries
 

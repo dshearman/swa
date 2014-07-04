@@ -1,3 +1,13 @@
+% Exposure Analysis
+% Laurence A. F. Park and Glenn Stone
+% March 22, 2005
+
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/exposure-exposure-')
+opts_chunk$set(dev = 'pdf', fig.cap="")
+```
+
+
 # Facebook Insights
 
 ## Facebook Insights
@@ -374,9 +384,9 @@ chisq.test(X)
 ```
 The numbers are slightly different (due to rounding this time) and the test returns a *p value*. 
 
-## *p* values
+## $p$ values
 
-The *p* value is the probability of exceeding the calculated $\chi^2$ under the null hypothesis.
+The $p$ value is the probability of exceeding the calculated $\chi^2$ under the null hypothesis.
 
 So instead of seeing if the calculated $\chi^2$ is bigger than a critical value, you can check if the p-value is 
 less than the significance (5% say --- 0.05)

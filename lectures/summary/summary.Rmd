@@ -3,6 +3,7 @@
 % 20th of September 2013
 
 ```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/summary-summary-')
 opts_chunk$set(dev = 'pdf', fig.cap="")
 ```
 

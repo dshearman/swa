@@ -12,6 +12,7 @@ INFORMATION_DIR = information
 TEST_DIR = tests
 OUTPUT_DIR = bin
 
+MAKESTYLE = slides
 # NO NEED TO ADD THESE, THEY ARE NOW AUTOMATICALLY GENERATED.
 # THESE WILL BE REMOVED SOON.
 # Dependancies for lecture tex files (needed if written in markdown or sweave)
@@ -29,7 +30,8 @@ OUTPUT_DIR = bin
 
 # Rules for construction
 $(LECTURE_DIR)/%.tex: FORCE 
-	$(MAKE) -C ${LECTURE_DIR} $*.tex
+	$(MAKE) -C ${LECTURE_DIR} -f makefile.$(MAKESTYLE) $*.tex	
+
 
 $(LAB_DIR)/%: FORCE
 	$(MAKE) -C $(LAB_DIR) $*
@@ -43,8 +45,9 @@ $(TEMPLATE_DIR)/%: FORCE
 %.handout:	${INCLUDE_DIR}/handout.tex ${TEMPLATE_DIR}/%.handout.tex
 	${PDFLATEX}  -jobname "${CODE}.$*.handout" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/handout.tex}\input{${TEMPLATE_DIR}/$*.handout.tex}"
 
+%.notes:	MAKESTYLE = notes
 %.notes:	${INCLUDE_DIR}/article.tex ${TEMPLATE_DIR}/%.tex
-	${TEX}  -jobname "${CODE}.$*.notes" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/article.tex}\input{${TEMPLATE_DIR}/$*.tex}"
+	${PDFLATEX}  -jobname "${CODE}.$*.notes" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/article.tex}\input{${TEMPLATE_DIR}/$*.tex}"
 
 %.slides:	${INCLUDE_DIR}/beamer.tex ${TEMPLATE_DIR}/%.tex
 	${TEX} -jobname "${CODE}.$*.slides" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/beamer.tex}\input{${TEMPLATE_DIR}/$*.tex}"

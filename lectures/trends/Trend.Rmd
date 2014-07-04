@@ -1,3 +1,9 @@
+
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/trend-trend-')
+opts_chunk$set(dev = 'pdf', fig.cap="")
+```
+
 ## Looking for Trends
 
 Looking for Trends in Facebook reach or Twitter mentions can relate to important business problems.

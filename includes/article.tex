@@ -1,18 +1,34 @@
 %%\documentclass[a4paper]{article}
 %\documentclass[twocolumn,a4paper,10pt]{report}
 %\documentclass[twocolumn,a4paper,10pt]{article}
-\documentclass[a4paper,10pt,twoside]{article}
+%%\documentclass[a4paper,10pt,twoside]{article}
 %\documentclass{tufte-handout}
 %\documentclass[handout]{beamer}
 %\documentclass[a4paper,10pt,twoside]{report}
+%\documentclass[a4paper,10pt]{report}
+\documentclass[a4paper,10pt]{book}
+%\documentclass[sfsidenotes]{tufte-handout}
+%\documentclass[sfsidenotes,usenames,dvipsnames,svgnames,override,table]{tufte-book}
+%\documentclass[sfsidenotes]{tufte-book}
+%\documentclass{amsbook}
+
+
+\usepackage{geometry}
 
 \usepackage{hyperref}
+
+%\usepackage{beamerarticle}
+
+\usepackage[noxcolor]{beamerarticle}
+%\usepackage{beamerarticle}
 \PassOptionsToPackage{table}{xcolor}
-\usepackage{beamerarticle}
+
 %\usepackage[table]{xcolor}
 
 %\mode<article>{\usepackage{fullpage}} 
-\mode<article>{\usepackage[left=2cm,top=3cm,right=2cm]{geometry}}
+%\mode<article>{\usepackage[left=2cm,top=3cm,right=2cm]{geometry}}
+
+
 
 \usepackage{includes/includes}
 
@@ -36,25 +52,58 @@
 \pagestyle{fancy}
 
 %\renewcommand{\chaptermark}[1]{\markboth{#1}{}} 
-\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}} 
-% \fancyhf{} 
-% \fancyhead[LE,RO]{\@subjectname} 
-% \fancyhead[LO]{\bfseries\rightmark} 
-% \fancyhead[RE]{\bfseries\leftmark} 
+%\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}} 
+\fancyhf{} 
+\fancyhead[LE,RO]{300958 Social Web Analytics}
+\fancyhead[LO]{\bfseries\leftmark} 
+\fancyhead[RE]{\bfseries\leftmark} 
+\fancyfoot[CE,CO]{\thepage}
 
 \newcommand{\bookmark}[1]{\hfill\S #1}
 
 
-\fancyhead{} % clear all header fields 
-\fancyhead[LE,RO]{\parttitle} 
-\fancyhead[LO,RE]{\printsubjectname}
-\fancyfoot{} % clear all footer fields 
-\fancyfoot[LE,RO]{\thepage} 
+%\fancyhead{} % clear all header fields 
+%\fancyhead[LE,RO]{\parttitle} 
+%\fancyhead[LO,RE]{\printsubjectname}
+%\fancyfoot{} % clear all footer fields 
+%\fancyfoot[LE,RO]{\thepage} 
+
 %\fancyfoot[LO,CE]{From: K. Grant} 
 %\fancyfoot[CO,RE]{To: Dean A. Smith} 
 %\renewcommand{\headrulewidth}{0.4pt} 
 %\renewcommand{\footrulewidth}{0.4pt} 
 
-\setjobnamebeamerversion{beamer} 
+
+
+
+\newcommand{\lecturepart}[4]{
+  \lecturesection{#1}{#4}
+  %\lecture{#1}{#3}
+}
+
+
+\newcommand{\lecturepartend}{
+
+}
+
+%\newcommand{\lecturesection}[1]{\part{#1}}
+\newcommand{\lecturesection}[2]{\chapter[#1]{#1}}
+
+%\newenvironment{columns}{}{}
+%\newenvironment{column}[1]{}{}
+
+%\renewcommand{\subsubsection}[1]{\noindent\paragraph{#1}}
+
+%\newcommand{\alert}[1]{\textbf{#1}}
+\newcommand{\svspace}[1]{}
+%\newcommand{\pause}{}
+%\newenvironment{block}[1]{
+%\vspace{1em}
+%\hrule
+%\noindent\textbf{#1}}{\hrule}
+
+\newcommand{\otherimagewl}[3]{
+    \includegraphics[width=#3]{#1}
+}
 
 

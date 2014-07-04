@@ -2,6 +2,11 @@
 % Laurence A. F. Park and Glenn Stone
 % March 22, 2005
 
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/rprog-rprog-')
+opts_chunk$set(dev = 'pdf', fig.cap="")
+```
+
 
 # Algorithms in R
 

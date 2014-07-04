@@ -101,6 +101,15 @@ marks$Exam..Total.Pts..56...103209[marks$Student.Number == "16861318"] = 31
 ## to amend 2
 marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17497998"] = 22
 
+marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17408338"] = 41
+marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17816205"] = 35
+marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17818403"] = 22
+
+marks$Exam..Total.Pts..56...103209[marks$Student.Number == "16777776"] = 21
+
+## to amend 3
+#marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17063496"] = 10
+
 
 sum.top.5 <- function(quiz.marks) {
   sorted.marks = sort(quiz.marks, decreasing=TRUE, na.last=TRUE)

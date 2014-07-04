@@ -1,3 +1,9 @@
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/events-events-')
+opts_chunk$set(dev = 'pdf', fig.cap="")
+```
+
+
 ## Testing for Impact 
 
 Twitter could be regarded as information about the _buzz_ surrounding
@@ -309,7 +315,7 @@ $$\text{Sum of Squares} = \frac{\text{contrast}^2}{4n}$$
 
 There are three contrasts so three sums of squares. We call them $SS_{BA}$, $SS_{CI}$ and $SS_{Int}$ 
 
-## _Sum of squares for error_ ($SS_E$)  
+## Sum of squares for error ($SS_E$)
 
 The total sum of squares ($SS_{Total}$) is  the sum of all the data points minus there mean squared.
 

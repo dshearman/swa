@@ -2,6 +2,10 @@
 % 300958 Social Web Analysis 
 % Week 3 Lab
 
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/week03-lab-')
+```
+
 `r opts_chunk$set(prompt=TRUE, comment=NA)`
 `r knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
 
@@ -253,7 +257,7 @@ and loops (for, while).
 
 If the execution of code depends on the state of a variable, we can
 use an if statement. For example, if the operating system is Windows,
-the file path is "C:\User\greg\file.txt", else the file path is
+the file path is "C:\\User\\greg\\file.txt", else the file path is
 "/home/greg/file.txt".
 
 The if statement in R has the syntax:

@@ -3,7 +3,9 @@
 % March 22, 2005
 
 
+
 ```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/text-clustering-')
 opts_chunk$set(dev = 'pdf', fig.cap="", fig.width=4.4, fig.height=3.1)
 library("mvtnorm")
 ```

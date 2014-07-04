@@ -1,3 +1,9 @@
+
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/spatial-spatial-')
+opts_chunk$set(dev = 'pdf', fig.cap="")
+```
+
 ## Spatial Analysis of Twitter
 
 Twitter collects the location of tweets and can provide this in the result of a search.
@@ -133,7 +139,7 @@ From the web site.
 
 # Using R and Twitter to track epidemics
 
-## Tweets containing _flu_
+## Tweets containing "flu"
 
 It might be interesting to look at the spatial distribution of tweets containing the word _flu_.
 
@@ -145,7 +151,7 @@ We downloaded these and found that 815 had a latitude and longitude (ie. were ge
 
 We can use the `maps` package in R to plot the tweets on a world map.
 
-## Tweets containing _flu_
+## Tweets containing "flu"
 
 ```{r echo=-1, dev="pdf", fig.width=5, fig.height=2.5, fig.cap="Tweets containing flu"}
 par(mar=rep(0.1,4))
@@ -155,7 +161,7 @@ map('world')
 points(flu.pts, pch=16, col=2)  ### use solid red circles
 ```
 
-## Tweets containing _flu_
+## Tweets containing "flu"
 
 We might like to estimate the _spatial intensity_ of tweets.
 
@@ -204,7 +210,7 @@ curve(dnorm(x), from=-3, to=3, axes=FALSE, xlab="distance")
 box()
 ```
 
-## Tweets containing _flu_
+## Tweets containing "flu"
 
 In R we do this with a function called `density` and we need the `spatstat` package.
 
@@ -224,7 +230,7 @@ plot(den1, ribbon=FALSE)
 map('world', add=TRUE)
 ```
 
-## Tweets containing _flu_
+## Tweets containing "flu"
 
 ```{r echo=FALSE, dev="pdf", fig.width=4.5, fig.height=2.5, fig.cap="Tweets containing flu"}
 par(mar=rep(0.1,4))
@@ -233,7 +239,7 @@ plot(den1, ribbon=FALSE, main="")
 map('world', add=TRUE)
 ```
 
-## Tweets containing _flu_
+## Tweets containing "flu"
 
 This data is __NOT__ normalised.  So there are possible problems.
 
@@ -243,7 +249,7 @@ This data is __NOT__ normalised.  So there are possible problems.
 
 How can we normalise?
 
-## Tweets containing _the_
+## Tweets containing "the"
 
 We do not have access to total number of tweets, by geocode. We can only search.
 
@@ -251,7 +257,7 @@ Searched for tweets containing an unrelated non-specific word --- "the"
 
 Over a similar period, found 200,000+ tweets of which 3558 are geocoded.
 
-## Tweets containing _the_
+## Tweets containing "the"
 
 ```{r echo=-1, dev="pdf", fig.width=5, fig.height=2.5, fig.cap="Tweets containing the"}
 par(mar=rep(0.1,4))
@@ -259,7 +265,7 @@ map('world')
 points(the.pts, pch=16, col=2)  ### use solid red circles
 ```
 
-## Tweets containing _the_
+## Tweets containing "the"
 
 Again we can estimate a density using the same procedure as before.
 
@@ -274,7 +280,7 @@ plot(den2, ribbon=FALSE)
 map('world', add=TRUE)
 ```
 
-## Tweets containing _the_
+## Tweets containing "the"
 
 ```{r echo=FALSE, dev="pdf", fig.width=4.5, fig.height=2.5, fig.cap="Tweets containing the"}
 par(mar=rep(0.1,4))
@@ -282,7 +288,7 @@ plot(den2, ribbon=FALSE, main="")
 map('world', add=TRUE)
 ```
 
-## Tweets containing _the_
+## Tweets containing "the"
 
 * Note the very high use of "the" in the UK?
 * The _flu_ hotspot in Brazil (Rio de Janeiro?) is not there

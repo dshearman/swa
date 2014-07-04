@@ -1,3 +1,10 @@
+
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/visualisation-viz-')
+opts_chunk$set(dev = 'pdf', fig.cap="")
+```
+
+
 # Word Clouds
 
 ## Crude Oil Texts

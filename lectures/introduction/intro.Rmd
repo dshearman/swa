@@ -2,6 +2,10 @@
 % 300958 Social Web Analytics
 % Week 1
 
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/intro-intro-')
+opts_chunk$set(dev = 'pdf', fig.cap="")
+```
 
 # Introduction to the Unit
 
@@ -150,18 +154,18 @@ upload information that others will read.
 As time has passed, higher level applications have been created for social
 activity on the Web:
 
-2. Forums: vUWS Discussion Board, Google Groups
-3. Bookmarking: Delicious, Pinterest, Reddit, Slashdot
+1. Forums: vUWS Discussion Board, Google Groups
+2. Bookmarking: Delicious, Pinterest, Reddit, Slashdot
 3. Video: YouTube, Vimeo
 4. Images: Flickr, Instagram
-7. Music: Last.fm
-8. Bloging: LiveJournal, WordPress
-9. Academic: Mendeley
-9. Business: LinkedIn
-5. Location: Foursquare
-6. MySpace, Facebook, Google+
-5. Microblog: Twitter, Vine, Identi.ca, Tumblr
-9. Information seeking: StackExchange
+5. Music: Last.fm
+6. Bloging: LiveJournal, WordPress
+7. Academic: Mendeley
+8. Business: LinkedIn
+9. Location: Foursquare
+10. MySpace, Facebook, Google+
+11. Microblog: Twitter, Vine, Identi.ca, Tumblr
+12. Information seeking: StackExchange
 
 
 ## Twitter

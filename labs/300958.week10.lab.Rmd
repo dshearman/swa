@@ -3,6 +3,7 @@
 % Week 10 Lab
 
 ```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/week10-lab-')
 opts_chunk$set(dev = 'png')
 library("igraph")
 show.answers=FALSE

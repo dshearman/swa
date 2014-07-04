@@ -2,6 +2,10 @@
 % 300958 Social Web Analysis 
 % Week 6 Lab
 
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/week06-lab-')
+```
+
 
 # Requirements
 

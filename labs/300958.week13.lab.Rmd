@@ -2,7 +2,9 @@
 % 300958 Social Web Analysis 
 % Week 13 Lab
 
+
 ```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/week13-lab-')
 opts_chunk$set(dev = 'png', fig.cap="", eval=FALSE)
 ```
 
@@ -87,7 +89,7 @@ unique words, we have $m$ variables.
 We showed in the lecture that a tweet can be classified using:
 $$
 	L = \log{\left (\frac{P(C = 1)}{P(C = 0)}\right )} + 
-	{\sum_{x_i \in \text{tweet}} \log{\left (\frac{P(X_i = x_i|C = 1)}{P(X_i = x_i|C = 0)}\right )}} \\
+	{\sum_{x_i \in \text{tweet}} \log{\left (\frac{P(X_i = x_i\vert C = 1)}{P(X_i = x_i\vert C = 0)}\right )}}
 $$
 The first term contains $P(C = 1)$, meaning the probability of a tweet
 having positive sentiment, and $P(C = 0)$, meaning the probability of
@@ -97,11 +99,11 @@ pC.1 = mean(C.train == "positive")
 ```
 **Compute** $P(C = 0)$ and store the value in the variable `pC.0`.
 
-The probability $P(X = x_i|C = 1)$ is the probability of putting our
+The probability $P(X = x_i\vert C = 1)$ is the probability of putting our
 hand in the positive sentiment bag and pulling out the word $x_i$.
-Therefore $P(X = x_i|C = 1)$ is given as:
+Therefore $P(X = x_i\vert C = 1)$ is given as:
 $$
-	P(X = x_i|C = 1) = \frac{\text{Frequency of $x_i$ in positive tweets}}{\text{Word count in positive tweets}}
+	P(X = x_i\vert C = 1) = \frac{\text{Frequency of $x_i$ in positive tweets}}{\text{Word count in positive tweets}}
 $$
 The word count in positive tweets is given as:
 ```{r}
@@ -116,7 +118,7 @@ The probability of each word in the set of positive tweets is computed as:
 pX.C.1 = total.each.positive.word/total.positive.words
 ```
 
-**Use** the above information to compute $P(X = x_i|C = 0)$
+**Use** the above information to compute $P(X = x_i\vert C = 0)$
 (probability of each word in the set of negative tweets), and store
 the result in the variable `pX.C.0`.
 
@@ -124,7 +126,7 @@ We can now compute the log ratio probability for each word. This value
 shows the contribution of each word toward the sentiment of the tweet.
 We compute these values as:
 $$
-	\text{sentiment weight}(x_i) = {\log{\left (\frac{P(X_i = x_i|C = 1)}{P(X_i = x_i|C = 0)}\right )}}
+	\text{sentiment weight}(x_i) = {\log{\left (\frac{P(X_i = x_i\vert C = 1)}{P(X_i = x_i\vert C = 0)}\right )}}
 $$
 store this vector of weights in `sentiment.weight`.
 We can also compute the bias:

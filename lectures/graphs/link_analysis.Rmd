@@ -2,7 +2,9 @@
 % Laurence A. F. Park
 % March 22, 2005
 
+
 ```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/graphs-link-')
 opts_chunk$set(dev = 'pdf', fig.cap="")
 library("igraph")
 ```

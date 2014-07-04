@@ -2,6 +2,10 @@
 % 300958 Social Web Analysis 
 % Week 11 Lab
 
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/week11-lab-')
+```
+
 `r opts_chunk$set(prompt=TRUE, comment=NA)`
 
 # Twitter Trends
@@ -61,7 +65,7 @@ prop.test(c(X,Y), n=c(N,N), correct=FALSE)
 
 Compare the results of this method to those above. 
 
-## Which method is _correct_?
+## Which method is correct?
 
 Since Twitter probably only use these $\chi^2$ statistics for ranking, it probably doesn't matter which is used.
 
