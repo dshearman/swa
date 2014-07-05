@@ -342,6 +342,7 @@ We will now show how to set up access to Twitter information using R
 and the Twitter API.
 
 Steps:
+
 1. Set up a Twitter App
 2. Obtain the App OAuth keys
 3. Give R the OAuth keys to authorise it to connect to the App

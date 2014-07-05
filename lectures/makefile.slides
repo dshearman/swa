@@ -16,8 +16,8 @@ PANDOC := pandoc -f markdown
 	#echo "opts_chunk$$set(fig.path='figure/text_analysis/text_index_');" | cat - $< | Rscript -e "f <- file('stdin'); open(f); library(knitr); knit(f, output='$*.md')"
 	Rscript -e "library(knitr); knit('$<', output='$*.md')"
 
-%.tex:	%.md figure/*
-	${PANDOC} -t beamer --slide-level=2 $< -o $*.tex
+%.tex:	FORCE %.md figure/*
+	${PANDOC} -t beamer --slide-level=2 $*.md -o $*.tex
 
 %.handout.tex:	%.md figure/*
 	${PANDOC} -f markdown -t latex $< -o $*.handout.tex
@@ -26,3 +26,4 @@ PANDOC := pandoc -f markdown
 	pandoc --slide-level=2 -s -c buttondown.css -f markdown -t html $< -o ${OUTPUT_DIR}/$*.html
 
 
+FORCE:

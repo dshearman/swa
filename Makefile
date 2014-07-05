@@ -1,4 +1,4 @@
-TEX = xelatex --shell-escape
+XELATEX = xelatex --shell-escape
 PDFLATEX := pdflatex
 R_PROG := /opt/local/bin/R
 CODE = 300958
@@ -47,10 +47,11 @@ $(TEMPLATE_DIR)/%: FORCE
 
 %.notes:	MAKESTYLE = notes
 %.notes:	${INCLUDE_DIR}/article.tex ${TEMPLATE_DIR}/%.tex
-	${PDFLATEX}  -jobname "${CODE}.$*.notes" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/article.tex}\input{${TEMPLATE_DIR}/$*.tex}"
+	${XELATEX}  -jobname "${CODE}.$*.notes" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/article.tex}\input{${TEMPLATE_DIR}/$*.tex}"
 
+%.slides:	MAKESTYLE = slides
 %.slides:	${INCLUDE_DIR}/beamer.tex ${TEMPLATE_DIR}/%.tex
-	${TEX} -jobname "${CODE}.$*.slides" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/beamer.tex}\input{${TEMPLATE_DIR}/$*.tex}"
+	${XELATEX} -jobname "${CODE}.$*.slides" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/beamer.tex}\input{${TEMPLATE_DIR}/$*.tex}"
 
 each.notes:	week01.notes week02.notes week03.notes week04.notes week05.notes week06.notes \
 	week07.notes week08.notes week09.notes week10.notes week12.notes

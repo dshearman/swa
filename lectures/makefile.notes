@@ -22,5 +22,7 @@ PANDOC := pandoc -f markdown
 %.web: 	%.md
 	pandoc --slide-level=2 -s -c buttondown.css -f markdown -t html $< -o ${OUTPUT_DIR}/$*.html
 
+#.SECONDARY
+.PRECIOUS: %.md
 
 FORCE:

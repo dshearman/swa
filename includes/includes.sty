@@ -17,7 +17,7 @@
 
 
 
-%\author{\@subjectname}
+
 %\author{300958 Social Web Analytics}
 \subjectname{300958 Social Web Analytics}
 
@@ -91,6 +91,19 @@
 
 
 
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifxetex
+  \usepackage{fontspec,xltxtra,xunicode}
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+\else
+  \ifluatex
+    \usepackage{fontspec}
+    \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \else
+    \usepackage[utf8]{inputenc}
+  \fi
+\fi
 
 
 %\usepackage{mathpazo}
@@ -126,19 +139,6 @@
 \DeclareMathOperator{\var}{Var}
 
 
-\usepackage{ifxetex,ifluatex}
-\usepackage{fixltx2e} % provides \textsubscript
-\ifxetex
-  \usepackage{fontspec,xltxtra,xunicode}
-  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-\else
-  \ifluatex
-    \usepackage{fontspec}
-    \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-  \else
-    \usepackage[utf8]{inputenc}
-  \fi
-\fi
 
 %\usepackage{colortbl}
 \usepackage{fancyvrb}
