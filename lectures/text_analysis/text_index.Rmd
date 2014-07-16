@@ -381,7 +381,7 @@ At the probability increases, $-\log{p}$ decreases:
 
 ```{r, echo=FALSE, fig.width=5, fig.height=4, dev="pdf"}
 x = (1:100)/100
-plot(x, -log(x), xlab="P(w\vert d)", ylab="-log(P(w\vert d))", type="l")
+plot(x, -log(x), xlab="P(w|d)", ylab="-log(P(w|d))", type="l")
 ```
 
 ## Using the Binomial distribution
