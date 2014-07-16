@@ -1,0 +1,118 @@
+{{saved book
+ |title=
+ |subtitle=
+ |cover-image=https://upload.wikimedia.org/wikipedia/commons/b/bd/Internet_map_1024_-_transparent.png
+ |cover-color=}}
+
+== Social Web Analysis ==
+;Introduction to the Social Web
+:[[Social web]]
+:[[Social graph]]
+:[[Social networking service]]
+:[[Twitter]]
+:[[Hashtag]]
+:[[Facebook]]
+:[[Like button]]
+;Accessing Social Web Data
+:[[HTML]]
+:[[Web scraping]]
+:[[Uniform resource locator]]
+:[[Application programming interface]]
+:[[XML]]
+:[[YAML]]
+:[[JSON]]
+:[[GraphML]]
+:[[OAuth]]
+;Simple Exposure Analysis
+:[[Demographics]]
+:[[Confidence interval]]
+:[[Binomial proportion confidence interval]]
+:[[Statistical hypothesis testing]]
+:[[Chi-squared test]]
+;Graph Analysis
+:[[Graph (mathematics)]]
+:[[Vertex (graph theory)]]
+:[[Degree (graph theory)]]
+:[[Path (graph theory)]]
+:[[Tree (graph theory)]]
+:[[Cycle (graph theory)]]
+:[[Connectivity (graph theory)]]
+:[[Directed graph]]
+:[[Complete graph]]
+:[[Adjacency matrix]]
+:[[Centrality]]
+:[[Seven Bridges of Königsberg]]
+:[[Eulerian path]]
+:[[Dijkstra's algorithm]]
+:[[Bellman–Ford algorithm]]
+;Random Graphs
+:[[Collaboration graph]]
+:[[Erdős–Rényi model]]
+:[[Scale-free network]]
+:[[Power law]]
+:[[Barabási–Albert model]]
+;Visualisation
+:[[Tag cloud]]
+:[[Principal component analysis]]
+:[[Multidimensional scaling]]
+:[[Metric (mathematics)]]
+:[[Euclidean distance]]
+:[[Cosine similarity]]
+;Text Indexing and Retrieval
+:[[Vector space model]]
+:[[Tf–idf]]
+:[[Stemming]]
+:[[Stop words]]
+:[[Precision and recall]]
+:[[Inverted index]]
+;Text  Clustering
+:[[Distance matrix]]
+:[[K-means clustering]]
+:[[Determining the number of clusters in a data set]]
+:[[Hierarchical clustering]]
+:[[Complete-linkage clustering]]
+:[[Single-linkage clustering]]
+:[[Spectral clustering]]
+:[[Graph partition]]
+:[[Minimum cut]]
+;Link Analysis
+:[[Stochastic matrix]]
+:[[Ergodicity]]
+:[[PageRank]]
+:[[Power iteration]]
+:[[HITS algorithm]]
+;Examining Significance
+:[[Statistical power]]
+:[[Analysis of variance]]
+;Trend Analysis
+:[[Trend estimation]]
+:[[Simple linear regression]]
+:[[Autoregressive model]]
+:[[Time series]]
+;Examining Impact
+:[[Student's t-test]]
+;Sentiment Analysis
+:[[Sentiment analysis]]
+:[[Statistical classification]]
+:[[Naive Bayes classifier]]
+:[[Curse of dimensionality]]
+:[[K-nearest neighbors algorithm]]
+:[[False positives and false negatives]]
+:[[Receiver operating characteristic]]
+:[[Association rule learning]]
+;Spatial Analysis
+:[[Geocoding]]
+:[[Poisson point process]]
+:[[Relative risk]]
+;Privacy
+:[[Internet privacy]]
+:[[Privacy issues of social networking sites]]
+:[[Identity theft]]
+;Appendix
+:[[R (programming language)]]
+:[[RStudio]]
+:[[Social network analysis software]]
+:[[List of social networking websites]]
+:[[Glossary of graph theory]]
+:[[Design of experiments]]
+
