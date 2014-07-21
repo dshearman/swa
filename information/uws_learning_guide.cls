@@ -118,6 +118,7 @@
 \newcommand{\toolkitlogo}{{\webdings\XeTeXglyph35}}
 \newcommand{\warninglogo}{{\webdings\XeTeXglyph91}}
 
+
 \newcommand{\lgtitlepage}{
 \lhead{\@unitnumber~\@unitname}
 \chead{}
