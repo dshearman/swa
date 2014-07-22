@@ -9,50 +9,6 @@ opts_chunk$set(fig.path='figure/week03-lab-')
 `r opts_chunk$set(prompt=TRUE, comment=NA)`
 `r knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
 
-# R Basics
-
-## Installing R
-
-All of the lab sessions for 300958 Social Web Analysis will use R and
-RStudio. If these two applications are *not* installed on the computer
-you are using, download them from:
-
-- R: [http://cran.csiro.au/](http://cran.csiro.au/)
-- RStudio: [http://www.rstudio.com/ide/download/desktop](http://www.rstudio.com/ide/download/desktop)
-
-Install R, then Rstudio.
-
-Once they are installed, open RStudio and say hello.
-```{r}
-print("Hello world!")
-```
-
-## Getting familiar with RStudio
-
-Once RStudio is loaded, we will see four sections:
-
-- Text editor (top left). Use this to enter code and save it as a script.
-- Console (bottom left). Code can be entered straight into the console, or scripts can be run by entering source("script_filename.r")
-- Workspace (top right). This section shows the variables that are currently defined. 
-- Browser (bottom right). We can access files, view plots, examine packages and access help in the browser.
-
-To write your first script, type:
-```{r eval=FALSE}
-print("Hello world!")
-```
-into the text editor, save it as hello.r. Then go to the console section and type:
-```{r eval=FALSE}
-source("hello.r")
-```
-By sourcing the script, you will run every command. Since there is one command in the script, only one command will be run.
-There is also a source button above the text editor window.
-
-If R complains that it cannot find the file, it may be looking in the wrong directory. To set the directory, use:
-```{r eval=FALSE}
-setwd("directory")
-```
-where `directory` is where your script is stored.
-
 
 # R Documentation
 
@@ -105,9 +61,10 @@ fundamentals of coding in R.
 
 In R variables are defined once data is assigned. R has dynamic
 typing, meaning that we *do not* have to declare the type of the
-variable (e.g. int x;), the type of the variable is set once data is
-assigned. To create a variable `x` of type numeric containing the
-value `4`, we issue the command:
+variable (e.g. we do not have to declare `int x;` as done in C, C++
+and Java), the type of the variable is set once data is assigned. To
+create a variable `x` of type numeric containing the value `4`, we
+issue the command:
 ```{r}
 x = 4
 ```
@@ -268,9 +225,9 @@ if (condition) {
 ```
 The statement can also be extended to include other conditions and a default condition.
 ```{r eval=FALSE}
-if (condition 1) {
+if (condition_1) {
    ## run this code if condition 1 is true
-} else if (condition 2) {
+} else if (condition_2) {
    ## run this code if condition 1 is false and condition 2 is true
 } else {
    ## run this code if condition 1  and condition 2 are false
@@ -310,7 +267,7 @@ for (variable in sequence) {
 
 ### Exercise
 
-The function cat will print its contents to the screen. E.g.
+The function `r cat` will print its contents to the screen. E.g.
 ```{r}
 a = 5
 cat("This is a number ", a, "\n")

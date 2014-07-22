@@ -1,0 +1,354 @@
+% Introduction to the Social Web
+% 300958 Social Web Analysis 
+% Week 2 Lab
+
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/week02-lab-')
+```
+
+`r opts_chunk$set(prompt=TRUE, comment=NA)`
+`r knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
+
+# The Social Web
+
+Throughout this semester, we will be making use of Twitter to analyse
+social interaction.  To begin this lab, we will create a Twitter
+account, add content to the account and follow others in the class and
+in the World.
+
+
+## Creating a Twitter account
+
+To create a Twitter account, go to this URL:
+<https://twitter.com/> and fill in your details in the "Sign Up" box.
+Make sure to read the Terms and Conditions carefully.
+
+## Twitter Terminology
+
+Twitter is a micro-blogging service that allows its users to write
+messages of up to 140 characters in length.  Its usefulness comes from
+its ability to allow us to follow others we are interested in, making
+it act as a customised news service.  Many posts contain a summary
+with a link to a more complete story, allowing us to quickly flick
+through the headlines and read any posts that interest
+us, in more detail.
+
+The components of Twitter are:
+
+- tweet: a message post
+- handle: a Twitter id, beginning with @
+- hashtag: any term beginning with #. Hashtags have become Twitter index terms, allowing us to easily find tweets on certain topics.
+- follower: an account that is following your posts
+- friend: an account that you are following
+- feed: the set of tweets
+- retweet: adding a previously published tweet to your own feed, allowing your followers to see it
+- reply: create a tweet containing another users handle, making it appear in both feeds.
+
+
+## Following your classmates
+
+Before we can follow others in the class, we have to be able to find
+them in Twitter. The simplest way of finding each other is to tweet
+something that other can find and then follow you.
+
+Once you have an account, write a tweet containing the tag:
+
+```
+#UWS300958
+```
+
+For example, I could write:
+
+```
+Searching for the existence of life on planet #UWS300958
+```
+
+We can then use the twitter search box to search for `#UWS300958` and
+find others in the class.
+
+We will be using the data from your twitter accounts later in the unit.
+So try to get as many followers and friends as you can.
+
+
+## Writing a second tweet.
+
+No twitter account could be complete without a tweet linking to a cat
+video.  For your second tweet, find a cat video on youtube and write a
+tweet containing the cat video URL.
+
+After uploading the tweet, examine the URL in the tweet. Is it the
+same as the URL you provided?
+
+
+## Receiving interesting tweets
+
+The final part of setting up your twitter account is to add sources
+that will provide you with information that you are interested in.
+
+The two most common ways of finding twitter accounts to follow are:
+
+- Search for topics that you are interested in (this usually provides
+  lots of rubbish, but you may find what you want).
+- Examine what your friends and followers are following.
+
+
+
+
+# Setting up R and learning the basics
+
+For the second part of the lab, we will set up R, the programming tool
+we will be using through the course.
+
+
+## Installing R
+
+All of the lab sessions for 300958 Social Web Analysis will use R and
+RStudio. These two programs should be installed on the lab
+machines. If they are installed, you should be able to click on the
+Start menu, type RStudio and the program should appear. If these two
+applications are *not* installed on the computer you are using,
+download them from:
+
+- R: [http://cran.csiro.au/](http://cran.csiro.au/)
+- RStudio: [http://www.rstudio.com/ide/download/desktop](http://www.rstudio.com/ide/download/desktop)
+
+Install R, then Rstudio. Note that R is the program that runs the R
+programs. RStudio is an IDE for R that provides a pretty interface for
+us to use.
+
+
+Open RStudio and say hello.
+```{r}
+print("Hello world!")
+```
+
+## Getting familiar with RStudio
+
+Once RStudio is loaded, we will see four sections:
+
+- Text editor (top left). Use this to enter code and save it as a script.
+- Console (bottom left). Code can be entered straight into the console, or scripts can be run by entering source("script_filename.r")
+- Workspace (top right). This section shows the variables that are currently defined. 
+- Browser (bottom right). We can access files, view plots, examine packages and access help in the browser.
+
+We can write code into the text editor or the console. The choice of
+where you write code depends on what the code is for.
+
+- The console runs the code we enter, but does no keep it. This is
+  useful for testing a line of code, installing packages or looking up
+  help files.
+
+- The text editor does not run the code we type, but allows us to save
+  the code for later use. There are buttons above the text editor that
+  allow us to run the code a line at a time, or run the whole
+  script. Most of the lab work we do should be done in the text
+  editor, so we can save it, run it, and review it later.
+
+
+To write your first script, type:
+```{r eval=FALSE}
+print("Hello world!")
+```
+into the text editor, save it as hello.r. Then go to the console section and type:
+```{r eval=FALSE}
+source("hello.r")
+```
+Rather than typing the above command into the console, there is also a
+button that we can use, above the text editor, that sources the text file.
+
+By sourcing the script, you will run every command. Since there is one
+command in the script, only one command will be run.
+
+If R complains that it cannot find the file, it may be looking in the wrong directory. 
+To examine which directory R is sourcing from, use:
+```{r eval=FALSE}
+getwd()
+```
+To set the directory to the directory containing the script, use:
+```{r eval=FALSE}
+setwd("directory")
+```
+where `directory` is where your script is stored.
+
+
+## Errors in code
+
+If there is an error in your program, the error message will be shown
+in the console. The error messages are usually descriptive enough for
+us to work out where the error is located in out code. **Read error
+messages carefully!** The more you get used to the types of errors,
+the easier it will be to debug you code.
+
+To see a simple error message, type in the console:
+```{r}
+hello
+```
+R will complain that `hello` can't be found. This is because R does
+not know what `hello` is. If we first create the variable called `hello`:
+```{r}
+hello = 10
+```
+R now knows of an object called `hello` and so typing `hello` in the
+console will no longer result in an error. We often see the
+previous error message when we have misspelled a variable name.
+For example, `hello` is not the same as `Hello`.
+
+If you see an error message, or set of error messages, start from the
+first message, fix the bug and run the code again. If you can't
+understand what the error is, ask the tutor.
+
+
+## Installing the required R packages
+
+This semester we will be using a set of R packages that are not
+included in the base install.
+
+Due to the current design of the UWS computer labs, if we install any
+packages in the default directories, the packages will be deleted
+overnight. Therefore, we should tell R to install the packages within
+our home directory. To do this:
+
+1. create a directory to hold the packages `R/library`, 
+2. open the file `.Renviron' in a text editor and add the line:
+
+```
+R_LIBS_USER="~/R/library"
+```
+
+3. Save the file and restart RStudio
+
+From now on, when the command `install.packages` is issued, the
+packages will be stored in the path you assigned.
+
+Try this out by installing the MASS package:
+```{r eval=FALSE}
+install.packages("MASS")
+```
+Once the package is installed, check the directory that you created to
+make sure that the package was installed in that directory.
+
+
+## Setting the Proxy Information
+
+If the packages failed to install, read the error message that was
+reported in the console.  If the message states that the repository
+could not be contacted, we may need to tell R about the UWS network
+proxy server.
+
+Information on how to tell R about the proxy is here:
+
+- <https://support.rstudio.com/hc/en-us/articles/200488488-Configuring-R-to-Use-an-HTTP-Proxy>
+
+
+## Manual download
+
+If the installer fails to fetch the packages, even after providing the
+proxy server information, we can download the packages to a local
+drive and install them from there.
+
+The list of all packages is here:
+
+- <http://cran.r-project.org/web/packages/available_packages_by_name.html>
+
+From the package list, click on the wanted package to go to the
+package page.  Then download either the MacOS or Windows binary to a
+local directory.  To install the package, we must tell R where it is
+saved. For example, if we downloaded the `tm` package and saved it in
+the /tmp directory:
+```{r eval=FALSE}
+install.packages("/tmp/tm_0.5-9.1.zip", repos=NULL)
+```
+The argument `repos=NULL` tells the installer not to download from the
+R repository.
+
+## Packages still won't install
+
+If you have tried each of the methods above and consulted with the
+tutor, but still cannot install the packages, there may be a problem
+with the UWS network or a change in the packages. To let Laurence know
+about this, create an issue at the 300958 issue tracker.
+
+- <https://bitbucket.org/lapark/300958-social-web-analytics/issues>
+
+If an issue already exists containing the same problem, then someone
+else has reported it and there is no need to create a new issue.
+
+
+## Loading packages
+
+Installing packages only downloads the appropriate package for your machine.
+To use the package, we must load it (just as we use `include` in C and C++
+and `import` in Python).
+
+To load a package, we use the command `library`. To load the package MASS, we use:
+
+```{r eval=FALSE}
+library("MASS")
+```
+
+Note that we cannot load packages that we have not already
+installed. Loading a package reads the package files and stores them
+in the computers memory, to make sure that the functions and data they
+offer are available to use.
+
+The packages that we will be using this semester are:
+
+- igraph
+- maps
+- ROAuth
+- skmeans
+- spatstat
+- tm
+- twitteR
+- wordcloud
+
+Install these packages now, so that they are ready to be used in the later labs.
+
+## Package Contents
+
+To read the package description and examine the functions and data it
+offers, we first load the package (using the `library` command), then
+we use the R help command.
+
+To read about the package MASS, use:
+```{r eval=FALSE}
+help(package = "MASS")
+```
+
+Read the description of the packages we installed in the previous
+section.
+
+
+## A sample script
+
+Copy and past the below code into the RStudio text editor, save it and source it:
+```{r eval=FALSE}
+main <- function() {
+     f = findFactors(1012)
+     print(f)
+}
+
+findFactors <- function(x) {
+   factors = c()
+   for (a in 1:x) {
+       if ((x %% a) == 0) {
+       	  factors = c(factors, a)
+       }
+   }
+   return(factors)
+}
+
+main()
+```
+- What is the code doing?
+- What is the `%%` operator?
+- What do you expect the output to be if we change 1012 to 16? Try it to check your answer.
+- Can you think of a better way to write the `findFactors` function?
+  If so, change the function (Hint: factors come in pairs, so we only
+  need to check from 1 to $sqrt{x}$).
+- Bonus task: Using the function `length`, write a function to test if
+  a given number is prime.
+
+## Final Task
+
+Before the end of the lab, post a tweet on how the lab went.

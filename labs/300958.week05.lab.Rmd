@@ -9,53 +9,9 @@ opts_chunk$set(fig.path='figure/week05-lab-')
 
 # Installing Libraries
 
-For this lab, we will need the twitteR, ROAuth and tm libraries.
-
-Installing libraries requires access to the Internet and hence R needs
-to know about the Web proxy when within UWS. R may have already been
-provided the proxy information, so first assume that the proxy has
-been set.
-
-
-## Installing twitteR and tm
-
-If the proxy is set, you may install libraries using the install.packages command:
-```{r eval=FALSE}
-install.packages("twitteR")
-install.packages("tm")
-install.packages("ROAuth")
-```
-If R will not speak to the proxy, you can download the packages and install them locally.
-The list of all packages is here:
-
-- [http://cran.r-project.org/web/packages/available_packages_by_name.html](http://cran.r-project.org/web/packages/available_packages_by_name.html)
-
-The packages needed for this lab are:
-
-- [http://cran.r-project.org/web/packages/tm/index.html](http://cran.r-project.org/web/packages/tm/index.html)
-- [http://cran.r-project.org/web/packages/twitteR/index.html](http://cran.r-project.org/web/packages/twitteR/index.html)
-- [http://cran.r-project.org/web/packages/ROAuth/index.html](http://cran.r-project.org/web/packages/ROAuth/index.html)
-
-From these Web pages, download either the MacOS or Windows binary to a local directory.
-Then install the package by telling R where you saved it. For example, if we saved
-the packages in the /tmp directory:
-```{r eval=FALSE}
-install.packages("/tmp/tm_0.5-9.1.zip", repos=NULL)
-```
-
-## Setting the Proxy Information
-
-If you have installed the twitteR, ROAuth and tm packages, you can skip this section.
-
-Information on how to tell R about the proxy is here:
-
-- [http://support.rstudio.org/help/kb/faq/configuring-r-to-use-an-http-proxy](http://support.rstudio.org/help/kb/faq/configuring-r-to-use-an-http-proxy)
-
-Information about the proxy setting is here:
-
-- [http://www.uws.edu.au/information_technology_services/its/servicedesk/proxy_settings](http://www.uws.edu.au/information_technology_services/its/servicedesk/proxy_settings)
-
-
+For this lab, we will need the `twitteR`, `ROAuth` and `tm` libraries.
+These were installed in the week 2 lab. If you have not installed them
+using the instructions from the week 2 lab, do so now.
 
 # Accessing Twitter
 
