@@ -12,6 +12,14 @@ INFORMATION_DIR = information
 TEST_DIR = tests
 OUTPUT_DIR = bin
 
+ifneq ($(cd ${LECTURE_DIR}/figures; pwd -P),$(cd figures; pwd -P))
+    $(error The ${LECTURE_DIR}/figures directory is not a symbolic link of the figures directory!)
+endif
+
+ifneq ($(cd ${LAB_DIR}/figures; pwd -P),$(cd figures; pwd -P))
+    $(error The ${LAB_DIR}/figures directory is not a symbolic link of the figures directory!)
+endif
+
 MAKESTYLE = slides
 # NO NEED TO ADD THESE, THEY ARE NOW AUTOMATICALLY GENERATED.
 # THESE WILL BE REMOVED SOON.
@@ -34,7 +42,7 @@ $(LECTURE_DIR)/%.tex: FORCE
 
 
 $(LAB_DIR)/%: FORCE
-	$(MAKE) -C $(LAB_DIR) $*
+	$(MAKE) -C $(LAB_DIR) -f makefile.$(MAKESTYLE) $*
 
 $(INFORMATION_DIR)/%: FORCE
 	$(MAKE) -C $(INFORMATION_DIR) $*

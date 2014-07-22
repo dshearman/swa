@@ -7,7 +7,7 @@ opts_chunk$set(fig.path='figure/week02-lab-')
 ```
 
 `r opts_chunk$set(prompt=TRUE, comment=NA)`
-`r knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
+`r #knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
 
 # The Social Web
 
@@ -311,6 +311,7 @@ offers, we first load the package (using the `library` command), then
 we use the R help command.
 
 To read about the package MASS, use:
+
 ```{r eval=FALSE}
 help(package = "MASS")
 ```
@@ -322,6 +323,7 @@ section.
 ## A sample script
 
 Copy and past the below code into the RStudio text editor, save it and source it:
+
 ```{r eval=FALSE}
 main <- function() {
      f = findFactors(1012)
@@ -340,6 +342,7 @@ findFactors <- function(x) {
 
 main()
 ```
+
 - What is the code doing?
 - What is the `%%` operator?
 - What do you expect the output to be if we change 1012 to 16? Try it to check your answer.
