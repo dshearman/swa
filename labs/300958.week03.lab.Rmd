@@ -254,9 +254,7 @@ do.i.like.this.number(2)
 ### for loop
 
 Loops allow us to execute a piece of code a number of times, where the
-number is not known until run time. For example, for every year that
-Greg has been born, give him a birthday punch.
-
+number is not known until run time.
 
 ```{r eval=FALSE}
 for (variable in sequence) {
@@ -265,9 +263,28 @@ for (variable in sequence) {
 ```
 
 
+For example, for every year that Greg has been born, give him a
+birthday punch.
+```{r eval=FALSE}
+for (year in 1:gregsAge) {
+  punchGreg()
+}
+```
+
+We can also use for loops to run a function over a set of items. For
+example, if we have the set of words `words`, where `words[i]` is the
+$i$th word, we can count the length of each word using:
+```{r eval=FALSE}
+for (i in 1:length(words)) {
+  countLetters(word[i])
+}
+```
+Note that in this case, we have to write the function `countLetters`.
+
+
 ### Exercise
 
-The function `r cat` will print its contents to the screen. E.g.
+The function `cat` will print its contents to the screen. E.g.
 ```{r}
 a = 5
 cat("This is a number ", a, "\n")

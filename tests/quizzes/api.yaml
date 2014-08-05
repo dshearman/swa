@@ -4,7 +4,7 @@
 questions:
 
     - type: MC
-      question: "<p>Which parser is most suitable for the following data:</p>&lt;programminglanguages&gt;&lt;language&gt;C++&lt;/language&gt;&lt;language&gt;Python&lt;/language&gt;&lt;language&gt;Ruby&lt;/language&gt;&lt;/programminglanguages&gt;"
+      question: "<p>Which parser is most suitable for the following data:</p>&lt;programminglanguages&gt;<br>&emsp;&lt;language&gt;C++&lt;/language&gt;<br>&emsp;&lt;language&gt;Python&lt;/language&gt;<br>&emsp;&lt;language&gt;Ruby&lt;/language&gt;<br>&lt;/programminglanguages&gt;"
       choices:
         - CSV
         - XML
@@ -13,13 +13,40 @@ questions:
       correct_answer: 2
 
     - type: MC
-      question: '<p>Which parser is most suitable for the following data:</p>{"programminglanguages":[{"language":"C++"},{"language":"Python"},{"language":"Ruby"}]}'
+      question: '<p>Which parser is most suitable for the following data:</p>{<br>&emsp;"programminglanguages":<br>&emsp;[{"language":"C++"},{"language":"Python"},{"language":"Ruby"}]<br>}'
       choices:
         - CSV
         - XML
         - YAML
         - JSON
       correct_answer: 4
+
+    - type: MC
+      question: '<p>Which parser is most suitable for the following data:</p>programminglanguages:<br>&emsp;&emsp;&emsp;&emsp;- language: C++<br>&emsp;&emsp;&emsp;&emsp;- language: Python<br>&emsp;&emsp;&emsp;&emsp;- language: Ruby'
+      choices:
+        - CSV
+        - XML
+        - YAML
+        - JSON
+      correct_answer: 3
+
+    - type: MC
+      question: 'In the following URL "https://www.twitter.com/api.php?search=cats" the port number is:'
+      choices:
+        - http
+	- https
+        - 80
+        - 8080
+      correct_answer: 3
+
+    - type: MC
+      question: 'In the following URL "https://www.twitter.com/api.php?search=cats" the scheme is:'
+      choices:
+        - http
+        - https
+        - 80
+        - 8080
+      correct_answer: 2
 
     - type: MC
       question: 'In the following URL "http://www.ibm.com:8080/doc/COBOL/search.php?q=structure" the query string is:'

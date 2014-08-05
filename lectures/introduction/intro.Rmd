@@ -43,14 +43,13 @@ Lecturers:
 
 - Laurence Park <lapark@scem.uws.edu.au>
 - Glenn Stone <g.stone@uws.edu.au>
+- Don Shearman <d.shearman@uws.edu.au>
 
 Tutors:
 
-- Attila Egri-Nagy <a.egri-nagy@uws.edu.au>
+- Arshad Muhammad Mehar <a.Muhammad@uws.edu.au>
 - Don Shearman <d.shearman@uws.edu.au>
-- Kingsley Agho <k.agho@uws.edu.au>
 - Nima Ramezani 
-- Shatha Aziz
 
 
 # Social Networks

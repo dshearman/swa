@@ -35,3 +35,12 @@ questions:
       question: '<p>Is this syntax the correct way to define a function?:</p>Hello <- function  print("Hello World")'
       answer: "False"
 
+    - type: MC
+      question: '<p>What does the following R code do:</p>if (x/2 == round(x/2)) {<br />&emsp; print(TRUE)<br />} else {<br />&emsp;print(FALSE)<br>}'
+      choices:
+       - It tests if x is prime.
+       - It tests if x is an integer.
+       - It tests if x is even.
+       - It tests if x is positive.
+      correct_answer: 3
+
