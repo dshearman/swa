@@ -34,9 +34,9 @@ questions:
       question: 'In the following URL "https://www.twitter.com/api.php?search=cats" the port number is:'
       choices:
         - http
-	- https
-        - 80
-        - 8080
+        - https
+        - '80'
+        - '8080'
       correct_answer: 3
 
     - type: MC
@@ -44,8 +44,8 @@ questions:
       choices:
         - http
         - https
-        - 80
-        - 8080
+        - '80'
+        - '8080'
       correct_answer: 2
 
     - type: MC

@@ -206,10 +206,18 @@ included in the base install.
 Due to the current design of the UWS computer labs, if we install any
 packages in the default directories, the packages will be deleted
 overnight. Therefore, we should tell R to install the packages within
-our home directory. To do this:
+our home directory.
 
-1. create a directory to hold the packages `R/library`, 
-2. open the file `.Renviron' in a text editor and add the line:
+Your home directory is:
+
+- My Documents (for Windows users)
+- /Users/username (for OS X, where username is your username)
+- /home/username (for Linux, where username is your username)
+
+To tell R where to install the packages
+
+1. In your home directory, create the directories `R/library`, to hold the packages.
+2. In your home directory, create the file `.Renviron' in a text editor and add the line:
 
 ```
 R_LIBS_USER="~/R/library"
