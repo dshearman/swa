@@ -247,8 +247,8 @@ To apply this document term weighting, we need to extract the term
 frequency matrix from the corpus object:
 
 ```{.r}
-twitter.dtm = DocumentTermMatrix(tweet.corpus) # create the DocumentTermMatrix object
-twitter.matrix = inspect(twitter.dtm) # convert to a matrix
+tweet.dtm = DocumentTermMatrix(tweet.corpus) # create the DocumentTermMatrix object
+tweet.matrix = inspect(tweet.dtm) # convert to a matrix
 ```
 
 **Compute** the weighted document term matrix `tweet.weighted.matrix`
