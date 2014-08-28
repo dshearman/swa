@@ -55,28 +55,20 @@ cred <- OAuthFactory$new(consumerKey="insert here",
      authURL="https://api.twitter.com/oauth/authorize")
 ```
 
-Then perform the handshake:
+In the UWS computer labs (using the Windows operating system), we must tell R not to bother verifying the Twitter SSL certificate:
+```{.r}
+options(RCurlOptions = list(verbose = FALSE, capath = system.file("CurlSSL", "cacert.pem", package = "RCurl"), ssl.verifypeer = FALSE))
+```
+If you are not using Windows, you can ignore the above command.
 
+
+Then perform the handshake:
 ```{.r}
 cred$handshake()
 ```
 
-If an error is received when performing the handshake, we may have to
-provide additional options to the RCurl library.
-
-```{.r}
-options(RCurlOptions = list(verbose = FALSE, capath = system.file("CurlSSL", "cacert.pem", package = "RCurl"), ssl.verifypeer = FALSE))
-```
-
 Once the handshake is performed, R will ask you to visit a URL to get
 an access code from Twitter. Get this code and provide it to R.
-
-**NOTE**: there is a bug in RStudio that prevents us from copying the
-  OAuth URL to the clipboard. So you can either:
-
-- Use R (not RStudio) when issuing the handshake, or
-- manually type out the provided URL into a Web browser.
-
 
 Once the handshake is done, we can save the credential information
 and use it later, without having go directly to Twitter again.
