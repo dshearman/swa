@@ -249,37 +249,37 @@ users on Twitter, we should note:
 
 Using `twitteR`, we can download user information when given a screen
 name or ID.
-Let's examine Kevin Rudd:
+Let's examine [Wil Wheaton](http://en.wikipedia.org/wiki/Wil_wheaton):
 ```{r eval=FALSE}
-user = getUser("KRuddMP")
+user = getUser("wilw")
 ```
 The variable `user` is now a `twitteR` object, which we can use as a seed for our graph.
 
-To examine all of the details for Kevin Rudd, convert the twitteR object into a data frame:
+To examine all of the details for Wil Wheaton, convert the twitteR object into a data frame:
 ```{r eval=FALSE}
 user$toDataFrame()
 ```
 The above function provides information such as the number of friends,
 the number of followers, if the account is protected and verified and
-the owner's name and id.  Kevin Rudd is a popular person, so he must
+the owner's name and id.  Wil Wheaton is a popular person, so he must
 have popular friends. From the output of `user$toDataFrame()` identify
-how many friends Kevin Rudd has.
+how many friends Wil Wheaton has.
 
 ## Dowloading a user's friends.
 
-We now want to download the list of Kevin Rudd's friends. Since he has
+We now want to download the list of Wil Wheaton's friends. Since he has
 a large number of friends, we download the first 100.
 ```{r eval=FALSE}
 friends = user$getFriends(100)
 ```
 
 The above function gets the friends of `user`; since `user` contains
-Kevin Rudd's details, the function returns a list of his friends.  The
+Wil Wheaton's details, the function returns a list of his friends.  The
 list of friends is a list of `twitteR` objects, so `friends[[1]]` is the
 same data type as `user`.
 
 
-We now have the details of 100 of Kevin Rudd's friends. 
+We now have the details of 100 of Wil Wheaton's friends. 
 Examine the information of the first friend:
 ```{r eval=FALSE}
 friends[[1]]$toDataFrame()
@@ -324,7 +324,7 @@ friends[[1]]$getProtected()
 **Write** a `for` loop to check if any of the friend accounts are
 protected and store the `TRUE`/`FALSE` values in the variable `protected.status`. 
 
-Once we have the vector `protected.status`, we can extract the unprotected friends of Kevin Rudd:
+Once we have the vector `protected.status`, we can extract the unprotected friends of Wil Wheaton:
 ```{r eval=FALSE}
 unprotected.friends = friends[!protected.status]
 ```
@@ -341,25 +341,24 @@ Lets create a place to store the friends of friends.
 ```{r eval=FALSE}
 more.friends = list()
 ```
-We can download a list of 100 friends of the first friend of Kevin Rudd using:
+We can download a list of 100 friends of the first friend of Wil Wheaton using:
 ```{r eval=FALSE}
 more.friends[[1]] = top.unprotected.friends[[1]]$getFriends(100)
 ```
 
 **Write** a `for` loop to download 100 friends from the 10 most
-popular friends of Kevin Rudd and store them in `more.friends`.
+popular friends of Wil Wheaton and store them in `more.friends`.
 
 
 ## Creating the Twitter Graph
 
-Now we have Kevin Rudd, 100 of Kevin Rudd's friends, and 100 of 10 of
-Kevin Rudd's most popular friends.
+Now we have Wil Wheaton, 100 of Wil Wheaton's friends, and 100 of 10 of
+Wil Wheaton's most popular friends.
 
 We can create a graph by constructing an edge list (who links to who).
-We know Kevin Rudd links to all of his friends 100, so the edge list
-will contain 100 rows beginning with Kevin Rudd and ending with the
-friend of Kevin Rudd. First we must get the names of all of Kevin
-Rudd's friends. 
+We know Wil Wheaton links to all of his 100 friends, so the edge list
+will contain 100 rows beginning with Wil Wheaton and ending with the
+friend of Wil Wheaton. First we must get the names of all of Wil Wheaton's friends. 
 
 First we allocate a variable to contain the names:
 ```{r eval=FALSE}
@@ -374,11 +373,11 @@ friend.names[1] = friends[[1]]$getScreenName()
 
 We can now build the edge list using:
 ```{r eval=FALSE}
-rudd = rep(user$getScreenName(), length(friends)) # repeat Kevin Rudd's user name 100 times
-el = cbind(rudd,friend.names) # bind the columns to create a matrix
+wil = rep(user$getScreenName(), length(friends)) # repeat Wil Wheaton's user name 100 times
+el = cbind(wil,friend.names) # bind the columns to create a matrix
 ```
 
-We need to do the same for Kevin Rudd's 10 most popular friends. To
+We need to do the same for Wil Wheaton's 10 most popular friends. To
 simplify the process, we should write a function. 
 
 **Using** what you have done above, write the function:
@@ -398,20 +397,20 @@ user.to.edgelist <- function(user, friends) {
 }
 ```
 
-We can use the created function `user.to.edgelist` to create the edge list for Kevin Rudd:
+We can use the created function `user.to.edgelist` to create the edge list for Wil Wheaton:
 ```{r eval=FALSE}
-el.rudd = user.to.edgelist(user, friends)
+el.wil = user.to.edgelist(user, friends)
 ```
 We can also build the edge list for the top 10 friends using a loop:
 ```{r eval=FALSE}
 for (a in c(1:length(more.friends))) {
     el.friend = user.to.edgelist(top.unprotected.friends[[a]], more.friends[[a]])
-    el.rudd = rbind(el.rudd, el.friend) # append the new edge list to the old one.
+    el.wil = rbind(el.wil, el.friend) # append the new edge list to the old one.
 }
 ```
 Now that we have the edge list, we can create the graph:
 ```{r eval=FALSE}
-g = graph.edgelist(el.rudd)
+g = graph.edgelist(el.wil)
 ```
 Let's plot the graph. Since there are many vertices, we will reduce
 the vertex size and use a spacial plot layout:
