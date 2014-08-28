@@ -199,8 +199,8 @@ tweet.corpus = Corpus(VectorSource(tweets.df$text))
 then convert the characters to UTF8:
 
 ```{.r}
-tweet.corpus = tm_map(tweet.corpus, 
-	     function(x) iconv(enc2utf8(x), sub = "byte")) # for Windows
+tweet.corpus = tm_map(tweet.corpus,
+         function(x) iconv(x, to='UTF8', sub='byte')) # for Windows
 tweet.corpus = tm_map(tweet.corpus, 
 	     function(x) iconv(x, to='UTF-8-MAC', sub='byte')) # for OS X
 ```
@@ -244,8 +244,13 @@ where $f_{d,t}$ is the frequency of term $t$ in document $d$ (found at
 containing term $t$ (found using `sum(tweet.matrix[,t] > 0)`.
 
 To apply this document term weighting, we need to extract the term
-frequency matrix from the corpus object:
+frequency matrix from the corpus object.
 
+First we must make sure that the data is in Corpus data type:
+```{r eval=FALSE}
+tweet.corpus = tm_map(tweet.corpus, PlainTextDocument)
+```
+Then we can pass the corpus to DocumentTermMatrix, to create a document-term matrix:
 ```{.r}
 tweet.dtm = DocumentTermMatrix(tweet.corpus) # create the DocumentTermMatrix object
 tweet.matrix = inspect(tweet.dtm) # convert to a matrix
