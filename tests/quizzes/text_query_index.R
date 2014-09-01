@@ -51,12 +51,56 @@ questions = list(
     list(
       type =  'MC',
       known.parameters =  "",
-      question = 'The stem of the word "writing" is:',
+      question = 'The most likely stem of the word "writing" is:',
       choices = list(
             'writer',
             'write',
             'ing',
             'written'),
+      correct_answer = '2'
+    ),
+    list(
+      type =  'MC',
+      known.parameters =  "",
+      question = 'The most likely stem of the word "teacher" is:',
+      choices = list(
+            'teaching',
+            'taught',
+            'teach',
+            'learn'),
+      correct_answer = '3'
+    ),
+    list(
+      type =  'MC',
+      known.parameters =  "",
+      question = 'The most likely stem of the word "bounce" is:',
+      choices = list(
+            'bounce',
+            'bouncing',
+            'bouncer',
+            'boundary'),
+      correct_answer = '1'
+    ),
+    list(
+      type =  'MC',
+      known.parameters =  "",
+      question = 'Which of the following words is most likely to be a stop word:',
+      choices = list(
+            'early',
+            'morning',        
+            'after',
+            'noon'),
+      correct_answer = '3'
+    ),
+    list(
+      type =  'MC',
+      known.parameters =  "",
+      question = 'Which of the following words is most likely to be a stop word:',
+      choices = list(
+            'jane',
+            'is',        
+            'extremely',
+            'happy'),
       correct_answer = '2'
     ),
     list(
@@ -69,30 +113,58 @@ questions = list(
             'this',
             'every'),
       correct_answer = '2'
+    ),
+    list(
+      type =  'MC',
+      known.parameters =  "",
+      question = 'Which of the following words is least likely to be a stop word:',
+      choices = list(
+            'to',
+            'be',        
+            'a',
+            'rat'),
+      correct_answer = '4'
     )
 
 )
 
 
 
-yaml.out(questions[[1]], "x = 3; n = 50; p = 0.1")
-yaml.out(questions[[1]], "x = 1; n = 40; p = 0.2")
-yaml.out(questions[[1]], "x = 2; n = 70; p = 0.1")
-yaml.out(questions[[1]], "x = 4; n = 60; p = 0.2")
+yaml.out(questions[[1]], "x = 3; n = 40; p = 0.1")
+yaml.out(questions[[1]], "x = 1; n = 50; p = 0.2")
+yaml.out(questions[[1]], "x = 2; n = 60; p = 0.1")
+yaml.out(questions[[1]], "x = 4; n = 70; p = 0.2")
+yaml.out(questions[[1]], "x = 3; n = 50; p = 0.25")
+yaml.out(questions[[1]], "x = 1; n = 40; p = 0.3")
+yaml.out(questions[[1]], "x = 2; n = 70; p = 0.25")
+yaml.out(questions[[1]], "x = 4; n = 60; p = 0.3")
 
-yaml.out(questions[[2]], "fdt = 3; N = 80; ft = 2")
-yaml.out(questions[[2]], "fdt = 1; N = 60; ft = 4")
-yaml.out(questions[[2]], "fdt = 4; N = 50; ft = 5")
-yaml.out(questions[[2]], "fdt = 2; N = 70; ft = 3")
+yaml.out(questions[[2]], "fdt = 3; N = 90; ft = 2")
+yaml.out(questions[[2]], "fdt = 1; N = 50; ft = 4")
+yaml.out(questions[[2]], "fdt = 4; N = 60; ft = 5")
+yaml.out(questions[[2]], "fdt = 2; N = 80; ft = 3")
+yaml.out(questions[[2]], "fdt = 3; N = 80; ft = 6")
+yaml.out(questions[[2]], "fdt = 1; N = 60; ft = 7")
+yaml.out(questions[[2]], "fdt = 4; N = 50; ft = 8")
+yaml.out(questions[[2]], "fdt = 2; N = 70; ft = 9")
 
 yaml.out(questions[[3]], "q = c(0,1,1,0,0); d = rbind(c(0,0,2,1,1),c(1,1,1,0,0),c(1,0,0,5,1),c(0,1,0,0,1))")
 yaml.out(questions[[3]], "q = c(1,0,1,0,0); d = rbind(c(0,0,2,1,1),c(1,1,1,0,0),c(1,0,0,5,1),c(0,1,0,0,1))")
 yaml.out(questions[[3]], "q = c(0,0,1,1,0); d = rbind(c(0,0,2,1,1),c(1,1,1,0,0),c(1,0,0,5,1),c(0,1,0,0,1))")
 yaml.out(questions[[3]], "q = c(0,0,0,1,1); d = rbind(c(0,0,2,1,1),c(1,1,1,0,0),c(1,0,0,5,1),c(0,1,0,0,1))")
+yaml.out(questions[[3]], "q = c(1,1,0,0,0); d = rbind(c(0,0,2,1,1),c(1,1,1,0,0),c(1,0,0,5,1),c(0,1,0,0,1))")
+yaml.out(questions[[3]], "q = c(1,0,0,1,0); d = rbind(c(0,0,2,1,1),c(1,1,1,0,0),c(1,0,0,5,1),c(0,1,0,0,1))")
+yaml.out(questions[[3]], "q = c(0,0,0,0,1); d = rbind(c(0,0,2,1,1),c(1,1,1,0,0),c(1,0,0,5,1),c(0,1,0,0,1))")
+yaml.out(questions[[3]], "q = c(0,0,1,0,1); d = rbind(c(0,0,2,1,1),c(1,1,1,0,0),c(1,0,0,5,1),c(0,1,0,0,1))")
 
 yaml.out(questions[[4]])
 yaml.out(questions[[5]])
 yaml.out(questions[[6]])
 yaml.out(questions[[7]])
+yaml.out(questions[[8]])
+yaml.out(questions[[9]])
+yaml.out(questions[[10]])
+yaml.out(questions[[11]])
+yaml.out(questions[[12]])
 
 
