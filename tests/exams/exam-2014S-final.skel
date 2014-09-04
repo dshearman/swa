@@ -1,0 +1,95 @@
+% -*- Rnw -*-
+\documentclass{uwsexam}
+
+m4_include(`exam_question.pool.m4')
+
+
+% Set up class variables
+\testtitle{Final Examination}
+\unitsession{Spring Session 2014}
+\unitname{Social Web Analytics}
+\unitcode{300958}
+\testtime{2 hours includes reading time}
+\questioncount{8}
+\lecturername{Laurence Park, Glenn Stone}
+\studentinstructions{
+\begin{enumerate}
+\item Write your name and student number on the top of this exam paper
+  and on all answer booklets.
+\item All exams include reading time, which allows you to spend some
+  time at the start of the examination composing yourself, reading the
+  exam paper, and planning which questions to answer, and how. We
+  advise you to read the instructions and questions carefully, before
+  you begin writing. \textbf{However, you are allowed to begin writing
+    straight away if you wish}.
+\item This is an ``open book'' exam. Any written or printed material
+  may be brought into the exam.
+\item Scientific, non-programmable hand held calculators are
+  permitted.
+\item Answer all questions in the answer booklet provided.
+\item There are 56 marks available. The marks assigned to each problem
+  are presented at the top of the problem. All working must be shown
+  to gain full marks.
+\item All 8 questions must be answered to obtain full marks.
+\end{enumerate}}
+
+
+
+\begin{document}
+
+\coversheet
+
+% Set the precision of the results
+_precision(4)
+
+
+\question{Question 2}{2 + 2 + 2 + 2 = 8 marks}
+
+\begin{questions}[]
+  
+  _graphs_q3(<[ g = graph.formula(A-B, A-C, A-D, C-E, B-F) ]>)
+  
+\end{questions}
+
+
+\question{Question 4}{4 + 2 + 2 = 8 marks}
+
+\begin{questions}[]
+  
+  _clustering_q3(<[ 
+    X = t(matrix(c(0,0,0,1,2,0,2,2),2,4)); missing = c(3,4) ]>)
+
+  
+\end{questions}
+
+
+
+% \question{Question 5}{2 + 2 + 2 + 2 = 8 marks}
+
+% \begin{questions}[]
+  
+%   x_link_analysis_q1(<[
+%     g = graph.formula(A+-+B, A+-C, A+-D, A+-E, B+-C, D+-+E);
+%     non.station = c(0.49, 0.34, 0.10, 0.04, 0.03) ]>)
+  
+% \end{questions}
+
+
+% \question{Question 8}{2 + 3 + 1 = 6 marks}
+
+% \begin{questions}[]
+  
+%   x_sentiment_q1(<[
+%     positive = c("My teeth shine #funfun","#funfun love my teeth",
+%         "#funfun is fun fun");
+%     negative = c("No shine #funfun","No love fun fun",
+%         "Where is my teeth shine #funfun");
+%     test = "fun teeth shine"
+%     ]>)
+
+% \end{questions}
+
+
+\testend
+
+\end{document}

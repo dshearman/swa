@@ -1249,3 +1249,195 @@ m4_define(_link_analysis_q2,<[
   \end{workingbox}
 
 ]>)
+
+
+
+m4_define(_graphs_q3,<[
+
+  \squestion
+  
+  % begin.rcode echo=FALSE, results="hide", message=FALSE
+  require("igraph")
+  $@
+  #g = graph.formula(A-B, A-C, A-D, B-D)
+  d = degree(g)
+  close = 1/closeness(g)
+  n = length(d)
+  V(g)$color = "white"
+  V(g)$label.color = "black"
+  E(g)$color = "black"
+  names(d) = LETTERS[1:n]
+  % end.rcode 
+
+  The following graph shows ``Recommended Video'' links between the
+  top five Youtube videos.
+
+  \begin{center}
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
+    par(mar = c(0,0,0,0))
+    plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:n])
+    % end.rcode 
+  \end{center}
+
+  Using this graph:
+  \begin{enumerate}
+  \item Construct the adjacency matrix.
+  \item Tabulate the degree distribution and state if the graph is
+    more similar to a Erdös-Renyi graph or Barabasi-Albert graph.
+  \item Calculate the graph density.
+  \item Calculate the closeness centrality for each vertex.
+  \end{enumerate}
+  
+  \begin{workingbox}
+    \marknote{For each of these four questions, give 1 mark for the correct
+      working and 1 mark for the right answer.}
+    
+    \begin{enumerate}
+    \item The adjacency matrix is:
+      \begin{center}
+        \begin{minipage}{0.5\textwidth}
+          % begin.rcode echo=FALSE,results="verbatim", message=FALSE
+          print(as.matrix(get.adjacency(g)))
+          % end.rcode 
+        \end{minipage}
+        \xmark{1}
+      \end{center}
+
+      
+    \item The degree distribution is:
+      \begin{center}
+        \begin{minipage}{0.5\textwidth}
+          % begin.rcode echo=FALSE,results="verbatim"
+          table(factor(degree(g), c(0,1,2,3,4,5)))
+          % end.rcode 
+        \end{minipage}
+        \xmark{1}
+      \end{center}
+      If the distribution is similar to Poisson, the graph is a
+      Erdös-Renyi graph. If the distribution is similar to
+      Exponential, the graph is a Barabasi-Albert graph.
+
+    \item The graph density is \rinline{graph.density(g)}.
+      
+    \item The closeness centrality for each vertex is:
+      \begin{center}
+        \begin{tabular}{\rinline{paste(rep('c',n),collapse='')}}
+          \rinline{paste(names(d),collapse=" & ")} \\
+          \rinline{paste(close,collapse=" & ")}
+        \end{tabular}
+      \xmark{2}
+      \end{center}
+
+      
+    \item The most central vertex is vertex \rinline{names(which(close == min(close)))}.
+      \xmark{1}
+      
+    \end{enumerate}
+    
+  \end{workingbox}
+]>)
+
+
+
+m4_define(_clustering_q3,<[
+  
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide", message=FALSE
+  
+  set.seed(1)
+  $@
+
+  d = dist(X)
+  D = as.matrix(d)
+  D.missing = D
+  z = D[missing[1],missing[2]]
+  D.missing[missing[1],missing[2]] = NA
+  D.missing[missing[2],missing[1]] = NA
+  h = hclust(d, method="complete")
+  min.dist = function(D) {
+    a = dim(D)[1]
+    row = which.min(apply(D + diag(rep(10,a)), 2, min))
+    col = apply(D + diag(rep(10,a)), 2, which.min)[row]
+    return(c(row,col))
+  }
+  
+  merge.rows = function(D, pos) {
+    a = D[pos[2],,drop=FALSE]
+    A = D[-pos[2],,drop=FALSE]
+    A[pos[1],] = apply(rbind(A[pos[1],,drop=FALSE],a),2,max)
+    return(A)
+  }
+  
+  merge.row.col = function(D, pos) {
+   pos = sort(pos)
+   Dt = merge.rows(D,pos)
+   E = merge.rows(t(Dt),pos)
+   mname = paste(colnames(D)[pos[1]],"-",colnames(D)[pos[2]], sep="")
+   colnames(E)[pos[1]] = mname
+   rownames(E)[pos[1]] = mname
+   return(E)
+  }
+  % end.rcode 
+
+  Show the data
+  and the distance matrix
+  
+  Cluster the data using complete linkage clustering and plot the dendrogram.
+
+  The data set:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(X)
+  % end.rcode 
+  The distances:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(D.missing)
+  % end.rcode 
+  
+  Plot the dendrogram of the given data using 
+  
+  \begin{enumerate}
+  \item Which metric was used to compute the distances?
+  \item Compute the missing distance.
+  \item Calculate the three distance matrices, showing the distance
+    between 3 clusters, 2 clusters and 1 cluster, using complete
+    linkage clustering.
+  \item Plot the dendrogram of the hierarchical clustering.
+  \end{enumerate}
+  
+  \begin{workingbox}
+    
+    \begin{enumerate}
+    \item Euclidean distance was used.
+    \item The missing distance is \rinline{z}.
+    \item The set of distance matrices are:
+    % begin.rcode echo=FALSE,results="verbatim"
+    E = D
+    p = min.dist(E)
+    E = merge.row.col(E, p)
+    print("Three clusters")
+    print(E)
+    p = min.dist(E)
+    E = merge.row.col(E, p)
+    print("Two clusters")
+    print(E)
+    p = min.dist(E)
+    E = merge.row.col(E, p)
+    print("One cluster")
+    print(E)
+    % end.rcode 
+    Note that the value of the numbers along the diagonal of each
+    matrix are not important, since we do not compare clusters to themselves.
+    \end{enumerate}
+    \item The dendrogram:
+    \begin{center}
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=3, fig.height=3
+    plot(h)
+    % end.rcode 
+    Take note of the clusters formed and the height of the vertical lines.
+    \end{center}
+      
+
+  
+  \end{workingbox}
+]>)
