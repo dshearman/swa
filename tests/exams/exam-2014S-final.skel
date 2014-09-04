@@ -75,8 +75,10 @@ _precision(4)
 % \end{questions}
 
 
-% \question{Question 8}{2 + 3 + 1 = 6 marks}
+  \question{Question 8}{2 + 3 + 1 = 6 marks}
 
+  Nearest neighbour using l1 metric
+  Evalutate ROC?
 % \begin{questions}[]
   
 %   x_sentiment_q1(<[
@@ -87,7 +89,7 @@ _precision(4)
 %     test = "fun teeth shine"
 %     ]>)
 
-% \end{questions}
+  \end{questions}
 
 
 \testend
