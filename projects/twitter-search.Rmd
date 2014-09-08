@@ -1,6 +1,6 @@
 % Group Project Specification
 % 300958 Social Web Analytics
-% Due Date: Friday of Week 12
+% Due Date: Friday of Week 13
 
 # Aim
 
@@ -33,7 +33,7 @@ To complete this project:
 
 # Group Size and Organisation
 
-Students in groups of size 1, 2, or 3 are to work together to complete
+Students in groups of size 2, 3 or 4 are to work together to complete
 this project.  One project report is to be submitted per group.
 
 The group must be formed by signing-up to a group within the Project
@@ -71,44 +71,49 @@ from the analysis in the report.
 
 # Marks
 
+## Marks
+
 This project is worth 30% of your final grade, and so the project will
-be marked out of 30.
+be marked out of 30. The project consists of six investigations where
+each investigation contributes equally to your final mark.
 
-When marking the reports, the assessors will adhere to the following
-marking criteria:
+There are six parts to the project, each will be marked using the
+following criteria:
 
----------------------------------------------------------------------
- Mark Criteria
------ ---------------------------------------------------------------
-   NA Report Not Submitted. Equivalent to 0 when computing final mark.
+--------------------------------------------------------------------------
+Marks  Criteria Satisfied
+-----  -------------------------------------------------------------------
+0      The method does not lead to insightful analysis.
 
-    0 Report submitted, but incomprehensible.
+1      The method provides the reader with some understanding of the data.
 
-  1-5 Report contains analysis, but not related to that requested by
-      the specification.
+2      The correct method leads to partially correct results and analysis.
 
- 6-10 Report contains some of the analysis requested by the
-      specification.
+3      The correct method leads to correct results and analysis.
 
-11-15 Report contains most of the analysis requested by the
-      specification.
+4      The correct method leads to correct results and analysis, with an insightful aim and conclusion.
+--------------------------------------------------------------------------
 
-16-20 Report contains all of the analysis requested by the
-      specification.
+Also, the overall quality of the report will be marked using the
+following criteria:
 
-21-25 Report contains all of the analysis requested by the
-      specification, with reasonable explanations of why the chosen
-      analysis was performed.
+--------------------------------------------------------------------------
+Marks  Criteria Satisfied
+-----  -------------------------------------------------------------------
+0      The report is poorly formatted and has little structure.
 
-26-30 Report contains all of the analysis requested by the
-      specification, with reasonable explanations of why the chosen
-      analysis was performed.  Further useful investigation was also
-      performed that reduced any uncertainty in the previous analysis.
----------------------------------------------------------------------
+1      The report is structured to allow the reader to identify each problem.
 
-A mark within the provided range is given based on the quality and
-presentation of the information in the report.
+2      The report is clearly structured and formatted.
 
+3-4    The report is clearly structured and formatted, and correct grammar and
+        mathematical notation is used.
+
+5-6    The report has the look of a professional report (clearly structured
+        and formatted, correct grammar and mathematical notation, and the report is
+        written so that is flows from start to end, not as a series of four
+        disjoint problems).
+--------------------------------------------------------------------------
 
 If a report is submitted late, the maximum mark it can achieve will be
 reduced by 10% (3 marks) per day. E.g., if a report is submitted five
@@ -150,6 +155,8 @@ By including this statement, we the authors of this work, verify that:
   cover of the report.**
 
 * * * * * * *
+
+# Project Description
 
 Twitter is investigating a new method of presenting search results to
 users.  A new method was proposed, but unfortunately, the employee who

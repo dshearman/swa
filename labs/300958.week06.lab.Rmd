@@ -227,7 +227,7 @@ user.
 
 Load the twitteR library:
 ```{r}
-library("igraph")
+library("twitteR")
 ```
 and register your application with Twitter using the process from 
 [Lab 5](300958.week05.lab.html)

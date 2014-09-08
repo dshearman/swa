@@ -23,3 +23,6 @@ YAMLTOCSV := python ./yamltocsv.py
 %.csv: %.yaml
 	${YAMLTOCSV} $< > $*.csv
 
+%.txt: %.yaml
+	${YAMLTOCSV} $< > $*.txt
+
