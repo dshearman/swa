@@ -1733,3 +1733,137 @@ m4_define(_text_index_q2,<[
     
   \end{workingbox}
 ]>)
+
+
+
+m4_define(_SimpleExposure_q2,<[
+\squestion
+
+% begin.rcode echo=FALSE, results="hide", message=FALSE
+
+$@
+
+
+set.seed(SEED)
+
+X = rbind(
+t(rmultinom(1, 38, pA)),
+t(rmultinom(1, 25, pB)),
+t(rmultinom(1, 2, pC)))
+
+
+page = paste("Page", LETTERS[1:3])
+dimnames(X) = list(continent, page)
+Y = cbind(X, Total = rowSums(X))
+Y = rbind(Y, Total=colSums(Y))
+Z = X[c(1,2),]
+Z[2,] = Z[2,] + X[3,]
+rownames(Z)[2] = paste(rownames(X)[2],rownames(X)[3], sep=" - ")
+
+E = (rowSums(Z) %o% colSums(Z))/sum(Z)
+
+x = sum((Z - E)^2/E)
+df = (nrow(Z) - 1)*(ncol(Z) - 1)
+% end.rcode
+
+
+
+Omnibiz provide information using five different languages on all of
+their Web pages. Data was gathered to identify if there was a
+relationship between a customers continent of origin and the first
+page they have ``liked''.
+\begin{center}
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(Y)
+  % end.rcode
+\end{center}
+
+\begin{enumerate}
+\item Identify one problem with using a $\chi^2$ (Chi-squared) test
+  with this data.
+\item Transform the table so that it is appropriate for a $\chi^2$ test.
+\item Find expected counts for each entry in the reduced table
+  assuming gender and age group are independent.
+\item Calculate a $\chi^2$ statistic for testing whether the age
+  profile varies by gender, and state its degrees of freedom.
+\item Does the test statistic provide evidence that the page likes are
+  related to the continent of origin? Explain your answer.
+\end{enumerate}
+
+  \begin{workingbox}
+    \begin{enumerate}
+    \item The $\chi^2$ test requires that all cells are 5 or
+      more. This table contain cells with values less than 5. \xmark{1}
+    \item To transform the data, we merge the last two rows:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(Z)
+      % end.rcode 
+      \xmark{2}
+    \item The expected counts are:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(E)
+      % end.rcode 
+      \xmark{2}
+    \item The test statistic is $\chi^2 = \rinline{x}$ with df = \rinline{df}.
+      \xmark{2}
+    \item If the test statistic small, there is no evidence of a
+      relationship between continent and first like. \xmark{1}
+    \end{enumerate}
+  \end{workingbox}
+
+
+]>)
+
+
+
+m4_define(_BACI_q2,<[
+\squestion
+
+A major bank is about that to start an
+advertising campaign. Before doing so 
+it decides to collect information about mentions
+on Twitter to measure the impact of the campaign. 
+Using a search the company collects the number of
+mentions of their product for 3 randomly chosen days before the
+campaign and 3 randomly chosen days shortly
+after the campaign begins. They also collect the number of mentions for
+their main competitor on the same number of days before and after
+the campaign. The data are in the left table below. The right table contains the
+sums of the square roots of the data.
+
+
+\begin{center}
+% begin.rcode echo=FALSE, results="asis"
+require(xtable, quietly=TRUE)
+mu = c(100, 130, 70, 70)
+n =3
+X = factor(rep(c("Company","Competitor"), 2*c(n,n)))
+Z = factor(rep(rep(c("Before","After"), c(n,n)),2), levels=c("Before","After"))
+$@
+set.seed(SEED)
+Y = rpois(4*n, rep(mu, rep(n,4)))
+
+tab=tapply(Y, list(X,Z), FUN=paste, collapse=",")
+print(xtable(tab, align="|l|c|c|"), floating=FALSE, hline.after=c(-1,0,1,2))
+
+cat("\\hspace{1cm}")
+xtab = xtabs(sqrt(Y)~X+Z)
+print(xtable(xtab, align="|l|r|r|", digits=2), floating=FALSE, hline.after=c(-1,0,1,2))
+RSS = sum(aov(sqrt(Y)~X*Z)$residuals^2)
+% end.rcode
+\end{center}
+
+\begin{enumerate}
+\item Explain why using a square root transformation is advisable for
+  count data.
+\item Calculate the \emph{contrast} for the interaction between
+  company and time.
+\item Calculate the \emph{Sum of Squares} for the interaction between
+  company and time.
+\item Given that the sum of squares for error is \rinline{round(RSS,3)}, find the
+  $F$-statistic for the interaction between
+  company and time, and state its degrees of freedom.
+\end{enumerate}
+
+
+]>)

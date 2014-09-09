@@ -98,6 +98,22 @@ _precision(4)
     ]>)
 
   \end{questions}
-\testend
+
+  \question{Question 8}{2 + 3 + 1 = 6 marks}
+  
+  \begin{questions}[]
+  
+    _SimpleExposure_q2(<[
+    SEED = 12345
+    pA = c(0.2,0.3,0.5);
+    pB = c(0.3,0.3,0.4);
+    pC = c(0.3,0.5,0.2);
+    continent = c("Australia", "Asia", "Antarctica")
+    ]>)
+
+  \end{questions}
+
+  
+  \testend
 
 \end{document}
