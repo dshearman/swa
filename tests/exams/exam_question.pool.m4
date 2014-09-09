@@ -1348,6 +1348,7 @@ m4_define(_clustering_q3,<[
   set.seed(1)
   $@
 
+  rownames(X) = LETTERS[1:nrow(X)]
   d = dist(X)
   D = as.matrix(d)
   D.missing = D
@@ -1380,22 +1381,18 @@ m4_define(_clustering_q3,<[
   }
   % end.rcode 
 
-  Show the data
-  and the distance matrix
   
-  Cluster the data using complete linkage clustering and plot the dendrogram.
-
-  The data set:
+  While attempting to cluster a set of user profile data, our laptop
+  battery discharged, leaving us with an incomplete distance matrix.
+  
+  The user profile data from $\rinline{nrow(X)}$ users is given below:
   % begin.rcode echo=FALSE,results="verbatim"
   print(X)
   % end.rcode 
-  The distances:
+  The incomplete distance matrix is:
   % begin.rcode echo=FALSE,results="verbatim"
   print(D.missing)
   % end.rcode 
-  
-  Plot the dendrogram of the given data using 
-  
   \begin{enumerate}
   \item Which metric was used to compute the distances?
   \item Compute the missing distance.
@@ -1440,4 +1437,197 @@ m4_define(_clustering_q3,<[
 
   
   \end{workingbox}
+]>)
+
+
+
+
+m4_define(_sentiment_q3,<[
+  
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide", message=FALSE
+  
+  $@
+
+  D = as.matrix(dist(X))
+  l = rep("negative",n)
+  l[positive] = "positive"
+  names(l) = c(1:n)
+  classify = c(5,6,7)
+  l.removed = l
+  l.removed[classify] = "-"
+  classified = (1:n)[-classify]
+  
+  knn = function(x, D, l, k) {
+    names(which.max(table(l[as.numeric(names(sort(D[x,])[1:k]))])))
+  }
+
+  k1.class = sapply(5:7, knn, D[,classified], l, k1)
+  k2.class = sapply(5:7, knn, D[,classified], l, k2)
+  
+  eval = function(k.class, pn.class) {
+    mean(k.class[which(l[classify] == pn.class)] == pn.class)
+  }
+  k1p = eval(k1.class,"positive")
+  k2p = eval(k2.class,"positive")
+  k1n = eval(k1.class,"negative")
+  k2n = eval(k2.class,"negative")
+  
+  % end.rcode 
+
+    
+  
+  The text in a set of \rinline{nrow(X)} Web pages was compared using a distance metric
+  and the following distance table was obtained.
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(D)
+  % end.rcode 
+  A user study provided the sentiment class for the following Web pages:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(l.removed)
+  % end.rcode 
+  \begin{enumerate}
+  \item Use the $k$ nearest neighbour classifier
+    to classify the sentiment of Web pages that are
+    missing classification (Web pages \rinline{classify}). Provide two
+    classifications for each Web page, the first where
+    $k = \rinline{k1}$ and the second where $k = \rinline{k2}$.
+  \item Given that the true class of Web pages \rinline{classify} is 
+    \rinline{l[classify]}), plot the Receiver operating characteristic
+    for $k = \rinline{k1}$ and $k = \rinline{k2}$. Make sure to
+    clearly label the plot.
+  \item From these results, which of using $k = \rinline{k1}$ or $k =
+    \rinline{k2}$ is more similar to random guessing?
+  \end{enumerate}
+  
+  \begin{workingbox}
+    
+    \begin{enumerate}
+    \item The classification of pages \rinline{classify} for $k =
+      \rinline{k1}$ is \rinline{k1.class}         \xmark{2}
+    \item The classification of pages \rinline{classify} for $k =
+      \rinline{k2}$ is \rinline{k2.class}        \xmark{2}
+    \item To plot the Receiver operating characteristic, we first
+      compute the sensitivity and specificity.
+      \begin{itemize}
+      \item For $k \rinline{k1}$: Sensitivity =
+        \rinline{k1p}, Specificity = \rinline{k1n}
+      \item For $k \rinline{k2}$: Sensitivity =
+        \rinline{k2p}, Specificity = \rinline{k2n}
+      \end{itemize} \xmark{2}
+      \begin{center}
+        % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
+        x = c(0,1)
+        #par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+        plot(1-k1n,k1p, type="p", xlim=x, ylim=x, xlab="1 - Specificity", ylab = "Sensitivity", pch=1)
+        points(1-k2n,k2p, pch=2)
+        legend("bottomright", c(paste("k =", k1), paste("k =", k2)), pch=1:2)
+        % end.rcode 
+      \end{center}\xmark{1}
+      \item The method that is closest to the diagonal is more similar
+        to random guessing. \xmark{1}
+    \end{enumerate}
+    
+  \end{workingbox}
+]>)
+
+
+m4_define(_link_analysis_q3,<[
+
+  %%%% Mean, standard deviation, mode, median, quantiles
+
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide"
+  require("igraph")
+  require("xtable", quietly=TRUE)
+
+  $@
+
+  
+  V(g)$color = "white"
+  V(g)$label.color = "black"
+  E(g)$color = "black"
+  alpha = 0.8
+  A = t(as.matrix(get.adjacency(g)))
+  T = A %*% diag(1/apply(A,2,sum))
+  N = dim(A)[1]
+  J = matrix(rep(1/N, N*N), N, N)
+  R = alpha*T + (1-alpha)*J
+  e = eigen(R)
+  pos = which(abs(e$values - 1) < 1e-8)
+  ud = degree(as.undirected(g))
+  station = ud/sum(ud)
+  begin.dist = rep(0,N)
+  begin.dist[1] = 1
+  
+  % end.rcode 
+  
+
+  The following directed graph shows the links between the top
+  \rinline{N} contributors to Stack Overflow.
+  \begin{center}
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
+    par(mar = c(0,0,0,0))
+    plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:N])
+    % end.rcode 
+  \end{center}
+  
+  \begin{enumerate}
+  \item Contruct the probability transition matrix.
+  \item State if the graph is ergodic and why or why not.
+  \item Compute the stationary distribution of the undirected form of
+    the graph (ignore the direction on the edges).
+  \item Show that the stationary distribution computed for the
+    undirected graph is or is not the stationary distribution for the
+    directed graph.
+  \end{enumerate}
+  
+  \begin{workingbox}
+    
+    \begin{enumerate}
+    \item The probability transition matrix is:
+      \begin{center}
+        \begin{minipage}{0.5\textwidth}
+          % begin.rcode echo=FALSE,results="verbatim"
+          print(T)
+          % end.rcode 
+        \end{minipage}
+        \xmark{2}
+      \end{center}
+    \item The graph is ergodic if there is a path from all vertices to
+      all other vertices. This student should report if all paths
+      exist, and if not, where a path does not exist. \xmark{2}
+      
+    \item The probability of each vertex in the stationary
+      distribution of an undirected graph is proportional to the
+      number of edges connected to the vertex. 
+      The degree of each vertex is:
+      \begin{align*}
+        \vec{p} = [~\rinline{paste(format(ud), collapse="~")}~]
+      \end{align*}
+      Therefore the
+      stationary distribution is:
+      \begin{align*}
+        \vec{p} = [~\rinline{paste(format(station), collapse="~")}~]
+      \end{align*}
+      \xmark{2}
+    \item The stationary distribution of the directed graph satisfies 
+      $\vec{p} = T\vec{p}$. By multiplying the transition matrix and
+      the undirected stationary distribution, we obtain:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(T %*% station)
+      % end.rcode 
+      If this is similar to the undirected stationary distribution,
+      then the undirected stationary distribution is also the
+      stationary distribution for the directed graph. Otherwise it is
+      not.
+      \xmark{2}
+    \end{enumerate}
+    
+    
+  
+  \end{workingbox}
+
 ]>)
