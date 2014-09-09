@@ -1631,3 +1631,105 @@ m4_define(_link_analysis_q3,<[
   \end{workingbox}
 
 ]>)
+
+
+
+
+m4_define(_text_index_q2,<[
+
+  %%%% construct text index, weight and query
+  
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide", message=FALSE
+  $@
+
+
+  rownames(A) = paste("D",1:nrow(A), sep="")
+  colnames(A) = paste("T",1:ncol(A), sep="")
+  
+  IDF = log(nrow(A)/apply(A > 0,2,sum))
+  TF = log(A + 1)
+  TF.IDF = TF %*% diag(IDF)
+
+
+  qv = as.numeric(colnames(A) %in% query)
+  d.norm = sqrt(apply(TF.IDF^2,1,sum))
+  q.norm = sqrt(sum(qv^2))
+  ds = (TF.IDF %*% qv)/(d.norm * q.norm)
+  
+  % end.rcode 
+
+  Using the three documents:
+  
+  A set of similar tweets (\rinline{rownames(A)} containing the terms
+  \rinline{colnames(A)}) has been preprocessed and converted into the
+  following term frequency index:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(A)
+  % end.rcode 
+
+    
+  \begin{enumerate}
+
+  \item Provide one reason for and one reason against using stop
+    word when preprocessing text for search engine.
+    
+  \item Compute the TF-IDF weight of each item in the term frequency index.
+    
+  \item Use cosine similarity to compute the set of document scores
+    for the query containing the terms ``\rinline{query}'', and rank
+    the documents by their relevance to the query.
+    
+  \item Cosine similarity consists of an inner product of the document
+    and query vectors, divided by the norm of the document and query
+    vectors. Is it necessary to divide by the document
+    vector norm and the query vector norm? Explain your reasoning.
+
+  \end{enumerate}
+  
+  \begin{workingbox}
+    \begin{enumerate}
+    \item Reason for: removing words make the search process more
+      efficient. Reason against: some stop words may be important
+      query terms, depending on the text collection.       \xmark{2}
+    \item The TF weights are:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(TF)
+      % end.rcode 
+      The IDF weights are:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(IDF)
+      % end.rcode 
+      giving the weighted term frequencies:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(TF.IDF)
+      % end.rcode 
+      \xmark{2}
+    \item The norm of each document vector is:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(d.norm)
+      % end.rcode 
+      The norm of the query vector is:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(q.norm)
+      % end.rcode 
+      Therefore the documents scores are:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(ds)
+      % end.rcode 
+      giving the document ranking \rinline{rownames(A)[rank(-ds)]}.
+      \xmark{2}
+    \item Dividing by the document norm removes the effect of the
+      document length (meaning a document wont get a high score just
+      because it is long) and so is required. Dividing by the query
+      norm does the same for the query and so is constant for all
+      document scores, but since we are interested in the rank and not
+      the scores, dividing by the query norm has no effect on the rank,
+      and so is not needed.
+      \xmark{2}
+    \end{enumerate}
+    
+    
+  \end{workingbox}
+]>)
