@@ -1452,6 +1452,9 @@ m4_define(_sentiment_q3,<[
   $@
 
   D = as.matrix(dist(X))
+  #rownames(D) = paste("Page", 1:n)
+  #colnames(D) = paste("Page", 1:n)
+  
   l = rep("negative",n)
   l[positive] = "positive"
   names(l) = c(1:n)
@@ -1490,10 +1493,10 @@ m4_define(_sentiment_q3,<[
   \item Use the $k$ nearest neighbour classifier
     to classify the sentiment of Web pages that are
     missing classification (Web pages \rinline{classify}). Provide two
-    classifications for each Web page, the first where
+    classifications for each unclassified Web page, the first where
     $k = \rinline{k1}$ and the second where $k = \rinline{k2}$.
   \item Given that the true class of Web pages \rinline{classify} is 
-    \rinline{l[classify]}), plot the Receiver operating characteristic
+    \rinline{l[classify]}, plot the Receiver operating characteristic
     for $k = \rinline{k1}$ and $k = \rinline{k2}$. Make sure to
     clearly label the plot.
   \item From these results, which of using $k = \rinline{k1}$ or $k =
@@ -1575,7 +1578,7 @@ m4_define(_link_analysis_q3,<[
   
   \begin{enumerate}
   \item Contruct the probability transition matrix.
-  \item State if the graph is ergodic and why or why not.
+  \item State if the graph is ergodic and describe why or why not.
   \item If we ignore the direction of the edges, we obtain an
     undirected graph. Compute the stationary distribution of this
     undirected graph.
@@ -1671,7 +1674,7 @@ m4_define(_text_index_q2,<[
   \begin{enumerate}
 
   \item Provide one reason for and one reason against using stop
-    word when preprocessing text for search engine.
+    word removal when preprocessing text for a search engine.
     
   \item Compute the TF-IDF weight of each item in the term frequency index.
     
@@ -1681,8 +1684,8 @@ m4_define(_text_index_q2,<[
     
   \item Cosine similarity consists of an inner product of the document
     and query vectors, divided by the norm of the document and query
-    vectors. Is it necessary to divide by the document
-    vector norm and the query vector norm? Explain your reasoning.
+    vectors.  Is this division by the document vector norm and the
+    query vector norm necessary when ranking documents? Explain your reasoning.
 
   \end{enumerate}
   
@@ -1716,7 +1719,8 @@ m4_define(_text_index_q2,<[
       % begin.rcode echo=FALSE,results="verbatim"
       print(ds)
       % end.rcode 
-      giving the document ranking \rinline{rownames(A)[rank(-ds)]}.
+      giving the document ranking
+      \rinline{rownames(A)[rank(-ds, ties.method = c("first"))]}.
       \xmark{2}
     \item Dividing by the document norm removes the effect of the
       document length (meaning a document wont get a high score just
@@ -1880,8 +1884,6 @@ successive days are given below, grouped into three successive time periods.
 
 \begin{center}
 % begin.rcode echo=FALSE, results="asis"
-s = c(50,70,40)
-trend = seq(30, 60, length=9)
 
 $@
 #set.seed(56235)
