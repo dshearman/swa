@@ -1395,7 +1395,7 @@ m4_define(_clustering_q3,<[
   % end.rcode 
   \begin{enumerate}
   \item Which metric was used to compute the distances?
-  \item Compute the missing distance.
+  \item Compute the missing distance (marked ``NA'').
   \item Calculate the three distance matrices, showing the distance
     between 3 clusters, 2 clusters and 1 cluster, using complete
     linkage clustering.
@@ -1476,8 +1476,6 @@ m4_define(_sentiment_q3,<[
   
   % end.rcode 
 
-    
-  
   The text in a set of \rinline{nrow(X)} Web pages was compared using a distance metric
   and the following distance table was obtained.
   % begin.rcode echo=FALSE,results="verbatim"
@@ -1485,7 +1483,7 @@ m4_define(_sentiment_q3,<[
   % end.rcode 
   A user study provided the sentiment class for the following Web pages:
   % begin.rcode echo=FALSE,results="verbatim"
-  print(l.removed)
+  print(l.removed[-classify])
   % end.rcode 
   \begin{enumerate}
   \item Use the $k$ nearest neighbour classifier
@@ -1498,7 +1496,7 @@ m4_define(_sentiment_q3,<[
     for $k = \rinline{k1}$ and $k = \rinline{k2}$. Make sure to
     clearly label the plot.
   \item From these results, which of using $k = \rinline{k1}$ or $k =
-    \rinline{k2}$ is more similar to random guessing?
+    \rinline{k2}$ is more similar to random guessing? Explain your reasoning.
   \end{enumerate}
   
   \begin{workingbox}
@@ -1577,11 +1575,12 @@ m4_define(_link_analysis_q3,<[
   \begin{enumerate}
   \item Contruct the probability transition matrix.
   \item State if the graph is ergodic and why or why not.
-  \item Compute the stationary distribution of the undirected form of
-    the graph (ignore the direction on the edges).
-  \item Show that the stationary distribution computed for the
-    undirected graph is or is not the stationary distribution for the
-    directed graph.
+  \item If we ignore the direction of the edges, we obtain an
+    undirected graph. Compute the stationary distribution of this
+    undirected graph.
+  \item Is the stationary distribution for the undirected graph the
+    same as the stationary distribution for the directed graph? Give
+    evidence for your answer.
   \end{enumerate}
   
   \begin{workingbox}
@@ -1660,8 +1659,6 @@ m4_define(_text_index_q2,<[
   
   % end.rcode 
 
-  Using the three documents:
-  
   A set of similar tweets (\rinline{rownames(A)} containing the terms
   \rinline{colnames(A)}) has been preprocessed and converted into the
   following term frequency index:
@@ -1770,7 +1767,7 @@ df = (nrow(Z) - 1)*(ncol(Z) - 1)
 
 Omnibiz provide information using five different languages on all of
 their Web pages. Data was gathered to identify if there was a
-relationship between a customers continent of origin and the first
+relationship between a customers city of origin and the first
 page they have ``liked''.
 \begin{center}
   % begin.rcode echo=FALSE,results="verbatim"
@@ -1783,11 +1780,11 @@ page they have ``liked''.
   with this data.
 \item Transform the table so that it is appropriate for a $\chi^2$ test.
 \item Find expected counts for each entry in the reduced table
-  assuming gender and age group are independent.
-\item Calculate a $\chi^2$ statistic for testing whether the age
-  profile varies by gender, and state its degrees of freedom.
+  assuming city of origin and Web page are independent.
+\item Calculate a $\chi^2$ statistic for testing whether the city of origin
+  varies by Web page, and state its degrees of freedom.
 \item Does the test statistic provide evidence that the page likes are
-  related to the continent of origin? Explain your answer.
+  related to the city of origin? Explain your answer.
 \end{enumerate}
 
   \begin{workingbox}
@@ -1819,27 +1816,25 @@ page they have ``liked''.
 m4_define(_BACI_q2,<[
 \squestion
 
-A major bank is about that to start an
-advertising campaign. Before doing so 
-it decides to collect information about mentions
-on Twitter to measure the impact of the campaign. 
-Using a search the company collects the number of
-mentions of their product for 3 randomly chosen days before the
-campaign and 3 randomly chosen days shortly
-after the campaign begins. They also collect the number of mentions for
-their main competitor on the same number of days before and after
-the campaign. The data are in the left table below. The right table contains the
-sums of the square roots of the data.
-
+Youtube are planning on inserting commercial breaks in popular videos
+that run for more than 10 minutes, but are concerned about the effect
+it will have on its viewers. To gauge the effect of adding commercial
+breaks, the number of views of the video ``Cats falling'' was recorded for
+three days before and three day after inserting commercials. The number of
+views was also collected on the same days for the video ``Cats
+smiling'', which had no commercials inserted.  The data are in the
+left table below. The right table contains the sums of the square
+roots of the data.
 
 \begin{center}
 % begin.rcode echo=FALSE, results="asis"
 require(xtable, quietly=TRUE)
-mu = c(100, 130, 70, 70)
-n =3
-X = factor(rep(c("Company","Competitor"), 2*c(n,n)))
-Z = factor(rep(rep(c("Before","After"), c(n,n)),2), levels=c("Before","After"))
+
 $@
+
+X = factor(rep(c("Cats falling","Cats smiling"), 2*c(n,n)))
+Z = factor(rep(rep(c("Before","After"), c(n,n)),2), levels=c("Before","After"))
+
 set.seed(SEED)
 Y = rpois(4*n, rep(mu, rep(n,4)))
 
@@ -1857,13 +1852,81 @@ RSS = sum(aov(sqrt(Y)~X*Z)$residuals^2)
 \item Explain why using a square root transformation is advisable for
   count data.
 \item Calculate the \emph{contrast} for the interaction between
-  company and time.
+  the views of the video ``Cats falling'' and time.
 \item Calculate the \emph{Sum of Squares} for the interaction between
-  company and time.
-\item Given that the sum of squares for error is \rinline{round(RSS,3)}, find the
-  $F$-statistic for the interaction between
-  company and time, and state its degrees of freedom.
+   the views of the video ``Cats falling'' and time.
+ \item Given that the sum of squares for error is
+   \rinline{round(RSS,3)}, find the $F$-statistic for the interaction
+   between the views of the video ``Cats falling'' and time, and state
+   its degrees of freedom.
 \end{enumerate}
 
 
+]>)
+
+
+
+
+
+m4_define(_Trend_q2,<[
+\squestion
+
+
+Facebook want to dynamically allocate bandwidth to provide users with
+a guaranteed quality of service, therefore they need to examine how
+usage fluctuates through the day. The counts of user access over three
+successive days are given below, grouped into three successive time periods.
+
+\begin{center}
+% begin.rcode echo=FALSE, results="asis"
+s = c(50,70,40)
+trend = seq(30, 60, length=9)
+
+$@
+#set.seed(56235)
+set.seed(SEED)
+xx = rpois(length(trend), trend + s)
+tmp = matrix(xx, ncol=3, byrow=TRUE)
+dimnames(tmp) = list(paste("Day",1:3), paste("Period", 1:3))
+print(xtable(tmp), floating=FALSE)
+% end.rcode
+\end{center}
+
+To examine the fluctuation for each day, we break the data into its
+trend and periodic components, after a square root transformation. The
+tables below shows the estimated moving average trend, and periodic
+components.
+
+\begin{center}
+{\bf Trend}\\[1ex]
+% begin.rcode echo=FALSE, results="asis"
+d = decompose(ts(sqrt(xx), freq=3))
+et = as.numeric(d$trend)
+etc = formatC(et, format="f", digits=2)
+etc[etc==" NA"] = ""
+tmp = matrix(etc, ncol=3, byrow=TRUE)
+dimnames(tmp) = list(paste("Day",1:3), paste("Period", 1:3))
+
+tmp[2,2] = missing.symbol
+print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
+% end.rcode
+
+{\bf Periodic}\\[1ex]
+% begin.rcode echo=FALSE, results="asis"
+ss = d$figure
+ssc = formatC(ss, format="f", digits=3)
+tmp = matrix(ssc, ncol=3, byrow=TRUE)
+dimnames(tmp) = list("Periodic", paste("Period", 1:3))
+
+tmp[1,2] = missing.symbol
+print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
+% end.rcode
+\end{center}
+
+\begin{enumerate}
+\item Compute the missing trend component marked with a \rinline{missing.symbol}.
+\item Compute the missing periodic component marked with a \rinline{missing.symbol}.
+\item Which period would you recommend allocating the most network
+  bandwidth to? Explain your answer.
+\end{enumerate}
 ]>)

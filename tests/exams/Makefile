@@ -32,4 +32,6 @@ bib:
 	 --section-divs --slide-level=2 -s -c ${STYLESHEET} -f markdown -t html \
 	$< -o $*.html
 
+.PRECIOUS: %.tex
+
 FORCE:

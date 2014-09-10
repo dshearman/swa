@@ -43,7 +43,7 @@ m4_include(`exam_question.pool.m4')
 _precision(4)
 
 
-\question{Question 2}{2 + 2 + 2 + 2 = 8 marks}
+\question{Question 1}{2 + 2 + 2 + 2 = 8 marks}
 
 \begin{questions}[]
   
@@ -52,7 +52,7 @@ _precision(4)
 \end{questions}
 
 
-\question{Question 4}{4 + 2 + 2 = 8 marks}
+\question{Question 2}{1 + 2 + 3 + 2 = 8 marks}
 
 \begin{questions}[]
   
@@ -64,7 +64,7 @@ _precision(4)
 
 
 
-\question{Question 5}{2 + 2 + 2 + 2 = 8 marks}
+\question{Question 3}{2 + 2 + 2 + 2 = 8 marks}
 
  \begin{questions}[]
   
@@ -74,7 +74,7 @@ _precision(4)
  \end{questions}
 
 
-  \question{Question 8}{2 + 3 + 1 = 6 marks}
+  \question{Question 4}{4 + 2 + 2 = 8 marks}
 
  \begin{questions}[]
   
@@ -89,7 +89,7 @@ _precision(4)
 
   \end{questions}
 
-  \question{Question 8}{2 + 3 + 1 = 6 marks}
+  \question{Question 5}{2 + 2 + 3 + 1 = 8 marks}
 
  \begin{questions}[]
   
@@ -99,7 +99,7 @@ _precision(4)
 
   \end{questions}
 
-  \question{Question 8}{2 + 3 + 1 = 6 marks}
+  \question{Question 6}{1 + 2 + 2 + + 2 + 1 = 8 marks}
   
   \begin{questions}[]
   
@@ -108,12 +108,31 @@ _precision(4)
     pA = c(0.2,0.3,0.5);
     pB = c(0.3,0.3,0.4);
     pC = c(0.3,0.5,0.2);
-    continent = c("Australia", "Asia", "Antarctica")
+    continent = c("Melbourne, Vic", "Sydney, NSW", "Newcastle, NSW")
     ]>)
 
   \end{questions}
 
+  \question{Question 7}{2 + 2 + 2 + 2 = 8 marks}
   
+  \begin{questions}[]
+
+    _BACI_q2(<[SEED = 12; 
+    mu = c(50, 40, 30, 40);
+    n = 3
+    ]>)
+  
+  \end{questions}
+  
+  \question{Question 8}{4 + 2 + 2 = 8 marks}
+  
+  \begin{questions}[]
+  
+    _Trend_q2(<[ ]>)
+    
+  \end{questions}
+    
+    
   \testend
 
 \end{document}
