@@ -1249,3 +1249,621 @@ m4_define(_link_analysis_q2,<[
   \end{workingbox}
 
 ]>)
+
+
+
+m4_define(_graphs_q3,<[
+
+  \squestion
+  
+  % begin.rcode echo=FALSE, results="hide", message=FALSE
+  require("igraph")
+  $@
+  #g = graph.formula(A-B, A-C, A-D, B-D)
+  d = degree(g)
+  close = 1/closeness(g)
+  n = length(d)
+  V(g)$color = "white"
+  V(g)$label.color = "black"
+  E(g)$color = "black"
+  names(d) = LETTERS[1:n]
+  % end.rcode 
+
+  The following graph shows ``Recommended Video'' links between the
+  top five Youtube videos.
+
+  \begin{center}
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
+    par(mar = c(0,0,0,0))
+    plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:n])
+    % end.rcode 
+  \end{center}
+
+  Using this graph:
+  \begin{enumerate}
+  \item Construct the adjacency matrix.
+  \item Tabulate the degree distribution and state if the graph is
+    more similar to a Erdös-Renyi graph or Barabasi-Albert graph.
+  \item Calculate the graph density.
+  \item Calculate the closeness centrality for each vertex.
+  \end{enumerate}
+  
+  \begin{workingbox}
+    \marknote{For each of these four questions, give 1 mark for the correct
+      working and 1 mark for the right answer.}
+    
+    \begin{enumerate}
+    \item The adjacency matrix is:
+      \begin{center}
+        \begin{minipage}{0.5\textwidth}
+          % begin.rcode echo=FALSE,results="verbatim", message=FALSE
+          print(as.matrix(get.adjacency(g)))
+          % end.rcode 
+        \end{minipage}
+        \xmark{1}
+      \end{center}
+
+      
+    \item The degree distribution is:
+      \begin{center}
+        \begin{minipage}{0.5\textwidth}
+          % begin.rcode echo=FALSE,results="verbatim"
+          table(factor(degree(g), c(0,1,2,3,4,5)))
+          % end.rcode 
+        \end{minipage}
+        \xmark{1}
+      \end{center}
+      If the distribution is similar to Poisson, the graph is a
+      Erdös-Renyi graph. If the distribution is similar to
+      Exponential, the graph is a Barabasi-Albert graph.
+
+    \item The graph density is \rinline{graph.density(g)}.
+      
+    \item The closeness centrality for each vertex is:
+      \begin{center}
+        \begin{tabular}{\rinline{paste(rep('c',n),collapse='')}}
+          \rinline{paste(names(d),collapse=" & ")} \\
+          \rinline{paste(close,collapse=" & ")}
+        \end{tabular}
+      \xmark{2}
+      \end{center}
+
+      
+    \item The most central vertex is vertex \rinline{names(which(close == min(close)))}.
+      \xmark{1}
+      
+    \end{enumerate}
+    
+  \end{workingbox}
+]>)
+
+
+
+m4_define(_clustering_q3,<[
+  
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide", message=FALSE
+  
+  set.seed(1)
+  $@
+
+  rownames(X) = LETTERS[1:nrow(X)]
+  d = dist(X)
+  D = as.matrix(d)
+  D.missing = D
+  z = D[missing[1],missing[2]]
+  D.missing[missing[1],missing[2]] = NA
+  D.missing[missing[2],missing[1]] = NA
+  h = hclust(d, method="complete")
+  min.dist = function(D) {
+    a = dim(D)[1]
+    row = which.min(apply(D + diag(rep(10,a)), 2, min))
+    col = apply(D + diag(rep(10,a)), 2, which.min)[row]
+    return(c(row,col))
+  }
+  
+  merge.rows = function(D, pos) {
+    a = D[pos[2],,drop=FALSE]
+    A = D[-pos[2],,drop=FALSE]
+    A[pos[1],] = apply(rbind(A[pos[1],,drop=FALSE],a),2,max)
+    return(A)
+  }
+  
+  merge.row.col = function(D, pos) {
+   pos = sort(pos)
+   Dt = merge.rows(D,pos)
+   E = merge.rows(t(Dt),pos)
+   mname = paste(colnames(D)[pos[1]],"-",colnames(D)[pos[2]], sep="")
+   colnames(E)[pos[1]] = mname
+   rownames(E)[pos[1]] = mname
+   return(E)
+  }
+  % end.rcode 
+
+  
+  While attempting to cluster a set of user profile data, our laptop
+  battery discharged, leaving us with an incomplete distance matrix.
+  
+  The user profile data from $\rinline{nrow(X)}$ users is given below:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(X)
+  % end.rcode 
+  The incomplete distance matrix is:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(D.missing)
+  % end.rcode 
+  \begin{enumerate}
+  \item Which metric was used to compute the distances?
+  \item Compute the missing distance.
+  \item Calculate the three distance matrices, showing the distance
+    between 3 clusters, 2 clusters and 1 cluster, using complete
+    linkage clustering.
+  \item Plot the dendrogram of the hierarchical clustering.
+  \end{enumerate}
+  
+  \begin{workingbox}
+    
+    \begin{enumerate}
+    \item Euclidean distance was used.
+    \item The missing distance is \rinline{z}.
+    \item The set of distance matrices are:
+    % begin.rcode echo=FALSE,results="verbatim"
+    E = D
+    p = min.dist(E)
+    E = merge.row.col(E, p)
+    print("Three clusters")
+    print(E)
+    p = min.dist(E)
+    E = merge.row.col(E, p)
+    print("Two clusters")
+    print(E)
+    p = min.dist(E)
+    E = merge.row.col(E, p)
+    print("One cluster")
+    print(E)
+    % end.rcode 
+    Note that the value of the numbers along the diagonal of each
+    matrix are not important, since we do not compare clusters to themselves.
+    \end{enumerate}
+    \item The dendrogram:
+    \begin{center}
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=3, fig.height=3
+    plot(h)
+    % end.rcode 
+    Take note of the clusters formed and the height of the vertical lines.
+    \end{center}
+      
+
+  
+  \end{workingbox}
+]>)
+
+
+
+
+m4_define(_sentiment_q3,<[
+  
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide", message=FALSE
+  
+  $@
+
+  D = as.matrix(dist(X))
+  l = rep("negative",n)
+  l[positive] = "positive"
+  names(l) = c(1:n)
+  classify = c(5,6,7)
+  l.removed = l
+  l.removed[classify] = "-"
+  classified = (1:n)[-classify]
+  
+  knn = function(x, D, l, k) {
+    names(which.max(table(l[as.numeric(names(sort(D[x,])[1:k]))])))
+  }
+
+  k1.class = sapply(5:7, knn, D[,classified], l, k1)
+  k2.class = sapply(5:7, knn, D[,classified], l, k2)
+  
+  eval = function(k.class, pn.class) {
+    mean(k.class[which(l[classify] == pn.class)] == pn.class)
+  }
+  k1p = eval(k1.class,"positive")
+  k2p = eval(k2.class,"positive")
+  k1n = eval(k1.class,"negative")
+  k2n = eval(k2.class,"negative")
+  
+  % end.rcode 
+
+    
+  
+  The text in a set of \rinline{nrow(X)} Web pages was compared using a distance metric
+  and the following distance table was obtained.
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(D)
+  % end.rcode 
+  A user study provided the sentiment class for the following Web pages:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(l.removed)
+  % end.rcode 
+  \begin{enumerate}
+  \item Use the $k$ nearest neighbour classifier
+    to classify the sentiment of Web pages that are
+    missing classification (Web pages \rinline{classify}). Provide two
+    classifications for each Web page, the first where
+    $k = \rinline{k1}$ and the second where $k = \rinline{k2}$.
+  \item Given that the true class of Web pages \rinline{classify} is 
+    \rinline{l[classify]}), plot the Receiver operating characteristic
+    for $k = \rinline{k1}$ and $k = \rinline{k2}$. Make sure to
+    clearly label the plot.
+  \item From these results, which of using $k = \rinline{k1}$ or $k =
+    \rinline{k2}$ is more similar to random guessing?
+  \end{enumerate}
+  
+  \begin{workingbox}
+    
+    \begin{enumerate}
+    \item The classification of pages \rinline{classify} for $k =
+      \rinline{k1}$ is \rinline{k1.class}         \xmark{2}
+    \item The classification of pages \rinline{classify} for $k =
+      \rinline{k2}$ is \rinline{k2.class}        \xmark{2}
+    \item To plot the Receiver operating characteristic, we first
+      compute the sensitivity and specificity.
+      \begin{itemize}
+      \item For $k \rinline{k1}$: Sensitivity =
+        \rinline{k1p}, Specificity = \rinline{k1n}
+      \item For $k \rinline{k2}$: Sensitivity =
+        \rinline{k2p}, Specificity = \rinline{k2n}
+      \end{itemize} \xmark{2}
+      \begin{center}
+        % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
+        x = c(0,1)
+        #par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+        plot(1-k1n,k1p, type="p", xlim=x, ylim=x, xlab="1 - Specificity", ylab = "Sensitivity", pch=1)
+        points(1-k2n,k2p, pch=2)
+        legend("bottomright", c(paste("k =", k1), paste("k =", k2)), pch=1:2)
+        % end.rcode 
+      \end{center}\xmark{1}
+      \item The method that is closest to the diagonal is more similar
+        to random guessing. \xmark{1}
+    \end{enumerate}
+    
+  \end{workingbox}
+]>)
+
+
+m4_define(_link_analysis_q3,<[
+
+  %%%% Mean, standard deviation, mode, median, quantiles
+
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide"
+  require("igraph")
+  require("xtable", quietly=TRUE)
+
+  $@
+
+  
+  V(g)$color = "white"
+  V(g)$label.color = "black"
+  E(g)$color = "black"
+  alpha = 0.8
+  A = t(as.matrix(get.adjacency(g)))
+  T = A %*% diag(1/apply(A,2,sum))
+  N = dim(A)[1]
+  J = matrix(rep(1/N, N*N), N, N)
+  R = alpha*T + (1-alpha)*J
+  e = eigen(R)
+  pos = which(abs(e$values - 1) < 1e-8)
+  ud = degree(as.undirected(g))
+  station = ud/sum(ud)
+  begin.dist = rep(0,N)
+  begin.dist[1] = 1
+  
+  % end.rcode 
+  
+
+  The following directed graph shows the links between the top
+  \rinline{N} contributors to Stack Overflow.
+  \begin{center}
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
+    par(mar = c(0,0,0,0))
+    plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:N])
+    % end.rcode 
+  \end{center}
+  
+  \begin{enumerate}
+  \item Contruct the probability transition matrix.
+  \item State if the graph is ergodic and why or why not.
+  \item Compute the stationary distribution of the undirected form of
+    the graph (ignore the direction on the edges).
+  \item Show that the stationary distribution computed for the
+    undirected graph is or is not the stationary distribution for the
+    directed graph.
+  \end{enumerate}
+  
+  \begin{workingbox}
+    
+    \begin{enumerate}
+    \item The probability transition matrix is:
+      \begin{center}
+        \begin{minipage}{0.5\textwidth}
+          % begin.rcode echo=FALSE,results="verbatim"
+          print(T)
+          % end.rcode 
+        \end{minipage}
+        \xmark{2}
+      \end{center}
+    \item The graph is ergodic if there is a path from all vertices to
+      all other vertices. This student should report if all paths
+      exist, and if not, where a path does not exist. \xmark{2}
+      
+    \item The probability of each vertex in the stationary
+      distribution of an undirected graph is proportional to the
+      number of edges connected to the vertex. 
+      The degree of each vertex is:
+      \begin{align*}
+        \vec{p} = [~\rinline{paste(format(ud), collapse="~")}~]
+      \end{align*}
+      Therefore the
+      stationary distribution is:
+      \begin{align*}
+        \vec{p} = [~\rinline{paste(format(station), collapse="~")}~]
+      \end{align*}
+      \xmark{2}
+    \item The stationary distribution of the directed graph satisfies 
+      $\vec{p} = T\vec{p}$. By multiplying the transition matrix and
+      the undirected stationary distribution, we obtain:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(T %*% station)
+      % end.rcode 
+      If this is similar to the undirected stationary distribution,
+      then the undirected stationary distribution is also the
+      stationary distribution for the directed graph. Otherwise it is
+      not.
+      \xmark{2}
+    \end{enumerate}
+    
+    
+  
+  \end{workingbox}
+
+]>)
+
+
+
+
+m4_define(_text_index_q2,<[
+
+  %%%% construct text index, weight and query
+  
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide", message=FALSE
+  $@
+
+
+  rownames(A) = paste("D",1:nrow(A), sep="")
+  colnames(A) = paste("T",1:ncol(A), sep="")
+  
+  IDF = log(nrow(A)/apply(A > 0,2,sum))
+  TF = log(A + 1)
+  TF.IDF = TF %*% diag(IDF)
+
+
+  qv = as.numeric(colnames(A) %in% query)
+  d.norm = sqrt(apply(TF.IDF^2,1,sum))
+  q.norm = sqrt(sum(qv^2))
+  ds = (TF.IDF %*% qv)/(d.norm * q.norm)
+  
+  % end.rcode 
+
+  Using the three documents:
+  
+  A set of similar tweets (\rinline{rownames(A)} containing the terms
+  \rinline{colnames(A)}) has been preprocessed and converted into the
+  following term frequency index:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(A)
+  % end.rcode 
+
+    
+  \begin{enumerate}
+
+  \item Provide one reason for and one reason against using stop
+    word when preprocessing text for search engine.
+    
+  \item Compute the TF-IDF weight of each item in the term frequency index.
+    
+  \item Use cosine similarity to compute the set of document scores
+    for the query containing the terms ``\rinline{query}'', and rank
+    the documents by their relevance to the query.
+    
+  \item Cosine similarity consists of an inner product of the document
+    and query vectors, divided by the norm of the document and query
+    vectors. Is it necessary to divide by the document
+    vector norm and the query vector norm? Explain your reasoning.
+
+  \end{enumerate}
+  
+  \begin{workingbox}
+    \begin{enumerate}
+    \item Reason for: removing words make the search process more
+      efficient. Reason against: some stop words may be important
+      query terms, depending on the text collection.       \xmark{2}
+    \item The TF weights are:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(TF)
+      % end.rcode 
+      The IDF weights are:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(IDF)
+      % end.rcode 
+      giving the weighted term frequencies:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(TF.IDF)
+      % end.rcode 
+      \xmark{2}
+    \item The norm of each document vector is:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(d.norm)
+      % end.rcode 
+      The norm of the query vector is:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(q.norm)
+      % end.rcode 
+      Therefore the documents scores are:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(ds)
+      % end.rcode 
+      giving the document ranking \rinline{rownames(A)[rank(-ds)]}.
+      \xmark{2}
+    \item Dividing by the document norm removes the effect of the
+      document length (meaning a document wont get a high score just
+      because it is long) and so is required. Dividing by the query
+      norm does the same for the query and so is constant for all
+      document scores, but since we are interested in the rank and not
+      the scores, dividing by the query norm has no effect on the rank,
+      and so is not needed.
+      \xmark{2}
+    \end{enumerate}
+    
+    
+  \end{workingbox}
+]>)
+
+
+
+m4_define(_SimpleExposure_q2,<[
+\squestion
+
+% begin.rcode echo=FALSE, results="hide", message=FALSE
+
+$@
+
+
+set.seed(SEED)
+
+X = rbind(
+t(rmultinom(1, 38, pA)),
+t(rmultinom(1, 25, pB)),
+t(rmultinom(1, 2, pC)))
+
+
+page = paste("Page", LETTERS[1:3])
+dimnames(X) = list(continent, page)
+Y = cbind(X, Total = rowSums(X))
+Y = rbind(Y, Total=colSums(Y))
+Z = X[c(1,2),]
+Z[2,] = Z[2,] + X[3,]
+rownames(Z)[2] = paste(rownames(X)[2],rownames(X)[3], sep=" - ")
+
+E = (rowSums(Z) %o% colSums(Z))/sum(Z)
+
+x = sum((Z - E)^2/E)
+df = (nrow(Z) - 1)*(ncol(Z) - 1)
+% end.rcode
+
+
+
+Omnibiz provide information using five different languages on all of
+their Web pages. Data was gathered to identify if there was a
+relationship between a customers continent of origin and the first
+page they have ``liked''.
+\begin{center}
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(Y)
+  % end.rcode
+\end{center}
+
+\begin{enumerate}
+\item Identify one problem with using a $\chi^2$ (Chi-squared) test
+  with this data.
+\item Transform the table so that it is appropriate for a $\chi^2$ test.
+\item Find expected counts for each entry in the reduced table
+  assuming gender and age group are independent.
+\item Calculate a $\chi^2$ statistic for testing whether the age
+  profile varies by gender, and state its degrees of freedom.
+\item Does the test statistic provide evidence that the page likes are
+  related to the continent of origin? Explain your answer.
+\end{enumerate}
+
+  \begin{workingbox}
+    \begin{enumerate}
+    \item The $\chi^2$ test requires that all cells are 5 or
+      more. This table contain cells with values less than 5. \xmark{1}
+    \item To transform the data, we merge the last two rows:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(Z)
+      % end.rcode 
+      \xmark{2}
+    \item The expected counts are:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(E)
+      % end.rcode 
+      \xmark{2}
+    \item The test statistic is $\chi^2 = \rinline{x}$ with df = \rinline{df}.
+      \xmark{2}
+    \item If the test statistic small, there is no evidence of a
+      relationship between continent and first like. \xmark{1}
+    \end{enumerate}
+  \end{workingbox}
+
+
+]>)
+
+
+
+m4_define(_BACI_q2,<[
+\squestion
+
+A major bank is about that to start an
+advertising campaign. Before doing so 
+it decides to collect information about mentions
+on Twitter to measure the impact of the campaign. 
+Using a search the company collects the number of
+mentions of their product for 3 randomly chosen days before the
+campaign and 3 randomly chosen days shortly
+after the campaign begins. They also collect the number of mentions for
+their main competitor on the same number of days before and after
+the campaign. The data are in the left table below. The right table contains the
+sums of the square roots of the data.
+
+
+\begin{center}
+% begin.rcode echo=FALSE, results="asis"
+require(xtable, quietly=TRUE)
+mu = c(100, 130, 70, 70)
+n =3
+X = factor(rep(c("Company","Competitor"), 2*c(n,n)))
+Z = factor(rep(rep(c("Before","After"), c(n,n)),2), levels=c("Before","After"))
+$@
+set.seed(SEED)
+Y = rpois(4*n, rep(mu, rep(n,4)))
+
+tab=tapply(Y, list(X,Z), FUN=paste, collapse=",")
+print(xtable(tab, align="|l|c|c|"), floating=FALSE, hline.after=c(-1,0,1,2))
+
+cat("\\hspace{1cm}")
+xtab = xtabs(sqrt(Y)~X+Z)
+print(xtable(xtab, align="|l|r|r|", digits=2), floating=FALSE, hline.after=c(-1,0,1,2))
+RSS = sum(aov(sqrt(Y)~X*Z)$residuals^2)
+% end.rcode
+\end{center}
+
+\begin{enumerate}
+\item Explain why using a square root transformation is advisable for
+  count data.
+\item Calculate the \emph{contrast} for the interaction between
+  company and time.
+\item Calculate the \emph{Sum of Squares} for the interaction between
+  company and time.
+\item Given that the sum of squares for error is \rinline{round(RSS,3)}, find the
+  $F$-statistic for the interaction between
+  company and time, and state its degrees of freedom.
+\end{enumerate}
+
+
+]>)
