@@ -508,7 +508,7 @@
 \hline
 All printed materials, books, handwritten or printed notes, and calculators are allowed. \\
 Any calculator which has the primary function of a calculator is allowed.  For example, calculators on mobile phones or similar electronic devices are not allowed.\\
-All printed materials, books, handwritten or printed notes are allowed. \\
+%All printed materials, books, handwritten or printed notes are allowed. \\
 \hline
 \end{tabularx}
 \renewcommand{\arraystretch}{1.3}
@@ -523,6 +523,7 @@ All printed materials, books, handwritten or printed notes are allowed. \\
 %  {\footnotesize
 %    \@studentinstructions
 %  }
+\hfill
   \begin{center}
     \underline{\textbf{DO NOT TAKE THIS PAPER FROM THE EXAMINATION ROOM}}
   \end{center}

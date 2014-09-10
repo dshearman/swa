@@ -357,9 +357,9 @@ m4_define(_link_analysis_q1,<[
   \end{center}
   
   \begin{enumerate}
-  \item Contruct the probability transition matrix.
+  \item Construct the probability transition matrix.
   \item State if the graph is ergodic and why or why not.
-  \item Contruct the random surfer probability transition matrix using $\alpha = \rinline{alpha}$.
+  \item Construct the random surfer probability transition matrix using $\alpha = \rinline{alpha}$.
   \item Determine if the stationary distribution for the random surfer
     transition matrix is $\vec{p} = [~\rinline{paste(format(non.station), collapse="~")}~]$.
   \end{enumerate}
@@ -1197,7 +1197,7 @@ m4_define(_link_analysis_q2,<[
   \end{center}
   
   \begin{enumerate}
-  \item Contruct the probability transition matrix.
+  \item Construct the probability transition matrix.
   \item State if the graph is ergodic and why or why not.
   \item Compute the state distribution after we begin on vertex 1 and
     take two random steps.
@@ -1271,7 +1271,7 @@ m4_define(_graphs_q3,<[
   % end.rcode 
 
   The following graph shows ``Recommended Video'' links between the
-  top five Youtube videos.
+  top \rinline{n} Youtube videos.
 
   \begin{center}
     % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
@@ -1397,10 +1397,10 @@ m4_define(_clustering_q3,<[
   \begin{enumerate}
   \item Which metric was used to compute the distances?
   \item Compute the missing distance (marked ``NA'').
-  \item Calculate the three distance matrices, showing the distance
-    between 3 clusters, 2 clusters and 1 cluster, using complete
-    linkage clustering.
-  \item Plot the dendrogram of the hierarchical clustering.
+  \item Using complete linkage clustering, calculate the three
+    distance matrices, showing the distance between 3 clusters, 2
+    clusters and 1 cluster.
+  \item Sketch the dendrogram of the hierarchical clustering.
   \end{enumerate}
   
   \begin{workingbox}
@@ -1577,13 +1577,13 @@ m4_define(_link_analysis_q3,<[
   \end{center}
   
   \begin{enumerate}
-  \item Contruct the probability transition matrix.
+  \item Construct the probability transition matrix.
   \item State if the graph is ergodic and describe why or why not.
   \item If we ignore the direction of the edges, we obtain an
     undirected graph. Compute the stationary distribution of this
     undirected graph.
-  \item Is the stationary distribution for the undirected graph the
-    same as the stationary distribution for the directed graph? Give
+  \item Is the stationary distribution for the undirected form of the graph the
+    same as the stationary distribution for the directed form of the graph? Give
     evidence for your answer.
   \end{enumerate}
   
@@ -1682,10 +1682,11 @@ m4_define(_text_index_q2,<[
     for the query containing the terms ``\rinline{query}'', and rank
     the documents by their relevance to the query.
     
-  \item Cosine similarity consists of an inner product of the document
-    and query vectors, divided by the norm of the document and query
-    vectors.  Is this division by the document vector norm and the
-    query vector norm necessary when ranking documents? Explain your reasoning.
+  \item Cosine similarity consists of three parts: 1) an inner product
+    of the document and query vectors, 2) division by the norm of the
+    document vector, and 3) division by the norm of the query vector.
+    For ranking documents, are the last two parts of Cosine similarity
+    necessary?  Explain your reasoning.
 
   \end{enumerate}
   
