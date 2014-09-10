@@ -13,7 +13,7 @@ bib:
 	${TEX} -jobname "$*.solutions" $<
 
 %.pdf:	%.tex FORCE 
-	${TEX} '\PassOptionsToClass{hideanswers}{uwsexam} \input{$<}'
+	${TEX} '\PassOptionsToClass{hideanswers}{uwsexamTFS} \input{$<}'
 
 %.tex:	%.Rtex exam_question.pool.m4 uwsexam.cls
 	Rscript -e "library(knitr); knit('$<', output='$*.tex')"

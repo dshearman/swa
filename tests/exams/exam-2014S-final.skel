@@ -1,17 +1,18 @@
 % -*- Rnw -*-
-\documentclass{uwsexam}
+\documentclass{uwsexamTFS}
 
 m4_include(`exam_question.pool.m4')
 
 
+
 % Set up class variables
-\testtitle{Final Examination}
+\testtitle{Final Exam}
 \unitsession{Spring Session 2014}
 \unitname{Social Web Analytics}
 \unitcode{300958}
 \testtime{2 hours includes reading time}
 \questioncount{8}
-\lecturername{Laurence Park, Glenn Stone}
+\lecturername{Laurence Park}
 \studentinstructions{
 \begin{enumerate}
 \item Write your name and student number on the top of this exam paper
@@ -32,6 +33,7 @@ m4_include(`exam_question.pool.m4')
   to gain full marks.
 \item All 8 questions must be answered to obtain full marks.
 \end{enumerate}}
+
 
 
 

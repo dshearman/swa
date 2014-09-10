@@ -2,6 +2,7 @@
 
 m4_changequote(`<[', `]>')
 
+
 m4_define(_precision,<[
   % begin.rcode setup, echo=FALSE
   options(digits=$1)
