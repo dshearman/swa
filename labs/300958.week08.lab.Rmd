@@ -47,10 +47,10 @@ tweet.corpus = Corpus(VectorSource(tweet.text))
 ```
 then convert the characters to UTF8:
 ```{r eval=FALSE}
+tweet.corpus = tm_map(tweet.corpus,
+         function(x) iconv(x, to='UTF8', sub='byte')) # for Windows
 tweet.corpus = tm_map(tweet.corpus, 
-         function(x) iconv(enc2utf8(x), sub = "byte")) # for Windows
-tweet.corpus = tm_map(tweet.corpus, 
-         function(x) iconv(x, to='UTF-8-MAC', sub='byte')) # for OS X
+	     function(x) iconv(x, to='UTF-8-MAC', sub='byte')) # for OS X
 ```
 Finally, we will remove unwanted characters, remove stopwords and stem the words:
 ```{r eval=FALSE}
@@ -60,6 +60,7 @@ tweet.corpus = tm_map(tweet.corpus, stripWhitespace)
 tweet.corpus = tm_map(tweet.corpus, tolower)
 tweet.corpus = tm_map(tweet.corpus, removeWords, stopwords('english'))
 tweet.corpus = tm_map(tweet.corpus, stemDocument)
+tweet.corpus = tm_map(tweet.corpus, PlainTextDocument)
 ```
 To perform clustering, we must obtain the document vectors, contained in the document term matrix.
 So we extract the matrix and apply TFIDF weighting:
