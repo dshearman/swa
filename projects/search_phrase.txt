@@ -1,0 +1,21 @@
+Group:   4; Phrase: avada kedavra
+Group:  82; Phrase: battlefield
+Group: 100; Phrase: blue screen of death
+Group:  37; Phrase: budget2014
+Group:  50; Phrase: clashofclans
+Group:  35; Phrase: destiny
+Group:  14; Phrase: dwts
+Group:  25; Phrase: fame
+Group:  30; Phrase: fashion
+Group:  75; Phrase: half life 3
+Group:  42; Phrase: generic
+Group:  86; Phrase: gt86
+Group:  22; Phrase: kevin bacon
+Group:  69; Phrase: #lolesports
+Group:  97; Phrase: musician
+Group:  26; Phrase: nicki minaj
+Group:  98; Phrase: superman
+Group:  88; Phrase: #terrorthreat
+Group:  96; Phrase: top gear
+Group:  85; Phrase: united nations
+
