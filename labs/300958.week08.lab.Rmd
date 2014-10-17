@@ -248,7 +248,7 @@ cosine.dissimilarity = function(x,y) {
   norm.x = normalise.vector(x)
   norm.y = normalise.vector(y)
   # return 1 - inner product of the normalised vectors
-  return(1 - (x %*% y))
+  return(1 - (norm.x %*% norm.y))
 }
 ```
 To compute SSW, we need to compute the dissimilarity between each
