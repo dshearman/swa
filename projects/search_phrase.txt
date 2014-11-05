@@ -1,21 +1,70 @@
+Group:  99; Phrase: #advancedwarfare
+Group:  46; Phrase: android
+Group:  36; Phrase: anime
+Group:  43; Phrase: annabelle
+Group:  94; Phrase: apple
+Group:   1; Phrase: asylum seekers
+Group:  47; Phrase: south africa
 Group:   4; Phrase: avada kedavra
-Group:  82; Phrase: battlefield
+Group   10; Phrase: basketball
+Group:  82; Phrase: battlefield 4
+Group:  23; Phrase: #bendgate
+Group:   2; Phrase: bigbrother
 Group: 100; Phrase: blue screen of death
 Group:  37; Phrase: budget2014
+Group:  92; Phrase: bungie
+Group:  90; Phrase: cats
+Group:  34; Phrase: #chestday
+Group:  95; Phrase: #chucknorris
 Group:  50; Phrase: clashofclans
+Group:  21; Phrase: consolewar
 Group:  35; Phrase: destiny
+Group:  80; Phrase: #destinythegame
+Group:   5; Phrase: dota2
 Group:  14; Phrase: dwts
+Group:   3; Phrase: eating food
+Group:  29; Phrase: #ebola
 Group:  25; Phrase: fame
 Group:  30; Phrase: fashion
-Group:  75; Phrase: half life 3
+Group:  18; Phrase: #fifa15
+Group:  27; Phrase: #gamedev
+Group:  12; Phrase: #gameofthrones
+Group:  51; Phrase: #gamergate
+Group:  74; Phrase: gatorade
 Group:  42; Phrase: generic
 Group:  86; Phrase: gt86
+Group:  88; Phrase: #gtr
+Group:  75; Phrase: half life 3
+Group:  19; Phrase: #iphone6
 Group:  22; Phrase: kevin bacon
+Group:  16; Phrase: #kingjames
 Group:  69; Phrase: #lolesports
+Group:  79; Phrase: motogp
 Group:  97; Phrase: musician
 Group:  26; Phrase: nicki minaj
+Group:  77; Phrase: nintendo
+Group:  67; Phrase: nfl
+Group:  54; Phrase: #nrlgf
+Group:  55; Phrase: #nsa
+Group:  39; Phrase: olympics
+Group:  49; Phrase: pokemon
+Group:  38; Phrase: #polaris2014
+Group:  48: Phrase: #rubix
+Group:  28; Phrase: samsung
+Group:  32; Phrase: samsung mobile
+Group:  41; Phrase: sanic
+Group:  13; Phrase: #scottishindependence
+Group:  17; Phrase: socceroos
+Group:  11; Phrase: star trek
+Group   71; Phrase: stereosonic
+Group:   7; Phrase: steve carell
 Group:  98; Phrase: superman
-Group:  88; Phrase: #terrorthreat
+Group:  33; Phrase: #surfacepro3
+Group:  31; Phrase: tony abbott
 Group:  96; Phrase: top gear
+Group:  41; Phrase: trent reznor
 Group:  85; Phrase: united nations
-
+Group:  40; Phrase: western sydney wanderers
+Group:  44; Phrase: #windows10
+Group:  45; Phrase: #worlds
+Group:  63; Phrase: wow

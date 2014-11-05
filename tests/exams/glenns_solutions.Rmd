@@ -1,0 +1,287 @@
+
+
+# Question 1
+
+Setup:
+```{r echo=TRUE}
+ages = c("13--17","18--24","25--34","35--44","45--54","55--65","65+")
+genders = c("F","M")
+f = c(5, 9, 8, 10, 6, 2, 4) 
+m = c(8, 20, 22, 21, 6, 7, 12)
+x = rbind(f,m)
+dimnames(x) = list(genders, ages)
+```
+
+Provide full marks if quesion is fully answered, or partial marks
+using the marks given below.
+
+a. The $\chi^2$ test requires that all cells have a frequency of at
+   least 5. For this table, two cells have counts less than 5. (1 mark)
+
+b. The reduced table it computed by summing the merged columns to obtain:
+
+```{r echo=TRUE}
+ages = c("13--24","25--34","35--44","45+")
+y = x[,c(2,3,4,5)]
+y[,1] = apply(x[,c(1,2)],1,sum)
+y[,4] = apply(x[,c(5,6,7)],1,sum)
+print(y)
+```
+1 mark for the correct table structure, full marks for the correct table elements.
+
+
+c. The expected values are computed as $e_{i,j} = {\sum r_{i}c_{j}/\text{total}}$, giving:
+
+```{r echo=TRUE}
+gtotal = apply(y,1,sum)
+atotal = apply(y,2,sum)
+ttotal = sum(y)
+e = gtotal %o% atotal/ttotal
+print(e)
+```
+
+1 mark for providing equation, full marks for correct soltution.
+
+d. The $\chi^2$ test statistic is computed as $\chi^2 = {\sum_{i,j} (o_{i,j} - e_{i,j})^2/e_{i,j}}$
+   with degrees of freedom $(r-1)(c-1) = 3$, giving the value $\chi^2$:
+```{r echo=TRUE}
+chisq = sum((y - e)^2/e)
+print(chisq)
+```
+
+1 mark for the correct equation, 1 mark for correct df, 1 mark for
+correct $\chi^2$, full marks for correct $\chi^2$ and df.
+
+
+
+# Question 3
+
+Setup
+```{r echo=TRUE}
+p = c(0.316, 0.194, 0.169, 0.137, 0.085, 0.073, 0.026)
+```
+
+a. The cumulative proportion is simply the sum of the proportions, so the missing values are:
+```{r echo=TRUE}
+print(cumsum(p)[c(1,4)])
+```
+Full marks for correct answers, 1 mark if understanding is shown, but answer is wrong.
+
+b. Tweet 1 has 6 words, tweet 2 has 6 words, there is 1 word in
+common. Therefore the binary distance between the two tweets is
+$(6 + 6 - 2\times 1)/(6 + 6 - 1) = 10/11 = 0.9091$.
+
+Full marks for correct answer, 1 mark for showing understanding.
+
+# Question 6
+
+a. The seasonal cycle is length 4, therefore, the seasonal window is
+   length 5, where the ends of the window have weight 0.5.
+   For day 1 period 4, the window contains:
+```{r echo=TRUE}
+x = c(35, 63, 47, 55, 69)
+```
+   The square root of the values are:
+```{r echo=TRUE}
+y = sqrt(x)
+print(y)
+```
+   We remove the seasonality using the window:
+```{r echo=TRUE}
+sum(y * c(0.5, 1, 1, 1, 0.5)/4)
+```
+   Full marks for correct answer, 1 mark for square root normalisation, 1
+   mark for using sliding window, 1 mark for using length 5 window.
+
+b. The seasonal component must sum to zero. We have 3 components, so the fourth component is:
+```{r echo=TRUE}
+s = c(-0.610, 0.235, 0.541)
+-sum(s)
+```
+Full marks for correct answer, 1 mark for showing understanding.
+
+
+# Question 7
+
+a. The square root transform is make a Poisson distribution approximately Normal.
+   Or Count data would have a variance proportional (equal to) the
+   mean. ie non-constant variance. The square root transformation is
+   variance stabilising.
+
+1 mark for answer.
+
+b. The contrast for the interaction between company and time is given as $(BC+AI) - (AC+BI)$,
+```{r echo=TRUE}
+BC = 24.86
+AC = 23.92
+BI = 29.27
+AI = 33.98
+contrast = (BC+AI) - (AC+BI)
+print(contrast)
+```
+2 marks for correct answer, or 1 mark for showing understanding.
+
+c. The sum of squares = $\text{constrast}^2/4n$, where $n = 3$.
+```{r echo=TRUE}
+n = 3
+SSI = contrast^2/(4*n)
+print(SSI)
+```
+2 marks for the correct answer, or 1 mark for showing understanding.
+
+```{r echo=TRUE}
+SSE = 1.82
+MSE = SSE/(4 * (n-1))
+print(MSE)
+F = SSI/MSE
+print(F)
+```
+Using 1 and $4(n-1) = 8$ degrees of freedom.
+
+3 marks for the correct answer, or 1 mark for MSE, 1 mark for F, 1 mark for DF.
+
+
+
+
+
+
+# Question 1
+
+Setup:
+```{r echo=TRUE}
+ages = c("13--17","18--24","25--34","35--44","45--54","55--65","65+")
+genders = c("F","M")
+f = c(9, 4, 6, 8, 8, 5, 4) 
+m = c(11, 22, 19, 9, 18, 8, 9)
+x = rbind(f,m)
+dimnames(x) = list(genders, ages)
+```
+
+Provide full marks if quesion is fully answered, or partial marks
+using the marks given below.
+
+a. The $\chi^2$ test requires that all cells have a frequency of at
+   least 5. For this table, two cells have counts less than 5. (1 mark)
+
+b. The reduced table it computed by summing the merged columns to obtain:
+
+```{r echo=TRUE}
+ages = c("13--24","25--34","35--44","45+")
+y = x[,c(2,3,4,5)]
+y[,1] = apply(x[,c(1,2)],1,sum)
+y[,4] = apply(x[,c(5,6,7)],1,sum)
+colnames(y) = ages
+print(y)
+```
+1 mark for the correct table structure, full marks for the correct table elements.
+
+
+c. The expected values are computed as $e_{i,j} = {\sum r_{i}c_{j}/\text{total}}$, giving:
+
+```{r echo=TRUE}
+gtotal = apply(y,1,sum)
+atotal = apply(y,2,sum)
+ttotal = sum(y)
+e = gtotal %o% atotal/ttotal
+print(e)
+```
+
+1 mark for providing equation, full marks for correct soltution.
+
+d. The $\chi^2$ test statistic is computed as $\chi^2 = {\sum_{i,j} (o_{i,j} - e_{i,j})^2/e_{i,j}}$
+   with degrees of freedom $(r-1)(c-1) = 3$, giving the value $\chi^2$:
+```{r echo=TRUE}
+chisq = sum((y - e)^2/e)
+print(chisq)
+```
+
+1 mark for the correct equation, 1 mark for correct df, 1 mark for
+correct $\chi^2$, full marks for correct $\chi^2$ and df.
+
+
+
+# Question 3
+
+Setup
+```{r echo=TRUE}
+p = c(0.279, 0.245, 0.176, 0.127, 0.075, 0.063, 0.035)
+```
+
+a. The cumulative proportion is simply the sum of the proportions, so the missing values are:
+```{r echo=TRUE}
+print(cumsum(p)[c(1,4)])
+```
+Full marks for correct answers, 1 mark if understanding is shown, but answer is wrong.
+
+b. Tweet 1 has 6 words, tweet 2 has 6 words, there is 2 word in
+common. Therefore the binary distance between the two tweets is
+$(6 + 6 - 2\times 2)/(6 + 6 - 2) = 8/10 = 0.8
+
+Full marks for correct answer, 1 mark for showing understanding.
+
+# Question 6
+
+a. The seasonal cycle is length 4, therefore, the seasonal window is
+   length 5, where the ends of the window have weight 0.5.
+   For day 1 period 4, the window contains:
+```{r echo=TRUE}
+x = c(53, 72, 58, 39, 57)
+```
+   The square root of the values are:
+```{r echo=TRUE}
+y = sqrt(x)
+print(y)
+```
+   We remove the seasonality using the window:
+```{r echo=TRUE}
+sum(y * c(0.5, 1, 1, 1, 0.5)/4)
+```
+   Full marks for correct answer, 1 mark for square root normalisation, 1
+   mark for using sliding window, 1 mark for using length 5 window.
+
+b. The seasonal component must sum to zero. We have 3 components, so the fourth component is:
+```{r echo=TRUE}
+s = c(-1.047, -0.050, 1.003)
+-sum(s)
+```
+Full marks for correct answer, 1 mark for showing understanding.
+
+
+# Question 7
+
+a. The square root transform is make a Poisson distribution approximately Normal.
+   Or Count data would have a variance proportional (equal to) the
+   mean. ie non-constant variance. The square root transformation is
+   variance stabilising.
+
+1 mark for answer.
+
+b. The contrast for the interaction between company and time is given as $(BC+AI) - (AC+BI)$,
+```{r echo=TRUE}
+BC = 23.95
+AC = 24.54
+BI = 29.80
+AI = 32.77
+contrast = (BC+AI) - (AC+BI)
+print(contrast)
+```
+2 marks for correct answer, or 1 mark for showing understanding.
+
+c. The sum of squares = $\text{constrast}^2/4n$, where $n = 3$.
+```{r echo=TRUE}
+n = 3
+SSI = contrast^2/(4*n)
+print(SSI)
+```
+2 marks for the correct answer, or 1 mark for showing understanding.
+
+```{r echo=TRUE}
+SSE = 1.82
+MSE = SSE/(4 * (n-1))
+print(MSE)
+F = SSI/MSE
+print(F)
+```
+Using 1 and $4(n-1) = 8$ degrees of freedom.
+
+3 marks for the correct answer, or 1 mark for MSE, 1 mark for F, 1 mark for DF.

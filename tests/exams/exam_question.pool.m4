@@ -415,27 +415,71 @@ m4_define(_sentiment_q1,<[
   $@
   
   all.terms = names(table(strsplit(tolower(paste(positive, negative, collapse=" ")),split=" ")))
-  p = table(factor(strsplit(tolower(paste(positive, collapse=" ")),split=" ")[[1]],all.terms))
-  n = table(factor(strsplit(tolower(paste(negative, collapse=" ")),split=" ")[[1]],all.terms))
-  p.p = p/sum(p)
-  n.p = n/sum(n)
-  
+
   tests = strsplit(tolower(test),split=" ")[[1]]
   pos = which(all.terms %in% tests)
+  npos = which(!(all.terms %in% tests))
+
+  p.tables = lapply(lapply(strsplit(tolower(positive), split=" "), factor, all.terms), table)
+  p = apply(do.call(rbind, p.tables) > 0, 2, sum)
+
+  n.tables = lapply(lapply(strsplit(tolower(negative), split=" "), factor, all.terms), table)
+  n = apply(do.call(rbind, n.tables) > 0, 2, sum)
+
+  nall.terms = all.terms
+  nall.terms[npos] = paste("~", all.terms[npos], sep="")
+
+  #p = table(factor(strsplit(tolower(paste(positive, collapse=" ")),split=" ")[[1]],all.terms))
+  #n = table(factor(strsplit(tolower(paste(negative, collapse=" ")),split=" ")[[1]],all.terms))
+  p.N = rep(length(p.tables), length(p))
+  n.N = rep(length(n.tables), length(n))
+  p.p = p/p.N
+  n.p = n/n.N
+
+  names(p.p) = nall.terms
+  names(n.p) = nall.terms
+  p.p[npos] = 1 - p.p[npos]
+  n.p[npos] = 1 - n.p[npos]
+  
+  freqs = rbind(p,n)
+  rownames(freqs) = c("Positive","Negative")
+  probs = rbind(p.p,n.p)
+  rownames(probs) = c("Positive","Negative")
+
+  # rule of succession
+  adjust = which((p.p == 0) | (p.p == 1))
+  p[adjust] = p[adjust] + 1
+  p.N[adjust] = p.N[adjust] + 2
+
+  adjust = which((n.p == 0) | (n.p == 1))
+  n[adjust] = n[adjust] + 1
+  n.N[adjust] = n.N[adjust] + 2
+
+  p.p = p/p.N
+  n.p = n/n.N
+
+  names(p.p) = nall.terms
+  names(n.p) = nall.terms
+  p.p[npos] = 1 - p.p[npos]
+  n.p[npos] = 1 - n.p[npos]
+
+  sprobs = rbind(p.p,n.p)
+  rownames(sprobs) = c("Positive","Negative")
+
+
+  
   
   P.d.p = prod(p.p[pos])
   P.d.n = prod(n.p[pos])
   P.p = length(positive)/(length(positive) + length(negative))
   P.n = length(negative)/(length(positive) + length(negative))
   
-  llr = log(P.p/P.n) + sum(log(p.p/n.p)[pos])
+  llr = log(P.p/P.n) + sum(log(p.p/n.p))
   tweet.class = "positive"
   if (llr < 0) tweet.class = "negative"
   
-  freqs = rbind(p,n)
-  rownames(freqs) = c("Positive","Negative")
-  probs = rbind(p.p,n.p)
-  rownames(probs) = c("Positive","Negative")
+
+  
   
   item = "\\item"
   
@@ -460,12 +504,12 @@ m4_define(_sentiment_q1,<[
   
   \begin{workingbox}
     
-    The frequency of each word given its sentiment (positive or negative) is:
+    The number of tweets containing each word is:
     % begin.rcode echo=FALSE,results="verbatim"
     print(freqs)
     % end.rcode 
     
-    The probability of each word given its sentiment (positive or negative) is:
+    The probability of each word appearing in a tweet given its sentiment (positive or negative) is:
     \begin{center}
     \begin{minipage}{0.9\textwidth}
     % begin.rcode echo=FALSE,results="verbatim"
@@ -474,6 +518,16 @@ m4_define(_sentiment_q1,<[
     \end{minipage}
     ~\xmark{2}
     \end{center}
+    
+    We adjust the probability of 0 and 1 using the Rule of Succession:
+    \begin{center}
+    \begin{minipage}{0.9\textwidth}
+    % begin.rcode echo=FALSE,results="verbatim"
+    print(sprobs, digits=2)
+    % end.rcode 
+    \end{minipage}
+    \end{center}
+    
     
     The probability ratios are:
     % begin.rcode echo=FALSE,results="verbatim"
@@ -488,8 +542,8 @@ m4_define(_sentiment_q1,<[
     The log likelihood ratio of the tweet ``\rinline{test}'' is:
     \begin{align*}
       \log{\frac{P(S|D)}{P(S'|D)}} &= \log{\frac{P(S)}{P(S')}} + {\sum_{i} \log{\frac{P(w_i|S)}{P(w_i|S')}}} \xmark{1} \\
-      &= \log{\frac{\rinline{P.p}}{\rinline{P.n}}} + \rinline{format(sum(log(p.p/n.p)[pos]))} \\
-      &= \rinline{format(log(P.p/P.n) + sum(log(p.p/n.p)[pos]))}  \xmark{1}
+      &= \log{\frac{\rinline{P.p}}{\rinline{P.n}}} + \rinline{format(sum(log(p.p/n.p)))} \\
+      &= \rinline{format(log(P.p/P.n) + sum(log(p.p/n.p)))}  \xmark{1}
     \end{align*} 
     Therefore the tweet is classified as \rinline{tweet.class}. \xmark{1}
     

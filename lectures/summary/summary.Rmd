@@ -319,16 +319,22 @@ Note: no phones, computers or iPads are allowed in the exam room.
 
 The exam will last two hours.
 
-It contains eight questions of varying marks.
+It contains eight questions, each worth eight marks.
 
 When reading through the exam, each question will be labelled with the number of marks allocated to it.
-The marks reflect the difficulty and time required to complete the question.
+If there are sub questions, the break down of the marks will be shown.
+
+Two hours/eight questions = 15 minutes per question.
 
 ## Sample Exam
 
-A sample exam will be provided.
+A sample exam and last years exam are available in vUWS.
 
-The solutions to the exam will be available next week.
+The solutions to the sample exam are available. The solutions to last years
+exam will be available next week.
+
+Don't waste these practice exams!
+
 
 ## Thanks
 

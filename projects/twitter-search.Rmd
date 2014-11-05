@@ -47,7 +47,7 @@ responsible for submitting the report.
 
 # Due date and Submission
 
-The project report is due in by 11:59 p.m. on the Friday of week 12.
+The project report is due in by 11:59 p.m. on the Friday of week 13.
 The report must be submitted as a PDF file using the assignment
 submission facilities in the Project section of 300958 in vUWS.  Only
 one student from each group (the manager) needs to submit the

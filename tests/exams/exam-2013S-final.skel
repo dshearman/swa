@@ -130,7 +130,7 @@ _precision(4)
 \begin{questions}[]
   
   _sentiment_q1(<[
-    positive = c("My teeth shine #funfun","#funfun love my teeth",
+    positive = c("My teeth shine #funfun","#funfun love my fun teeth",
         "#funfun is fun fun");
     negative = c("No shine #funfun","No love fun fun",
         "Where is my teeth shine #funfun");

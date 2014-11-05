@@ -34,8 +34,8 @@ questions = list(
 )
 
 
-set.seed(1725)
-for(i in 1:4) yaml.out(questions[[1]], 'X=rpois(1,357); Y=rpois(1,422)')
+set.seed(1726)
+for(i in 1:16) yaml.out(questions[[1]], 'X=rpois(1,357); Y=rpois(1,422)')
 
 set.one = function(n) {
   x = runif(n)
@@ -50,8 +50,8 @@ set.one = function(n) {
 }
 
 
-set.seed(8872)
-for(n in c(20,22,23,25)) yaml.out(questions[[2]], set.one(n))
+set.seed(8873)
+for(n in c(20:30)) yaml.out(questions[[2]], set.one(n))
 
 count = c(135, 145, 133, 102, 105, 108, 128, 144, 149, 130, 107, 106, 83, 117, 
           123, 104, 116, 127, 75, 128, 136, 145, 120, 127, 110, 109, 122, 136, 125, 
@@ -59,10 +59,10 @@ count = c(135, 145, 133, 102, 105, 108, 128, 144, 149, 130, 107, 106, 83, 117,
           132)
 Y = sqrt(count)
 
-for(i in c(1,7,13,19)) {
+for(i in c(5,10,14,23,21,28,31,34,37,40)) {
   str = paste("y=c(", paste(formatC(Y[i:(i+5)], format="f", digits=2), collapse=","),")")
   yaml.out(questions[[3]], str)
 }
 
-set.seed(78867)
-for(i in 1:4) yaml.out(questions[[4]], "s=round(rnorm(3),3)")
+set.seed(78865)
+for(i in 1:10) yaml.out(questions[[4]], "s=round(rnorm(3),3)")
