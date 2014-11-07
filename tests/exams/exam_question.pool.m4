@@ -13,6 +13,8 @@ m4_define(_precision,<[
 ]>)
 
 
+
+
 m4_define(_graphs_q1,<[
 
   \squestion
@@ -595,6 +597,37 @@ The owner of this page is interested in determining whether the age profile of r
   profile varies by gender, and state its degrees of freedom.
 \end{enumerate}
 
+  \begin{workingbox}
+    \begin{enumerate}[a.]
+    \item The $\chi^2$ test requires that all cells have a frequency of at
+      least 5. For this table, two cells have counts less than 5. (1 mark)
+
+    \item The reduced table it computed by summing the merged columns to obtain:
+
+      % begin.rcode echo=FALSE,results="verbatim", message=FALSE    
+      ages = c("13--24","25--34","35--44","45+")
+      y = x[,c(2,3,4,5)]
+      y[,1] = apply(x[,c(1,2)],1,sum)
+      y[,4] = apply(x[,c(5,6,7)],1,sum)
+      print(y)
+      % end.rcode
+
+    \item The expected values are computed as $e_{i,j} = {\sum r_{i}c_{j}/\text{total}}$, giving:
+      % begin.rcode echo=FALSE,results="verbatim", message=FALSE    
+      gtotal = apply(y,1,sum)
+      atotal = apply(y,2,sum)
+      ttotal = sum(y)
+      e = gtotal %o% atotal/ttotal
+      chisq = sum((y - e)^2/e)
+      print(e)
+      % end.rcode
+
+    \item The $\chi^2$ test statistic is computed as $\chi^2 = {\sum_{i,j} (o_{i,j} - e_{i,j})^2/e_{i,j}}$
+      with degrees of freedom $(r-1)(c-1) = 3$, giving the value $\chi^2$:
+      \rinline{chisq}
+    \end{enumerate}
+  \end{workingbox}
+  
 ]>)
 
 
@@ -633,6 +666,15 @@ cat("\\hspace{1cm}")
 xtab = xtabs(sqrt(Y)~X+Z)
 print(xtable(xtab, align="|l|r|r|", digits=2), floating=FALSE, hline.after=c(-1,0,1,2))
 RSS = sum(aov(sqrt(Y)~X*Z)$residuals^2)
+BC = xtab[2,1]
+AC = xtab[2,2]
+BI = xtab[1,1]
+AI = xtab[1,2]
+contrast = (BC+AI) - (AC+BI)
+n = 3
+SSI = contrast^2/(4*n)
+SSE = RSS
+MSE = SSE/(4 * (n-1))
 % end.rcode
 \end{center}
 
@@ -648,6 +690,17 @@ RSS = sum(aov(sqrt(Y)~X*Z)$residuals^2)
   company and time, and state its degrees of freedom.
 \end{enumerate}
 
+\begin{workingbox}
+\begin{enumerate}
+\item Count data would have a variance proportional (equal to) the mean. ie non-constant variance.
+The square root transformation is variance stabilising. \xmark{1}
+\item The contrast for the interaction between company and time is given as $(BC+AI) - (AC+BI)$ = 
+\rinline{contrast}.\xmark{2}
+\item The sum of squares for the interaction is \rinline{SSI}, where $n = \rinline{n}$. \xmark{2}
+\item The $F$-statistic is SSI/MSE = \rinline{SSI/MSE} on 1 and \rinline{4*(n-1)} degrees of freedom. \xmark{3}
+\end{enumerate}
+\end{workingbox} 
+
 
 ]>)
 
@@ -655,9 +708,11 @@ RSS = sum(aov(sqrt(Y)~X*Z)$residuals^2)
 m4_define(_Trend_q1,<[
 \squestion
 
-The jTele mobile phone company is looking at the tweet count containing their hash-tag, in the three days after the release
-of a new model. The counts are aggregated into four time periods; midnight to 6am, 6am to noon, noon to 6pm and 6pm to midnight.
-The data are below.
+The jTele mobile phone company is looking at the tweet count
+containing their hash-tag, in the three days after the release of a
+new model. The counts are aggregated into four time periods; midnight
+to 6am, 6am to noon, noon to 6pm and 6pm to midnight.  The data are
+below.
 
 \begin{center}
 % begin.rcode echo=FALSE, results="asis"
@@ -687,6 +742,7 @@ etc[etc==" NA"] = ""
 tmp = matrix(etc, ncol=4, byrow=TRUE)
 dimnames(tmp) = list(paste("Day",1:3), paste("Period", 1:4))
 
+part1 = tmp[1,4]
 tmp[1,4] = missing.symbol
 print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
@@ -698,6 +754,7 @@ ssc = formatC(ss, format="f", digits=3)
 tmp = matrix(ssc, ncol=4, byrow=TRUE)
 dimnames(tmp) = list("Periodic", paste("Period", 1:4))
 
+part2 = tmp[1,4]
 tmp[1,4] = missing.symbol
 print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
@@ -707,6 +764,15 @@ print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 \item Compute the missing trend component marked with a \rinline{missing.symbol}.
 \item Compute the missing periodic component marked with a \rinline{missing.symbol}.
 \end{enumerate}
+
+\begin{workingbox}
+\begin{enumerate}
+\item The missing trend component is a moving average with window size 4, therefore we use the window (0.5, 1,1,1,0.5), giving the average \rinline{part1}.
+\item The periodic components have a mean of zero, meaning their sum is 0. Therefore the missing component is \rinline{part2}.
+\end{enumerate}
+\end{workingbox}
+
+
 ]>)
 
 % GS
@@ -714,6 +780,8 @@ m4_define(_Visual_q1,<[
 \squestion
 
 In conducting a principal component analysis R produces the following summary output.
+
+
 
 % begin.rcode echo=FALSE, results="asis"
 require(clusterGeneration, quietly=TRUE)
@@ -727,14 +795,14 @@ X = rmvnorm(50, sigma=S$Sigma)
 tab = round(summary(prcomp(X))$importance,3)
 tab[3,] = cumsum(tab[2,])
 tab = formatC(tab, format="f", digits=3)
-ans = tab[3, c(1,4)]
+xans = tab[3, c(1,4)]
 tab[3,c(1,4)] = missing.symbol
 print(xtable(tab), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
 Compute the missing entries marked \rinline{missing.symbol}.
 
   \begin{workingbox}
-    Missing entries are \rinline{ans[1]} and \rinline{ans[2]} respectively.
+    Missing entries are \rinline{xans[1]} and \rinline{xans[2]} respectively.
 \xmark{2}
   \end{workingbox}
 ]>)
@@ -756,6 +824,11 @@ Tweet 1: & assault assistance disadvantaged university students begins\\
 Tweet 2: & believe more students doing university better
 \end{tabular}
 \end{center}
+
+\begin{workingbox}
+  Tweet 1 contains 6 words, tweet 2 contains 6 words, 2 words are shared, giving (4 + 4)/(4 + 2 + 4) = 0.8
+\end{workingbox}
+
 
 ]>)
 
@@ -1920,6 +1993,7 @@ RSS = sum(aov(sqrt(Y)~X*Z)$residuals^2)
    between the views of the video ``Cats falling'' and time, and state
    its degrees of freedom.
 \end{enumerate}
+
 
 
 ]>)

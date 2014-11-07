@@ -1,6 +1,8 @@
-R_PROG := /opt/local/bin/R
+#R_PROG := /opt/local/bin/R
+R_PROG := /usr/bin/R
 TEX := xelatex
-R_SCRIPT := /opt/local/bin/Rscript
+#R_SCRIPT := /opt/local/bin/Rscript
+R_SCRIPT := /usr/bin/Rscript
 PANDOC := /opt/local/bin/pandoc
 STYLESHEET := buttondown.css
 
@@ -16,7 +18,7 @@ bib:
 	${TEX} '\PassOptionsToClass{hideanswers}{uwsexamTFS} \input{$<}'
 
 %.tex:	%.Rtex exam_question.pool.m4 uwsexam.cls
-	Rscript -e "library(knitr); knit('$<', output='$*.tex')"
+	${R_SCRIPT} -e "library(knitr); knit('$<', output='$*.tex')"
 
 %.R:	%.Rtex
 	echo "library(tools); Stangle('$<')" | ${R_PROG} --vanilla --silent 
