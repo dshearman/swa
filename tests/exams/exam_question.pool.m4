@@ -1978,6 +1978,14 @@ cat("\\hspace{1cm}")
 xtab = xtabs(sqrt(Y)~X+Z)
 print(xtable(xtab, align="|l|r|r|", digits=2), floating=FALSE, hline.after=c(-1,0,1,2))
 RSS = sum(aov(sqrt(Y)~X*Z)$residuals^2)
+AI = xtab[1,2]
+BI = xtab[1,1]
+AC = xtab[2,2]
+BC = xtab[2,1]
+contrast = (BC+AI) - (AC+BI)
+SSi = contrast^2/(4*n)
+MSE = RSS/(4*(n-1))
+F = SSi/MSE
 % end.rcode
 \end{center}
 
@@ -1994,6 +2002,22 @@ RSS = sum(aov(sqrt(Y)~X*Z)$residuals^2)
    its degrees of freedom.
 \end{enumerate}
 
+
+\begin{workingbox}
+\begin{enumerate}
+\item Count data would have a variance proportional (equal to) the
+  mean. ie non-constant variance.  The square root transformation is
+  variance stabilising. \xmark{2}
+\item The contrast for the interaction between company and time is
+  given as $(BC+AI) - (AC+BI)$ = (\rinline{BC} + \rinline{AI}) -
+  (\rinline{AC} + \rinline{BI}) = \rinline{contrast}
+\item The sum of squares for the interaction is $SS_{\text{int}} =
+  \text{contrast}^2/4n = \rinline{SSi}$. \xmark{4}
+\item The $F$-statistic is $SS_{\text{int}}/MS_{E} =
+  \rinline{SSi/MSE}$ on 1 and \rinline{4*(n-1)} degrees of freedom,
+  where $MS_E = SS_E/(4(n-1))$. \xmark{2}
+\end{enumerate}
+\end{workingbox} 
 
 
 ]>)
@@ -2040,6 +2064,7 @@ tmp = matrix(etc, ncol=3, byrow=TRUE)
 dimnames(tmp) = list(paste("Day",1:3), paste("Period", 1:3))
 
 tmp[2,2] = missing.symbol
+adat = round(sqrt(xx)[4:6],3)
 print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
 
@@ -2051,6 +2076,7 @@ tmp = matrix(ssc, ncol=3, byrow=TRUE)
 dimnames(tmp) = list("Periodic", paste("Period", 1:3))
 
 tmp[1,2] = missing.symbol
+ansS = -sum(as.numeric(tmp[1,-2]))
 print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 % end.rcode
 \end{center}
@@ -2061,4 +2087,21 @@ print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 \item Which period would you recommend allocating the most network
   bandwidth to? Explain your answer.
 \end{enumerate}
+
+\begin{workingbox}
+\begin{enumerate}
+\item The trend is a 3-point moving average on the sqrt scale, so is
+\begin{center}
+\rinline{paste("(", paste(adat, collapse="+"), ")/3", sep="")} $=$ \rinline{sum(adat)/3}
+\end{center}
+\xmark{4}
+
+\item The seasonal component should sum to zero so the missing component is \rinline{ansS}
+\xmark{2}
+
+\item Period two has the largest periodic component, so it should be
+  allocated the most bandwidth. \xmark{2}
+\end{enumerate}
+\end{workingbox}
+
 ]>)
