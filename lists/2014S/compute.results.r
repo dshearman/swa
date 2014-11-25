@@ -26,7 +26,8 @@ exam = "Exam..Total.Pts..64...122689"
 
 
 # marks from vUWS
-all.marks <- read.csv("gc_300958_2014_spr_fullgc_2014-11-24-16-58-08.csv")
+#all.marks <- read.csv("gc_300958_2014_spr_fullgc_2014-11-24-16-58-08.csv")
+all.marks <- read.csv("gc_300958_2014_spr_fullgc_2014-11-25-10-51-10.csv")
 ## add missing project marks
 ## late exam mark
 
@@ -57,8 +58,10 @@ quiz.marks = ceiling(subset(marks, select=quizzes))
 project.mark = ceiling(zero.nas(subset(marks, select=project, drop=TRUE)))
 exam.mark = ceiling(subset(marks, select=exam, drop=TRUE)*50/60)
 cf.grades = c()
+f.grades = c()
 
 exam.mark[cf.grades] = floor(exam.mark[cf.grades]*60/64)
+exam.mark[f.grades] = floor(exam.mark[f.grades]*60/64)
 
 total.quiz.mark = zero.nas(apply(quiz.marks,1,sum.top.5))
 
@@ -129,17 +132,22 @@ compute.grade <- function(marks) {
 
 results = compute.grade(results)
 
-
 table(results$grade)
-
-
-
-
 
 subset(results, grade == "CF")
 
 
 cf.grades = which(results$grade == "CF")
+f.grades = which(results$grade == "F")
+
+exam.mark2 = floor(subset(marks, select=exam, drop=TRUE)*50/64)
+exam.mark[cf.grades] = exam.mark2[cf.grades]
+exam.mark[f.grades] = exam.mark2[f.grades]
+raw.exam.mark = exam.mark
+final.mark = apply(cbind(raw.assess.mark, raw.exam.mark), 1, sum, na.rm=TRUE)
+results = data.frame(Student.Number = marks$Student.Number, Student.Name = marks$Student.Name, raw.assess.mark = raw.assess.mark, raw.exam.mark = raw.exam.mark, final.mark = final.mark)
+results = compute.grade(results)
+
 
 
 withdrawal.rate <- function(grades) {
