@@ -41,8 +41,8 @@ Now that you have passed high school, we can let you know that this is a graph.
 
 \svspace{-2em}
 ```{r, echo=FALSE, fig.width=5, fig.height=2.8}
-library("igraph")
-par(mar = c(0,0,0,0))
+suppressMessages(library("igraph"))
+par(mar = c(0,0,1,0))
 g = erdos.renyi.game(10,p=0.4)
 V(g)$label.cex = 0.8
 plot(g, layout=layout.fruchterman.reingold, vertex.size = 15)
@@ -54,7 +54,7 @@ An undirected graph has no direction on the edges.
 
 \svspace{-2em}
 ```{r, echo=FALSE, fig.width=5, fig.height=2.8}
-par(mar = c(0,0,0,0))
+par(mar = c(0,0,1,0))
 g = erdos.renyi.game(10,p=0.4)
 V(g)$label.cex = 0.8
 plot(g, layout=layout.fruchterman.reingold, vertex.size = 15)
@@ -66,7 +66,7 @@ An Directed graph has direction on the edges.
 
 \svspace{-2em}
 ```{r, echo=FALSE, fig.width=5, fig.height=2.8}
-par(mar = c(0,0,0,0))
+par(mar = c(0,0,1,0))
 g = erdos.renyi.game(10,p=0.4, directed=TRUE)
 V(g)$label.cex = 0.8
 plot(g, layout=layout.fruchterman.reingold, vertex.size = 15)
@@ -78,7 +78,7 @@ A Weighted Graph has weighted edges.
 
 \svspace{-2em}
 ```{r, echo=FALSE, fig.width=5, fig.height=2.8}
-par(mar = c(0,0,0,0))
+par(mar = c(0,0,1,0))
 g = erdos.renyi.game(10,p=0.4, directed=FALSE)
 V(g)$label.cex = 0.8
 E(g)$weight <- rpois(ecount(g),2) + 1
@@ -197,7 +197,7 @@ layout=layout.fruchterman.reingold, vertex.size = 35)
 
 ## Subgraphs
 
-A subgraph is a subset of the vertices of a graph and all interconnected edges.
+A subgraph $H = (V_H,E_H)$ of the graph $G = (V_G, E_G)$ contains a subset of the vertices of $G$ ($V_H \subset V_G$) and a subset of the interconnected edges ($E_H \subset E_G$).
 
 ### All Subgraphs
 
@@ -328,6 +328,7 @@ plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]
 expression("v"[5]),expression("v"[6]),expression("v"[7])),
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
+
 The degree of $v_1$ is 3. The degree of $v_7$ is 1.
 
 ### Highest degree

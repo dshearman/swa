@@ -1,6 +1,6 @@
 XELATEX = xelatex --shell-escape
 PDFLATEX := pdflatex
-R_PROG := /opt/local/bin/R
+R_PROG := /usr/bin/R
 CODE = 300958
 TEMPLATE_DIR = templates
 INCLUDE_DIR = includes

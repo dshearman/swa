@@ -148,6 +148,8 @@ final.mark = apply(cbind(raw.assess.mark, raw.exam.mark), 1, sum, na.rm=TRUE)
 results = data.frame(Student.Number = marks$Student.Number, Student.Name = marks$Student.Name, raw.assess.mark = raw.assess.mark, raw.exam.mark = raw.exam.mark, final.mark = final.mark)
 results = compute.grade(results)
 
+table(results$grade)
+subset(results, grade == "CF")
 
 
 withdrawal.rate <- function(grades) {

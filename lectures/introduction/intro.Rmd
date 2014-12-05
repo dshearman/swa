@@ -37,19 +37,11 @@ The learning guide is found in vUWS > 300958 > Unit Information
 
 Unit Coordinator:
 
-- Laurence Park <lapark@scem.uws.edu.au>
+- Don Shearman <d.shearman@uws.edu.au>
 
 Lecturers:
 
-- Laurence Park <lapark@scem.uws.edu.au>
-- Glenn Stone <g.stone@uws.edu.au>
 - Don Shearman <d.shearman@uws.edu.au>
-
-Tutors:
-
-- Arshad Muhammad Mehar <a.Muhammad@uws.edu.au>
-- Don Shearman <d.shearman@uws.edu.au>
-- Nima Ramezani 
 
 
 # Social Networks
