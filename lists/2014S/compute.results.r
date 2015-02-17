@@ -39,7 +39,7 @@ marks <- merge(students, all.marks, by.x="Student.Number", by.y="Username", all.
 
 # Amendments
 ## Reviewed exam marks
-#marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17012834"] = 22
+marks$Exam..Total.Pts..64...122689[marks$Student.Number == "17596549"] = 26
 
 ## missing project
 #marks$Group.Project..Total.Pts..30...101193[marks$Student.Number == "17575788"] = 10
@@ -47,6 +47,10 @@ marks <- merge(students, all.marks, by.x="Student.Number", by.y="Username", all.
 
 ## deferred exams
 #marks$Exam..Total.Pts..56...103209[marks$Student.Number == "17513223"] = 13
+marks$Exam..Total.Pts..64...122689[marks$Student.Number == "17580250"] = 35
+marks$Exam..Total.Pts..64...122689[marks$Student.Number == "16985780"] = 33
+marks$Exam..Total.Pts..64...122689[marks$Student.Number == "17563488"] = 35
+marks$Exam..Total.Pts..64...122689[marks$Student.Number == "17696744"] = sum(3,0,3,3,2,3,5,2)
 
 
 sum.top.5 <- function(quiz.marks) {
