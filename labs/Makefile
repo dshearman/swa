@@ -1,8 +1,8 @@
 # Makefile for lab notes
 # To generate lab notes, type make and the name of the html notes.
 
-R_PROG := /opt/local/bin/R
-R_SCRIPT := Rscript
+R_PROG := /usr/bin/R
+R_SCRIPT := /usr/bin/Rscript
 #PANDOC := pandoc -f markdown+grid_tables
 PANDOC := pandoc -f markdown
 STYLESHEET := buttondown.css

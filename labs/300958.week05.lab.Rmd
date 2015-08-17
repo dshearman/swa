@@ -4,6 +4,7 @@
 
 ```{r setup, include=FALSE}
 opts_chunk$set(fig.path='figure/week05-lab-')
+opts_chunk$set(eval=FALSE)
 ```
 
 
@@ -17,6 +18,16 @@ using the instructions from the week 2 lab, do so now.
 
 To allow R to access twitter, we need to provide R with twitter's
 keys. In this section we will examine the process perform this.
+A video of this process is also available:
+
+- [Accessing Twitter using twitteR](http://www.scem.uws.edu.au/~lapark/300958/labs/connectingTwitter.mkv)
+
+Note that this video is stored in a Matroska media container (.mkv)
+and uses H.264 video coding and vorbis audio encoding. They are free
+formats (not limited in use by patents) and so not promoted by
+commercial software companies. If you can't play this movie with your
+current video player, download VLC.
+
 
 ## Obtaining OAuth keys
 
@@ -29,70 +40,47 @@ To access the Twitter API, we must register a program that is accessing the API.
 - [https://dev.twitter.com/apps](https://dev.twitter.com/apps)
 
 and log in. Once you have logged in, click "Create a new application"
-and fill in the form. When the application is created, it will be
-provided a *consumer key* and a *consumer secret*; these text sequences
-are needed soon, so keep them handy.
+and fill in the form.  Ensure that the Callback URL is set to
+`http://127.0.0.1:1410` When the application is created, it will be
+provided a *consumer key* and a *consumer secret* (both text
+sequences); these text sequences are needed soon, so create a new R
+script and record the values:
+
+```{.r}
+key = "put key string here"
+secret = "put secret string here"
+```
+
 
 ## Authorising R
 
-We can access the Twitter API in R by loading the twitteR and ROAuth libraries (and
+We can access the Twitter API in R by loading the twitteR library (and
 installing them first if needed).
 
-`r library("twitteR")`
-```{r}
+```{.r}
 library("twitteR")
 library("ROAuth")
 ```
 
-We then need to set up the OAuth session details. **Note**: insert your
-application's key and secret where needed.
+We then need to set up the OAuth session details. **Note**: insert
+your application's key and secret where needed. To perform the OAuth
+authentication using twitteR and your previously recorded key and
+secret, add the following code to your R script and run the script:
 
 ```{.r}
-cred <- OAuthFactory$new(consumerKey="insert here",
-     consumerSecret="insert here",
-     requestURL="https://api.twitter.com/oauth/request_token",
-     accessURL="https://api.twitter.com/oauth/access_token",
-     authURL="https://api.twitter.com/oauth/authorize")
+setup_twitter_oauth(key, secret)
 ```
 
-In the UWS computer labs (using the Windows operating system), we must tell R not to bother verifying the Twitter SSL certificate:
+A Web browser window should open asking you to verify yourself to
+Twitter. Once you have entered your twitter password, the OAuth
+handshake is complete and you can start using twitteR to download
+tweets.
+
+If the process failed, it may be due to a missing SSL certificate. If so, add the following line
+to the top of your script to disable SSL verification, and rerun the script.
+
 ```{.r}
 options(RCurlOptions = list(verbose = FALSE, capath = system.file("CurlSSL", "cacert.pem", package = "RCurl"), ssl.verifypeer = FALSE))
-```
-If you are not using Windows, you can ignore the above command.
-
-
-Then perform the handshake:
-```{.r}
-cred$handshake()
-```
-
-Once the handshake is performed, R will ask you to visit a URL to get
-an access code from Twitter. Get this code and provide it to R.
-
-Once the handshake is done, we can save the credential information
-and use it later, without having go directly to Twitter again.
-
-```{.r}
-save(cred, file="twitter.Rdata")
-```
-
-When we want to access Twitter in another session, we simply load and
-register the credentials:
-
-```{.r}
-load("twitter.Rdata")
-```
-
-**NOTE**: If you performed the handshake in R, you can
-  save the credential data, then open RStudio and load the credential
-  data. This will allow you to continue working in RStudio.
-
-
-Finally, to establish the connection to Twitter, we must register our application:
-
-```{.r}
-registerTwitterOAuth(cred)
 ```
 
 We are now ready to request information from the Twitter API.
@@ -219,6 +207,9 @@ To perform each of these tasks, `tm` provides the functions
 search engine to work out how to perform the six tasks, then implement
 them on our corpus.  You can examine the changes in the corpus by
 printing the contents of the first document using `tweet.corpus[[1]]`.
+**Hint**: `tm_map` applies a function to all documents in the
+corpus. Look at the examples at the bottom of the `tm_map` help page.
+
 
 ## Weighting the Document Matrix
 
@@ -245,8 +236,13 @@ tweet.corpus = tm_map(tweet.corpus, PlainTextDocument)
 Then we can pass the corpus to DocumentTermMatrix, to create a document-term matrix:
 ```{.r}
 tweet.dtm = DocumentTermMatrix(tweet.corpus) # create the DocumentTermMatrix object
-tweet.matrix = inspect(tweet.dtm) # convert to a matrix
+tweet.matrix = as.matrix(tweet.dtm) # convert to a matrix
 ```
+
+For the following exercises, remember that `tweet.matrix[i,]` is the
+$i$th row of the matrix (a document) , `tweet.matrix[,i]` is the $i$th
+column (a term), and `tweet.matrix[i,j]` is the $i$th row and $j$th
+column (word $j$ in document $i$).
 
 **Compute** the weighted document term matrix `tweet.weighted.matrix`
   containing the values of $w_{d,t}$.
