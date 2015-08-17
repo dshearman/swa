@@ -151,8 +151,8 @@ in the document.
 
 ## Document vectors
 
-A document vector $\vec{d}_i$ is an ordered set of term frequencies
-$f_{d,t}$, where the order depends on the words in the document
+A document vector $\vec{d}_i$ is an ordered set of term weights
+$w_{d,t}$, where the order depends on the words in the document
 collection.
 
 
@@ -163,8 +163,8 @@ $$
 $$
 where:
 $$
-	\vec{d}_i \cdot \vec{d}_j = {\sum_{k = 1}^M f_{d_i,t_k}f_{d_j,t_k}}
-	\text{~and~} \norm{\vec{d}_i} = \sqrt{{\sum_{k = 1}^M f_{d_i,t_k}^2}}
+	\vec{d}_i \cdot \vec{d}_j = {\sum_{k = 1}^M w_{d_i,t_k}w_{d_j,t_k}}
+	\text{~and~} \norm{\vec{d}_i} = \sqrt{{\sum_{k = 1}^M w_{d_i,t_k}^2}}
 $$
 Therefore, $s({\vec{d}_i,\vec{d}_j}) = 1$ if $\vec{d}_i/\norm{\vec{d}_i} = \vec{d}_j/\norm{\vec{d}_j}$, otherwise $-1 \le s_{i,j} < 1$.
 
@@ -181,6 +181,7 @@ vector.
 
 ## Example: Document vectors in the Vector Space
 
+Let's use $w_{d,t} = f_{d,t}$ the frequency of term $t$ in document $d$.
 Our document set:
 
 1. Social Web analytics is the best!
@@ -273,18 +274,18 @@ $$
 	=
 	\left [
 	\begin{array}{cccc}
-	w_{d_1,t_1} & w_{d_1,t_2} & \ldots & w_{d_1,t_M} \\
-	w_{d_2,t_1} & w_{d_2,t_2} & \ldots & w_{d_2,t_M} \\
+	w^{\star}_{d_1,t_1} & w^{\star}_{d_1,t_2} & \ldots & w^{\star}_{d_1,t_M} \\
+	w^{\star}_{d_2,t_1} & w^{\star}_{d_2,t_2} & \ldots & w^{\star}_{d_2,t_M} \\
 	\vdots & \vdots & \ddots & \vdots \\
-	w_{d_N,t_1} & w_{d_N,t_2} & \ldots & w_{d_N,t_M} \\
+	w^{\star}_{d_N,t_1} & w^{\star}_{d_N,t_2} & \ldots & w^{\star}_{d_N,t_M} \\
 	\end{array}
 	\right ]
 $$
 where:
 $$
-	w_{d_i,t_j} = f_{d_i,t_j}/\norm{d_i}
+	w^{\star}_{d_i,t_j} = w_{d_i,t_j}/\norm{d_i}
 $$
-and $w_{d_i,t_j}$ and $f_{d_i,t_j}$ are the weight and term frequency
+and $w^{\star}_{d_i,t_j}$ and $w_{d_i,t_j}$ are the normalised weight and weight
 of word $t_j$ in document $d_i$.
 
 
@@ -321,18 +322,21 @@ The word "blood" will have the weight:
 
 ## Going beyond term frequency
 
-We have treated the normalised frequency of a term as its weight
-$w_{d,t}$ in the document. If a word appears two times in a documents,
-it is twice as relevant to that document when compared to a document
+In the previous example, we used the term frequency as the term weight
+($w_{d,t} = f_{d,t}$).
+By doing so, if a word appears twice in a document, a query using that word
+will show that document being twice as relevant to a document
 that contains the word only once.
 
-If a document contains a word 200 times, is the word twice as
-relevant to a document that contains the word 100 times? We would
-expect not. As the frequency of a word increase, the relevance of the
-word should not increase linearly.
+If a document contains a word 200 times, is the word twice as relevant
+to a document that contains the word 100 times? We would expect
+not. As the frequency of a word increases, the relevance of the word
+should not increase linearly, meaning that the weight should be a
+sub-linear function of the frequency.
 
-In this section we will examine how to compute the relevance of term
-to the document set and to each document.
+In this section we will examine document weights that provide a more
+accurate representation of the document.
+
 
 
 
