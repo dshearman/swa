@@ -59,7 +59,13 @@ installing them first if needed).
 
 ```{.r}
 library("twitteR")
-library("ROAuth")
+```
+
+To perform browser based authentication, we need to install the
+additional libraries `base64enc` and `httpuv`:
+```{r}
+install.packages("base64enc")
+install.packages("httpuv")
 ```
 
 We then need to set up the OAuth session details. **Note**: insert
