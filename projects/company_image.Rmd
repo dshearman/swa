@@ -1,0 +1,176 @@
+% Group Project Specification
+% 300958 Social Web Analytics
+% Due Date: Friday of Week 13
+
+# Aim
+
+The Group Project provides us with a chance to analyse the Social Web
+using the knowledge obtained from this unit with assistance from a
+computer based statistical package. For this project, we will focus on
+identifying a chosen companies Twitter image.
+
+# Method
+
+To complete this project:
+
+1. Read through this specification
+
+2. Form a group and register your group in the vUWS 300958 Project
+   section.
+
+3. Choose a company that is active on Twitter and send Laurence an
+   email with subject "[300958 Project Company] Name" where Name is
+   the name of the company (e.g. if choosing Telstra, the email
+   subject would be "[300958 Project Company] Telstra"). Laurence will
+   reply to let you know if the company is acceptable. Note that a given
+   company cannot be allocated to more than one group.
+
+4. Complete the data analysis required by the specification
+
+5. Write up your analysis using your favourite word
+   processing/typesetting program, making sure that all of the working
+   is shown and that is it presented well.
+
+6. Include the student declaration text on the front page of your
+   report. Please make sure that the names and student numbers of each
+   group member are clearly displayed on the front page.
+
+7. Submit the report as a PDF by the due date.
+
+
+# Group Size and Organisation
+
+Students in groups of size 1, 2, 3 or 4 are to work together to complete
+this project.  One project report is to be submitted per group.
+
+The group must be formed by signing-up to a group within the Project
+section of 300958 in vUWS.  It is not compulsory for all students in a
+group to be from the same lab class, but it is generally a good idea.
+
+Groups must be formed by the end of week 9. Once the group is formed,
+A 'manager' should be nominated from within the group to be
+responsible for submitting the report.
+
+
+# Due date and Submission
+
+The project report is due in by 11:59 p.m. on the Friday of week 13.
+The report must be submitted as a PDF file using the assignment
+submission facilities in the Project section of 300958 in vUWS.  Only
+one student from each group (the manager) needs to submit the
+assignment.
+
+
+# Report Format
+
+Once the required analysis is performed by the group, the members of
+the group are to write up the analysis as a report. Remember that the
+assessor will only see the groups report and will be marking the
+group's analysis based on your report. Therefore the report should
+contain a clear and concise description of the procedures carried out,
+the analysis of results and any conclusions reached from the analysis.
+
+The required analysis in this specification covers the material
+presented in lectures and labs.  Students should use the computer
+software R to carry out the required analysis and then present the results
+from the analysis in the report.
+
+
+# Marks
+
+## Marks
+
+This project is worth 30% of your final grade, and so the project will
+be marked out of 30. The project consists of four investigations
+and will be marked using the following criteria:
+
+--------------------------------------------------------------------------
+Marks  Criteria Satisfied
+-----  -------------------------------------------------------------------
+0-5    One of the project parts have been completed correctly.
+
+6-10   Two of the project parts have been completed correctly.
+
+11-15  Three of the project parts have been completed correctly.
+
+16-20  The required work has been completed correctly.
+
+21-25  The required work has been completed correctly and the company questions have been answered based on the results.
+
+26-30  The required work has been completed correctly and the company questions have been answered based on the results of multiple investigations.
+--------------------------------------------------------------------------
+
+If a report is submitted late, the maximum mark it can achieve will be
+reduced by 10% (3 marks) per day. E.g., if a report is submitted five
+days late, it can receive at most 15 marks.
+
+
+# Declaration
+
+*The following declaration must be included in a clearly visible and
+readable place on the first page of the report.*
+
+* * * * * * *
+
+By including this statement, we the authors of this work, verify that:
+
+- We hold a copy of this assignment that we can produce if the
+  original is lost or damaged.
+
+- We hereby certify that no part of this assignment/product has been
+  copied from any other student's work or from any other source except
+  where due acknowledgement is made in the assignment.
+
+- No part of this assignment/product has been written/produced for us
+  by another person except where such collaboration has been
+  authorised by the subject lecturer/tutor concerned.
+
+- We are aware that this work may be reproduced and submitted to
+  plagiarism detection software programs for the purpose of detecting
+  possible plagiarism (**which may retain a copy on its database
+  for future plagiarism checking**).
+
+- We hereby certify that we have read and understand what the School
+  of Computing and Mathematics defines as minor and substantial
+  breaches of misconduct as outlined in the learning guide for this
+  unit.
+
+**Note: An examiner or lecturer/tutor has the right not to mark this
+  project report if the above declaration has not been added to the
+  cover of the report.**
+
+* * * * * * *
+
+# Project Description
+
+
+A company is investigating its public image and has approached your
+team to identify what the public associated with the company name.
+
+1. The company want to obtain an understanding of the general Twitter
+community sentiment. Obtain a random sample of tweets (at least 1000)
+and report the most representative words of the sample. What do these
+words say about the Twitter community?
+
+2. The company wants to identify specifically what the Twitter community is
+saying about the company. Identify words that the Twitter public associate to
+the company (have the greatest increase in proportion when compared to the
+random sample).
+
+3. The company has questioned whether the tweets coming from the Twitter
+community are different from the tweets from within the company.  Obtain a set
+of tweets from the companies timeline, combine them with the random sample and
+the public tweets (from parts 1 and 2) and cluster the set. Identify if the
+clusters show that the company tweets are different from the public tweets. 
+
+4. When presenting these results to the committee, you have been asked
+to identify any problems with the analytical process used in each part
+and how these problems could be corrected. In this section, do not
+explain difficulties in writing code or getting programs to
+run. Explain how the methods used could lead to misleading results
+(e.g. was random sampling used when obtaining the tweets?).
+
+The company want the above analysis to be written up in a professional
+report. Each part should have its own section of the report and all
+questions should have thoughtful answers. Any code that is used should
+be included and clearly explained (include comments in the code).
