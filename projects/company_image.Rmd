@@ -19,11 +19,13 @@ To complete this project:
    section.
 
 3. Choose a company that is active on Twitter and send Laurence an
-   email with subject "[300958 Project Company] Name" where Name is
-   the name of the company (e.g. if choosing Telstra, the email
-   subject would be "[300958 Project Company] Telstra"). Laurence will
-   reply to let you know if the company is acceptable. Note that a given
-   company cannot be allocated to more than one group.
+   email with subject "[300958 Project Company] Group: x; Company: y",
+   where x is your group number and y is your wanted wanted company
+   Twitter handle.  (e.g. if group 12 were choosing Telstra, the email
+   subject would be "[300958 Project Company] Group: 12; Company:
+   Telstra"). Laurence will reply to let you know if the company is
+   acceptable. Note that a given company cannot be allocated to more
+   than one group.
 
 4. Complete the data analysis required by the specification
 
@@ -77,8 +79,6 @@ from the analysis in the report.
 
 
 # Marks
-
-## Marks
 
 This project is worth 30% of your final grade, and so the project will
 be marked out of 30. The project consists of four investigations

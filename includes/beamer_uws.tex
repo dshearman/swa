@@ -7,7 +7,6 @@
 
 \usepackage{hyperref}
 \usepackage{graphicx}
-\usepackage{ifthen}
 
 %\usepackage{pgf}
 
@@ -21,28 +20,22 @@
 \author{\printsubjectname}
 \newcommand{\bookmark}[1]{}
 
-\newcommand{\setweek}[1]{\setcounter{part}{#1}}
-
 \mode<presentation>{\usetheme{Madrid}}
 %\mode<presentation>{\usecolortheme{crane}}
 %\mode<presentation>{\usecolortheme{default}}
 
 %\setbeamercolor{normal text}{fg=blue!50!black,bg=white}
 %\setbeamercolor{structure}{fg=green!75!black}
-\mode<presentation>{\usecolortheme[named=crimson]{structure}}
-
 
 \setbeamertemplate{navigation symbols}{} 
 
 % add logo to frame titles
 \usepackage{textpos}
 
-%\pgfdeclareimage[height=0.8cm]{logo}{information/uws-logo-white.pdf}
-\pgfdeclareimage[height=0.55cm]{logo}{information/wsu_white.pdf}
-\pgfdeclareimage[height=1.5cm]{logot}{information/wsu_logo.pdf}
+\pgfdeclareimage[height=0.8cm]{logo}{information/uws-logo-white.pdf}
 
 \addtobeamertemplate{frametitle}{}{%
-\begin{textblock*}{0.13\textwidth}(.76\textwidth,-0.78cm)
+\begin{textblock*}{0.13\textwidth}(.91\textwidth,-0.88cm)
 	\pgfuseimage{logo}
 \end{textblock*}}
 
@@ -58,12 +51,8 @@
   %\mode<article>{\begin{multicols}{2}[\lecturesection{#1}\vspace{-.7em}#4\newline\hligne]}
   \mode<article>{\lecturesection{#1}}
   \mode<beamer>{\lecturesection{#1}}
-  \ifthenelse{\equal{#4}{}}{
-    \mode<beamer>{\date[#2]{#2}}
-  }{
-    \mode<beamer>{\date[#2]{#2 - #4}}
-  }
-
+  %\mode<beamer>{\date[#2]{#2 - #4}}
+  \mode<beamer>{\date[#2]{#2}}
   \lecture{#1}{#3}
 }
 
@@ -75,45 +64,10 @@
 \newcommand{\lecturesection}[1]{\part{#1}}
 %\newcommand{\lecturesection}[1]{\chapter{#1}}
 
-\setbeamertemplate{title page}
-{
-  \vbox{}
-  \vfill
-  \begin{centering}
-      \vskip3.25em%
-    \begin{beamercolorbox}[sep=1em,center]{title}
-      \usebeamerfont{title}\inserttitle\par%
-      \ifx\insertsubtitle\@empty%
-      \else%
-        \vskip0.25em%
-        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
-      \fi%    
-    \end{beamercolorbox}%
-    \vskip1em\par
-    \begin{beamercolorbox}[sep=8pt,center]{author}
-      \usebeamerfont{author}\insertauthor
-    \end{beamercolorbox}
-      %\vskip2.25em%
-      {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}        
-      \vspace{-1em} %<-- right here
-    \begin{beamercolorbox}[sep=8pt,center]{institute}
-      \usebeamerfont{institute}\insertinstitute
-    \end{beamercolorbox}
-    %\vspace{-20pt} %<-- right here
-    \begin{beamercolorbox}[sep=8pt,center]{date}
-      \usebeamerfont{date}\insertdate
-    \end{beamercolorbox}\vskip0.0em
-  \end{centering}
-  \vfill
-}
-
-
-\titlegraphic{\pgfuseimage{logot}}
-
 \setjobnamebeamerversion{beamer} 
 
-\institute[Western Sydney]{School of Computing, Engineering and Mathematics}
-  %Western Sydney University}
+\institute[UWS]{School of Computing, Engineering and Mathematics\\
+  University of Western Sydney}
 
 \AtBeginLecture{
 %\part{\insertlecture}

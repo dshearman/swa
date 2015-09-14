@@ -317,7 +317,7 @@ There are three contrasts so three sums of squares. We call them $SS_{BA}$, $SS_
 
 ## Sum of squares for error ($SS_E$)
 
-The total sum of squares ($SS_{Total}$) is  the sum of all the data points minus there mean squared.
+The total sum of squares ($SS_{Total}$) is  the sum of all the data points minus their mean squared.
 
 $$SS_{Total} = \sum_{ij} (y_{ij} - \bar{y})^2$$
 

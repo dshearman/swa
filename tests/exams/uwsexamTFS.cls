@@ -385,7 +385,9 @@
 
 ~\vspace{-5em}
 
-\begin{minipage}[b]{0.75\textwidth}%
+%\begin{minipage}[b]{0.75\textwidth}%
+\begin{minipage}[b]{\textwidth}%
+\centering
 %\begin{center}
 %\textbf{\MakeUppercase{\@testtitle}} -
 %\textbf{\MakeUppercase{\@unitsession}}
@@ -393,6 +395,7 @@
 %{\large
 %Assessment and Graduation Unit }\\[0.5em]
 {\Large
+WESTERN SYDNEY UNIVERSITY \\[0.5em]
 \textbf{\@testtitle} -- \@unitsession
 } \\[1em]
 {\large
@@ -403,10 +406,10 @@
 }
 %\vspace{-2em}
 \end{minipage}%
-\hfill
-%\begin{flushright}
-\scalebox{0.14}{\includegraphics{../../information/uws_cymk}}
-%\end{flushright}
+%\hfill
+%%\begin{flushright}
+%\scalebox{0.14}{\includegraphics{../../information/uws_cymk}}
+%%\end{flushright}
 
 
 

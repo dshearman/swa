@@ -2040,6 +2040,7 @@ successive days are given below, grouped into three successive time periods.
 
 $@
 #set.seed(56235)
+require("xtable")
 set.seed(SEED)
 xx = rpois(length(trend), trend + s)
 tmp = matrix(xx, ncol=3, byrow=TRUE)
@@ -2056,7 +2057,7 @@ components.
 \begin{center}
 {\bf Trend}\\[1ex]
 % begin.rcode echo=FALSE, results="asis"
-d = decompose(ts(sqrt(xx), freq=3))
+d = stats::decompose(ts(sqrt(xx), freq=3))
 et = as.numeric(d$trend)
 etc = formatC(et, format="f", digits=2)
 etc[etc==" NA"] = ""
@@ -2101,6 +2102,556 @@ print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
 
 \item Period two has the largest periodic component, so it should be
   allocated the most bandwidth. \xmark{2}
+\end{enumerate}
+\end{workingbox}
+
+]>)
+
+
+
+%------------------------------------------------------------------
+
+m4_define(_graphs_q4,<[
+
+  \squestion
+  
+  % begin.rcode echo=FALSE, results="hide", message=FALSE
+  require("igraph")
+  $@
+  #g = graph.formula(A-B, A-C, A-D, B-D)
+  d = degree(g)
+  close = 1/closeness(g)
+  n = length(d)
+  V(g)$color = "white"
+  V(g)$label.color = "black"
+  E(g)$color = "black"
+  names(d) = LETTERS[1:n]
+  % end.rcode 
+
+  The top \rinline{n} technology companies have following Twitter relationships.
+
+  \begin{center}
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
+    par(mar = c(0,0,0,0))
+    plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:n])
+    % end.rcode 
+  \end{center}
+
+  Using this graph:
+  \begin{enumerate}
+  \item Construct the adjacency list.
+  \item Tabulate the degree distribution and state if the graph is
+    more similar to a Erdös-Renyi graph or Barabasi-Albert graph.
+  \item Calculate the graph diameter.
+  \item Identify which vertex has the greatest degree centrality and explain why.
+  \end{enumerate}
+  
+  \begin{workingbox}
+    \marknote{For each of these four questions, give 1 mark for the correct
+      working and 1 mark for the right answer.}
+    
+    \begin{enumerate}
+    \item The adjacency list is:
+      \begin{center}
+        \begin{minipage}{0.5\textwidth}
+          % begin.rcode echo=FALSE,results="verbatim", message=FALSE
+          print(as.matrix(get.edgelist(g)))
+          % end.rcode 
+        \end{minipage}
+        \xmark{1}
+      \end{center}
+
+      
+    \item The degree distribution is:
+      \begin{center}
+        \begin{minipage}{0.5\textwidth}
+          % begin.rcode echo=FALSE,results="verbatim"
+          table(factor(degree(g), c(0,1,2,3,4,5)))
+          % end.rcode 
+        \end{minipage}
+        \xmark{1}
+      \end{center}
+      If the distribution is similar to Poisson, the graph is a
+      Erdös-Renyi graph. If the distribution is similar to
+      Exponential, the graph is a Barabasi-Albert graph.
+
+    \item The diameter is the longest shortest path. For this graph, the diameter is 
+      \rinline{diameter(g)}.
+      
+    \item The degree for each vertex is:
+      \begin{center}
+        \begin{tabular}{\rinline{paste(rep('c',n),collapse='')}}
+          \rinline{paste(names(d),collapse=" & ")} \\
+          \rinline{paste(d,collapse=" & ")}
+        \end{tabular}
+        The vertex with greatest degree has the greatest degree centrality score.
+      \xmark{2}
+      \end{center}
+
+      
+    \item The most central vertex is vertex \rinline{names(which(close == min(close)))}.
+      \xmark{1}
+      
+    \end{enumerate}
+    
+  \end{workingbox}
+]>)
+
+
+
+m4_define(_clustering_q4,<[
+  
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide", message=FALSE
+  
+  set.seed(1)
+  $@
+
+  rownames(X) = LETTERS[1:nrow(X)]
+  d = dist(X, method = "binary")
+  D = as.matrix(d)
+  D.missing = D
+  z = D[missing[1],missing[2]]
+  D.missing[missing[1],missing[2]] = NA
+  D.missing[missing[2],missing[1]] = NA
+  h = hclust(d, method="single")
+  min.dist = function(D) {
+    a = dim(D)[1]
+    row = which.min(apply(D + diag(rep(10,a)), 2, min))
+    col = apply(D + diag(rep(10,a)), 2, which.min)[row]
+    return(c(row,col))
+  }
+  
+  merge.rows = function(D, pos) {
+    a = D[pos[2],,drop=FALSE]
+    A = D[-pos[2],,drop=FALSE]
+    A[pos[1],] = apply(rbind(A[pos[1],,drop=FALSE],a),2,max)
+    return(A)
+  }
+  
+  merge.row.col = function(D, pos) {
+   pos = sort(pos)
+   Dt = merge.rows(D,pos)
+   E = merge.rows(t(Dt),pos)
+   mname = paste(colnames(D)[pos[1]],"-",colnames(D)[pos[2]], sep="")
+   colnames(E)[pos[1]] = mname
+   rownames(E)[pos[1]] = mname
+   return(E)
+  }
+  % end.rcode 
+
+  The Death Star was destroyed before Grand Moff Tarkin could cluster
+  the locations of the rebel bases. Unfortunately Darth Vader has
+  found you on his way to meet the Emperor and wants you to complete
+  the analysis on the way.
+    
+  The local of $\rinline{nrow(X)}$ rebel bases is given below:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(X)
+  % end.rcode 
+  The incomplete distance matrix produced by the Death Star is:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(D.missing)
+  % end.rcode 
+  \begin{enumerate}
+  \item Which metric was used to compute the distances?
+  \item Compute the missing distance (marked ``NA'').
+  \item Using single linkage clustering, calculate the three
+    distance matrices, showing the distance between 3 clusters, 2
+    clusters and 1 cluster.
+  \item Sketch the dendrogram of the hierarchical clustering.
+  \end{enumerate}
+  
+  \begin{workingbox}
+    
+    \begin{enumerate}
+    \item Binary distance was used.
+    \item The missing distance is \rinline{z}.
+    \item The set of distance matrices are:
+    % begin.rcode echo=FALSE,results="verbatim"
+    E = D
+    p = min.dist(E)
+    E = merge.row.col(E, p)
+    print("Three clusters")
+    print(E)
+    p = min.dist(E)
+    E = merge.row.col(E, p)
+    print("Two clusters")
+    print(E)
+    p = min.dist(E)
+    E = merge.row.col(E, p)
+    print("One cluster")
+    print(E)
+    % end.rcode 
+    Note that the value of the numbers along the diagonal of each
+    matrix are not important, since we do not compare clusters to themselves.
+    \end{enumerate}
+    \item The dendrogram:
+    \begin{center}
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=3, fig.height=3
+    plot(h)
+    % end.rcode 
+    Take note of the clusters formed and the height of the vertical lines.
+    \end{center}
+      
+
+  
+  \end{workingbox}
+]>)
+
+
+m4_define(_link_analysis_q4,<[
+
+  %%%% Mean, standard deviation, mode, median, quantiles
+
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide"
+  require("igraph")
+  require("xtable", quietly=TRUE)
+
+  $@
+
+  
+  V(g)$color = "white"
+  V(g)$label.color = "black"
+  E(g)$color = "black"
+  alpha = 0.8
+  A = t(as.matrix(get.adjacency(g)))
+  T = A %*% diag(1/apply(A,2,sum))
+  N = dim(A)[1]
+  J = matrix(rep(1/N, N*N), N, N)
+  R = alpha*T + (1-alpha)*J
+  e = eigen(R)
+  pos = which(abs(e$values - 1) < 1e-8)
+  ud = degree(as.undirected(g))
+  station = ud/sum(ud)
+  begin.dist = rep(0,N)
+  begin.dist[1] = 1
+  
+  % end.rcode 
+  
+
+  The following graph shows the information flow between 
+  \rinline{N} major cities.
+  \begin{center}
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
+    par(mar = c(0,0,0,0))
+    plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:N])
+    % end.rcode 
+  \end{center}
+  
+  \begin{enumerate}
+    \item Compute the stationary distribution of the graph.
+    \item Explain why the graph is ergodic and what change must be
+      made to make it non-ergodic.
+  \item Construct the probability transition matrix of your new non-ergodic graph.
+  \item Show that the stationary distribution found above is not the stationary distribution of the new non-ergodic graph.
+  \end{enumerate}
+  
+  \begin{workingbox}
+
+      \item The probability of each vertex in the stationary
+      distribution of an undirected graph is proportional to the
+      number of edges connected to the vertex. 
+      The degree of each vertex is:
+      \begin{align*}
+        \vec{p} = [~\rinline{paste(format(ud), collapse="~")}~]
+      \end{align*}
+      Therefore the
+      stationary distribution is:
+      \begin{align*}
+        \vec{p} = [~\rinline{paste(format(station), collapse="~")}~]
+      \end{align*}
+      \xmark{2}
+
+    \item The graph is ergodic since there is a path from each vertex
+      to every other vertex. To make the graph non-ergodic, we must
+      change one of the edges (add direction, or remove), so that
+      there is not a path between at lest one pair of vertices. \xmark{2}
+        
+    \begin{enumerate}
+    \item The probability transition matrix of the original graph is:
+      \begin{center}
+        \begin{minipage}{0.5\textwidth}
+          % begin.rcode echo=FALSE,results="verbatim"
+          print(T)
+          % end.rcode 
+        \end{minipage}
+        \xmark{2}
+      \end{center}
+      This must be adjusted to reflect the change in in the graph. \xmark{2}
+      
+    \item The student must show that $\vec{p} \ne T\vec{p}$ \xmark{2}
+      
+    \end{enumerate}
+    
+    
+  
+  \end{workingbox}
+
+]>)
+
+
+
+
+m4_define(_sentiment_q3,<[
+  
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide", message=FALSE
+  
+  $@
+
+  D = as.matrix(dist(X))
+  M = cmdscale(D)
+  #rownames(D) = paste("Page", 1:n)
+  #colnames(D) = paste("Page", 1:n)
+  
+  l = rep("negative",n)
+  l[positive] = "positive"
+  names(l) = c(1:n)
+  classify = c(5,6,7)
+  l.removed = l
+  l.removed[classify] = "-"
+  classified = (1:n)[-classify]
+  
+  knn = function(x, D, l, k) {
+    names(which.max(table(l[as.numeric(names(sort(D[x,])[1:k]))])))
+  }
+
+  k1.class = sapply(5:7, knn, D[,classified], l, k1)
+  k2.class = sapply(5:7, knn, D[,classified], l, k2)
+  
+  eval = function(k.class, pn.class) {
+    mean(k.class[which(l[classify] == pn.class)] == pn.class)
+  }
+  k1p = eval(k1.class,"positive")
+  k2p = eval(k2.class,"positive")
+  k1n = eval(k1.class,"negative")
+  k2n = eval(k2.class,"negative")
+  
+  % end.rcode 
+
+  The histograms of a set of \rinline{nrow(X)} tweeted images were compared
+  using a distance metric and the following distance table was
+  obtained.
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(D)
+  % end.rcode 
+  with the following Multi-dimensional Scaling projection:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(M)
+  % end.rcode 
+  A user study provided the sentiment class for a subset of the images:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(l.removed[-classify])
+  % end.rcode 
+  \begin{enumerate}
+  \item Use the $k$ nearest neighbour classifier to classify the
+    sentiment of images that are missing classification (Web pages
+    \rinline{classify}), using $k = \rinline{k1}$. 
+  \item Use the $k$ nearest neighbour classifier to classify the
+    sentiment of images that are missing classification (Web pages
+    \rinline{classify}), using $k = \rinline{k2}$. 
+  \item Given that the true class of images \rinline{classify} is 
+    \rinline{l[classify]}, plot the Receiver operating characteristic
+    for $k = \rinline{k1}$ and $k = \rinline{k2}$. Make sure to
+    clearly label the plot.
+  \item From these results, which of using $k = \rinline{k1}$ or
+    $k = \rinline{k2}$ would you use in practice (if any)? Which is
+    more similar to random guessing? Explain your reasoning.
+  \end{enumerate}
+  
+  \begin{workingbox}
+    
+    \begin{enumerate}
+    \item The classification of images \rinline{classify} for $k =
+      \rinline{k1}$ is \rinline{k1.class}         \xmark{2}
+    \item The classification of images \rinline{classify} for $k =
+      \rinline{k2}$ is \rinline{k2.class}        \xmark{2}
+    \item To plot the Receiver operating characteristic, we first
+      compute the sensitivity and specificity.
+      \begin{itemize}
+      \item For $k \rinline{k1}$: Sensitivity =
+        \rinline{k1p}, Specificity = \rinline{k1n}
+      \item For $k \rinline{k2}$: Sensitivity =
+        \rinline{k2p}, Specificity = \rinline{k2n}
+      \end{itemize} \xmark{2}
+      \begin{center}
+        % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
+        x = c(0,1)
+        #par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+        plot(1-k1n,k1p, type="p", xlim=x, ylim=x, xlab="1 - Specificity", ylab = "Sensitivity", pch=1)
+        points(1-k2n,k2p, pch=2)
+        legend("bottomright", c(paste("k =", k1), paste("k =", k2)), pch=1:2)
+        % end.rcode 
+      \end{center}\xmark{1}
+    \item We would choose the method on the upper left of the digonal
+      (if there is no method, choose none). The method that is closest
+      to the diagonal is more similar to random guessing. \xmark{1}
+    \end{enumerate}
+    
+  \end{workingbox}
+]>)
+
+
+
+m4_define(_text_index_q3,<[
+
+  %%%% construct text index, weight and query
+  
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide", message=FALSE
+  $@
+
+
+  rownames(A) = paste("D",1:nrow(A), sep="")
+  colnames(A) = paste("T",1:ncol(A), sep="")
+  
+  IDF = log(nrow(A)/apply(A > 0,2,sum))
+  TF = log(A + 1)
+  TF.IDF = TF %*% diag(IDF)
+
+  #expected.probability = c(0.1, 0.2, 0.7)
+  
+  qv = as.numeric(colnames(A) %in% query)
+  d.norm = sqrt(apply(TF.IDF^2,1,sum))
+  q.norm = sqrt(sum(qv^2))
+  ds = (TF.IDF %*% qv)/(d.norm * q.norm)
+  
+  % end.rcode 
+
+  A set of similar tweets (\rinline{rownames(A)} containing the terms
+  \rinline{colnames(A)}) has been preprocessed and converted into the
+  following term frequency index:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(A)
+  % end.rcode 
+
+    
+  \begin{enumerate}
+
+  \item Provide one reason for and one reason against using stop
+    word removal when preprocessing text for a search engine.
+    
+  \item Compute the Divergence from Randomness weight (using the
+    Binomial Distribution) of each item in the term frequency index, given that the expected proportion of each term is \rinline{paste(paste(colnames(A), ":", sep=""), expected.probability, collapse=", ")}.
+    
+  \item Use cosine similarity to compute the set of document scores
+    for the query containing the terms ``\rinline{query}'', and rank
+    the documents by their relevance to the query.
+    
+  \item A colleague tells you to include each word five times in the
+    query to get better results (e.g. search for
+    \rinline{paste(rep(query, each=5), collapse = " ")}). Explain why
+    this is a good or bad idea.
+
+  \end{enumerate}
+  
+  \begin{workingbox}
+    \begin{enumerate}
+    \item Reason for: removing words make the search process more
+      efficient. Reason against: some stop words may be important
+      query terms, depending on the text collection.       \xmark{2}
+    \item The TF weights are:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(TF)
+      % end.rcode 
+      The IDF weights are:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(IDF)
+      % end.rcode 
+      giving the weighted term frequencies:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(TF.IDF)
+      % end.rcode 
+      \xmark{2}
+    \item The norm of each document vector is:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(d.norm)
+      % end.rcode 
+      The norm of the query vector is:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(q.norm)
+      % end.rcode 
+      Therefore the documents scores are:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(ds)
+      % end.rcode 
+      giving the document ranking
+      \rinline{rownames(A)[rank(-ds, ties.method = c("first"))]}.
+      \xmark{2}
+    \item Dividing by the document norm removes the effect of the
+      document length (meaning a document wont get a high score just
+      because it is long) and so is required. Dividing by the query
+      norm does the same for the query and so is constant for all
+      document scores, but since we are interested in the rank and not
+      the scores, dividing by the query norm has no effect on the rank,
+      and so is not needed.
+      \xmark{2}
+    \end{enumerate}
+    
+    
+  \end{workingbox}
+]>)
+
+
+m4_define(_Trend_q3,<[
+\squestion
+
+Supreme Chancellor Valorum wants the assistance of the Jedi Knights to
+break the blockade of Naboo, and has decided to examine their
+popularity in the community. The table below shows the square root of
+the number of tweets for each month containing the word Jedi.
+
+\begin{center}
+% begin.rcode echo=FALSE, results="asis"
+
+$@
+#set.seed(56235)
+require("xtable")
+set.seed(SEED)
+y = rpois(length(trend), trend)
+MONTHS = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+n = length(y)
+names(y) = MONTHS[1:n]
+x = 1:n
+mod = lm(y ~ x)
+yhat = predict(mod)
+ssx = sum((x - mean(x))^2)
+ssxy = sum((x - mean(x))*(y - mean(y)))
+ssy = sum((y - mean(y))^2)
+b = ssxy/ssx
+RSS = sum((y - yhat)^2)
+s = sqrt(RSS/(n-2))
+t = (b)/(s/sqrt(ssx))
+print(xtable(tmp), floating=FALSE)
+% end.rcode
+\end{center}
+
+Our task is to fit the simple linear regression $y = a + bx$, where
+$y$ is the square root of the number of tweets in the month containing
+the word Jedi, and $x$ is the month as a number (Jan = 1, Feb = 2,
+\ldots, Dec = 12). We have found that $SS_{x} = \rinline{ssx}$, 
+$SS_{xy} = \rinline{ssxy}$, and $SS_{y} = \rinline{ssy}$.
+
+\begin{enumerate}
+\item Compute the sample gradient $b$ of the of the simple linear regression.
+\item Compute the residual sum of squares ($RSS$), given that the fitted square root tweet counts are $\hat{y} = \rinline{paste(yhat, collapse=", ")}$.
+\item Compute the $t$ test statistic, testing the Null Hypothesis that $\beta$, the gradient of the model is zero.
+\item What can we conclude from the above $t$ test statistic in terms of tweets about Jedis?
+\end{enumerate}
+
+\begin{workingbox}
+\begin{enumerate}
+\item The sample gradient $b = SS_{xy}/SS_x = \rinline{b}$ \xmark{2}
+\item $RSS = {\sum {(y_i - \hat{y}_i)}^2} = \rinline{RSS}$ \xmark{2}
+\item $t = (b - 0)/(s/\sqrt{SS_x})$, $s = \sqrt{RSS/(n-2)} = \rinline{s}$, $t = \rinline{t}$ \xmark{2}
+\item If the magnitude of the $t$ value is small, then we have no evidence of a change in tweet counts about Jedis as the months increase. If the $t$ value is large, and $b > 0$, then the tweets counts are increasing over the months. If $b < 0$ then the tweet counts are decreasing.
+  \xmark{2}
 \end{enumerate}
 \end{workingbox}
 
