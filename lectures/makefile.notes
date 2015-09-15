@@ -1,20 +1,20 @@
 TEX = xelatex --shell-escape
-R_PROG := /opt/local/bin/R
-R_SCRIPT := /opt/local/bin/Rscript
+R_PROG := /usr/bin/R
+R_SCRIPT := /usr/bin/Rscript
 #PANDOC := pandoc -f markdown+grid_tables
 PANDOC := pandoc -f markdown
 
 # Rules for construction
 %.md.png:	%.Rmd
-	Rscript -e "library(knitr); opts_chunk[['set']](dev = 'png'); knit('$<', output='$*.md')"
+	${R_SCRIPT} -e "library(knitr); opts_chunk[['set']](dev = 'png'); knit('$<', output='$*.md')"
 
 %.md.pdf:	%.Rmd
-	Rscript -e "library(knitr); opts_chunk[['set']](dev = 'pdf'); knit('$<', output='$*.md')"
+	${R_SCRIPT} -e "library(knitr); opts_chunk[['set']](dev = 'pdf'); knit('$<', output='$*.md')"
 
 %.md:	%.Rmd
 	#mkdir -p "figure/$*"
-	#echo "opts_chunk$$set(fig.path='figure/text_analysis/text_index_');" | cat - $< | Rscript -e "f <- file('stdin'); open(f); library(knitr); knit(f, output='$*.md')"
-	Rscript -e "library(knitr); knit('$<', output='$*.md')"
+	#echo "opts_chunk$$set(fig.path='figure/text_analysis/text_index_');" | cat - $< | ${R_SCRIPT} -e "f <- file('stdin'); open(f); library(knitr); knit(f, output='$*.md')"
+	${R_SCRIPT} -e "library(knitr); knit('$<', output='$*.md')"
 
 %.tex:	FORCE %.md
 	${PANDOC} -f markdown -t latex $*.md -o $*.tex

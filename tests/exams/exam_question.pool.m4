@@ -2158,7 +2158,7 @@ m4_define(_graphs_q4,<[
           print(as.matrix(get.edgelist(g)))
           % end.rcode 
         \end{minipage}
-        \xmark{1}
+        \xmark{2}
       \end{center}
 
       
@@ -2173,10 +2173,10 @@ m4_define(_graphs_q4,<[
       \end{center}
       If the distribution is similar to Poisson, the graph is a
       Erdös-Renyi graph. If the distribution is similar to
-      Exponential, the graph is a Barabasi-Albert graph.
+      Exponential, the graph is a Barabasi-Albert graph. \xmark{1}
 
     \item The diameter is the longest shortest path. For this graph, the diameter is 
-      \rinline{diameter(g)}.
+      \rinline{diameter(g)}. \xmark{2}
       
     \item The degree for each vertex is:
       \begin{center}
@@ -2184,13 +2184,10 @@ m4_define(_graphs_q4,<[
           \rinline{paste(names(d),collapse=" & ")} \\
           \rinline{paste(d,collapse=" & ")}
         \end{tabular}
-        The vertex with greatest degree has the greatest degree centrality score.
-      \xmark{2}
       \end{center}
-
-      
-    \item The most central vertex is vertex \rinline{names(which(close == min(close)))}.
-      \xmark{1}
+        The vertex with greatest degree has the greatest degree centrality score.
+        The most central vertex is vertex \rinline{names(which(close == min(close)))}.
+        \xmark{2}
       
     \end{enumerate}
     
@@ -2226,7 +2223,7 @@ m4_define(_clustering_q4,<[
   merge.rows = function(D, pos) {
     a = D[pos[2],,drop=FALSE]
     A = D[-pos[2],,drop=FALSE]
-    A[pos[1],] = apply(rbind(A[pos[1],,drop=FALSE],a),2,max)
+    A[pos[1],] = apply(rbind(A[pos[1],,drop=FALSE],a),2,min)
     return(A)
   }
   
@@ -2246,7 +2243,7 @@ m4_define(_clustering_q4,<[
   found you on his way to meet the Emperor and wants you to complete
   the analysis on the way.
     
-  The local of $\rinline{nrow(X)}$ rebel bases is given below:
+  The location of $\rinline{nrow(X)}$ rebel bases are given below:
   % begin.rcode echo=FALSE,results="verbatim"
   print(X)
   % end.rcode 
@@ -2266,8 +2263,8 @@ m4_define(_clustering_q4,<[
   \begin{workingbox}
     
     \begin{enumerate}
-    \item Binary distance was used.
-    \item The missing distance is \rinline{z}.
+    \item Binary distance was used. \xmark{2}
+    \item The missing distance is \rinline{z}. \xmark{2}
     \item The set of distance matrices are:
     % begin.rcode echo=FALSE,results="verbatim"
     E = D
@@ -2286,13 +2283,13 @@ m4_define(_clustering_q4,<[
     % end.rcode 
     Note that the value of the numbers along the diagonal of each
     matrix are not important, since we do not compare clusters to themselves.
-    \end{enumerate}
+    \end{enumerate} \xmark{2}
     \item The dendrogram:
     \begin{center}
     % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=3, fig.height=3
     plot(h)
     % end.rcode 
-    Take note of the clusters formed and the height of the vertical lines.
+    Take note of the clusters formed and the height of the vertical lines. \xmark{2}
     \end{center}
       
 
@@ -2338,7 +2335,7 @@ m4_define(_link_analysis_q4,<[
   \begin{center}
     % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
     par(mar = c(0,0,0,0))
-    plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:N])
+    plot(g, layout=layout.fruchterman.reingold, vertex.size = 30, vertex.label = LETTERS[1:N])
     % end.rcode 
   \end{center}
   
@@ -2379,7 +2376,6 @@ m4_define(_link_analysis_q4,<[
           print(T)
           % end.rcode 
         \end{minipage}
-        \xmark{2}
       \end{center}
       This must be adjusted to reflect the change in in the graph. \xmark{2}
       
@@ -2396,7 +2392,7 @@ m4_define(_link_analysis_q4,<[
 
 
 
-m4_define(_sentiment_q3,<[
+m4_define(_sentiment_q4,<[
   
   \squestion
   
@@ -2412,7 +2408,7 @@ m4_define(_sentiment_q3,<[
   l = rep("negative",n)
   l[positive] = "positive"
   names(l) = c(1:n)
-  classify = c(5,6,7)
+  classify = c(5,6,7,8)
   l.removed = l
   l.removed[classify] = "-"
   classified = (1:n)[-classify]
@@ -2421,8 +2417,8 @@ m4_define(_sentiment_q3,<[
     names(which.max(table(l[as.numeric(names(sort(D[x,])[1:k]))])))
   }
 
-  k1.class = sapply(5:7, knn, D[,classified], l, k1)
-  k2.class = sapply(5:7, knn, D[,classified], l, k2)
+  k1.class = sapply(classify, knn, D[,classified], l, k1)
+  k2.class = sapply(classify, knn, D[,classified], l, k2)
   
   eval = function(k.class, pn.class) {
     mean(k.class[which(l[classify] == pn.class)] == pn.class)
@@ -2516,12 +2512,14 @@ m4_define(_text_index_q3,<[
   TF.IDF = TF %*% diag(IDF)
 
   #expected.probability = c(0.1, 0.2, 0.7)
-  
+  p = dbinom(A[1,], size = sum(A[1,]), prob = expected.probability)
+  w = -log(p)
+
+  d.norm = sqrt(sum(w^2))
   qv = as.numeric(colnames(A) %in% query)
-  d.norm = sqrt(apply(TF.IDF^2,1,sum))
   q.norm = sqrt(sum(qv^2))
-  ds = (TF.IDF %*% qv)/(d.norm * q.norm)
-  
+  ds = (w %*% qv)/(d.norm * q.norm)
+
   % end.rcode 
 
   A set of similar tweets (\rinline{rownames(A)} containing the terms
@@ -2538,11 +2536,10 @@ m4_define(_text_index_q3,<[
     word removal when preprocessing text for a search engine.
     
   \item Compute the Divergence from Randomness weight (using the
-    Binomial Distribution) of each item in the term frequency index, given that the expected proportion of each term is \rinline{paste(paste(colnames(A), ":", sep=""), expected.probability, collapse=", ")}.
+    Binomial Distribution) of each term in the first document, given that the expected proportion of each term is \rinline{paste(paste(colnames(A), ":", sep=""), expected.probability, collapse=", ")}.
     
-  \item Use cosine similarity to compute the set of document scores
-    for the query containing the terms ``\rinline{query}'', and rank
-    the documents by their relevance to the query.
+  \item Use cosine similarity to compute the document score for document 1
+    using the query containing the terms ``\rinline{query}''.
     
   \item A colleague tells you to include each word five times in the
     query to get better results (e.g. search for
@@ -2556,42 +2553,17 @@ m4_define(_text_index_q3,<[
     \item Reason for: removing words make the search process more
       efficient. Reason against: some stop words may be important
       query terms, depending on the text collection.       \xmark{2}
-    \item The TF weights are:
-      % begin.rcode echo=FALSE,results="verbatim"
-      print(TF)
-      % end.rcode 
-      The IDF weights are:
-      % begin.rcode echo=FALSE,results="verbatim"
-      print(IDF)
-      % end.rcode 
-      giving the weighted term frequencies:
-      % begin.rcode echo=FALSE,results="verbatim"
-      print(TF.IDF)
-      % end.rcode 
+    \item The Binomial probabilities of the first document are
+      \rinline{p}. The weights are \rinline{w}.
       \xmark{2}
-    \item The norm of each document vector is:
-      % begin.rcode echo=FALSE,results="verbatim"
-      print(d.norm)
-      % end.rcode 
-      The norm of the query vector is:
-      % begin.rcode echo=FALSE,results="verbatim"
-      print(q.norm)
-      % end.rcode 
-      Therefore the documents scores are:
-      % begin.rcode echo=FALSE,results="verbatim"
-      print(ds)
-      % end.rcode 
-      giving the document ranking
-      \rinline{rownames(A)[rank(-ds, ties.method = c("first"))]}.
+    \item The norm of the weighted document vector is \rinline{d.norm}.
+      The norm of the query vector \rinline{q.norm}.
+      Therefore the documents score is \rinline{ds}.
       \xmark{2}
-    \item Dividing by the document norm removes the effect of the
-      document length (meaning a document wont get a high score just
-      because it is long) and so is required. Dividing by the query
-      norm does the same for the query and so is constant for all
-      document scores, but since we are interested in the rank and not
-      the scores, dividing by the query norm has no effect on the rank,
-      and so is not needed.
-      \xmark{2}
+    \item Increasing the number of query terms only changes the query
+      vector. Since the query vector is normalised, multiplying the
+      query vector by five will not make a difference to the document
+      score.  \xmark{2}
     \end{enumerate}
     
     
@@ -2614,7 +2586,7 @@ $@
 #set.seed(56235)
 require("xtable")
 set.seed(SEED)
-y = rpois(length(trend), trend)
+y = sqrt(rpois(length(trend), trend))
 MONTHS = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 n = length(y)
 names(y) = MONTHS[1:n]
@@ -2628,7 +2600,9 @@ b = ssxy/ssx
 RSS = sum((y - yhat)^2)
 s = sqrt(RSS/(n-2))
 t = (b)/(s/sqrt(ssx))
-print(xtable(tmp), floating=FALSE)
+ytab = as.data.frame(t(y))
+rownames(ytab) = c("Tweet Count")
+print(xtable(ytab), floating=FALSE)
 % end.rcode
 \end{center}
 
@@ -2640,7 +2614,7 @@ $SS_{xy} = \rinline{ssxy}$, and $SS_{y} = \rinline{ssy}$.
 
 \begin{enumerate}
 \item Compute the sample gradient $b$ of the of the simple linear regression.
-\item Compute the residual sum of squares ($RSS$), given that the fitted square root tweet counts are $\hat{y} = \rinline{paste(yhat, collapse=", ")}$.
+\item Compute the residual sum of squares ($RSS$), given that the fitted square root tweet counts are $\hat{y} = \rinline{paste(format(yhat), collapse=", ")}$.
 \item Compute the $t$ test statistic, testing the Null Hypothesis that $\beta$, the gradient of the model is zero.
 \item What can we conclude from the above $t$ test statistic in terms of tweets about Jedis?
 \end{enumerate}
@@ -2654,5 +2628,162 @@ $SS_{xy} = \rinline{ssxy}$, and $SS_{y} = \rinline{ssy}$.
   \xmark{2}
 \end{enumerate}
 \end{workingbox}
+
+]>)
+
+
+
+m4_define(_BACI_q3,<[
+\squestion
+
+The Jedi council are planning on providing all Jedis with double ended
+lightsabers, but are concerned that the public may mistake Jedis
+carrying these special lightsaber weapons as evil. To examine public
+sentiment, the number of tweets containing the words ``evil jedi'' were
+counted for three days before and after changing the weapons. As a
+control the number of tweets containing the words ``jedi council'' were
+counted before and after the changeover.
+
+Below is the square root of the tweet counts:
+\begin{center}
+% begin.rcode echo=FALSE, results="asis"
+require(xtable, quietly=TRUE)
+
+$@
+
+X = factor(rep(c("Evil Jedi","Jedi Council"), 2*c(n,n)))
+Z = factor(rep(rep(c("Before","After"), c(n,n)),2), levels=c("Before","After"))
+
+set.seed(SEED)
+Y = rpois(4*n, rep(mu, rep(n,4)))
+
+tab=tapply(format(sqrt(Y)), list(X,Z), FUN=paste, collapse=", ")
+print(xtable(tab, align="|l|c|c|"), floating=FALSE, hline.after=c(-1,0,1,2))
+
+cat("\\hspace{1cm}")
+xtab = xtabs(sqrt(Y)~X+Z)
+#print(xtable(xtab, align="|l|r|r|", digits=2), floating=FALSE, hline.after=c(-1,0,1,2))
+a = aov(sqrt(Y)~X*Z)
+RSS = sum(a$residuals^2)
+AI = xtab[1,2]
+BI = xtab[1,1]
+AC = xtab[2,2]
+BC = xtab[2,1]
+contrast = (BC+AI) - (AC+BI)
+effect = contrast/(2*n)
+
+SSi = contrast^2/(4*n)
+MSE = RSS/(4*(n-1))
+F = SSi/MSE
+SSba = as.data.frame(anova(a))["Z","Sum Sq"]
+SSci = as.data.frame(anova(a))["X","Sum Sq"]
+SSint = as.data.frame(anova(a))["X:Z","Sum Sq"]
+SStot = sum((sqrt(Y) - mean(sqrt(Y)))^2)
+% end.rcode
+\end{center}
+
+
+
+\begin{enumerate}
+\item Calculate the \emph{effect} for the interaction between the two
+  sets of tweets and time.
+\item What does the value of the interaction effect tell us about the
+  tweet counts?
+\item Given that $SS_{Total} = \rinline{SStot}$, $SS_{BA} = \rinline{SSba}$ and $SS_{CI} = \rinline{SSci}$, find the $F$-statistic for the interaction
+  between the square root of the tweet count and time, and state
+  its degrees of freedom.
+\item List two problems with the data collection process.
+\end{enumerate}
+
+
+\begin{workingbox}
+\begin{enumerate}
+\item The contrast for the interaction between tweet count and time
+  given as $(BC+AI) - (AC+BI)$ = (\rinline{BC} + \rinline{AI}) -
+  (\rinline{AC} + \rinline{BI}) = \rinline{contrast}. The effect is $contrast/(2n) = \rinline{effect}$ \xmark{2}
+\item The interaction effect $\gamma$ is the sample mean increase of
+  the square root tweet count containing "Evil Jedi" after changing to
+  double ended lightsabers. \xmark{2}
+\item The $F$-statistic is $SS_{\text{int}}/MS_{E} =
+  \rinline{SSi/MSE}$ on 1 and \rinline{4*(n-1)} degrees of freedom,
+  where $SS_{\text{int}} = \text{contrast}_{int}^2/4n = \rinline{SSint}$, $SS_E = SS_{Total} - SS_{BA} - SS_{CI} - SS_{Int} = \rinline{RSS}$, $MS_E = SS_E/(4(n-1)) = \rinline{MSE}$. \xmark{2}
+\item The tweet count of tweets containing "evil jedi" may not be
+  effected by lightsaber use or may be effected by other factors. The
+  tweet count of tweets containing "jedi council" may be effected by
+  lightsaber use and so may not be useful as a control. \xmark{2}
+\end{enumerate}
+\end{workingbox} 
+
+
+]>)
+
+
+
+
+m4_define(_SimpleExposure_q3,<[
+\squestion
+
+% begin.rcode echo=FALSE, results="hide", message=FALSE
+
+$@
+
+
+set.seed(SEED)
+
+X = rbind(
+t(rmultinom(1, 38, pA)),
+t(rmultinom(1, 25, pB)),
+t(rmultinom(1, 25, pC)))
+
+
+page = paste("Page", LETTERS[1:3])
+page = c("Reference", "No Reference")
+dimnames(X) = list(continent, page)
+Y = cbind(X, Total = rowSums(X))
+Y = rbind(Y, Total=colSums(Y))
+Z = X
+E = (rowSums(Z) %o% colSums(Z))/sum(Z)
+
+x = sum((Z - E)^2/E)
+df = (nrow(Z) - 1)*(ncol(Z) - 1)
+% end.rcode
+
+
+TweetMe have obtained the count of tweets containing references to their company from three different countries.
+\begin{center}
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(Y)
+  % end.rcode
+\end{center}
+
+\begin{enumerate}
+\item Identify any problems with using a $\chi^2$ (Chi-squared) test
+  with this data and transform the data to avoid them.
+\item Find expected counts for each entry in the table
+  assuming city of origin and Web page are independent.
+\item Calculate a $\chi^2$ statistic for testing whether a tweets reference to TweetMe is independent of the country of origin, and state its degrees of freedom.
+\item State the Null and Alternative hypotheses of the test. Provide a
+  conclusion to the test based on your $\chi^2$ statistic.
+\end{enumerate}
+
+  \begin{workingbox}
+    \begin{enumerate}
+    \item The $\chi^2$ test requires that all cells are 5 or
+      more. All cells are at least 5, so no transform is needed. \xmark{2}
+    \item The expected counts are:
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(E)
+      % end.rcode 
+      \xmark{2}
+    \item The test statistic is $\chi^2 = \rinline{x}$ with df = \rinline{df}.
+      \xmark{2}
+    \item The Null Hypothesis is that reference to TweetMe is
+      independent of country. The Alternative is that there is an
+      assication to country. If the test statistic small, there is no
+      evidence of a relationship. If the test statistic is large, then
+      there is an association. \xmark{2}
+    \end{enumerate}
+  \end{workingbox}
+
 
 ]>)

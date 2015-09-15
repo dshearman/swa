@@ -1,4 +1,4 @@
-XELATEX = xelatex --shell-escape
+XELATEX = lualatex --shell-escape
 PDFLATEX := pdflatex
 R_PROG := /usr/bin/R
 CODE = 300958
