@@ -2243,7 +2243,9 @@ m4_define(_clustering_q4,<[
   found you on his way to meet the Emperor and wants you to complete
   the analysis on the way.
     
-  The location of $\rinline{nrow(X)}$ rebel bases are given below:
+  The location of $\rinline{nrow(X)}$ rebel bases 
+  (\rinline{paste(LETTERS[1:nrow(X)], collapse=", ")})
+  are given below:
   % begin.rcode echo=FALSE,results="verbatim"
   print(X)
   % end.rcode 
@@ -2446,10 +2448,10 @@ m4_define(_sentiment_q4,<[
   % end.rcode 
   \begin{enumerate}
   \item Use the $k$ nearest neighbour classifier to classify the
-    sentiment of images that are missing classification (Web pages
+    sentiment of images that are missing classification (images
     \rinline{classify}), using $k = \rinline{k1}$. 
   \item Use the $k$ nearest neighbour classifier to classify the
-    sentiment of images that are missing classification (Web pages
+    sentiment of images that are missing classification (images
     \rinline{classify}), using $k = \rinline{k2}$. 
   \item Given that the true class of images \rinline{classify} is 
     \rinline{l[classify]}, plot the Receiver operating characteristic
