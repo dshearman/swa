@@ -225,7 +225,7 @@ plot(gd1)
 ```
 We can obtain the adjacency matrix of `gd1`:
 ```{r message=FALSE}
-A = t(get.adjacency(gd1))
+A = t(as.matrix(get.adjacency(gd1)))
 print(A)
 ```
 Note: the function `t` used above, transposes the adjacency matrix so
@@ -270,7 +270,7 @@ therefore the random jump matrix `J` will be a $4\times 4$ matrix with values 1/
 J = matrix(rep(1/4, 4*4),4,4)
 ```
 ```{r echo=show.answers}
-A = t(get.adjacency(gd2))
+A = t(as.matrix(get.adjacency(gd2)))
 T = adjacency.to.probability(A)
 ```
 We can then linearly combine transition probability matrix `T` and `J`

@@ -1,0 +1,57 @@
+% Spatial Analysis of Twitter
+% 300958 Social Web Analysis 
+% Week 14 Lab Solutions
+
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/week14-labsol-')
+```
+
+`r opts_chunk$set(prompt=TRUE, comment=NA, fig.cap="")`
+
+
+- The file [flu.csv](flu.csv) contains the latitude and longitude of
+800+ tweets containing the word "flu".  Using the `spatstat` package
+construct an intensity map of the tweets and add a map of the world.
+Try using different values for the bandwidth parameter `sigma`, for
+example, sigma=1,5 and 10.
+
+```{r}
+library(maps, quietly = TRUE)
+library(spatstat, quietly = TRUE)
+flu.pts = read.csv("flu.csv")
+flu.pp = ppp(flu.pts$lng, flu.pts$lat, 
+             xrange=c(-180,180), yrange=c(-90,90))
+den1 = density(flu.pp, sigma=5)
+plot(den1, ribbon=FALSE, main="")
+map('world', add=TRUE)
+```
+
+
+- The file [the.csv](the.csv) contains the latitude and longitude of
+800+ tweets containing the word "the".  Construct a relative risk map
+of the "flu"" tweets and "the" tweets, add a map of the world.  Try
+using different values for the bandwidth parameter `sigma`.
+
+```{r}
+the.pts = read.csv("the.csv")
+the.pp = ppp(the.pts$lng, the.pts$lat, 
+             xrange=c(-180,180), yrange=c(-90,90))
+both = superimpose(Athe=the.pp, Bflu=flu.pp)
+r = relrisk(both, sigma=5)
+plot(r, ribbon=FALSE, main="")
+map('world', add=TRUE)
+```
+
+- The file [iphoneGEO.csv](iphoneGEO.csv) has the lat and long of the
+  iphone 5 data. Try making an intensity plot of these tweets.
+
+```{r}
+iphone = read.csv("iphoneGEO.csv")
+iphone.pp = ppp(iphone$lng, iphone$lat, 
+             xrange=c(-180,180), yrange=c(-90,90))
+plot(iphone.pp, cols=2)
+map('world', add=TRUE)
+den = density(iphone.pp, sigma=5)
+plot(den, ribbon=FALSE, main="")
+map('world', add=TRUE)
+```

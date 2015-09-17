@@ -1,0 +1,199 @@
+% Graphs 1: Graphs and their parameters
+% 300958 Social Web Analysis 
+% Week 6 Lab Solutions
+
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/week06-labsol-')
+```
+
+- By visually examining the two graphs above, which looks denser? Use
+the function `graph.density` to compute the density of each graph and
+compare the results to your guess.
+
+The ER graph looks to have higher density since it contains many more
+edges.
+
+```{r}
+library("igraph", quietly=TRUE)
+g.er = erdos.renyi.game(n = 100,p = 0.1)
+g.ba = barabasi.game(n = 100, directed=FALSE)
+graph.density(g.er)
+graph.density(g.ba)
+```
+
+- The diameter is the longest shortest path. Which of the two graphs do
+you expect to have the largest diameter?  Use the function `diameter`
+to compute the diameter of each graph.
+
+We expect the ER graph to have a smaller diameter because there are
+many paths between each of the vertices.
+
+```{r}
+diameter(g.er)
+diameter(g.ba)
+```
+
+- What do you expect the degree distribution of each graph to look like?
+We can compute the degree of each vertex using the function `degree`.
+We can also compute the degree distribution of the graph using the function
+`degree.distribution`. Use the `help` pages to understand the output.
+
+The ER degree distribution should look mound shaped (a mean with left
+and right tails). The BA degree distribution should look exponentially
+decaying (many vertices with low degree, a few with high degree).
+
+```{r}
+degree(g.er)
+degree.distribution(g.er)
+degree(g.ba)
+degree.distribution(g.ba)
+```
+
+- Which vertex is most central according to Degree Centrality?
+
+To find the most central, we order the vertices by their degree.
+```{r}
+order(degree(g.er), decreasing=TRUE)
+order(degree(g.ba), decreasing=TRUE)
+```
+
+
+- Read the R help page for
+`closeness` to find what R is computing. Then work out which of the
+vertices is the most central with respect to closeness centrality.
+
+The R function closeness provides the reciprocal of the sum of path lengths.
+Therefore the sum of path lengths is:
+```{r}
+1/closeness(g.ba)
+```
+We want the vertex with the shortest path lengths, therefore we want
+the maximum given by the R closeness function.
+```{r}
+order(closeness(g.er), decreasing = TRUE)
+order(closeness(g.ba), decreasing = TRUE)
+```
+
+
+- Is the centre the same for all three centrality measures? Examine this for the 
+Erdős-Renyi graph and Barabási–Albert graph.
+
+```{r}
+order(betweenness(g.er), decreasing = TRUE)
+order(betweenness(g.ba), decreasing = TRUE)
+```
+
+Compare the above orders.
+
+
+
+- Using the following graph:
+```{r fig.cap="Small Graph"}
+g3 = graph.formula(A-B, A-C, A-D, B-D, B-E, E-D, C-E)
+plot(g3)
+```
+
+Calculate the Degree Distribution, Degree Centrality, Closeness
+Centrality, Betweenness Centrality using the methods shown in the
+lecture. Then check your answer using the R functions.
+
+
+```{r}
+degree.distribution(g3)
+degree(g3)
+1/closeness(g3)
+betweenness(g3)
+```
+
+
+- Find the 10 friends that have the most followers. What are their
+names?  Note the function `sort` will sort the vector of follower
+counts. The function `order` will sort, but provide the position of
+the sort. So to find the top 10, we use `order` with `decreasing=TRUE`
+and choose the first ten values, giving us the positions of the top
+10.
+
+```{r eval=FALSE}
+friendFollowCount = count.followers(friends)
+friendPosition = order(friendFollowCount, decreasing = TRUE)[1:10]
+topFriends = friends[friendPosition]
+```
+
+- Write a `for` loop to check if any of the friend accounts are
+protected and store the `TRUE`/`FALSE` values in the variable `protected.status`. 
+
+```{r eval=FALSE}
+n = length(friends)
+protected.status = rep(0, n)
+for (a in 1:n) {
+  protected.status = friends[[a]]$getProtected()
+}
+```
+
+- Using the function `count.followers` find the 10 unprotected
+  friends with the most followers and store them in `top.unprotected.friends`.
+
+```{r eval=FALSE}
+friendFollowCount = count.followers(unprotected.friends)
+friendPosition = order(friendFollowCount, decreasing = TRUE)[1:10]
+top.unprotected.friends = unprotected.friends[friendPosition]
+```
+
+- Write a `for` loop to download 100 friends from the 10 most
+popular friends of Wil Wheaton and store them in `more.friends`.
+
+```{r eval=FALSE}
+n = length(top.unprotected.friends)
+for (a in 1:n) {
+  more.friends[[a]] = top.unprotected.friends[[a]]$getFriends(100)
+}
+```
+
+- Write a `for` loop to store all 100 screen names in the variable `friend.names`.
+
+```{r eval=FALSE}
+friend.names = c()
+n = length(friends)
+for (a in 1:n) {
+  friend.names[a] = friends[[a]]$getScreenName()
+}
+```
+
+
+- Using what you have done above, write the function:
+
+```{r eval=FALSE}
+user.to.edgelist <- function(user, friends) {
+
+  # create the list of friend screen names
+  friend.names = c()		
+  for (a in c(1:length(friends))) {
+    friend.names[a] = friends[[a]]$getScreenName()
+  } 
+
+  user.name = rep(user$getScreenName(), length(friends)) # repeat user's name
+  el = cbind(user.name,friend.names) # bind the columns to create a matrix
+
+  return(el)
+}
+```
+
+- Who is at the centre of the graph? Use the centrality measures to
+  examine this.
+
+```{r eval=FALSE}
+order(closeness(g2))
+```
+
+- Examine the graph density. Is it sparse or dense?
+
+```{r eval=FALSE}
+density(g2)
+```
+
+- Examine the degree distribution. Is this graph more similar to an
+Erdős-Renyi graph or a Barabási–Albert graph?
+
+```{r eval=FALSE}
+degree.distribution(g2)
+```

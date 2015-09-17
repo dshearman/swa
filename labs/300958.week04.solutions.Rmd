@@ -1,0 +1,195 @@
+% Simple Exposure Analysis
+% 300958 Social Web Analysis 
+% Week 4 Lab Solutions
+
+
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/week04-labsol-')
+```
+
+`r opts_chunk$set(prompt=TRUE, comment=NA)`
+
+
+- Use `read.csv` to read in the CSV files [keyMetrics.csv](keyMetrics.csv), [LifetimeLikesByGenderAge.csv](LifetimeLikesByGenderAge.csv) and [WeeklyReachDemog.csv](WeeklyReachDemog.csv) into data frames.
+Make sure you give sensible names to the data frames you create. Use as.is=TRUE for keyMetrics.csv to avoid the mentioned problem.
+
+```{r}
+keyMetrics = read.csv("http://staff.scm.uws.edu.au/~lapark/300958/labs/keyMetrics.csv", as.is=TRUE)
+LifetimeLikesByGenderAge = read.csv("http://staff.scm.uws.edu.au/~lapark/300958/labs/LifetimeLikesByGenderAge.csv", as.is=TRUE)
+WeeklyReachDemog = read.csv("http://staff.scm.uws.edu.au/~lapark/300958/labs/WeeklyReachDemog.csv", as.is=TRUE)
+```
+
+- Identify and extract the "Weekly Total impressions" variable from the keyMetrics. HINT: the `names` function will
+give a list of column names.
+
+```{r}
+names(keyMetrics)
+impress <- as.numeric(keyMetrics[-1,28])
+print(impress)
+```
+
+
+- Look at the help page for `plot` (see the examples) 
+and try changing the axis labels (`xlab=` and `ylab=`), give a title (`main=`) and
+changing colours and line type (`col=` and `lty=`)
+
+```{r}
+dates <- strptime(keyMetrics[-1,1], format="%m/%d/%y")
+plot(dates,impress, type="l", col=2, lty=3)
+```
+
+```{r include=FALSE}
+m1 = 89
+n1 = 104
+p1 = round(m1/n1,3)
+d1 = 1.960*sqrt(p1*(1-p1)/n1)
+m2 = 52
+n2 = 200
+p2 = round(m2/n2,3)
+d2 = 1.960*sqrt(p2*(1-p2)/n2)
+m3 = 441
+n3 = 762
+p3 = round(m3/n3,3)
+d3 = 1.645*sqrt(p3*(1-p3)/n3)
+
+```
+
+- The proportion of males that reach a page is `r m1` out of `r n1` in a particular week. 
+Find a 95% confidence interval for
+the proportion of males in the audience for this page.
+
+```{r}
+z = 1.96
+p = 89/104
+n = 104
+p.lower = p - z*sqrt(p*(1-p)/n)
+p.upper = p + z*sqrt(p*(1-p)/n)
+print(c(p.lower, p.upper))
+```
+
+- For `r m2` out of `r n2` find a 95% confidence interval for
+the proportion.
+
+```{r}
+z = 1.96
+p = 52/200
+n = 200
+p.lower = p - z*sqrt(p*(1-p)/n)
+p.upper = p + z*sqrt(p*(1-p)/n)
+print(c(p.lower, p.upper))
+```
+
+- For `r m3` out of `r n3` find a 90% confidence interval for
+the proportion.
+
+
+
+```{r}
+z = 1.645
+p = 441/762
+n = 762
+p.lower = p - z*sqrt(p*(1-p)/n)
+p.upper = p + z*sqrt(p*(1-p)/n)
+print(c(p.lower, p.upper))
+```
+
+- Try this in R using `prop.test` (remember the results may be slightly different)
+
+```{r}
+prop.test(89,104, conf.level = 0.95)
+prop.test(52,200, conf.level = 0.95)
+prop.test(441,762, conf.level = 0.90)
+```
+
+
+
+```{r include=FALSE}
+sim <- function(p1,p2=p1,n) rbind(t(rmultinom(1,n,p1)), t(rmultinom(1,n,p2)))
+csq <- function(x) {
+p <- round(apply(x,1,sum)/sum(x),3)
+q <- round(apply(x,2,sum)/sum(x),3)
+e <- round(sum(x) * outer(p,q,"*"),3)
+sum((x-e)^2/e)
+}
+degf <- function(x) (ncol(x)-1)*(nrow(x)-1)
+```
+
+```{r include=FALSE}
+X1 <- matrix(c(46, 123, 15, 31, 13, 16), ncol=3)
+colnames(X1) <- c("<25", "25-34", "35+")
+rownames(X1) <-  c("Female", "Male")
+set.seed(12345)
+X2 <- sim(runif(3), runif(3), 305) 
+dimnames(X2) <- dimnames(X1)
+X3 <- sim(runif(4), runif(4), 276) 
+colnames(X3) <- c("<25", "25-34", "35-44", "45+")
+rownames(X3) <-  c("Female", "Male")
+```
+
+- Find the $\chi^2$ statistic and the degrees of freedom for the following tables.
+
+```{r  echo=FALSE}
+print(X1)
+```
+
+```{r}
+X <- matrix(c(46, 123, 15, 31, 13, 16), ncol=3)
+rX = rowSums(X)
+cX = colSums(X)
+sX = sum(X)
+E = rX %o% cX/sX
+chiSq = sum((X - E)^2/E)
+df = (length(rX) - 1)*(length(cX) - 1)
+print(c(chiSq, df))
+```
+
+```{r  echo=FALSE}
+print(X2)
+```
+
+```{r}
+X <- matrix(c(107, 68, 106, 101, 92, 136), ncol=3)
+rX = rowSums(X)
+cX = colSums(X)
+sX = sum(X)
+E = rX %o% cX/sX
+chiSq = sum((X - E)^2/E)
+df = (length(rX) - 1)*(length(cX) - 1)
+print(c(chiSq, df))
+```
+
+
+```{r  echo=FALSE}
+print(X3)
+```
+
+```{r}
+X <- matrix(c(58, 77, 87, 54, 76, 85, 55, 60), ncol=4)
+rX = rowSums(X)
+cX = colSums(X)
+sX = sum(X)
+E = rX %o% cX/sX
+chiSq = sum((X - E)^2/E)
+df = (length(rX) - 1)*(length(cX) - 1)
+print(c(chiSq, df))
+```
+
+
+- Construct the $2\times 2$ table containing the number of males and females
+(independent of age), versus the months of April and May. Does a $\chi^2$ test
+show that the reach for gender is independent of the two months?
+
+```{r}
+dates = strptime(WeeklyReachDemog$Date, format="%m/%d/%y")
+months = format(dates, "%b")
+female = rowSums(WeeklyReachDemog[,3:9], na.rm=TRUE)
+male = rowSums(WeeklyReachDemog[,10:16], na.rm=TRUE)
+X = matrix(c(sum(female[months == "Apr"]),
+      sum(female[months == "May"]),
+      sum(male[months == "Apr"]),
+      sum(male[months == "May"])), 2, 2)
+colnames(X) = c("Female", "Male")
+rownames(X) = c("April", "May")
+
+chisq.test(X)
+```

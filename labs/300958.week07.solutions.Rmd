@@ -1,0 +1,35 @@
+% Visualization of Social Web Data
+% 300958 Social Web Analysis 
+% Week 7 Lab Solutions
+
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/week07-labsol-')
+```
+
+`r opts_chunk$set(prompt=TRUE, comment=NA)`
+
+- Try and plot the first and third principal components. And the second and third.
+
+```{r eval=FALSE}
+plot(pca$x[,1], pca$x[,3], col=colors, pch=16)
+plot(pca$x[,2], pca$x[,3], col=colors, pch=16)
+```
+
+- Repeat using a `sqrt` transformation.
+
+```{r eval=FALSE}
+pca <- prcomp(t(sqrt(M)))
+plot(pca$x[,1], pca$x[,2], col=colors, pch=16)
+plot(pca$x[,1], pca$x[,3], col=colors, pch=16)
+plot(pca$x[,2], pca$x[,3], col=colors, pch=16)
+```
+
+- Repeat using a three dimensional representation, and plot the first v. third and second v. third dimensions.
+
+```{r eval=FALSE}
+mds <- cmdscale(D, k=3)
+plot(mds[,1], mds[,2], col=colors, pch=16)
+plot(mds[,1], mds[,3], col=colors, pch=16)
+plot(mds[,2], mds[,3], col=colors, pch=16)
+```
+

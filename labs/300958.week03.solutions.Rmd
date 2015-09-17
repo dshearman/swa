@@ -1,0 +1,105 @@
+% Introduction to R
+% 300958 Social Web Analysis 
+% Week 3 Lab Solutions
+
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/week03-labsol-')
+```
+
+`r opts_chunk$set(prompt=TRUE, comment=NA)`
+`r knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
+
+
+- What data structure would you choose to store your past results at
+UWS? Write code to store your results in the variable `past.results`.
+
+Out past results are tabular, so we would use a data frame.
+
+```{r}
+past.results = data.frame(
+  UnitNumber = c(300700, 300958, 200045),
+  UnitName = c("Statistical Decision Making", "Social Web Analytics", 
+               "Quantitative Project"),
+  Mark = c(73, 81, 48)
+)
+print(past.results)
+```
+
+- Write a for loop to convert a number to a sequence of plus signs. For
+example, 5 will be converted to "+++++".
+
+```{r}
+n = 10
+for (a in 1:n) {
+  cat("+")
+}
+```
+
+
+- Write an `if` statement to test if an item in `past.results` is a pass
+or fail grade.  Then use a for loop to test all of the grades in
+`past.results`.
+
+```{r}
+n = nrow(past.results)
+for (a in 1:n) {
+  if (past.results$Mark[a] >= 50) {
+    cat(past.results$UnitNumber[a],":", as.character(past.results$UnitName[a]), 
+        ":", "PASS", "\n")
+  } else {
+    cat(past.results$UnitNumber[a],":", as.character(past.results$UnitName[a]), 
+        ":", "FAIL", "\n")
+  }
+}
+```
+
+- Write a function `check.pass` that takes the data structure
+`past.results` and returns a vector showing if each grade was a pass
+or a fail.
+
+```{r}
+check.pass = function(results) {
+  n = nrow(results)
+  passStatus = rep(0,n)
+  for (a in 1:n) {
+    if (results$Mark[a] >= 50) {
+	  passStatus[a] = TRUE
+    } else {
+	  passStatus[a] = FALSE
+	}
+  }
+  return(passStatus)
+}
+check.pass(past.results)
+```
+
+
+- Use your knowledge of R from the previous part of this lab to write
+the missing code, then enjoy the game of life.  
+
+```{r}
+count.neighbours <- function(grid, pos) {
+## Count the number of living neighbours of a point.
+
+  counter = 0
+  x = pos$x
+  y = pos$y
+
+  ## check the 3x3 grid centred at pos
+  for (x in pos$x + c(-1,0,1)) {
+    for (y in pos$y + c(-1,0,1)) {
+      ## wrap the coordinates, in case the point is at the grid boundary
+      wrap.pos = wrap.coordinates(grid, list(x = x, y = y))
+      ## if there is life, add 1
+      if (inspect(grid,wrap.pos) == 1) {
+        counter = counter + 1
+      }
+    }
+  }
+  wrap.pos = wrap.coordinates(grid, pos)
+  ## remove state of centre point
+  counter = counter - inspect(grid,wrap.pos)
+  return(counter)
+}
+```
+

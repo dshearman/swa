@@ -1,0 +1,63 @@
+% Text Mining 2: Clustering
+% 300958 Social Web Analysis 
+% Week 8 Lab Solutions
+
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/week08-labsol-')
+```
+
+
+- Write a for loop that performs k-means for 1 to 15 clusters and stores the 
+SSW value for each clustering in the variable `SSW`.
+
+```{r eval=FALSE}
+n = 15
+SSW = rep(0, n)
+for (a in 1:n) {
+  K = kmeans(tweet.matrix, a)
+  SSW[a] = K$tot.withinss
+}
+```
+
+
+- Write and run the function `ssw.cosine`, containing a for loop, to compute
+  the dissimilarity between each tweet vector and its cluster
+  prototype, then sum the values to obtain the within sum of squares.
+
+```{r eval=FALSE}
+ssw.cosine = function(tweet.matrix, SK) {
+  n = nrow(tweet.matrix)
+  SSW = rep(0, n)
+  for (a in 1:n) {
+    SSW[a] = cosine.dissimilarity(tweet.matrix[a, ], SK$prototype[SK$cluster[a],])
+  }
+  return(sum(SSW))
+}
+```
+
+- Write the for loop to compute the SSW value (using the above
+  function `ssw.cosine`) for spherical k-means using 2 to 15 clusters.
+
+```{r eval=FALSE}
+n = 15
+SSW = rep(0, n)
+for (a in 1:n) {
+  SK = skmeans(tweet.matrix, a)
+  SSW[a] = ssw.cosine(tweet.matrix, SK)
+}
+```
+
+- Plot the set of SSW values against the cluster number. Can any
+  elbows be seen the plot?
+
+```{r eval=FALSE}
+plot(1:15, SSW, type="b")
+```
+
+- Perform clustering using single linkage clustering instead. Which
+  of the two method provides more reasonable clusters?
+
+```{r eval=FALSE}
+h = hclust(D, method="single")
+```
+

@@ -1,0 +1,143 @@
+% Text Mining 3: Sentiment Analysis
+% 300958 Social Web Analysis 
+% Week 13 Lab Solutions
+
+
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/week13-labsol-')
+opts_chunk$set(dev = 'png', fig.cap="", eval=FALSE)
+```
+
+
+- Compute $P(C = 0)$ and store the value in the variable `pC.0`.
+
+```{r eval=FALSE}
+pC.0 = mean(C.train == "negative")
+```
+
+- Compute the frequency of each of the $m$ words in the positive tweet
+collection and store the vector in the variable
+`total.each.positive.word`.
+
+```{r eval=FALSE}
+total.each.positive.word = colSums(A.train[C.train == "positive",])
+```
+
+
+The probability of each word in the set of positive tweets is computed as:
+```{r}
+pX.C.1 = total.each.positive.word/total.positive.words
+```
+
+- Use the above information to compute $P(X = x_i\vert C = 0)$
+(probability of each word in the set of negative tweets), and store
+the result in the variable `pX.C.0`.
+
+```{r eval=FALSE}
+total.negative.words = sum(A.train[C.train == "negative",])
+total.each.negative.word = colSums(A.train[C.train == "negative",])
+pX.C.0 = total.each.negative.word/total.negative.words
+```
+
+- Examine the sentiment weight for each word and the bias, making sure that they make sense.
+
+```{r eval=FALSE}
+sentiment.weight = log(pX.C.1/pX.C.0)
+bias = log(total.positive.words/total.negative.words)
+```
+
+- Write a for loop to compute the sentiment score of all validation
+  tweets. Examine the scores and compare them to the actual sentiment.
+
+```{r eval=FALSE}
+tweetSentiment = function(tweetVector, sentiment.weight, bias) {
+  word.positions = which(tweetVector > 0)
+  tweet.score = bias + sum(sentiment.weight[word.positions])
+  return(tweet.score)
+}
+
+n = nrow(A.validate)
+scores = rep(0,n)
+for (a in 1:n) {
+  scores[a] = tweetSentiment(A.validate[tweet.number, ], sentiment.weight, bias)
+}
+print(cbind(scores, C.validate))
+```
+
+
+- Complete the function below:
+
+```{r}
+tweet.distance <- function(tweet, train.tweets) {
+
+  n = nrow(train.tweets)
+  d = rep(0, n)
+  for (a in 1:n) {
+    d[a] = binary.metric(tweet, train.tweets[a,])
+  }
+  return(d)
+}
+```
+
+
+- Write a function to compute the class of all tweets in the matrix `A.validate`.
+
+```{r eval=FALSE}
+kNN.classify.all = function(tweets, train.tweets, train.classes, k) {
+  n = nrow(A.validate)
+  validate.classes = rep(0, n)
+  for (a in 1:n) {
+    validate.classes[a] = kNN.classify(tweets[a,], train.tweets, train.classes, k)
+  }
+  return(validate.classes)
+}
+```
+
+
+- Write the function `specificity` to compute the specificity of the prediction.
+
+```{r}
+specificity <- function(predicted.class, actual.class) {
+  negative.positions = which(actual.class == "negative")]
+  return(mean(predicted.class[negative.positions] == "negative"))
+}
+```
+
+
+Once these functions have been written, **examine** the sensitivity and
+specificity of the Naive Bayes and kNN results. Does one provide
+better results that the other?  Is there a specific value of $k$ that
+provides better classification?
+
+```{r eval=FALSE}
+predicted.classes = list(
+  "1"  = kNN.classify.all(A.validate, A.train, C.train, 1),
+  "2"  = kNN.classify.all(A.validate, A.train, C.train, 2),
+  "5"  = kNN.classify.all(A.validate, A.train, C.train, 5),
+  "10" = kNN.classify.all(A.validate, A.train, C.train, 10),
+  "20" = kNN.classify.all(A.validate, A.train, C.train, 20)
+  )
+
+sensitivitySet = c(
+sensitivity(predicted.classes[["1"]], C.validate),
+sensitivity(predicted.classes[["2"]], C.validate),
+sensitivity(predicted.classes[["5"]], C.validate),
+sensitivity(predicted.classes[["10"]], C.validate),
+sensitivity(predicted.classes[["20"]], C.validate))
+
+specificitySet = c(
+specificity(predicted.classes[["1"]], C.validate),
+specificity(predicted.classes[["2"]], C.validate),
+specificity(predicted.classes[["5"]], C.validate),
+specificity(predicted.classes[["10"]], C.validate),
+specificity(predicted.classes[["20"]], C.validate))
+```
+
+- Plot an ROC plot (plot 1 - specificity vs sensitivity, with plot
+parameters xlim=c(0,1) and ylim=c(0,1)). Which classification
+method is closer to the top left corner?
+
+```{r eval=FALSE}
+plot(1 - specificitySet, sensitivitySet, xlim = c(0,1), ylim = c(0,1))
+```
+

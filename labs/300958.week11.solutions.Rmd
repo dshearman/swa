@@ -1,0 +1,112 @@
+% Looking for Trends 
+% 300958 Social Web Analysis 
+% Week 11 Lab Solutions
+
+```{r setup, include=FALSE}
+opts_chunk$set(fig.path='figure/week11-labsol-')
+```
+
+`r opts_chunk$set(prompt=TRUE, comment=NA)`
+
+- Complete the following R-code to write a function to compute Twitter's $\chi^2$ statistic for trends.
+
+```{r eval=FALSE, prompt=FALSE}
+TwitterChi = function(tweetsBefore, tweetsNow, N) {
+
+  return((tweetsNow - tweetsBefore)^2/tweetsBefore
+    + ((N - tweetsNow) - (N - tweetsBefore))^2/(N - tweetsBefore))
+  
+}
+```
+
+
+
+- Using the data below (from lectures) compute $\bar{x}$, $\bar{y}$, $SS_X$, $SS_{XY}$ and therefore $\hat{\beta}$ and $\hat{\alpha}$. You should use, $x=\text{day}$ and  $y=\sqrt{\text{count}}$.
+
+```{r}
+count = c(135, 145, 133, 102, 105, 108, 128, 144, 
+149, 130, 107, 106, 83, 117, 123, 104, 116, 127, 75, 128, 136, 
+145, 120, 127, 110, 109, 122, 136, 125, 143, 177, 142, 134, 153, 
+173, 151, 174, 168, 158, 156, 128, 156, 140, 133, 132)
+day = c(210, 
+211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 
+224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 
+237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 
+250, 251, 252, 253, 254)
+
+x = day
+y = sqrt(count)
+xbar = mean(x)
+ybar = mean(y)
+SSx = sum((x - xbar)^2)
+SSxy = sum((x - xbar)*(y - ybar))
+b = SSxy/SSx
+a = ybar - b*xbar
+print(c(a,b))
+```
+
+- Use the `lm` function to check your results on the Twitter counts from above.
+
+```{r}
+summary(lm(y ~ x))
+```
+
+The following is a moving average (as defined in lectures) function using a `for` loop.
+
+```{r prompt=FALSE}
+moving.average = function(x, m) {
+  if( m%%2 ) { 
+     ## m is odd
+     w = rep(1,m)/m
+   } else { 
+    ## m is even
+    w = c(0.5, rep(1,m-1), 0.5)/m
+  }
+  j = floor(m/2)
+  offsets = (-j):j
+  n = length(x)
+  res = rep(NA, n)
+  for(i in (j+1):(n-j)) {
+    res[i] = sum(w*x[i+offsets])
+    }
+  return(res)
+}
+```
+
+- Make sure you understand this function and use it to compute the 7 point moving average of the tweet count data. Remember to square root first.
+
+```{r}
+trend = moving.average(sqrt(count), 7)
+print(trend)
+```
+
+The following function computes a seasonal component by averaging over all observations that are $m$ apart.
+
+```{r prompt=FALSE}
+seasonal = function(x ,m) {
+  ## extend the data so it is a multiple of m long
+  tmp = c(x, rep(NA, m - length(x)%%m))
+  ## convert to a matrix
+  mat = matrix(tmp, nrow=m)
+  ## Calculate the row means to get the seasonal component (excluding missing entries)
+  seas = rowMeans(mat, na.rm=TRUE)
+  seas = seas - mean(seas)
+  return(seas)
+}
+```
+
+- Make sure you understand this function and use it to compute the seasonal component for the tweet count data. Remember to subtract the trend first.
+
+```{r fig.cap="Data split into trend and seasonal components."}
+centred = sqrt(count) - trend # remove trend
+zcentred = centred[!is.na(centred)] # remove NAs at boundaries
+s = seasonal(zcentred, 7) # compute seasonal component
+print(s)
+plot(day, sqrt(count))
+lines(day, trend, col=2)
+lines(day, trend, col=2)
+lines(day[!is.na(centred)], trend[!is.na(centred)] + rep_len(s, length.out = sum(!is.na(centred))))
+```
+
+
+ 
