@@ -17,6 +17,9 @@ bib:
 %.pdf:	%.tex FORCE 
 	${TEX} '\PassOptionsToClass{hideanswers}{uwsexamTFS} \input{$<}'
 
+%.AIP.pdf: %.tex FORCE
+	${TEX} -jobname "$*.AIP" '\PassOptionsToClass{hideanswers,fontsize=17pt}{uwsexamTFS} \input{$<}'
+
 %.tex:	%.Rtex exam_question.pool.m4 uwsexam.cls
 	${R_SCRIPT} -e "library(knitr); knit('$<', output='$*.tex')"
 

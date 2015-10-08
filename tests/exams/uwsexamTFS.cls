@@ -67,7 +67,7 @@
 \RequirePackage[no-math]{fontspec}
 \setmainfont[Mapping=tex-text]{Arial}
 \setsansfont[Mapping=tex-text]{Arial Black}
-\setmonofont[Mapping=tex-text]{Courier New}
+\setmonofont[Mapping=tex-text]{Courier New Bold}
 
 %\def\begincomment#1\endcomment{} 
 
@@ -84,7 +84,7 @@
 \RequirePackage{graphics}
 
 \RequirePackage{ifthen}
-\RequirePackage[hmargin={1.5cm,1.5cm},vmargin={3cm,3cm} ]{geometry} 
+\RequirePackage[hmargin={1.5cm,1.5cm},vmargin={3cm,3cm}, landscape]{geometry} 
 
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}

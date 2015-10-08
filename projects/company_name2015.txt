@@ -1,0 +1,60 @@
+Group ID    Chosen Company
+----------- -------------------------------------
+Group:  14; Company: McDonald's
+Group:  25; Company: Razer
+Group:  95; Company: Amazon
+Group:  27; Company: Nike
+Group:  60; Company: Apple
+Group:  21; Company: Microsoft
+Group:  70; Company: Telstra
+Group:  33; Company: Cisco
+Group: 100; Company: YouTube 
+Group:   4; Company: John Cena
+Group:  22; Company: IGN
+Group:  26; Company: Channel 10
+Group:  29; Company: Blizzard Entertainment
+Group:  77; Company: Arsenal FC
+Group:  37; Company: Supercell
+Group:  32; Company: Aldi, Australia
+Group:  13; Company: Nintendo AU NZ
+Group:  99: Company: Facebook
+Group:  23; Company: Adidas Originals
+Group:  50; Company: Coles
+Group:  24; Company: Funimation
+Group:  98; Company: Tesco
+Group:  40; Company: Sony
+Group:  69; Company: Fox
+Group:  47; Company: Google
+Group:  44; Company: Steam Games
+Group:   5, Company: Riot Games
+Group:  10; Company: VW USA
+Group:  83; Company: Honda
+Group:  97; Company: Chris Brown
+Group:  38; Company: Foxtel
+Group:  80; Company: Subway
+Group:  11; Company: Dota2
+Group:  48; Company: Samsung
+Group:  28; Company: Ubisoft
+Group:  94; Company: San Fransisco 49ers
+Group:  96; Company: Dominos_AU
+Group:   0; Company: Uber
+Group:  15; Company: Samsung Mobile
+Group:  42; Company: CocaCola
+Group:   2; Company: Windows
+Group:  17; Company: Logitech
+Group:  66; Company: @TheRock
+Group:  30; Company: GoPro
+Group:  49; Company: Ricoh USA
+Group:  90; Company: Lacoste
+Group:  31; Company: Steelseries
+Group:   6; Company: Vodafone
+Group:  89; Company: Hungry Jacks
+Group:  16; Company: Event Cinemas
+Group:  71; Company: Pfizer
+Group:  43; Company: Gymshark
+Group:  41; Company: Gameloft
+Group:  19; Company: Electronic Arts
+Group:  20; Company: Commonwealth Bank of Australia
+Group:  56; Company: Valve Software
+Group:   3; Company: Redbull
+Group:  39; Company: Pizza Hut
