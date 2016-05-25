@@ -31,7 +31,6 @@
 %\setbeamercolor{structure}{fg=green!75!black}
 \mode<presentation>{\usecolortheme[named=crimson]{structure}}
 
-
 \setbeamertemplate{navigation symbols}{} 
 
 % add logo to frame titles
@@ -40,12 +39,16 @@
 %\pgfdeclareimage[height=0.8cm]{logo}{information/uws-logo-white.pdf}
 \pgfdeclareimage[height=0.8cm]{logo}{includes/WesternSydney/WSU_Logo_White.pdf}
 \pgfdeclareimage[height=1.5cm]{logot}{includes/WesternSydney/WSU_Logo_RGB.pdf}
+%\pgfdeclareimage[height=1.5cm]{logot}{includes/WesternSydney/WSU_Logo_White.pdf}
 
+\usefonttheme{serif}
 \addtobeamertemplate{frametitle}{}{%
-\begin{textblock*}{0.13\textwidth}(.84\textwidth,-0.88cm)
+\begin{textblock*}{0.13\textwidth}(.84\textwidth,-0.94cm)
 	\pgfuseimage{logo}
 \end{textblock*}}
-
+\setbeamerfont{frametitle}{size=\huge,series=\bfseries,family=\sffamily}
+\setbeamerfont{title}{size=\Huge,series=\bfseries}
+\setbeamerfont{section in toc}{size=\Large, series=\bfseries, family=\sffamily}
 
 %\logo{\pgfuseimage{logo}}
 
@@ -75,26 +78,29 @@
 \newcommand{\lecturesection}[1]{\part{#1}}
 %\newcommand{\lecturesection}[1]{\chapter{#1}}
 
+\setbeamertemplate{section in toc}[square]
+\setbeamertemplate{section in toc shaded}[default][50]
+
 \setbeamertemplate{title page}
 {
   \vbox{}
   \vfill
   \begin{centering}
       \vskip3.25em%
-    \begin{beamercolorbox}[sep=1em,center]{title}
+    \begin{beamercolorbox}[sep=0.5em,center]{title}
       \usebeamerfont{title}\inserttitle\par%
-      \ifx\insertsubtitle\@empty%
-      \else%
-        \vskip0.25em%
-        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
-      \fi%    
+%      \ifx\insertsubtitle\@empty%
+%      \else%
+%        \vskip0.25em%
+%        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+%      \fi%
     \end{beamercolorbox}%
     \vskip1em\par
     \begin{beamercolorbox}[sep=8pt,center]{author}
       \usebeamerfont{author}\insertauthor
     \end{beamercolorbox}
       %\vskip2.25em%
-      {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}        
+      {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
       \vspace{-1em} %<-- right here
     \begin{beamercolorbox}[sep=8pt,center]{institute}
       \usebeamerfont{institute}\insertinstitute
@@ -105,6 +111,20 @@
     \end{beamercolorbox}\vskip0.0em
   \end{centering}
   \vfill
+}
+
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,left]{author in head/foot}%
+    \usebeamerfont{author in head/foot}~\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,right]{title in head/foot}%
+    \usebeamerfont{title in head/foot}~\insertshorttitle\hfill%\hspace*{3em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{1ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
 }
 
 
@@ -118,24 +138,45 @@
 \AtBeginLecture{
 %\part{\insertlecture}
 %  \frame{\partpage}
+  {
+  %\setbeamercolor{background canvas}{bg=crimson}
+  %\setbeamercolor{section in toc}{fg=fluro}
+  %\setbeamercolor{institute}{fg=fluro}
+  %\setbeamercolor{author}{fg=fluro}
+  %\setbeamercolor{date}{fg=fluro}
 
   %\mode<article>{\title{\insertlecture}}
   \mode<beamer>{\title{\insertlecture}}
   \frame[plain]{\titlepage}
   %\section*{Outline} 
   %\frame{\tableofcontents} 
+
+  \setbeamercolor{background canvas}{bg=crimson}
+  \setbeamercolor{section in toc}{fg=fluro}
+  %\setbeamercolor{section in toc shaded}{fg=fluro}
+
   \begin{frame}<beamer>
     \frametitle{Outline}
     \tableofcontents
   \end{frame}
+  }
 }
 
 \AtBeginSection[] % Do nothing for \section*
 {
+  {
+  \setbeamercolor{background canvas}{bg=crimson}
+  \setbeamercolor{section in toc}{fg=fluro}
+  \setbeamercolor{section in toc}{bg=crimson}
+  \setbeamercolor{section in toc shaded}{fg=black}
+  \setbeamercolor{section in toc shaded}{bg=crimson}
+
   \begin{frame}<beamer>
     \frametitle{Outline}
     \tableofcontents[currentsection]
+    %\tableofcontents[pausesections]
   \end{frame}
+  }
 }
 
 \newcommand{\svspace}[1]{\vspace{#1}}
@@ -144,3 +185,4 @@
     \mode<beamer>{\includegraphics[width=#2]{#1}}
     \mode<article>{\includegraphics[width=#3]{#1}}
 }
+
