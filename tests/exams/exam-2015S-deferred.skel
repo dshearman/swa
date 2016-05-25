@@ -10,7 +10,7 @@ m4_include(`exam_question.pool.m4')
 \unitsession{Spring Session 2015}
 \unitname{Social Web Analytics}
 \unitcode{300958}
-\testtime{2 hours, includes reading time}
+\testtime{2 hours 40 minutes, includes reading time}
 \questioncount{8}
 \lecturername{Laurence Park}
 \studentinstructions{

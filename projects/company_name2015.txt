@@ -4,7 +4,7 @@ Group:  14; Company: McDonald's
 Group:  25; Company: Razer
 Group:  95; Company: Amazon
 Group:  27; Company: Nike
-Group:  60; Company: Apple
+Group:  60; Company: Lenovo
 Group:  21; Company: Microsoft
 Group:  70; Company: Telstra
 Group:  33; Company: Cisco
@@ -40,21 +40,40 @@ Group:  96; Company: Dominos_AU
 Group:   0; Company: Uber
 Group:  15; Company: Samsung Mobile
 Group:  42; Company: CocaCola
-Group:   2; Company: Windows
+Group:   2; Company: Delta Airlines
 Group:  17; Company: Logitech
 Group:  66; Company: @TheRock
 Group:  30; Company: GoPro
-Group:  49; Company: Ricoh USA
+Group:  49; Company: Pepsi
 Group:  90; Company: Lacoste
 Group:  31; Company: Steelseries
 Group:   6; Company: Vodafone
 Group:  89; Company: Hungry Jacks
-Group:  16; Company: Event Cinemas
+Group:  16; Company: Walt Disney Studios
 Group:  71; Company: Pfizer
 Group:  43; Company: Gymshark
 Group:  41; Company: Gameloft
 Group:  19; Company: Electronic Arts
 Group:  20; Company: Commonwealth Bank of Australia
-Group:  56; Company: Valve Software
+Group:  56; Company: Naughty Dog
 Group:   3; Company: Redbull
 Group:  39; Company: Pizza Hut
+Group:  35; Company: @KFCAustralia
+Group:  12; Company: Intel
+Group:  61; Company: sportsbet
+Group:  18; Company: Optus
+Group:  36; Company: Subaru
+Group:  93; Company: Nvidia
+Group:  45; Company: SpaceX
+Group:  34; Company: Converse
+Group:  51; Company: Lexus
+Group:   7; Company: Unity3D
+Group:  46; Company: Mozilla
+Group:  52; Company: Oculus rift
+
+43,43
+22,22
+5
+94
+9
+89

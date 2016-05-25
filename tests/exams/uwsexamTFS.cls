@@ -84,7 +84,8 @@
 \RequirePackage{graphics}
 
 \RequirePackage{ifthen}
-\RequirePackage[hmargin={1.5cm,1.5cm},vmargin={3cm,3cm}, landscape]{geometry} 
+%\RequirePackage[hmargin={1.5cm,1.5cm},vmargin={3cm,3cm}, landscape]{geometry} 
+\RequirePackage[hmargin={1.5cm,1.5cm},vmargin={3cm,3cm}]{geometry} 
 
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}

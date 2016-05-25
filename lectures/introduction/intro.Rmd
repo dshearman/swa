@@ -1,5 +1,5 @@
-% Introduction to Social Networks
-% 300958 Social Web Analytics
+% Introduction to Social Media Intelligence
+% 301116 Social Media Intelligence
 % Week 1
 
 ```{r setup, include=FALSE}
