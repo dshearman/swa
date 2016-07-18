@@ -97,11 +97,11 @@
 \usepackage{fixltx2e} % provides \textsubscript
 \ifxetex
   \usepackage{fontspec,xltxtra,xunicode}
-  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
 \else
   \ifluatex
     \usepackage{fontspec}
-    \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+    \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
   \else
     \usepackage[utf8]{inputenc}
   \fi
@@ -144,6 +144,7 @@
 
 
 %\usepackage{colortbl}
+%\usepackage[table]{xcolor}
 \usepackage{fancyvrb}
 \usepackage{longtable}
 \newcommand{\VerbBar}{|}

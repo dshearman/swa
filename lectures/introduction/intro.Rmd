@@ -43,12 +43,17 @@ Lecturers:
 
 - Laurence Park <lapark@scem.uws.edu.au>
 - Glenn Stone <g.stone@uws.edu.au>
+- Sangeeta Bhatia <17545059@student.uws.edu.au>,
 
 Lab demonstrators:
 
-- Catherine Zheng <c.zheng@uws.edu.au>
-- Mehar Muhammad <a.muhammad@uws.edu.au>
-- Nima Ramezani
+- Timothy Galvin <T.Galvin@uws.edu.au>,
+- Chad Clark <Chad.Clark@westernsydney.edu.au>
+- Rekha Nachiappan <R.Nachiappan@westernsydney.edu.au>
+
+Mailing list:
+
+- unit_300958@scem.uws.edu.au
 
 # Social Networks
 

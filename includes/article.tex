@@ -9,8 +9,8 @@
 %\documentclass[a4paper,10pt]{book}
 %\documentclass[sfsidenotes]{tufte-handout}
 %\documentclass[sfsidenotes,usenames,dvipsnames,svgnames,override,table]{tufte-book}
-\documentclass[sfsidenotes]{tufte-book}
-%\documentclass{amsbook}
+%\documentclass[sfsidenotes]{tufte-book}
+\documentclass{amsbook}
 %\documentclass[chapterprefix=true,titlepage=false]{scrbook}
 %\documentclass[chapterprefix=false,titlepage=false]{scrbook}
 
@@ -21,11 +21,16 @@
 
 %\usepackage{beamerarticle}
 
-\usepackage[noxcolor]{beamerarticle}
-%\usepackage{beamerarticle}
-\PassOptionsToPackage{table}{xcolor}
 
-%\usepackage[table]{xcolor}
+
+\usepackage[noxcolor]{beamerarticle}
+%\usepackage[xcolor]{beamerarticle}
+%\usepackage{beamerarticle}
+%\usepackage{beamerarticle}
+
+\PassOptionsToPackage{table}{xcolor}
+\usepackage[table]{xcolor}
+
 
 %\mode<article>{\usepackage{fullpage}} 
 %\mode<article>{\usepackage[left=2cm,top=3cm,right=2cm]{geometry}}
@@ -38,8 +43,8 @@
 \usepackage{graphicx}
 
 %\usepackage{avant}
-\usepackage{sectsty}
-\allsectionsfont{\sffamily}
+%\usepackage{sectsty}
+%\allsectionsfont{\sffamily}
 
 \newcommand{\setweek}[1]{\setcounter{chapter}{#1}}
 
@@ -89,6 +94,18 @@
 %\lefoot[\pagemark]{\pagemark}
 %\renewcommand*{\headfont}{\itshape\scshape}% Will equal \scshape for most fonts
 %\renewcommand*{\chaptermarkformat}{\chapapp~\thechapter\autodot\enskip}
+
+
+%% for KOMA script
+%\RedeclareSectionCommand[
+%style=section,
+%beforeskip=1\baselineskip,
+%afterskip=2.5\baselineskip,
+%font=\Huge
+%]{chapter}
+%\renewcommand*{\chapterformat}{%
+%  \mbox{\chapappifchapterprefix{\nobreakspace}\thechapter%
+%  \autodot\enskip}}
 
 
 

@@ -62,7 +62,7 @@ $(TEMPLATE_DIR)/%: FORCE
 	${XELATEX} -jobname "${CODE}.$*.slides" -output-directory ${OUTPUT_DIR} "\input{${INCLUDE_DIR}/beamer.tex}\input{${TEMPLATE_DIR}/$*.tex}"
 
 each.notes:	week01.notes week02.notes week03.notes week04.notes week05.notes week06.notes \
-	week07.notes week08.notes week09.notes week10.notes week12.notes
+	week07.notes week08.notes week10.notes week11.notes week12.notes week13.notes week14.notes
 
 each.slides:	week01.slides week02.slides week03.slides week04.slides week05.slides week06.slides \
 	week07.slides week08.slides week10.slides week11.slides week12.slides week13.slides week14.slides
