@@ -372,7 +372,7 @@ or a fail.
 
 # Challenge 1: Finding Force of Will
 
-The file [AllSets.json]("http://x") contains details of all "Magic: The
+The file [AllSets.json](http://staff.scm.uws.edu.au/~lapark/300958/labs/AllSets.json) contains details of all "Magic: The
 Gathering" cards, but it is encoded as a JSON file.
 
 The library `jsonlite` contains the function `fromJSON` that reads a
@@ -381,8 +381,8 @@ JSON formatted file and stores the data in a list data structure.
 Find the name of the artist who produced the image for the card "Force
 of Will" from the "Eternal Masters" set (three letter code: EMA).
 
-*Hint*: Start of by loading the data into a variable (let's call it
- `cards`), examine the type of the variable, then use `names(cards)`
+*Hint*: Start by loading the data into a variable (let's call it
+ `mtg`), examine the type of the variable, then use `names(mtg)`
  to get a list of the names of the top level categories. Once you find
  the catrgory you need, use `class` and `names` to examine the
  sub-categories.
