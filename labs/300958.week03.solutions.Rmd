@@ -7,8 +7,7 @@ opts_chunk$set(fig.path='figure/week03-labsol-')
 ```
 
 `r opts_chunk$set(prompt=TRUE, comment=NA)`
-`r knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
-
+`r #knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
 
 - What data structure would you choose to store your past results at
 UWS? Write code to store your results in the variable `past.results`.
@@ -73,6 +72,43 @@ check.pass = function(results) {
 check.pass(past.results)
 ```
 
+
+
+# Challenge 1: Finding Force of Will
+
+Load the JSON data into a list and examine the type and categories.
+```{r}
+library("jsonlite")
+mtg = fromJSON("AllSets.json")
+class(mtg)
+names(mtg)
+```
+We see that the categories are the three letter set names, we want to examine `EMA`.
+```{r}
+class(mtg$EMA)
+names(mtg$EMA)
+```
+The sub-categories are the set details and cards. We want to examine the cards.
+```{r}
+class(mtg$EMA$cards)
+names(mtg$EMA$cards)
+```
+The cards are stored in a data frame (table). So we find the row that contains the name "Force of Will".
+```{r}
+pos = which(mtg$EMA$cards$name == "Force of Will")
+```
+Then find the artist at that position.
+```{r}
+mtg$EMA$cards$artist[pos]
+```
+Or simply print out all of the card details for that row.
+```{r}
+mtg$EMA$cards[pos,]
+```
+
+
+
+# Challenge 2: The Game of Life
 
 - Use your knowledge of R from the previous part of this lab to write
 the missing code, then enjoy the game of life.  

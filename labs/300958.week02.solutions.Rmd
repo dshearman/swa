@@ -33,10 +33,10 @@ main()
 
 - What is the code doing?
 
-Two functions are defined (main and findFactors), then main is
-called. main calls findFactors with the argument 1012, then prints the
-return value. findFactors searches for the set of factors of its
-argument x, by testing if the numbers from 1 to x divide into x.
+Two functions are defined (`main` and `findFactors`), then `main` is
+called. `main` calls `findFactors` with the argument 1012, then prints the
+return value. `findFactors` searches for the set of factors of its
+argument `x`, by testing if the numbers from 1 to x divide into x.
 
 - What is the `%%` operator?
 

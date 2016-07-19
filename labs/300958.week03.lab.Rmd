@@ -7,7 +7,7 @@ opts_chunk$set(fig.path='figure/week03-lab-')
 ```
 
 `r opts_chunk$set(prompt=TRUE, comment=NA)`
-`r knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
+`r #knit_hooks$set(source = function(x, options) paste("<pre lang='r'>", x, "</pre>", sep = ""))`
 
 
 # R Documentation
@@ -74,6 +74,11 @@ We can create variables of type `string`:
 ```{r}
 x = "hello, this is some text."
 ```
+We can also determine the type of the variable using the `class`:
+```{r}
+class(x)
+```
+
 
 ## Data Structures
 
@@ -101,6 +106,13 @@ Higher dimensional arrays can be constructed using the function
 dimension has two items:
 ```{r}
 really.cross.ages = array(c(24, 43, 76, 21, 32, 54, 43, 65), c(2,2,2))
+```
+To examine the variables types:
+We can also determine the type of the variable using the `class`:
+```{r}
+class(ages)
+class(cross.ages)
+class(really.cross.ages)
 ```
 
 To access data from an array, we provide the index on the data.
@@ -133,8 +145,13 @@ contain both numeric and string value, only one or the other).
 
 A data frame is a rectangular table of data. with named columns.  The
 `iris` data frame is part of the core R libraries and so is always
-accessible in R.
+accessible in R. Details is the `iris` dataset 
+<https://en.wikipedia.org/wiki/Iris_flower_data_set>
 
+We can determine if a variable is a data frame:
+```{r}
+class(iris)
+```
 We can examine the size of the data frame:
 ```{r}
 dim(iris)
@@ -156,6 +173,23 @@ We can also access the elements using indexing (as if it were a matrix):
 iris[3,]
 ```
 
+If we want to find the rows that have a spefic quality, we must use a
+truth statement. To find all rows that correspond to the "setosa"
+species:
+```{r}
+iris$Species == "setosa"
+```
+The set of `TRUE` and `FALSE` values corresond to each row. To find which are `TRUE`, we use the function `which`:
+```{r}
+which(iris$Species == "setosa")
+```
+We can store these positions and use them to extract the petal width for all of the Setosa species.
+```{r}
+pos = which(iris$Species == "setosa")
+iris$Petal.Width[pos]
+```
+
+
 To create a new data frame, we provide the column data, where each
 column of a vector of the same length:
 ```{r}
@@ -172,11 +206,19 @@ We can have a list that stores a persons information:
 ```{r}
 bob = list(name = "Bob Bobson", age = 42, runs = c(13, 45, 87, 2, 9))
 ```
+and examine its type:
+```{r}
+class(bob)
+```
 We can even have a list of lists:
 ```{r}
 bobs = list(list(name = "Bob Bobson", age = 42, runs = c(13, 45, 87, 2, 9)),
      list(name = "Bob Johnson", town = "Bobville", bowling.runs = c(45, 23, 54, 12), 
      	       bowling.wickets = c(2,0,2,3)))
+```
+which still has the same type:
+```{r}
+class(bobs)
 ```
 
 There are two methods of accessing a list, single and double
@@ -196,6 +238,8 @@ If the list contains names, we can access the data by calling the name
 ```{r}
 bob$runs
 ```
+
+
 
 ### Exercise
 
@@ -264,7 +308,7 @@ for (variable in sequence) {
 
 
 For example, for every year that Greg has been born, give him a
-birthday punch.
+birthday punch (remember that `1:5` is the vector `c(1,2,3,4,5)`).
 ```{r eval=FALSE}
 for (year in 1:gregsAge) {
   punchGreg()
@@ -313,6 +357,10 @@ To run the function, we must add parentheses to the end and include any argument
 ```{r}
 addOne(5)
 ```
+```{r}
+x = addOne(5)
+addOne(x)
+```
 If the result is not assigned to a variable, it is printed to the screen.
 
 
@@ -322,7 +370,24 @@ Write a function `check.pass` that takes the data structure
 `past.results` and returns a vector showing if each grade was a pass
 or a fail.
 
-# The Game of Life
+# Challenge 1: Finding Force of Will
+
+The file [AllSets.json]("http://x") contains details of all "Magic: The
+Gathering" cards, but it is encoded as a JSON file.
+
+The library `jsonlite` contains the function `fromJSON` that reads a
+JSON formatted file and stores the data in a list data structure.
+
+Find the name of the artist who produced the image for the card "Force
+of Will" from the "Eternal Masters" set (three letter code: EMA).
+
+*Hint*: Start of by loading the data into a variable (let's call it
+ `cards`), examine the type of the variable, then use `names(cards)`
+ to get a list of the names of the top level categories. Once you find
+ the catrgory you need, use `class` and `names` to examine the
+ sub-categories.
+
+# Challenge 2: The Game of Life
 
 John Conway developed the [Game of
 Life](http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) to show
