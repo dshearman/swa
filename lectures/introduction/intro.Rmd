@@ -278,7 +278,7 @@ It is used extensively by academic statisticians for research and teaching and i
 It has 4634 extension packages available.
 
 ### Pros
-Its free and open source. It has most methods for most things mostly before any other package. It has the best graphics. It extendable.
+Its free and open source. Most analytic methods are available for R before other other languages. It has excellent visualisation tools. It extendable.
 
 ### Cons
 It has a steep learning curve. No GUI by default. Poor (but improving) memory management; difficulty with very large data sets. 

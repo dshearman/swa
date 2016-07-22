@@ -17,7 +17,7 @@ PANDOC := pandoc -f markdown
 	${R_SCRIPT} -e "library(knitr); knit('$<', output='$*.md')"
 
 %.tex:	FORCE %.md figure/*
-	${PANDOC} -t beamer --slide-level=2 $*.md -o $*.tex
+	${PANDOC} -t beamer --slide-level=3 $*.md -o $*.tex
 
 %.handout.tex:	%.md figure/*
 	${PANDOC} -f markdown -t latex $< -o $*.handout.tex

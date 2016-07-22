@@ -11,7 +11,7 @@ opts_chunk$set(dev = 'pdf', fig.cap="")
 
 # Motivation
 
-## Finding the public opinion
+### Finding the public opinion
 
 
 The social Web contains the opinions of a large sample of the
@@ -28,7 +28,7 @@ Example using word similarities:
 [Geek vs Nerd](http://slackprop.wordpress.com/2013/06/03/on-geek-versus-nerd/)
 
 
-## Digging through the piles of text
+### Digging through the piles of text
 
 \begin{columns}
 \begin{column}{0.45\textwidth}
@@ -46,7 +46,7 @@ Given a million documents, we have to automate the process.
 
 # Document Models
 
-## The need for a document model
+### The need for a document model
 
 Given a set of documents, we are usually faced with the problem of
 searching through them, to either:
@@ -55,7 +55,7 @@ searching through them, to either:
 - Find the document that is most similar to another document
 - Find words that are most similar to another word
 
-### Which tweet is most similar to "Hero memories" or "Game"?
+#### Which tweet is most similar to "Hero memories" or "Game"?
 
 \begin{columns}[t]
 \begin{column}{0.45\textwidth}
@@ -73,7 +73,7 @@ memories. -sjm
 \vspace{1em}
 How can we compute the similarity over millions of tweets?
 
-## Document Models
+### Document Models
 
 Documents are defined by their content, the words they contain. 
 When we write a document:
@@ -87,22 +87,71 @@ because they all come from the same document model, they contain the
 same ideas.
 
 
-## Document model form
+### Document model form
 
 The most common form of document representation is as a *bag of
 words*, meaning that each document is represented as a set of unique
-words and an associated weight:
+words and an associated weight (the order of the words is ignored,
+just as if we tipped the document words into a bag):
+\begin{center}
+\begin{tabular}{lcccccccc}
+\toprule
+	& word 1 & word 2 & \ldots & word $M$ \\
+\midrule
+$\vec{d}$ & $w_{d,1}$ & $w_{d,2}$ & \ldots & $w_{d,M}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+where $w_{d,t}$ is the weight of word $t$ in document $d$.
 
-$$
-	\text{document} = \{\text{word}_1:\text{weight}, \text{word}_2:\text{weight}, \ldots, \text{word}_n:\text{weight}\}
-$$
-
-The weight of each word is a function of the frequency of the word in
-the document and in the collection of documents.
+The weight $w_{d,t}$ is a score showing how well the term $t$
+represents document $d$.  The weight can be positive, zero or
+negative. The greater the weight, the more likely that the term
+represents the document.
 
 
 
-## Types of Document Models
+### Example: Document representation
+
+Let's use $w_{d,t} = f_{d,t}$ the frequency of term $t$ in document $d$.
+Our document set:
+
+1. Social Web analytics is the best!
+2. Social Web analytics is the greatest unit.
+3. The best Web unit is Social Web analytics.
+
+\pause
+
+Construct the frequency table:
+
+\begin{center}
+\begin{tabular}{lcccccccc}
+\toprule
+\onslide<2->{& Social & Web & analytics & is & the & best & greatest & unit} \\
+\cmidrule(r){1-1}\cmidrule(r){2-9}
+\onslide<3->{$\vec{d}_1$ &      1 &   1 &         1 &  1 &   1 &    1 &        0 &    0} \\
+\onslide<4->{$\vec{d}_2$ &      1 &   1 &         1 &  1 &   1 &    0 &        1 &    1} \\
+\onslide<5>{$\vec{d}_3$ &      1 &   2 &         1 &  1 &   1 &    1 &        0 &    1} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Note that each row of the frequency table is an eight dimensional
+vector ($M = 8$).
+
+### Problem: Document Index
+
+#### Problem
+
+Construct the frequency table of the following four documents:
+
+- One one was a race horse
+- Two two was one too
+- One one won one race
+- Two two won one too
+
+
+### Types of Document Models
 
 
 There are three main document models:
@@ -114,9 +163,11 @@ There are three main document models:
 Each of these models treats the documents as a *bag of words*, meaning
 that order of the words is lost once the model is computed.
 
-We will examine the Vector Space Model.
+We will examine the Vector Space Model and Language Model.
 
 ## Vector Space Model
+
+### Vector Space Model
 
 Each document is treated as a vector in an $M$ dimensional vector
 space, where $M$ is the number of unique terms in the document
@@ -149,7 +200,7 @@ in the document.
 \end{tikzpicture}
 \end{center}
 
-## Document vectors
+### Document vectors
 
 A document vector $\vec{d}_i$ is an ordered set of term weights
 $w_{d,t}$, where the order depends on the words in the document
@@ -169,7 +220,7 @@ $$
 Therefore, $s({\vec{d}_i,\vec{d}_j}) = 1$ if $\vec{d}_i/\norm{\vec{d}_i} = \vec{d}_j/\norm{\vec{d}_j}$, otherwise $-1 \le s_{i,j} < 1$.
 
 
-## Queries
+### Queries
 
 Using the Vector Space Model, we can compare documents to documents,
 but we want to be able to compare queries to documents as well (to find the documents most relevant to a query).
@@ -179,37 +230,10 @@ short document. Therefore, we can represent a query using a document
 vector.
 
 
-## Example: Document vectors in the Vector Space
 
-Let's use $w_{d,t} = f_{d,t}$ the frequency of term $t$ in document $d$.
-Our document set:
+### Example: Query the document index
 
-1. Social Web analytics is the best!
-2. Social Web analytics is the greatest unit.
-3. The best Web unit is Social Web analytics.
-
-\pause
-
-Construct the frequency table:
-
-\begin{center}
-\begin{tabular}{lcccccccc}
-\toprule
-\onslide<2->{& Social & Web & analytics & is & the & best & greatest & unit} \\
-\cmidrule(r){1-1}\cmidrule(r){2-9}
-\onslide<3->{$\vec{d}_1$ &      1 &   1 &         1 &  1 &   1 &    1 &        0 &    0} \\
-\onslide<4->{$\vec{d}_2$ &      1 &   1 &         1 &  1 &   1 &    0 &        1 &    1} \\
-\onslide<5>{$\vec{d}_3$ &      1 &   2 &         1 &  1 &   1 &    1 &        0 &    1} \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-Note that each row of the frequency table is an eight dimensional
-vector ($M = 8$).
-
-## Example: Query the document index
-
-If we have the query *best Web unit*, we create the query vector $\vec{q}$ in
+If we have the query "best Web unit", we create the query vector $\vec{q}$ in
 the eight dimensional vector space:
 
 \begin{center}
@@ -240,21 +264,137 @@ $\vec{q}$   &   & $\sqrt{3}$  & \\
 \end{center}
 
 
-## Problem: Index and Query
+### Problem: Query Documents
 
-### Problem
+#### Problem
 
-Construct the frequency table of the following four documents:
+Using your frequency table of the below documents, compute the
+similarity of the documents to the query: "one won"
 
 - One one was a race horse
 - Two two was one too
 - One one won one race
 - Two two won one too
 
-and compute the similarity of the documents to the query: "one won"
+
+### Problems with term frequency
+
+In the previous example we used the the freuquency $f_{d,t}$ as the word weight $w_{d,t}$.
+This lead to problems:
+
+1. Repeating words: If a word appears twice as many times in a
+  document, it should not double the document score. Web page designers
+  used to repeat words to attempt to artificially boost their pages
+  raking in search results.
+
+2. Common words dominate the results: The previous example shows that
+  when using the query "one won" all documents scored high because
+  they contained the word "one". The word "one" contains no
+  information because it appears in every document, and so should not
+  effect the results.
+
+To combat these problems we will use TF-IDF weighting. TF for problem
+1, IDF for problem 2.
+
+### TF-IDF
+
+TF-IDF weighting was designed using experimentation, and has shown to
+provide good results for a simple method.
+
+- TF: term frequency
+- IDF: Inverse Document Frequency
+
+The weight for term in a document is computed as the product of the
+term frequency weight and inverse document frequency weight.
 
 
-## Document Matrix
+### Term weight function (IDF)
+
+IDF is a measure of the terms importance across the document collection.
+
+The term weight can be computed using the function:
+$$
+	\text{IDF}_t = \log_e{\left ( \frac{N}{f_t} \right )}
+$$
+where $N$ is the number of documents, $f_t$ is the number of
+documents containing term $t$, and $\text{IDF}_t$ is the weight of term $t$.
+
+
+
+### Term weight plot ($N = 100$)
+
+As the term document count increases, its weight decreases.
+
+```{r, echo=FALSE, fig.width=4.5, fig.height=2.4, dev="pdf", fig.cap="Inverse document frequency (IDF)"}
+par(mar = c(2.5,2.5,0.1,0))
+par(mgp = c(1.5, 0.4, 0))
+plot(1:100, log(100/(1:100)), ylab="Term weight", xlab="Term Document Count", cex.lab=0.6, cex.axis=0.6)
+```
+
+
+### Computing the IDF
+
+#### Problem 
+
+Compute the IDF term weights for each of the words in the following
+document set:
+
+- One one was a race horse
+- Two two was one too
+- One one won one race
+- Two two won one too
+
+
+### Within document term weight (TF)
+
+The within document term weight (TF) is a measure of how important the
+term is within the document. This weight is dependent on the frequency
+of the term in the document.
+
+The within document term weight can be computed using:
+$$
+\begin{aligned}
+	\text{TF}_{d,t} &= \log_e{\left ( f_{d,t} + 1\right )}
+\end{aligned}
+$$
+where $f_{d,t}$ is the frequency of term $t$ in document $d$ and
+$\text{TF}_{d,t}$ is the weight of term $t$ in document $d$.
+
+### TF weighted frequency plot
+
+As the frequency increases, the increase in weight reduces.
+
+```{r, echo=FALSE, fig.width=4.5, fig.height=2.4, dev="pdf", fig.cap="Weighted term frequency (TF)"}
+par(mar = c(2.5,2.5,0.1,0))
+par(mgp = c(1.5, 0.4, 0))
+plot(1:100, log(1:100 + 1), xlab="Term Frequency", ylab="log(Term Frequency + 1)",cex.lab=0.6, cex.axis=0.6)
+```
+
+
+### TF-IDF: Putting it together.
+
+The weighted term frequency is given as:
+$$
+\begin{aligned}
+	w_{d,t} &= \text{TF}_t\times \text{IDF}_{d,t} \\
+		&= \log_e{\left ( f_{d,t} + 1\right )}\log_e{\left ( \frac{N}{f_t} \right )} \\
+\end{aligned}
+$$
+where $f_{d,t}$ is the frequency of term $t$ in document $d$ and
+$w_{d,t}$ is the weight of term $t$ in document $d$.
+
+#### Problem 
+
+Using the results from the previous problem, compute the within
+document term weights for each of the words in the first document:
+
+- One one was a race horse
+- Two two was one too
+- One one won one race
+- Two two won one too
+
+
+### Document Matrix
 
 Computing the similarity is the inner product of normalised
 vectors. Therefore, we can compute the similarity to all documents
@@ -289,7 +429,8 @@ and $w^{\star}_{d_i,t_j}$ and $w_{d_i,t_j}$ are the normalised weight and weight
 of word $t_j$ in document $d_i$.
 
 
-## Similarity using the Document Matrix
+
+### Similarity using the Document Matrix
 
 Given a document matrix $D$, we can compute the similarity of all
 documents to query $\vec{q}$ using:
@@ -299,264 +440,187 @@ $$
 where $\vec{s}$ is the vector of similarity scores, and 
 $\vec{q}^{T}$ is the transpose of $\vec{q}$.
 
-# Word Weight
 
-## Importance of words
+## Language Model
 
-Not all words have equal importance, so they should not contribute
-equally to the similarity score. For example, if a word appears in
-every document, it is not very informative. If a word appears in one
-document, it may define the document.
+### Language models in Information Retrieval
 
-The weight of a word depends on its context, therefore, we must
-compute the weight of each word when given a new document set.
+A language model is a statistical model of how a sequence of words is produced.
 
-\begin{block}{Example}
-The word "blood" will have the weight:
-\begin{itemize}
-\item ~[low] Medical research article set
-\item ~[high] My brother's diary.
-\end{itemize}
-\end{block}
-
-
-## Going beyond term frequency
-
-In the previous example, we used the term frequency as the term weight
-($w_{d,t} = f_{d,t}$).
-By doing so, if a word appears twice in a document, a query using that word
-will show that document being twice as relevant to a document
-that contains the word only once.
-
-If a document contains a word 200 times, is the word twice as relevant
-to a document that contains the word 100 times? We would expect
-not. As the frequency of a word increases, the relevance of the word
-should not increase linearly, meaning that the weight should be a
-sub-linear function of the frequency.
-
-In this section we will examine document weights that provide a more
-accurate representation of the document.
-
-
-
-
-## Computing Word Weight
-
-When computing word weight (the importance of a word in the document
-set), we must take into account the distribution of the words.
-
-We will examine the weighting methods:
-
-- Divergence from Randomness
-- TF-IDF
-
-
-## Divergence from Randomness
-
-The importance of a word in a document is inversely proportional to
-the probability of it appearing. Meaning, if we expect a word to
-appear and it appears, it is not interesting. If we expect a word not
-to appear and it does, it is interesting.
-
-Remember that $log(1/x) = -log(x)$, so we can compute the weight of
-word $w$ in a document $d$ as:
-$$
-	w_{d,t} = -\log{\left ( P(w\vert d) \right )}
-$$
-
-\pause
-
-### Probability of occurrence
-
-Given a set of computing documents, which words should have high weight?
+A simple language model takes the form of a categorical distribution with $M$ categories
+over the set of all $M$ words.
 \begin{center}
-	computer, with, nuclear, windows, water, snowman.
+\begin{tabular}{lcccccccc}
+\toprule
+	& word 1 & word 2 & \ldots & word $M$ \\
+\midrule
+$\vec{d}$ & $p_1$ & $p_2$ & \ldots & $p_M$ \\
+\bottomrule
+\end{tabular}
 \end{center}
+where $p_t$ is the probability of the next word being word $t$ and ${\sum_t p_t = 1}$.
 
-\pause
+Note that just like the vector space model, this simple language model
+ignores the order of the terms (but more complex language models can
+be designed to use the term ordering).
 
-Words with low probability, that appear, are provided a higher weight.
+### Probability of a Document
 
+Using a language model, we can compute the probability that a given
+document can be produced. We assume that a document is a set of
+independent terms, therefore the probabilty of all terms is the
+product of each term.
+\begin{align*}
+	P(d\vert L) = {\prod_{t} p_t^{f_d,t}}
+\end{align*}
+where $L$ is the language model providing term probabilities $p_t$,
+$f_{d,t}$ is the frequecy of term $t$ in document $d$.
 
-## The effect of $-log(x)$
+For long documents, the document probability will be very small, so we
+usually compute the log probability.:
+\begin{align*}
+	\log{P(d\vert L)} = \log{{\prod_{t} p_t^{f_d,t}}} = {\sum_{t} f_{d,t}\log{p_t}}
+\end{align*}
 
-At the probability increases, $-\log{p}$ decreases:
-\vspace{-6em}
+### Querying documents
 
-```{r, echo=FALSE, fig.width=5, fig.height=4, dev="pdf"}
-x = (1:100)/100
-plot(x, -log(x), xlab="P(w|d)", ylab="-log(P(w|d))", type="l")
-```
+To find documents best matching a query, we must be able to compare the query to each document.
+When using a language model, we assume that:
+- each document has been generated using its own language model
+- we compute the probability that the query could be generated from each of the languge models
 
-## Using the Binomial distribution
+If it is likely that a query could be generated using a document model
+that has generated document $i$, then the query and document $i$ are
+likely to contain the same topics.
 
-We can compute the probability of a word appearing, using the Binomial
-distribution.
+Given query $q$ and the document model for document $d$ $L_d$, the probability of query $q$ is:
+\begin{align*}
+	s(d,q) = \log{P(q\vert L_d)} = \log{{\prod_{t} p_t^{f_q,t}}} = {\sum_{t} f_{q,t}\log{p_t}}
+\end{align*}
+The documents are then ordered by their $s(d,q)$ score.
 
-\begin{block}{Binomial Distribution}
+### Computing Language Models
 
-The probability of $x$ successes, in $n$ trials, where each trial has
-the probability of successes $p$.
+To compute the query score, we must be able to compute the language
+model for a given document (document model). Our model is a
+categorical distribution, so we must fit the values $p_t$ to the
+document (sample).
 
-\end{block}
+We must ask, for document $d$, what are the most likely values of
+$p_t$ that would lead to generating document $d$. The answer is:
+\begin{align*}
+	p_t = P(t\vert d) = \frac{f_{d,t}}{\sum_t f_{d,t}}
+\end{align*}
+So $P(t\vert d)$ is the proportion of term $t$ in document $d$.
 
-- A document is a sample of $n$ words. 
-- If word $w$ is chosen, we have a success, if word $w$ is not chosen,
-  we have a failure.
-- The probability $p$ of word $w$ is the proportion of occurrences of
-  word $w$ in the document collection (occurrences of word $w$ / total
-  number of words in collection).
+### Problem: Document Models
 
+#### Problem
 
-## Binomial Example
-
-A document collection contains 10 documents, each containing 100 words
-(total of 1000 words).  The word "the" appears 100 times in the
-collection, so its probability $P(w\vert C)$ is $p = 100/1000 = 0.1$.  In a
-given document of length 100, "the" appears 12 times. The probability
-of this occurring is:
-$$
-\begin{aligned}
-	P(X = 12) &= \text{Binomial}(12, n = 100, p = 0.1) \\
-	&= {100 \choose 12}0.1^{12}{(1 - 0.1)}^{100 - 12} =  0.0987
-\end{aligned}
-$$
-with weight:
-$$
-	w_{d,t} = -log(0.0987) = 2.316
-$$
-
-
-## DFR Binomial Horses
-
-
-\begin{block}{Problem}
-
-Compute the DFR Binomial weight for each word in the first document
-from the document set below.
-
-\begin{itemize}
-\item One one was a race horse
-\item Two two was one too
-\item One one won one race
-\item Two two won one too
-\end{itemize}
-
-\end{block}
-
-Hint: the Binomial probability is computed as:
-$$
-\begin{aligned}
-	P(X = x) &= {n \choose x}p^{x}{(1 - p)}^{n - x}
-\end{aligned}
-$$
-
-
-## TF-IDF
-
-TF-IDF weighting was designed using experimentation, and has shown to
-provide good results for a simple method.
-
-- TF: term frequency
-- IDF: Inverse Document Frequency
-
-The weight for term in a document is computed as the product of the
-term frequency weight and inverse document frequency weight.
-
-
-## Term weight function (IDF)
-
-IDF is a measure of the terms importance across the document collection.
-
-The term weight can be computed using the function:
-$$
-	\text{IDF}_t = \log_e{\left ( \frac{N}{f_t} \right )}
-$$
-where $N$ is the number of documents, $f_t$ is the number of
-documents containing term $t$, and $\text{IDF}_t$ is the weight of term $t$.
-
-
-
-## Term weight plot ($N = 100$)
-
-As the term document count increases, its weight decreases.
-\vspace{-6em}
-
-```{r, echo=FALSE, fig.width=5, fig.height=3.8, dev="pdf"}
-plot(1:100, log(100/(1:100)), ylab="Term weight", xlab="Term Document Count")
-```
-
-## Computing the IDF
-
-### Problem 
-
-Compute the IDF term weights for each of the words in the following
-document set:
+Construct document models documents for documents 2 and 3 of the following four documents.
 
 - One one was a race horse
 - Two two was one too
 - One one won one race
 - Two two won one too
 
+### Problem: Query Documents Models
 
-## Within document term weight (TF)
+#### Problem
 
-The within document term weight (TF) is a measure of how important the
-term is within the document. This weight is dependent on the frequency
-of the term in the document.
-
-The within document term weight can be computed using:
-$$
-\begin{aligned}
-	\text{TF}_{d,t} &= \log_e{\left ( f_{d,t} + 1\right )}
-\end{aligned}
-$$
-where $f_{d,t}$ is the frequency of term $t$ in document $d$ and
-$\text{TF}_{d,t}$ is the weight of term $t$ in document $d$.
-
-## TF weighted frequency plot
-
-As the frequency increases, the increase in weight reduces.
-\vspace{-6em}
-
-```{r, echo=FALSE, fig.width=5, fig.height=3.8, dev="pdf"}
-plot(1:100, log(1:100 + 1), xlab="Term Frequency", ylab="log(Term Frequency + 1)")
-```
-
-
-## TF-IDF: Putting it together.
-
-The weighted term frequency is given as:
-$$
-\begin{aligned}
-	w_{d,t} &= \text{TF}_t\times \text{IDF}_{d,t} \\
-		&= \log_e{\left ( f_{d,t} + 1\right )}\log_e{\left ( \frac{N}{f_t} \right )} \\
-\end{aligned}
-$$
-where $f_{d,t}$ is the frequency of term $t$ in document $d$ and
-$w_{d,t}$ is the weight of term $t$ in document $d$.
-
-### Problem 
-
-Using the results from the previous problem, compute the within
-document term weights for each of the words in the first document:
+Using your document models of the below documents, compute the
+similarity of the documents 2 and 3 to the query: "one won"
 
 - One one was a race horse
 - Two two was one too
 - One one won one race
 - Two two won one too
 
+### Zero Probability
 
+We saw in the previous problem that if a document model has zero
+probability for any query term, then the probabiliy of the query is
+zero (log probability of $-\infty$).
 
+We computed the zero probability for $p_t$ based on the sample
+document not having any occurence of term $t$ ($f_{d,t} = 0$), but
+should the model have zero probabilities? It is more likely that the
+model has very small probabilities, but not zero probability. Zero
+probability implies that the term will never exist in a document
+generated from the model, but it is more likely that the term is
+improbable, not impossible.
 
+#### Sunrise Problem
 
+What is the probability that the sun will rise tomorrow? If we base
+the answer on our prior knowledge (sample), the probability is 1.
+<https://en.wikipedia.org/wiki/Sunrise_problem>
 
+### Model Smoothing
 
+To remove the problem of zero term probabilities, we smooth out the
+probabilites based on what we belive the probabilities should be (background probability).
+
+A good estimate of background probability comes from combining all
+documents into a document collection $C$.
+
+The background probability of term $t$ is:
+\begin{align*}
+	P(t\vert C) = \frac{\sum_d f_{d,t}}{\sum_t {\sum_d f_{d,t}}}
+\end{align*}
+The smoothed probability for term $t$ is:
+\begin{align*}
+	\lambda P(t\vert d) + (1 - \lambda)P(t\vert C)
+\end{align*}
+where $\lambda \in [0,1]$
+
+### Choosing $\lambda$
+
+The smoothed document model has a smoothing parameter $\lambda$, but what do we set it to?
+
+- $\lambda = 1 \rightarrow P(t\vert d)$
+- $\lambda = 0 \rightarrow p(t\vert C)$
+
+If we examine the document $d$ that is used to compute $P(t\vert d)$, if $d$
+has many words, it is a large sample from the document model, so the
+probabilities $P(t\vert d)$ should be good estimates of the document model
+term proportion. If $d$ contains only a few words, then it is a small
+sample from the document model, and so the estimate $P(t\vert d)$ may not be
+good estimates.
+
+Therefore, if a document has many words, $\lambda$ should be closer to 1.
+
+### Dirichlet Smoothing
+
+Dirichlet smoothing uses:
+\begin{align*}
+	\lambda = \frac{n_d}{n_d + \alpha}
+\end{align*}
+where $n_d = {\sum_t f_{d,t}}$ (the number of words in document $d$),
+and $\alpha$ is a positive real number.
+
+- As $n_d$ increases, $\lambda$ approaches $1$,
+- as $n_d$ decreases, $\lambda$ approaches $0$.
+
+The Diriclet parameter $\alpha$ is related to the sample size (number
+of words in the document). If $\alpha = n_d$, $\lambda = 0.5$.
+
+### Example: Language Model with Diriclet Smoothing
+
+#### Example
+
+Using your document models of the below documents, compute the
+similarity of the documents 2 and 3 to the query: "one won"
+
+- One one was a race horse
+- Two two was one too
+- One one won one race
+- Two two won one too
 
 
 # Preprocessing Text
 
-## Preparing for index construction
+### Preparing for index construction
 
 The English language contains a lot of redundancy that allows us to
 express ideas, but provides confusion to computer processes that do not
@@ -565,13 +629,13 @@ understand the relationships between the words.
 In this section we will examine a few methods to strip down the text
 to increase the effectiveness of analysis.
 
-## Stop words
+### Stop words
 
 Stop words provide no or only little information to our analysis and
 so can be safely removed. Removing stop words can be beneficial to an
 analysis, but it always depends on the text being examined.
 
-### Problem
+#### Problem
 
 Which words can we remove from these documents:
 
@@ -580,7 +644,7 @@ Which words can we remove from these documents:
 3. The best Web unit is Social Web analytics.
 
 
-## Stop word list
+### Stop word list
 
 Here is an example stop word list:
 
@@ -599,12 +663,12 @@ Lists can be compiled for a specific task.
 
 \pause 
 
-### When not to remove stop words
+#### When not to remove stop words
 
 By removing stop words, we remove all occurrences of "To be or not to
 be."
 
-## Letter case and punctuation
+### Letter case and punctuation
 
 When examining words in documents, we want to identify how often they
 appear and in which documents they appear.
@@ -623,7 +687,7 @@ Our document set has been reduced to:
 2. social web analytics greatest unit
 3. best web unit social web analytics
 
-## Stemming
+### Stemming
 
 There are many words that have the same stem, but are adjusted due to
 their use in a sentence. By removing the variation, we obtain a better
@@ -649,7 +713,7 @@ Note that the stems do not have to be words.
 
 
 
-## Summary
+### Summary
 
 You should know how to:
 
@@ -658,7 +722,7 @@ You should know how to:
 - preprocess a document collection
 
 
-## Next Week
+### Next Week
 
 Introduction to Graphs
 

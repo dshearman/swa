@@ -10,7 +10,7 @@ opts_chunk$set(dev = 'pdf', fig.cap="")
 
 # Facebook Insights
 
-## Facebook Insights
+### Facebook Insights
 
 If you own a facebook page and you have 30 "likes" then you get access to facebook insights.
 
@@ -18,7 +18,7 @@ Facebook believes these Insights are useful - particularly to business.
 
 The School of Computing, Engineering and Mathematics has a facebook page.
 
-## Likes, Reach and Talking About
+### Likes, Reach and Talking About
 
 Facebook Insights records data (over a fixed period) relating to the number of likes, 
 the reach and the number "Talking About"
@@ -35,7 +35,7 @@ These measures can be obtained for various time periods, daily, weekly, 28-day, 
 
 The measures are only available for pages that 30 or more of that measure.
 
-## Business Questions
+### Business Questions
 
 The sort of things an organisation might be interested in include.
 
@@ -46,29 +46,26 @@ The sort of things an organisation might be interested in include.
 Facebook provide graphical visualisations of this data. We will look at replicating this, and
 doing some simple statistical analysis.
 
-## Facebook Insights
+### Facebook Insights
 
 \includegraphics[width=0.9\linewidth]{Insights1.pdf}
 
-## Facebook Insights
+### Facebook Insights
 
-The overview screen shows the Reach (and "Talking About") of the Page
-
-The figures at the top are current Likes, and cummulative TA and Reach for the last 7 days.
-
-The graph shows the TA and Reach for 7 day period ending on a particular day, plotted against that day.
-
-The purple circles represent the number of posts each day.
+- The overview screen shows the Reach (and "Talking About") of the Page
+- The figures at the top are current Likes, and cummulative TA and Reach for the last 7 days.
+- The graph shows the TA and Reach for 7 day period ending on a particular day, plotted against that day.
+- The purple circles represent the number of posts each day.
 
 This is all for the past month.
 
 (There is a table of per post info also)
 
-## Facebook Insights
+### Facebook Insights
 
 \includegraphics[width=0.9\linewidth]{Insights2.pdf}
 
-## Facebook Insights
+### Facebook Insights
 
 On the second screen (its the same for Likes, Reach or Talking About), the Likes are broken down by several
 demographic factors
@@ -82,7 +79,7 @@ You can choose the time period that this covers, upto a 92 day period.
 You can also Export the data for 180 days.
 
 
-## Export Data
+### Export Data
 
 The small button to the right of this second screen allows us to export data.
 
@@ -95,7 +92,7 @@ We will look at Page level, XLS data.
 As exported by Facebook there are sometimes problems with this file,
 so open it in Excel and re-save as an XLSX file.
 
-## Export Data
+### Export Data
 \newcommand\sfont{\fontsize{8}{8.1}\selectfont}
 
 R has some facilities to read XLSX files. The gdata library is one. (This will need to be installed)
@@ -104,11 +101,11 @@ R has some facilities to read XLSX files. The gdata library is one. (This will n
 library(gdata, quietly=TRUE)
 ```
 ```{r, size='sfont', cache=FALSE}
-sheetCount("Facebook Insights Data Export 2013-08-07.xlsx")
-sheetNames("Facebook Insights Data Export 2013-08-07.xlsx")
+#sheetCount("Facebook Insights Data Export 2013-08-07.xlsx")
+#sheetNames("Facebook Insights Data Export 2013-08-07.xlsx")
 ```
 
-## Export Data
+### Export Data
 
 The XLSX file contains 65 sheets.
 We are primarily going to look at "Key Metrics" and "Weekly Reach by Demographics"
@@ -131,7 +128,7 @@ The "as.is=TRUE" prevents the key metrics being treated as factors. (see later)
 
 # Reach and Demographics
 
-## Demographics
+### Demographics
 
 Demographics refers to the characteristics of individuals. In Facebook, the most useful demographics are Age group and Gender. City, Country and Language are also recorded.
 
@@ -139,14 +136,14 @@ Several sheets in the XLSX file have breakdown by demographics.
 
 We will look at "Weekly Reach Demographics"
 
-## Reach and Demographics
+### Reach and Demographics
 Reading in the CSV file gives the following. At the moment, we are interested in a particular (recent) date.
 ```{r}
 xx <- WeekReach[158,]
 print(xx)
 ```
 
-## Reach and Demographics
+### Reach and Demographics
 First we make this into a table (matrix) after discarding the Date, and "U" categories.
 And we set up meaningful row and columns names
 
@@ -158,14 +155,14 @@ rownames(tab) <- c("Female","Male")
 print(tab)
 ```
 
-## Reach and Demographics
+### Reach and Demographics
 So we can draw a graph similar to the Facebook one (bar plot)
 ```{r, echo=2, fig.cap=NULL, dev=c('pdf'), fig.width=5, fig.height=2.8}
 par(mar=c(5,4,1,1)+.1, cex=0.7)
 barplot(tab, legend=TRUE, col=c("pink","lightblue"))
 ```
 
-## Reach and Demographics
+### Reach and Demographics
 However, side by side bars are sometimes easier to compare.
 ```{r, echo=2, tidy=FALSE, fig.cap=NULL, dev=c('pdf'), fig.width=5, fig.height=2.8}
 par(mar=c(6,4,0,1)+.1, cex=0.7)
@@ -173,7 +170,7 @@ barplot(tab, legend=TRUE, col=c("pink","lightblue"),
         beside=TRUE)
 ```
 
-##  Questions of interest.
+###  Questions of interest.
 Business (or page owners) might be interested to know...
 
 * What proportion of Reach is ... eg. Male or 18 to 24? If the page, represents a product or service
@@ -184,7 +181,9 @@ that you are reaching?
 
 These are statistical questions...provided we are prepared to assume that the reach is a *random sample* of all possible Reach. (Discuss?)
 
-## Proportions
+## Confidence interval for proportion
+
+### Proportions
 
 The simple (point) estimate of the proportion in category XYZ, is simply the number 
 in that category divided by the total.
@@ -194,30 +193,38 @@ therefore total = 170+74 = 244
 
 proportion 170/244 = 0.697 or 69.7%
 
-## Confidence Interval for Proportion
+### Confidence Interval for Proportion
 
 Revision: A confidence interval is a range that contains the true proportion with high confidence.
 
-For a proportion it takes the form, $\hat{p} \pm \Delta$ where $\Delta = z_{\alpha/2} \sqrt{\hat{p}(1-\hat{p})/n}$
+For a proportion it takes the form,
+\begin{align*}
+\hat{p} \pm \Delta \text{ where }\Delta = z_{\alpha/2} \sqrt{\hat{p}(1-\hat{p})/n}
+\end{align*}
 where $n$ is the total (and should be large), and $z_{\alpha/2}$ is 
 a constant derived from a Normal distribution, that determines the level of confidence.
 
-For a $\alpha=$ 95% confidence interval $z_{\alpha/2} = 1.960$
+- For a $\alpha=$ 95% confidence interval $z_{\alpha/2} = 1.960$
+- For a $\alpha=$ 90% confidence interval $z_{\alpha/2} = 1.645$
 
-For a $\alpha=$ 90% confidence interval $z_{\alpha/2} = 1.645$
+### Confidence Interval for Proportion
 
-## Confidence Interval for Proportion
+#### Example
 
-Q. Find a 95% confidence interval for the proportion of males reached.
+Find a 95% confidence interval for the proportion of males reached.
 
 $\hat{p}= 0.697$, $z_{\alpha/2} = 1.960$, $n=244$
 
-Therefore, $\Delta = z_{\alpha/2} \sqrt{\hat{p}(1-\hat{p})/n} = 1.960\times\sqrt{0.697*(1-0.697)/244} = 0.058$
-
+Therefore,
+\begin{align*}
+\Delta &= z_{\alpha/2} \sqrt{\hat{p}(1-\hat{p})/n} \\
+       &= 1.960\times\sqrt{0.697*(1-0.697)/244} \\
+       &= 0.058
+\end{align*}
 Confidence Interval is $\hat{p}\pm\Delta = 0.697 \pm 0.058$ or $(0.639, 0.755)$
 
 
-## Confidence Interval for Proportion
+### Confidence Interval for Proportion
 
 In R we can use the prop.test function. It does a hypothesis test, but also computes a confidence interval.
 **prop.test(x,n, conf.level)** where x is the count in the category of interest (not the proportion)
@@ -228,10 +235,15 @@ prop.test(170,244, conf.level=0.95)
 
 Results are slightly different due to a different approximation.
 
-## Age profiles
 
+## Chi-squared test for independence
+
+### Age profiles
+
+\begin{block}{Question}
 Are the age profiles of the males and females that we are reaching different?
 That is, neglecting the the difference in overall number is the spread across ages different?
+\end{block}
 
 ```{r}
 print(tab)
@@ -241,7 +253,218 @@ Is there evidence, that the age profiles of genders in our audience differs?
 
 This is a *hypothesis test*
 
-## Hypothesis test
+
+### Independent events
+
+#### Example
+
+The outcomes of tossing a coin and rolling a dice are
+independent. Here are the results from tossing a coin and rolling a
+dice 100 times.
+
+```{r echo=FALSE}
+n = 100
+dice = sample(6, n, replace = TRUE)
+coin = sample(2, n, replace = TRUE)
+X = table(coin, dice)
+```
+
+\begin{center}
+\begin{tabular}{lcccccc}
+  \toprule
+  & \multicolumn{6}{c}{Dice} \\
+  & 1 & 2 & 3 & 4 & 5 & 6 \\
+  \midrule
+   Head & 12 & 8 & 6 & 9 & 6 & 4 \\
+   Tail & 8 & 9 & 8 & 10 & 10 & 10 \\
+   \bottomrule
+\end{tabular}
+\end{center}
+
+If we ran the experiment again, we would get different numbers, but
+the two variables are still independent.
+
+\pause
+We know that the dice roll and coin toss are independent. For another
+experiment where we are unsure of the dependence, how different do the
+numbers have to be for us to have confidence that the variables are
+dependent?
+
+### Chi-squared statistic
+
+The $\chi^2$ (Chi-squared) statistic can be used to summarise the
+similarity of a table to the expected "independent" table.
+$$
+\chi^2 = \sum_i \sum_j \frac{(X_{ij} - np_iq_j)^2}{np_iq_j}
+$$
+
+- $X_{ij}$ as the count of the $i$th row, $j$th column,
+- $n$ as the sample size (sum of all counts),
+- $p_i$ as the expected proportion of $i$th row and
+- $q_j$ as the expected proportion of the $j$th column.
+- $np_iq_j$ is the expected count in cell $ij$, assuming independence between rows and columns.
+
+If all $X_{ij}$ are equal to the expected $np_iq_j$, $\chi^2 = 0$. The
+more different $X_{ij}$ is to $np_iq_j$, the greater $\chi^2$.
+
+
+### Chi-squared statistic of Dice and Coin sample
+
+#### Example
+
+\begin{center}
+\begin{tabular}{lcccccc}
+  \toprule
+  & \multicolumn{6}{c}{Dice} \\
+  & 1 & 2 & 3 & 4 & 5 & 6 \\
+  \midrule
+   Head & 12 & 8 & 6 & 9 & 6 & 4 \\
+   Tail & 8 & 9 & 8 & 10 & 10 & 10 \\
+   \bottomrule
+\end{tabular}
+\end{center}
+
+- $p_i$ for each $i$ is 0.20, 0.17, 0.14, 0.19, 0.16, 0.14
+- $q_j$ for each $j$ is 0.45, 0.55
+- n = 100
+- Giving $\chi^2 = 3.81$
+
+\pause
+We can compute the $\chi^2$ value of our sample and obtain a
+number. If the number is large, then the sample table is not similar to the
+expected independent table, so the sample is probably not independent.
+
+\pause
+But how "large" is large? Is 3.81 large enough?
+
+
+### Examining the $\chi^2$ distribution for independent tables.
+
+To detemine what "large enough" means for the $\chi^2$ statistic, we
+must examine the $\chi^2$ statistic for tables where the random
+varaiables are \alert{independent}. If our $\chi^2$ statistic is larger than
+those, then our table variables are \alert{probably not independent}.
+
+How do we observe other samples with independent rows and columns?
+
+\pause
+We use randomisation of our table.
+
+### Randomisation to break dependence
+
+#### Example (continued)
+
+If two random events are indepenent, we can independently shuffle the
+order of their outcomes without effecting the probability of their
+joint outcome.
+
+\begin{center}
+\begin{tabular}{lcccccccccc}
+\toprule
+Dice & 5 & 2 & 2 & 1 & 5 & 1 & 3 & 6 & 4 & 6 \\
+Coin & T & H & H & H & H & H & H & H & H & H \\
+\bottomrule
+\end{tabular}
+
+\pause
+$\downarrow$ Random shuffle $\downarrow$
+
+\begin{tabular}{lcccccccccc}
+\toprule
+Dice & 1 & 6 & 2 & 5 & 2 & 6 & 3 & 1 & 4 & 5 \\
+Coin & H & H & H & H & H & T & H & H & H & H \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\pause
+Note that the above two outcomes are not equivalent if
+dependence exists between the coin toss and dice roll outcomes.
+
+### Observing independent samples
+
+By repeatedly using random shuffling and computing the $\chi^2$
+statistic of the new table, we can observe what the dice vs. coin
+$\chi^2$ statistic  will look like when the two are independent.
+
+We now ask "what is the probability that we could obtain our $\chi^2$ statistic
+or greater, given that the coin and dice are independent?"
+
+- If the probability is low, then the dice and coin are probably not
+  independent (since the shuffled tables are independent).
+
+- If the probability is high,
+  then we can't say anything. We can assume that they are independent.
+
+
+### Computing the $p$-value
+
+#### Example (continued)
+
+```{r echo=FALSE}
+dice =  c(2,4,5,1,2,6,5,5,4,3,5,6,1,3,5,5,3,1,2,2,1,1,1,3,1,2,5,5,6,4,1,2,4,3,3,6,1,
+6,3,2,1,5,6,2,2,2,1,5,3,6,3,4,6,5,4,4,1,6,6,3,4,3,6,4,4,2,4,5,1,1,1,1,1,5,
+1,2,3,4,4,6,2,5,2,4,2,6,6,5,3,5,4,4,2,2,1,4,3,4,1,4)
+coin = c("H", "T", "T", "T", "H", "T", "T", "T", "H", "T", "H", "T", "H", "T", "H", "T", "T", "T", "H", "T", "H", "H", "T", "H", "H", "H", "H", "T", "H", "H", "T", "T", "T", "T", "T", "T", "T",
+"T", "H", "T", "H", "T", "T", "T", "H", "T", "H", "H", "H", "H", "H", "H", "T", "T", "H", "H", "H", "T", "T", "H", "T", "T", "H", "T", "H", "H", "H", "T", "H", "H", "T", "T", "H", "T",
+"H", "T", "T", "T", "H", "T", "T", "T", "H", "T", "T", "T", "H", "H", "T", "H", "T", "T", "H", "T", "H", "H", "H", "T", "T", "T")
+X = table(coin, dice)
+```
+
+```{r}
+expectedIndependent = function(X) {
+    n = sum(X)
+    p = rowSums(X)/sum(X)
+    q = colSums(X)/sum(X)
+    E = p %o% q * n # outer product creates table
+}
+
+chiSquaredStatistic = function(X, E) {
+    return(sum((X - E)^2/E))
+}
+
+E = expectedIndependent(X) # compute expected counts if independent
+
+x2 = replicate(1000, { # compute 1000 randomised chi-squared statistics
+  diceShuffle = sample(dice)
+  coinShuffle = sample(coin)
+  Xindep = table(coinShuffle, diceShuffle)
+  chiSquaredStatistic(Xindep, E)
+})
+```
+
+### Chi-squared distribution
+
+```{r echo=FALSE, fig.width=4.2, fig.height=2.5, fig.cap="Randomisation distribution of the dice vs. coin chi-squared statistic. Blue region is the set of $\\chi^2$ values that are greater than our sample $\\chi^2$ statistic (3.81)."}
+par(mar = c(2.5,2.5,0.1,0))
+par(mgp = c(1.5, 0.4, 0))
+test <- rnorm(100)
+sampX2 = chiSquaredStatistic(X, E)
+dat <- data.frame(x=x2, above=x2 > sampX2)
+library(ggplot2, quietly=TRUE)
+qplot(x,data=dat,geom="histogram",binwidth=0.4,fill=above) + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("chi-squared statistics")
+#hist(x2, 20, cex.lab=0.6, cex.axis=0.6, main="")
+pval = mean(x2 > sampX2)
+```
+
+### Hypothesis test
+
+We just performed a Hypothesis test on the dice vs. coin table.
+
+- $H_0$: The dice and coin outcomes are independent.
+- $H_A$: The dice and coin outcomes are not independent.
+
+The $p$-value for the test is the proportion of blue in the previous histogram (`r pval`).
+
+Since the $p$-value is high, we cannot reject $H_0$.
+
+\pause
+We can also compute the $p$-value using the R function:
+```{r}
+chisq.test(X, simulate.p.value = TRUE)
+```
+
+### Age profiles: Hypothesis test
 
 Revision: In a hypothesis test we assume a hypothesis that will be accepted by default (null hypothesis), 
 and then try and show that the data demonstrates this is unlikely.
@@ -255,7 +478,7 @@ called $X$ and denote the entry in the $i$-th row and $j$-th as $X_{ij}$
 In our example, $r$ is 2, and $c$ is 7 and $X_{2,2} = 121$ for example.
 
 
-## Chi-squared test
+### Age profiles: Chi-squared test
 
 Firstly, assume the null hypothesis is true. Then we can ignore gender and estimate the proportion in each age group.
 
@@ -276,7 +499,7 @@ p <- apply(tab,1,sum)/sum(tab)
 print(p<-round(p,3))
 ```
 
-## Chi-squared test
+### Age profiles: Chi-squared test
 
 So if the null hypothesis is true, the *expected* proportion in the $ij$-th cell of the table, is just
 $p_i \times q_j$. This means the *expected* **number** in that cell is 
@@ -292,7 +515,7 @@ $$
 
 If this is big then some of the observed cell counts and expected counts are different.
 
-## Chi-squared test
+### Age profiles: Chi-squared test
 
 If the observed and expected counts are different then it is likely the null hypothesis is false.
 
@@ -303,7 +526,7 @@ The approximate *critical* values are taken from a $\chi^2$-distribtuion. This i
 
 NOTE: this only works if the expected values are all bigger than about 5.
 
-## Chi-squared distribution.
+### Chi-squared distribution.
 
 Suppose you want to make an error, 5% of the time. That is, you will say the age profiles are different 
 when they are not really, only 5% of the time. (This is called the significance or $\alpha$)
@@ -320,7 +543,7 @@ print(TT)
 
 Critical values for a $\chi^2$ distribution for degrees of freedom upto 10.
 
-## Summary of chi-squared test
+### Summary of chi-squared test
 
 1. Compute the row and column proportions
 2. Compute the expected cell counts
@@ -328,7 +551,7 @@ Critical values for a $\chi^2$ distribution for degrees of freedom upto 10.
 4. Sum the squared differences using the reciprocal of the expected counts as weights
 5. Refer the $\chi^2$ to a critcal value, if exceeds it reject the null hypothesis.
 
-## The Facebook data
+### The Facebook data
 
 The expected counts are
 ```{r, echo=FALSE}
@@ -338,7 +561,7 @@ print(E)
 Some of these are less than 5. We have two options either discard some cells, this changes the hypothesis. 
 Or aggregate some cells. 
 
-## The Facebook data
+### The Facebook data
 
 If we change the categories and add up we get
 ```{r, echo=FALSE}
@@ -355,7 +578,7 @@ print(q)
 print(p)
 ```
 
-## The Facebook data
+### The Facebook data
 
 Thus the expected counts are (all greater than 5)
 ```{r, echo=FALSE}
@@ -372,7 +595,7 @@ And the weighted sum ($\chi^2$) is `r sum((X-E)^2/E)`
 
 This is **not** larger than the critical value of a $\chi^2$ on 2 degrees of freedom (5.991), so we cannot reject the null hypothesis
 
-## The Facebook data in R
+### The Facebook data in R
 
 Of course R does all of this
 ```{r}
@@ -384,14 +607,14 @@ chisq.test(X)
 ```
 The numbers are slightly different (due to rounding this time) and the test returns a *p value*. 
 
-## $p$ values
+### $p$ values
 
 The $p$ value is the probability of exceeding the calculated $\chi^2$ under the null hypothesis.
 
 So instead of seeing if the calculated $\chi^2$ is bigger than a critical value, you can check if the p-value is 
 less than the significance (5% say --- 0.05)
 
-## The Facebook data in R
+### The Facebook data in R
 
 It turns out R can handle the "counts less than 5" case also, using *Fisher's exact test*
 
@@ -405,7 +628,7 @@ Fisher's exact test is generally not done by hand.
 
 # Key Metrics
 
-## Key Metrics
+### Key Metrics
 The Key Metrics data has a header row, and a second row that is a description. There are 90 columns: 1,15,18 and 24 are;
 
 * **Date** The Date! 
@@ -414,7 +637,7 @@ who have seen any content associated with your Page. (Unique Users)
 * **Daily Organic Reach** Daily The number of people who visited your Page, or saw your Page or one of its posts in News Feed or ticker. These can be people who have liked your Page and people who haven't. (Unique Users)
 * **Daily Viral Reach** Daily The number of people who saw your Page or one of its posts from a story shared by a Friend. These stories include liking your Page, posting to your Page's Timeline, liking, commenting on or sharing one of your Page posts, answering a question you posted, responding to one of your events, mentioning your Page, tagging your Page in a photo or checking in at your location. (Unique Users)
 
-## Key Metrics
+### Key Metrics
 ```{r}
 dates <- keyMetrics[,1]
 dates <- dates[-1]
@@ -424,27 +647,27 @@ reach[1]
 reach <- as.numeric(reach[-1])
 ```
 
-## Key Metrics
+### Key Metrics
 ```{r, fig.cap="Daily Total Reach", dev=c('pdf'), fig.width=4, fig.height=2.8, echo=2}
 par(mar=c(4,4,0,1)+0.1, cex=0.7)
 plot(dates, reach, type="l")
 ```
 
-## Key Metrics
+### Key Metrics
 ```{r, fig.cap="Daily Total Reach", dev=c('pdf'), fig.width=4, fig.height=2.8, echo=2:3}
 par(mar=c(4,4,0,1)+0.1, cex=0.7)
 keep <- (dates > as.POSIXlt("2013-07-01"))
 plot(dates[keep], reach[keep], type="l")
 ```
 
-## Weekly Total Reach
+### Weekly Total Reach
 ```{r, fig.cap="Weekly Total Reach", dev=c('pdf'), fig.width=4, fig.height=2.8, echo=2:3}
 par(mar=c(4,4,0,1)+0.1, cex=0.7)
 wreach <- as.numeric(keyMetrics[-1,16])
 plot(dates[keep], wreach[keep], type="l")
 ```
 
-## Conclusion
+### Conclusion
 
 So by exporting the data we can do a lot more than the usual insights provide
 

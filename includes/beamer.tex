@@ -1,5 +1,7 @@
 \documentclass[table]{beamer}
 
+%\RequirePackage{luatex85}
+
 % for printing slides
 %\usepackage{pgfpages}
 %\pgfpagesuselayout{4 on 1}[a4paper,border shrink=5mm,landscape]
@@ -8,6 +10,7 @@
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{ifthen}
+%\RequirePackage{luatex85}
 
 %\usepackage{pgf}
 
@@ -50,6 +53,7 @@
 %\setbeamerfont{frametitle}{series=\bfseries,family=\sffamily}
 \setbeamerfont{title}{size=\Huge,series=\bfseries}
 \setbeamerfont{section in toc}{size=\Large, series=\bfseries, family=\sffamily}
+\setbeamerfont{subsection in toc}{size=\large, series=\bfseries, family=\sffamily}
 
 %\logo{\pgfuseimage{logo}}
 
@@ -154,6 +158,7 @@
 
   \setbeamercolor{background canvas}{bg=crimson}
   \setbeamercolor{section in toc}{fg=fluro}
+  \setbeamercolor{subsection in toc}{fg=fluro}
   %\setbeamercolor{section in toc shaded}{fg=fluro}
 
   \begin{frame}<beamer>
@@ -168,13 +173,44 @@
   {
   \setbeamercolor{background canvas}{bg=crimson}
   \setbeamercolor{section in toc}{fg=fluro}
+  \setbeamercolor{subsection in toc}{fg=fluro}
   \setbeamercolor{section in toc}{bg=crimson}
+  \setbeamercolor{subsection in toc}{bg=crimson}
   \setbeamercolor{section in toc shaded}{fg=black}
   \setbeamercolor{section in toc shaded}{bg=crimson}
+  \setbeamercolor{subsection in toc shaded}{fg=black}
+  \setbeamercolor{subsection in toc shaded}{bg=crimson}
 
   \begin{frame}<beamer>
     \frametitle{Outline}
-    \tableofcontents[currentsection]
+    \tableofcontents[currentsection,currentsubsection,
+    sectionstyle=show/shaded,
+    subsectionstyle=show/shaded/shaded]
+    %\tableofcontents[pausesections]
+  \end{frame}
+  }
+}
+
+\AtBeginSubsection[] % Do nothing for \section*
+{
+  {
+  \setbeamercolor{background canvas}{bg=crimson}
+  \setbeamercolor{section in toc}{fg=fluro}
+  \setbeamercolor{section in toc}{bg=crimson}
+  \setbeamercolor{section in toc shaded}{fg=black}
+  \setbeamercolor{section in toc shaded}{bg=crimson}
+  \setbeamercolor{subsection in toc}{fg=fluro}
+  \setbeamercolor{subsection in toc}{bg=crimson}
+  \setbeamercolor{subsection in toc shaded}{fg=black}
+  \setbeamercolor{subsection in toc shaded}{bg=crimson}
+
+  \begin{frame}<beamer>
+    \frametitle{Outline}
+    \tableofcontents[currentsection,currentsubsection,
+    sectionstyle=show/shaded,
+    subsectionstyle=show/shaded/shaded]
+    %\tableofcontents[currentsection,currentsubsection,subsectionstyle=show]
+    %\tableofcontents[currentsection,currentsubsection,subsectionstyle=hide]
     %\tableofcontents[pausesections]
   \end{frame}
   }
