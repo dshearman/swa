@@ -31,7 +31,7 @@ includes people who have seen it because it was *shared* etc.
 * "Talking about" means actively interacting with a page or post. 
 That is likes, comments, tags or shares etc.
 
-These measures can be obtained for various time periods, daily, weekly, 28-day, as well as a cummulative total.
+These measures can be obtained for various time periods, daily, weekly, 28-day, as well as a cumulative total.
 
 The measures are only available for pages that 30 or more of that measure.
 
@@ -53,7 +53,7 @@ doing some simple statistical analysis.
 ### Facebook Insights
 
 - The overview screen shows the Reach (and "Talking About") of the Page
-- The figures at the top are current Likes, and cummulative TA and Reach for the last 7 days.
+- The figures at the top are current Likes, and cumulative TA and Reach for the last 7 days.
 - The graph shows the TA and Reach for 7 day period ending on a particular day, plotted against that day.
 - The purple circles represent the number of posts each day.
 
@@ -74,7 +74,7 @@ demographic factors
 
 The graph is a *bar plot* of proportions by gender and age.
 
-You can choose the time period that this covers, upto a 92 day period.
+You can choose the time period that this covers, up to a 92 day period.
 
 You can also Export the data for 180 days.
 
@@ -84,7 +84,7 @@ You can also Export the data for 180 days.
 The small button to the right of this second screen allows us to export data.
 
 * Data can be exported at a page or post level.
-* Dates can be chosen upto 180 days long.
+* Dates can be chosen up to 180 days long.
 * XLS or CSV format can be used. XLS contains more information.
 
 We will look at Page level, XLS data.
@@ -174,7 +174,7 @@ barplot(tab, legend=TRUE, col=c("pink","lightblue"),
 Business (or page owners) might be interested to know...
 
 * What proportion of Reach is ... eg. Male or 18 to 24? If the page, represents a product or service
-you might be interested in whether you are raeching Males more than Females? 
+you might be interested in whether you are reaching Males more than Females? 
 * Is this proportion changing? (see later lecture)
 * Are the age *profiles* different for males and females? Is there something different about the age profiles 
 that you are reaching?
@@ -188,52 +188,145 @@ These are statistical questions...provided we are prepared to assume that the re
 The simple (point) estimate of the proportion in category XYZ, is simply the number 
 in that category divided by the total.
 
-Eg. Number of males  (2+121+31+7+4+2+3)= 170, Number of females (1+45+15+6+2+3+2) =74,
-therefore total = 170+74 = 244
+- Number of males  $(2+121+31+7+4+2+3)= 170$
+- Number of females $(1+45+15+6+2+3+2) =74$,
+- Total = 170+74 = 244
 
-proportion 170/244 = 0.697 or 69.7%
+Therefore, our estimate of the proportion of males is $\hat{p} = 170/244 = 0.697$ or 69.7%
 
-### Confidence Interval for Proportion
+\pause
+But note that this is an \alert{estimate} of the true proportion
+$p$. Providing only the estimate $\hat{p}$ does not tell us how
+different $\hat{p}$ is to $p$.
 
-Revision: A confidence interval is a range that contains the true proportion with high confidence.
-
-For a proportion it takes the form,
-\begin{align*}
-\hat{p} \pm \Delta \text{ where }\Delta = z_{\alpha/2} \sqrt{\hat{p}(1-\hat{p})/n}
-\end{align*}
-where $n$ is the total (and should be large), and $z_{\alpha/2}$ is 
-a constant derived from a Normal distribution, that determines the level of confidence.
-
-- For a $\alpha=$ 95% confidence interval $z_{\alpha/2} = 1.960$
-- For a $\alpha=$ 90% confidence interval $z_{\alpha/2} = 1.645$
-
-### Confidence Interval for Proportion
+### Variance in sample proportions
 
 #### Example
 
-Find a 95% confidence interval for the proportion of males reached.
+```{r echo=FALSE}
+n = 10
+dice = sample(6, n, replace = TRUE)
+hatp = mean(dice == 1)
+```
 
-$\hat{p}= 0.697$, $z_{\alpha/2} = 1.960$, $n=244$
+We want to estimate the proportion of 1s rolled when using a six sided
+dice. In this experiment, we know that $p = 1/6$ (assuming the dice is
+fair). After rolling the dice $n = 10$ times, we obtain the sample:
 
-Therefore,
-\begin{align*}
-\Delta &= z_{\alpha/2} \sqrt{\hat{p}(1-\hat{p})/n} \\
-       &= 1.960\times\sqrt{0.697*(1-0.697)/244} \\
-       &= 0.058
-\end{align*}
-Confidence Interval is $\hat{p}\pm\Delta = 0.697 \pm 0.058$ or $(0.639, 0.755)$
+\begin{center}
+	`r dice`
+\end{center}
+
+Giving $\hat{p} = `r hatp`$.
+
+```{r echo=FALSE}
+n = 10
+dice = sample(6, n, replace = TRUE)
+hatp = mean(dice == 1)
+```
+\pause
+After rolling the dice another 10 times:
+\begin{center}
+	`r dice`
+\end{center}
+
+Giving $\hat{p} = `r hatp`$.
+
+
+### Sample proportion distribution
+
+If we repeat the experiment 1000 times, we get the following distribution. If $p = 1/6$, we can get values of $\hat{p}$ from 0 to 0.5, when $n = 10$.
+
+```{r echo=FALSE, fig.width=4.2, fig.height=2.5, fig.cap="Distribution of sample proportion."}
+n = 10
+library(ggplot2, quietly=TRUE)
+ddist = replicate(1000, mean(sample(6, n, replace = TRUE) == 1))
+qplot(ddist,geom="histogram",binwidth=0.1) + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("sample proportion") + xlim(0,1)
+#qplot(ddist,geom="histogram") + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("sample proportion")
+```
 
 
 ### Confidence Interval for Proportion
 
-In R we can use the prop.test function. It does a hypothesis test, but also computes a confidence interval.
-**prop.test(x,n, conf.level)** where x is the count in the category of interest (not the proportion)
+We just showed that if we know the proportion $p$, we can estimate the
+variation of $\hat{p}$. But when we obtain a sample, we have $\hat{p}$
+(not $p$), so we have the reverse question.
 
-```{r}
-prop.test(170,244, conf.level=0.95)
+\begin{block}{Confidence interval for $p$}
+Giving a sample proportion $\hat{p}$ and sample size $n$, what range
+of values could $p$ take, with probability $1-\alpha$?
+\end{block}
+
+\pause
+
+For a 95% confidence interval:
+
+- We must estimate the variation of $\hat{p}$
+- Using bootstrapping, we sample \alert{with replacement} from the original sample and compute the bootstrap statistic $\hat{p}_b$
+- Repeat the process many times (at least 1000) to obtain a distribution of the bootstrap statistic.
+- The confidence interval for $p$ is the middle 95% of the bootstrap distribution.
+
+
+### Confidence interval for proportion of males
+
+The sample proportion of males $\hat{p} = 0.697$ with $n = 244$.
+
+```{r echo = 3, fig.width=4.2, fig.height=2.5, fig.cap="Bootstrap distribution of proportion of males."}
+par(mar = c(2.5,2.5,0.1,0))
+par(mgp = c(1.5, 0.4, 0))
+bootDist = replicate(1000, mean(sample(c("M","F"), size = 244,
+	 prob = c(0.697, 0.303), replace = TRUE) == "M"))
+qplot(bootDist,geom="histogram",binwidth=0.01) + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("Bootstrap distribution of proportion of males")
+lower = quantile(bootDist, 0.025)
+upper = quantile(bootDist, 0.975)
 ```
 
-Results are slightly different due to a different approximation.
+### Confidence interval for proportion of males
+
+The 95% confidence interval is middle 95% of the bootstrap distribution:
+```{r}
+lower = quantile(bootDist, 0.025)
+upper = quantile(bootDist, 0.975)
+print (c(lower, upper))
+```
+
+Therefore, there is a 90% chance that the proportion of males is between `r lower` and `r upper`.
+\pause
+The 90% confidence interval is middle 90% of the bootstrap distribution:
+```{r}
+lower = quantile(bootDist, 0.05)
+upper = quantile(bootDist, 0.95)
+print (c(lower, upper))
+```
+
+### Problem: confidence intervals
+
+#### Problem
+
+Estimate the 95% confidence interval from the following bootstrap distributions.
+
+
+```{r echo = FALSE, fig.width=4.2, fig.height=2.5, fig.cap="Bootstrap distribution of proportion of males."}
+par(mar = c(2.5,2.5,0.1,0))
+par(mgp = c(1.5, 0.4, 0))
+par(mfrow = c(2,2))
+bootDist1 = rnorm(100, mean = 50, sd = 10)
+bootDist2 = rpois(100, lambda = 10)
+bootDist3 = rlnorm(100, meanlog = 5, sdlog = 2)
+bootDist4 = rgamma(100, shape = 5, rate = 2)
+#qplot(bootDist1,geom="histogram",binwidth=5) + theme(legend.position = "none")
+#qplot(bootDist2,geom="histogram",binwidth=1) + theme(legend.position = "none")
+#qplot(bootDist3,geom="histogram",binwidth=1) + theme(legend.position = "none")
+#qplot(bootDist4,geom="histogram",binwidth=1) + theme(legend.position = "none")
+hist(bootDist1,10, main = "", xlab = "", ylab = "")
+hist(bootDist2,10, main = "", xlab = "", ylab = "")
+hist(bootDist3,10, main = "", xlab = "", ylab = "")
+hist(bootDist4,10, main = "", xlab = "", ylab = "")
+```
+
+
+
+
 
 
 ## Chi-squared test for independence
@@ -340,9 +433,9 @@ But how "large" is large? Is 3.81 large enough?
 
 ### Examining the $\chi^2$ distribution for independent tables.
 
-To detemine what "large enough" means for the $\chi^2$ statistic, we
+To determine what "large enough" means for the $\chi^2$ statistic, we
 must examine the $\chi^2$ statistic for tables where the random
-varaiables are \alert{independent}. If our $\chi^2$ statistic is larger than
+variables are \alert{independent}. If our $\chi^2$ statistic is larger than
 those, then our table variables are \alert{probably not independent}.
 
 How do we observe other samples with independent rows and columns?
@@ -354,7 +447,7 @@ We use randomisation of our table.
 
 #### Example (continued)
 
-If two random events are indepenent, we can independently shuffle the
+If two random events are independent, we can independently shuffle the
 order of their outcomes without effecting the probability of their
 joint outcome.
 
@@ -438,10 +531,9 @@ x2 = replicate(1000, { # compute 1000 randomised chi-squared statistics
 ```{r echo=FALSE, fig.width=4.2, fig.height=2.5, fig.cap="Randomisation distribution of the dice vs. coin chi-squared statistic. Blue region is the set of $\\chi^2$ values that are greater than our sample $\\chi^2$ statistic (3.81)."}
 par(mar = c(2.5,2.5,0.1,0))
 par(mgp = c(1.5, 0.4, 0))
-test <- rnorm(100)
 sampX2 = chiSquaredStatistic(X, E)
 dat <- data.frame(x=x2, above=x2 > sampX2)
-library(ggplot2, quietly=TRUE)
+
 qplot(x,data=dat,geom="histogram",binwidth=0.4,fill=above) + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("chi-squared statistics")
 #hist(x2, 20, cex.lab=0.6, cex.axis=0.6, main="")
 pval = mean(x2 > sampX2)
@@ -449,7 +541,7 @@ pval = mean(x2 > sampX2)
 
 ### Hypothesis test
 
-We just performed a Hypothesis test on the dice vs. coin table.
+We just performed a \alert{Hypothesis test} on the dice vs. coin table.
 
 - $H_0$: The dice and coin outcomes are independent.
 - $H_A$: The dice and coin outcomes are not independent.
@@ -464,167 +556,72 @@ We can also compute the $p$-value using the R function:
 chisq.test(X, simulate.p.value = TRUE)
 ```
 
-### Age profiles: Hypothesis test
+### Age profiles: Hypothesis test for independence
 
-Revision: In a hypothesis test we assume a hypothesis that will be accepted by default (null hypothesis), 
-and then try and show that the data demonstrates this is unlikely.
+We now continue our analysis of age vs. gender.
 
-In this case, our null hypothesis will be that the age profiles of males and females are the same.
-The *alternative hypothesis* is that they are not.
-
-Think of the data as a table (or matrix) with $r$ rows and $c$ columns
-called $X$ and denote the entry in the $i$-th row and $j$-th as $X_{ij}$
-
-In our example, $r$ is 2, and $c$ is 7 and $X_{2,2} = 121$ for example.
-
-
-### Age profiles: Chi-squared test
-
-Firstly, assume the null hypothesis is true. Then we can ignore gender and estimate the proportion in each age group.
-
-The total numbers in each age category are;
-```{r, echo=FALSE}
-apply(tab,2,sum)
+```{r echo=FALSE}
+print(tab)
 ```
 
-So the proportions ($q_j$) are (divide by 244);
-```{r, echo=FALSE}
-q <- apply(tab,2,sum)/sum(tab)
-print(q<-round(q,3))
-```
+If we assume ($H_0$) that age and gender are independent (we get the same
+distribution of ages no matter what gender we observe), the expected
+frequencies are ($np_iq_j$)
 
-We already know that the proportions in each *row* ($p_i$) are;
-```{r, echo=FALSE}
-p <- apply(tab,1,sum)/sum(tab)
-print(p<-round(p,3))
-```
-
-### Age profiles: Chi-squared test
-
-So if the null hypothesis is true, the *expected* proportion in the $ij$-th cell of the table, is just
-$p_i \times q_j$. This means the *expected* **number** in that cell is 
-$np_iq_j$.
-
-So how different are the observed? We could look at  $(X_{ij} - np_iq_j)^2$.
-If this is big then the observed cell counts and expected are different.
-
-Taking all cells into account we have to use a *weighted* sum. 
-$$
-\chi^2 = \sum_i \sum_j \frac{(X_{ij} - np_iq_j)^2}{np_iq_j}
-$$
-
-If this is big then some of the observed cell counts and expected counts are different.
-
-### Age profiles: Chi-squared test
-
-If the observed and expected counts are different then it is likely the null hypothesis is false.
-
-So how big does $\chi^2$ have to be? It depends on the number of rows and columns in the table $X$, 
-and how sure you want to be that they are different.
-
-The approximate *critical* values are taken from a $\chi^2$-distribtuion. This is a Chi-squared test!
-
-NOTE: this only works if the expected values are all bigger than about 5.
-
-### Chi-squared distribution.
-
-Suppose you want to make an error, 5% of the time. That is, you will say the age profiles are different 
-when they are not really, only 5% of the time. (This is called the significance or $\alpha$)
-
-Then the value that $\chi^2$ has to exceed depends on the size of the table. It depends on the
-*degrees of freedom* which in this case is 
-$(r-1)\times(c-1)$
-
-```{r, echo=FALSE}
-TT <- round(qchisq(0.95, 1:10),3)
-names(TT) <- as.character(1:10)
-print(TT)
-```
-
-Critical values for a $\chi^2$ distribution for degrees of freedom upto 10.
-
-### Summary of chi-squared test
-
-1. Compute the row and column proportions
-2. Compute the expected cell counts
-3. Compute the squared difference between the observed and expected counts
-4. Sum the squared differences using the reciprocal of the expected counts as weights
-5. Refer the $\chi^2$ to a critcal value, if exceeds it reject the null hypothesis.
-
-### The Facebook data
-
-The expected counts are
-```{r, echo=FALSE}
-E <- round(sum(tab)*outer(p,q,"*"),2)
-print(E)
-```
-Some of these are less than 5. We have two options either discard some cells, this changes the hypothesis. 
-Or aggregate some cells. 
-
-### The Facebook data
-
-If we change the categories and add up we get
-```{r, echo=FALSE}
-tab2 <- tab[,2:4]
-tab2[,1] <- tab2[,1] + tab[,1]
-tab2[,3] <- tab2[,3] + apply(tab[,5:7],1,sum)
-colnames(tab2) <- c("<25", "25-34", "35+")
-print(tab2)
-```
-The proportions are now
-```{r, echo=FALSE}
-q <- round(apply(tab2,2,sum)/sum(tab2),3)
-print(q)
-print(p)
-```
-
-### The Facebook data
-
-Thus the expected counts are (all greater than 5)
-```{r, echo=FALSE}
-X <- tab2
-E <- round(sum(X)*outer(p,q,"*"),2)
+```{r echo=FALSE}
+E = expectedIndependent(tab) # compute expected counts if independent
+tabx2 = chiSquaredStatistic(tab, E)
 print(E)
 ```
 
-So the Observed minus Expected Squared is
-```{r, echo=FALSE}
-(X-E)^2
-```
-And the weighted sum ($\chi^2$) is `r sum((X-E)^2/E)`
+Giving us a $\chi^2$ value of `r tabx2`.
 
-This is **not** larger than the critical value of a $\chi^2$ on 2 degrees of freedom (5.991), so we cannot reject the null hypothesis
+Is the difference between the observed frequencies and expected
+frequencies large enough for us to say that the age and gender are not
+independent?
 
-### The Facebook data in R
 
-Of course R does all of this
-```{r}
-X <- matrix(c(46, 123, 15, 31, 13, 16), ncol=3)
-colnames(X) <- c("<25", "25-34", "35+")
-rownames(X) <-  c("Female", "Male")
-print(X)
-chisq.test(X)
-```
-The numbers are slightly different (due to rounding this time) and the test returns a *p value*. 
+### Age profiles: randomisation distribution
 
-### $p$ values
+Given the below distribution of $\chi^2$ if gender and age are
+independent, and our sample having $\chi^2 = `r tabx2`$, can we say
+that gender and age are not independent?
 
-The $p$ value is the probability of exceeding the calculated $\chi^2$ under the null hypothesis.
-
-So instead of seeing if the calculated $\chi^2$ is bigger than a critical value, you can check if the p-value is 
-less than the significance (5% say --- 0.05)
-
-### The Facebook data in R
-
-It turns out R can handle the "counts less than 5" case also, using *Fisher's exact test*
-
-```{r, echo=2:3}
-X <- tab
-print(X)
-fisher.test(X)
+```{r echo=FALSE}
+tabx = rep(rownames(tab), rowSums(tab))
+taby = unlist(mapply(rep, colnames(tab), c(t(tab)), USE.NAMES=FALSE))
+x2 = replicate(1000, { # compute 1000 randomised chi-squared statistics
+  diceShuffle = sample(taby)
+  coinShuffle = sample(tabx)
+  Xindep = table(coinShuffle, diceShuffle)
+  chiSquaredStatistic(Xindep, E)
+})
 ```
 
-Fisher's exact test is generally not done by hand.
+```{r echo=FALSE, fig.width=4.2, fig.height=2.5, fig.cap="Randomisation distribution of the age vs. gender chi-squared statistic."}
+par(mar = c(2.5,2.5,0.1,0))
+par(mgp = c(1.5, 0.4, 0))
+dat <- data.frame(x=x2, above=x2 > tabx2)
+qplot(x,data=dat,geom="histogram",binwidth=0.4) + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("chi-squared statistics")
+pval = mean(x2 > tabx2)
+```
+
+### Age profiles: randomisation distribution
+
+The blue region shows a $p$-value of `r pval`, so we cannot say that
+gender and age are not independent (cannot reject $H_0$).
+
+```{r echo=FALSE, fig.width=4.2, fig.height=2.5, fig.cap="Randomisation distribution of the age vs. gender chi-squared statistic. Blue region is the set of $\\chi^2$ values that are greater than our sample $\\chi^2$ statistic (4.81)."}
+par(mar = c(2.5,2.5,0.1,0))
+par(mgp = c(1.5, 0.4, 0))
+dat <- data.frame(x=x2, above=x2 > tabx2)
+qplot(x,data=dat,geom="histogram",binwidth=0.4,fill=above) + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("chi-squared statistics")
+#hist(x2, 20, cex.lab=0.6, cex.axis=0.6, main="")
+```
+
+
+
+
 
 # Key Metrics
 
@@ -675,3 +672,8 @@ So by exporting the data we can do a lot more than the usual insights provide
 * Estimating features of Reach/Likes etc
 * Graphing different parameters
 * Graphing over different time periods
+
+
+### Next week
+
+Text Mining 1: Indexing and Querying Text

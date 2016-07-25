@@ -617,6 +617,8 @@ similarity of the documents 2 and 3 to the query: "one won"
 - One one won one race
 - Two two won one too
 
+## Use language models of timeline to find clusters of people.
+
 
 # Preprocessing Text
 
