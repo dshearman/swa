@@ -201,3 +201,5 @@ Construct the $2\times 2$ table containing the number of males and females
 (independent of age), versus the months of April and May. Does a $\chi^2$ test
 show that the reach for gender is independent of the two months?
 
+
+## Chi squared test for preference of ages (equal proportions).

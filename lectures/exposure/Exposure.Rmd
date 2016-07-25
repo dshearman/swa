@@ -235,12 +235,14 @@ Giving $\hat{p} = `r hatp`$.
 
 ### Sample proportion distribution
 
-If we repeat the experiment 1000 times, we get the following distribution. If $p = 1/6$, we can get values of $\hat{p}$ from 0 to 0.5, when $n = 10$.
-
-```{r echo=FALSE, fig.width=4.2, fig.height=2.5, fig.cap="Distribution of sample proportion."}
+```{r echo = FALSE}
 n = 10
 library(ggplot2, quietly=TRUE)
 ddist = replicate(1000, mean(sample(6, n, replace = TRUE) == 1))
+```
+If we repeat the experiment 1000 times, we get the following distribution. If $p = 1/6$, we can get values of $\hat{p}$ from `r min(ddist)` to `r max(ddist)`, when $n = 10$.
+
+```{r echo=FALSE, fig.width=4.2, fig.height=2.5, fig.cap="Distribution of sample proportion."}
 qplot(ddist,geom="histogram",binwidth=0.1) + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("sample proportion") + xlim(0,1)
 #qplot(ddist,geom="histogram") + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("sample proportion")
 ```
@@ -344,7 +346,7 @@ print(tab)
 
 Is there evidence, that the age profiles of genders in our audience differs?
 
-This is a *hypothesis test*
+This is a *hypothesis test*. We want to test if the two variables are independent.
 
 
 ### Independent events
@@ -509,7 +511,7 @@ expectedIndependent = function(X) {
     n = sum(X)
     p = rowSums(X)/sum(X)
     q = colSums(X)/sum(X)
-    E = p %o% q * n # outer product creates table
+    return(p %o% q * n) # outer product creates table
 }
 
 chiSquaredStatistic = function(X, E) {
@@ -537,6 +539,26 @@ dat <- data.frame(x=x2, above=x2 > sampX2)
 qplot(x,data=dat,geom="histogram",binwidth=0.4,fill=above) + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("chi-squared statistics")
 #hist(x2, 20, cex.lab=0.6, cex.axis=0.6, main="")
 pval = mean(x2 > sampX2)
+```
+
+### Problem: $\chi^2$ test
+
+#### Problem
+
+Our sample produces a $\chi^2$ statistic of 15. Determine if our sample does not belong to the following $\chi^2$ distributions.
+
+```{r echo = FALSE, fig.width=4.2, fig.height=2.5, fig.cap="Bootstrap distribution of proportion of males."}
+par(mar = c(2.5,2.5,0.1,0))
+par(mgp = c(1.5, 0.4, 0))
+par(mfrow = c(2,2))
+bootDist1 = rchisq(100, df = 10)
+bootDist2 = rchisq(100, df = 20)
+bootDist3 = rchisq(100, df = 5)
+bootDist4 = rchisq(100, df = 40)
+hist(bootDist1,10, main = "", xlab = "", ylab = "")
+hist(bootDist2,10, main = "", xlab = "", ylab = "")
+hist(bootDist3,10, main = "", xlab = "", ylab = "")
+hist(bootDist4,10, main = "", xlab = "", ylab = "")
 ```
 
 ### Hypothesis test
@@ -619,7 +641,18 @@ qplot(x,data=dat,geom="histogram",binwidth=0.4,fill=above) + theme_grey(base_siz
 #hist(x2, 20, cex.lab=0.6, cex.axis=0.6, main="")
 ```
 
+### Other uses of the $\chi^2$ test
 
+We computed the $\chi^2$ distribution where the expected frequencies
+were those generated using $np_iq_j$. This was to test if the two
+variables (age and gender) are independent.
+
+Note that we can test for any set of expected frequencies. If we want
+to test if the proportion of males is 60% and females is 40% and the
+sample size is $n$, the expected number of males is $0.6n$ and the
+expected number of females is $0.4n$.
+
+We will go through a problem concerning this in the lab.
 
 
 
