@@ -9,6 +9,7 @@ opts_chunk$set(fig.path='figure/week04-labsol-')
 
 `r opts_chunk$set(prompt=TRUE, comment=NA)`
 
+# Using R
 
 - Use `read.csv` to read in the CSV files [keyMetrics.csv](keyMetrics.csv), [LifetimeLikesByGenderAge.csv](LifetimeLikesByGenderAge.csv) and [WeeklyReachDemog.csv](WeeklyReachDemog.csv) into data frames.
 Make sure you give sensible names to the data frames you create. Use as.is=TRUE for keyMetrics.csv to avoid the mentioned problem.
@@ -38,142 +39,116 @@ dates <- strptime(keyMetrics[-1,1], format="%m/%d/%y")
 plot(dates,impress, type="l", col=2, lty=3)
 ```
 
-```{r include=FALSE}
-m1 = 89
-n1 = 104
-p1 = round(m1/n1,3)
-d1 = 1.960*sqrt(p1*(1-p1)/n1)
-m2 = 52
-n2 = 200
-p2 = round(m2/n2,3)
-d2 = 1.960*sqrt(p2*(1-p2)/n2)
-m3 = 441
-n3 = 762
-p3 = round(m3/n3,3)
-d3 = 1.645*sqrt(p3*(1-p3)/n3)
 
-```
+# $\chi^2$ Test
 
-- The proportion of males that reach a page is `r m1` out of `r n1` in a particular week. 
-Find a 95% confidence interval for
-the proportion of males in the audience for this page.
 
+## Test for independence
+
+Create the two column table.
 ```{r}
-z = 1.96
-p = 89/104
-n = 104
-p.lower = p - z*sqrt(p*(1-p)/n)
-p.upper = p + z*sqrt(p*(1-p)/n)
-print(c(p.lower, p.upper))
-```
-
-- For `r m2` out of `r n2` find a 95% confidence interval for
-the proportion.
-
-```{r}
-z = 1.96
-p = 52/200
-n = 200
-p.lower = p - z*sqrt(p*(1-p)/n)
-p.upper = p + z*sqrt(p*(1-p)/n)
-print(c(p.lower, p.upper))
-```
-
-- For `r m3` out of `r n3` find a 90% confidence interval for
-the proportion.
-
-
-
-```{r}
-z = 1.645
-p = 441/762
-n = 762
-p.lower = p - z*sqrt(p*(1-p)/n)
-p.upper = p + z*sqrt(p*(1-p)/n)
-print(c(p.lower, p.upper))
-```
-
-- Try this in R using `prop.test` (remember the results may be slightly different)
-
-```{r}
-prop.test(89,104, conf.level = 0.95)
-prop.test(52,200, conf.level = 0.95)
-prop.test(441,762, conf.level = 0.90)
-```
-
-
-
-```{r include=FALSE}
-sim <- function(p1,p2=p1,n) rbind(t(rmultinom(1,n,p1)), t(rmultinom(1,n,p2)))
-csq <- function(x) {
-p <- round(apply(x,1,sum)/sum(x),3)
-q <- round(apply(x,2,sum)/sum(x),3)
-e <- round(sum(x) * outer(p,q,"*"),3)
-sum((x-e)^2/e)
+tab = matrix(as.numeric(WeekReach[158,3:16]), nrow=2, byrow=TRUE)
+tabx = rep(rownames(tab), rowSums(tab))
+l = ncol(tab)
+m = nrow(tab)
+cn = colnames(tab)
+taby = c()
+for (a in 1:m) {
+    for (b in 1:l) {
+       taby = c(taby, rep(cn[b], tab[a,b]))
+    }
 }
-degf <- function(x) (ncol(x)-1)*(nrow(x)-1)
+
+tab2 = data.frame(Gender = tabx, Age = taby)
+# Verify that we the correct values
+table(tab2)
 ```
 
-```{r include=FALSE}
-X1 <- matrix(c(46, 123, 15, 31, 13, 16), ncol=3)
-colnames(X1) <- c("<25", "25-34", "35+")
-rownames(X1) <-  c("Female", "Male")
-set.seed(12345)
-X2 <- sim(runif(3), runif(3), 305) 
-dimnames(X2) <- dimnames(X1)
-X3 <- sim(runif(4), runif(4), 276) 
-colnames(X3) <- c("<25", "25-34", "35-44", "45+")
-rownames(X3) <-  c("Female", "Male")
+
+Compute the $\chi^2$ randomisation distribution.
+```{r}
+expectedIndependent = function(X) {
+    n = sum(X)
+    p = rowSums(X)/sum(X)
+    q = colSums(X)/sum(X)
+    return(p %o% q * n) # outer product creates table
+}
+
+chiSquaredStatistic = function(X, E) {
+    return(sum((X - E)^2/E))
+}
+
+E = expectedIndependent(table(tab2)) # compute expected counts if independent
+
+x2dist = replicate(1000, { # compute 1000 randomised chi-squared statistics
+  ageShuffle = sample(tab2$Age)
+  genderShuffle = sample(tab2$Gender)
+  Xindep = table(genderShuffle, ageShuffle)
+  chiSquaredStatistic(Xindep, E)
+})
 ```
 
-- Find the $\chi^2$ statistic and the degrees of freedom for the following tables.
-
-```{r  echo=FALSE}
-print(X1)
+Compute the $\chi^2$ statistic for `tab`.
+```{r}
+x2 = chiSquaredStatistic(table(tab2), E)
 ```
+
+Compute the $p$ value of the test.
+```{r}
+## pval is the proportion of x2dist that is greater than x2
+pval = mean(x2dist > x2)
+print(pval)
+```
+
+The $p$-value is large, so we cannot reject $H_0$. Our conclusion is
+that we don't have enough evidence to show that age and gender are
+dependent.
+
+## Test for preference
+
+```{r)
+age = colSums(tab)
+n = sum(age)
+k = length(age)
+```
+
+Given the sample size `n` and the age table, compute the expected
+age group frequencies if all ages have the same proportion.
+```{r}
+## If all have the same proportion and the proportions must sum to 1:
+ep = rep(1/k, k)
+## We want the expected frequencies
+E = ep*n
+```
+
+Compute the $\chi^2$ value using the observed and expected frequencies.
+```{r}
+x2 = chiSquaredStatistic(age, E)
+print(x2)
+```
+
+- Sample from the set of age categories with replacement using the given
+  proportions and sample size (using `sample`).
+- Compute the $\chi^2$ value of the sample.
+- Repeat at least 1000 times to obtain a distribution of $\chi^2$ values given $H_0$.
 
 ```{r}
-X <- matrix(c(46, 123, 15, 31, 13, 16), ncol=3)
-rX = rowSums(X)
-cX = colSums(X)
-sX = sum(X)
-E = rX %o% cX/sX
-chiSq = sum((X - E)^2/E)
-df = (length(rX) - 1)*(length(cX) - 1)
-print(c(chiSq, df))
+x2dist = replicate(1000, {
+	r = table(sample(k, size = n, prob = ep, replace = TRUE))
+	chiSquaredStatistic(r, E)
+})
+hist(x2dist)
 ```
 
-```{r  echo=FALSE}
-print(X2)
-```
-
+Compute the $p$ value.
 ```{r}
-X <- matrix(c(107, 68, 106, 101, 92, 136), ncol=3)
-rX = rowSums(X)
-cX = colSums(X)
-sX = sum(X)
-E = rX %o% cX/sX
-chiSq = sum((X - E)^2/E)
-df = (length(rX) - 1)*(length(cX) - 1)
-print(c(chiSq, df))
+pval = mean(x2dist > x2)
+print(pval)
 ```
+The $p$-value is very small, so we reject $H_0$, meaning that we have evidence that the ages are not of equal proportion.
 
 
-```{r  echo=FALSE}
-print(X3)
-```
-
-```{r}
-X <- matrix(c(58, 77, 87, 54, 76, 85, 55, 60), ncol=4)
-rX = rowSums(X)
-cX = colSums(X)
-sX = sum(X)
-E = rX %o% cX/sX
-chiSq = sum((X - E)^2/E)
-df = (length(rX) - 1)*(length(cX) - 1)
-print(c(chiSq, df))
-```
-
+# More R - a challenge
 
 - Construct the $2\times 2$ table containing the number of males and females
 (independent of age), versus the months of April and May. Does a $\chi^2$ test

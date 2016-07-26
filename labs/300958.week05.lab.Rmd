@@ -272,3 +272,4 @@ You found words associated to Kevin Bacon. Use Twitter to find words
 associated to your friend's names.
 
 
+## Use language models of timeline to find clusters of people.

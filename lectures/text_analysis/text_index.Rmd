@@ -73,21 +73,7 @@ memories. -sjm
 \vspace{1em}
 How can we compute the similarity over millions of tweets?
 
-### Document Models
-
-Documents are defined by their content, the words they contain. 
-When we write a document:
-
-- we have model of the document $M_d$ in our mind.
-- we then sample words from the document model $M_d$ to create the document.
-
-The words in the document are a sample from a model. We can take many
-samples to obtain many documents, each with different words. But
-because they all come from the same document model, they contain the
-same ideas.
-
-
-### Document model form
+### Bag of words (independent) models
 
 The most common form of document representation is as a *bag of
 words*, meaning that each document is represented as a set of unique
@@ -264,22 +250,9 @@ $\vec{q}$   &   & $\sqrt{3}$  & \\
 \end{center}
 
 
-### Problem: Query Documents
-
-#### Problem
-
-Using your frequency table of the below documents, compute the
-similarity of the documents to the query: "one won"
-
-- One one was a race horse
-- Two two was one too
-- One one won one race
-- Two two won one too
-
-
 ### Problems with term frequency
 
-In the previous example we used the the freuquency $f_{d,t}$ as the word weight $w_{d,t}$.
+In the previous example we used the the frequency $f_{d,t}$ as the word weight $w_{d,t}$.
 This lead to problems:
 
 1. Repeating words: If a word appears twice as many times in a
@@ -332,19 +305,6 @@ plot(1:100, log(100/(1:100)), ylab="Term weight", xlab="Term Document Count", ce
 ```
 
 
-### Computing the IDF
-
-#### Problem 
-
-Compute the IDF term weights for each of the words in the following
-document set:
-
-- One one was a race horse
-- Two two was one too
-- One one won one race
-- Two two won one too
-
-
 ### Within document term weight (TF)
 
 The within document term weight (TF) is a measure of how important the
@@ -380,13 +340,16 @@ $$
 		&= \log_e{\left ( f_{d,t} + 1\right )}\log_e{\left ( \frac{N}{f_t} \right )} \\
 \end{aligned}
 $$
-where $f_{d,t}$ is the frequency of term $t$ in document $d$ and
-$w_{d,t}$ is the weight of term $t$ in document $d$.
+where $f_{d,t}$ and $w_{d,t}$ are the frequency and weight of term $t$ in document $d$, $N$ is the number of documents, and $f_t$ is the number of documents containing term $t$.
+
+\pause
 
 #### Problem 
 
-Using the results from the previous problem, compute the within
-document term weights for each of the words in the first document:
+Compute the TF-IDF weights for documents 2 and 3. Use them to compute the
+cosine similarity documents scores for documents 2 and 3 and
+query "one won".
+
 
 - One one was a race horse
 - Two two was one too
@@ -468,34 +431,34 @@ be designed to use the term ordering).
 
 Using a language model, we can compute the probability that a given
 document can be produced. We assume that a document is a set of
-independent terms, therefore the probabilty of all terms is the
+independent terms, therefore the probability of all terms is the
 product of each term.
 \begin{align*}
-	P(d\vert L) = {\prod_{t} p_t^{f_d,t}}
+	P(d\vert L) = {\prod_{t} p_t^{f_{d,t}}}
 \end{align*}
 where $L$ is the language model providing term probabilities $p_t$,
-$f_{d,t}$ is the frequecy of term $t$ in document $d$.
+$f_{d,t}$ is the frequency of term $t$ in document $d$.
 
 For long documents, the document probability will be very small, so we
 usually compute the log probability.:
 \begin{align*}
-	\log{P(d\vert L)} = \log{{\prod_{t} p_t^{f_d,t}}} = {\sum_{t} f_{d,t}\log{p_t}}
+	\log{P(d\vert L)} = \log{{\prod_{t} p_t^{f_{d,t}}}} = {\sum_{t} f_{d,t}\log{p_t}}
 \end{align*}
 
 ### Querying documents
 
 To find documents best matching a query, we must be able to compare the query to each document.
-When using a language model, we assume that:
-- each document has been generated using its own language model
-- we compute the probability that the query could be generated from each of the languge models
+When using a language model, we assume that
+each document has been generated using its own language model,
+and we compute the probability that the query could be generated from each of the language models
 
 If it is likely that a query could be generated using a document model
 that has generated document $i$, then the query and document $i$ are
 likely to contain the same topics.
 
-Given query $q$ and the document model for document $d$ $L_d$, the probability of query $q$ is:
+Given query $q$ and the document model for document $d$ ($L_d$), the probability of query $q$ is:
 \begin{align*}
-	s(d,q) = \log{P(q\vert L_d)} = \log{{\prod_{t} p_t^{f_q,t}}} = {\sum_{t} f_{q,t}\log{p_t}}
+	s(d,q) = \log{P(q\vert L_d)} = \log{{\prod_{t} p_t^{f_{q,t}}}} = {\sum_{t} f_{q,t}\log{p_t}}
 \end{align*}
 The documents are then ordered by their $s(d,q)$ score.
 
@@ -504,7 +467,7 @@ The documents are then ordered by their $s(d,q)$ score.
 To compute the query score, we must be able to compute the language
 model for a given document (document model). Our model is a
 categorical distribution, so we must fit the values $p_t$ to the
-document (sample).
+document (the document is our sample from the model).
 
 We must ask, for document $d$, what are the most likely values of
 $p_t$ that would lead to generating document $d$. The answer is:
@@ -524,26 +487,18 @@ Construct document models documents for documents 2 and 3 of the following four 
 - One one won one race
 - Two two won one too
 
-### Problem: Query Documents Models
+Then compute the similarity of the documents 2 and 3 to the query:
+"one won"
 
-#### Problem
-
-Using your document models of the below documents, compute the
-similarity of the documents 2 and 3 to the query: "one won"
-
-- One one was a race horse
-- Two two was one too
-- One one won one race
-- Two two won one too
 
 ### Zero Probability
 
 We saw in the previous problem that if a document model has zero
-probability for any query term, then the probabiliy of the query is
+probability for any query term, then the probability of the query is
 zero (log probability of $-\infty$).
 
 We computed the zero probability for $p_t$ based on the sample
-document not having any occurence of term $t$ ($f_{d,t} = 0$), but
+document not having any occurrence of term $t$ ($f_{d,t} = 0$), but
 should the model have zero probabilities? It is more likely that the
 model has very small probabilities, but not zero probability. Zero
 probability implies that the term will never exist in a document
@@ -559,7 +514,7 @@ the answer on our prior knowledge (sample), the probability is 1.
 ### Model Smoothing
 
 To remove the problem of zero term probabilities, we smooth out the
-probabilites based on what we belive the probabilities should be (background probability).
+probabilities based on what we believe the probabilities should be (background probability).
 
 A good estimate of background probability comes from combining all
 documents into a document collection $C$.
@@ -602,22 +557,22 @@ and $\alpha$ is a positive real number.
 - As $n_d$ increases, $\lambda$ approaches $1$,
 - as $n_d$ decreases, $\lambda$ approaches $0$.
 
-The Diriclet parameter $\alpha$ is related to the sample size (number
+The Dirichlet parameter $\alpha$ is related to the sample size (number
 of words in the document). If $\alpha = n_d$, $\lambda = 0.5$.
 
-### Example: Language Model with Diriclet Smoothing
+### Example: Language Model with Dirichlet Smoothing
 
 #### Example
 
 Using your document models of the below documents, compute the
-similarity of the documents 2 and 3 to the query: "one won"
+similarity of the document 2 to the query: "one won", using $\alpha = 10$.
 
 - One one was a race horse
 - Two two was one too
 - One one won one race
 - Two two won one too
 
-## Use language models of timeline to find clusters of people.
+
 
 
 # Preprocessing Text
@@ -710,19 +665,13 @@ Our document set has been reduced to:
 Note that the stems do not have to be words.
 
 
-
-
-
-
-
 ### Summary
 
-You should know how to:
-
-- construct document and query vectors, and use them to compute similarity
-- compute term weights using DFR and TF-IDF
-- preprocess a document collection
-
+- Text documents can be represented as a bag of words (treating all words independently).
+- To compare documents we can use the Vector Space Model or Language Model.
+- The Vector Space Model uses TF-IDF weighting and Cosine Similarity.
+- Language Models use a Dirichlet Smoothed Categorical distribution.
+- Before building the models we can preprocess (remove stop words, lowercase, remove punctuation, stem)
 
 ### Next Week
 

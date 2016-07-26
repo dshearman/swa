@@ -101,8 +101,8 @@ R has some facilities to read XLSX files. The gdata library is one. (This will n
 library(gdata, quietly=TRUE)
 ```
 ```{r, size='sfont', cache=FALSE}
-#sheetCount("Facebook Insights Data Export 2013-08-07.xlsx")
-#sheetNames("Facebook Insights Data Export 2013-08-07.xlsx")
+sheetCount("Facebook Insights Data Export 2013-08-07.xlsx")
+sheetNames("Facebook Insights Data Export 2013-08-07.xlsx")
 ```
 
 ### Export Data
@@ -527,6 +527,9 @@ x2 = replicate(1000, { # compute 1000 randomised chi-squared statistics
   chiSquaredStatistic(Xindep, E)
 })
 ```
+
+
+
 
 ### Chi-squared distribution
 
