@@ -113,7 +113,7 @@ of the population data.
 
 We showed in the lectures that we can perform a test for independence
 for a given two way table (two way meaning, has more than one row and
-column). To perform the test, we need to compute
+column). To perform the test, we need to:
 
 - compute the expected values of the table if the rows and columns are
   independent (code shown in the lecture slides).
@@ -150,7 +150,7 @@ data.frame(Gender = gender, Age = age)`. Also, the functions `rowSums`,
 functions, read the R documentation on them, e.g help(rowSums)).
 
 
-Once we have the data in two column, we shuffle the columns and recompute the table and compute the $\chi^2$ value (as shown in the lecture).
+Once we have the data in two columns, we shuffle the columns and recompute the table and compute the $\chi^2$ value (as shown in the lecture).
 
 Using the above table `tab` and the hypotheses $H_0$: Gender and Age are independent, $H_A$: Gender and Age are not independent:
 
@@ -173,18 +173,26 @@ We are only interested in age and not gender, so lets marginalise out the gender
 ```{r eval = FALSE}
 age = colSums(tab)
 n = sum(age)
+k = length(age)
 ```
 
+To test if a given sample comes from a multinomial distribution, we use the $\chi^2$ test:
+$$
+	\chi^2 = {\sum_{i = 1}^{k} \frac{X_{i} - np_i}{np_i}}
+$$
+where $X_i$ are the frequencies in the sample, $n$ is the sample size, $k$ is the number of categories, and $p_i$ are the proportions assumed under $H_0$.
+
 - Given the sample size `n` and the age table, compute the expected
-  age group frequencies if all ages have the same proportion.
+  age group frequencies $np_i$ if all ages have the same proportion.
+
 - Compute the $\chi^2$ value using the observed and expected frequencies.
 
 
 We need to generate the randomisation distribution, given the
 $H_0$. $H_0$ says that all proportions are equal, and we have a sample
-of size `n`. Therefore, we can comute the randomisation distribution by:
+of size `n`. Therefore, we can compute the randomisation distribution by:
 
-- sample from the set of age categories with replacement using the given proportions and sample size (using `sample`).
+- sample from the set of age categories with replacement using the given proportions $p_i$ and sample size $n$ (using `sample`).
 - compute the $\chi^2$ value of the sample.
 - Repeat at least 1000 times to obtain a distribution of $\chi^2$ values given $H_0$.
 

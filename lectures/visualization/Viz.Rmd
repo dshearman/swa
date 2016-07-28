@@ -7,7 +7,7 @@ opts_chunk$set(dev = 'pdf', fig.cap="")
 
 # Word Clouds
 
-## Crude Oil Texts
+### Crude Oil Texts
 
 ```{r, echo=FALSE, fig.cap="Word cloud from Crude Oil texts", dev='pdf', fig.width=3, fig.height=2.5, warning=FALSE, message=FALSE, cache=TRUE}
 library(wordcloud)
@@ -24,7 +24,7 @@ wordcloud(words,freq, random.order=FALSE,
           colors=brewer.pal(8, "Dark2"))
 ```
 
-## Word Clouds
+### Word Clouds
 
 Word clouds are a simple visualisation of word frequencies in a corpus of texts.
 
@@ -41,7 +41,7 @@ $$
 
 where here $s$ is text size and $f$ is frequency
 
-## Placing the words
+### Placing the words
 
 The simple idea behind placing the words is this.
 
@@ -52,7 +52,7 @@ The simple idea behind placing the words is this.
    * If it does fit place the word.
 4. Repeat for any remaining words.
 
-## Placing the words
+### Placing the words
 
 A spiral is used to place the words, it is easiest to express the equation for in polar coordinates.
 
@@ -63,7 +63,7 @@ where $r$ is the radius (distance from the origin) and $\theta$ is the angle (ca
 The simplest form is a linear function of $\theta$
 $$ r = \delta \times \theta$$
 
-## Placing the words
+### Placing the words
 
 ```{r, fig.width=3, fig.height=2.5, dev='pdf', fig.cap="", echo=FALSE}
 plot.new()
@@ -76,7 +76,7 @@ lines(r*cos(theta), r*sin(theta))
 ```
 A Linear Spiral
 
-## Word Clouds
+### Word Clouds
 Animated Demo
 ```{r, eval=FALSE}
 library(animation)
@@ -84,7 +84,7 @@ source("mywordle.R")
 mywordle(words,freq, pause=TRUE)
 ```
 
-## Word Clouds Code
+### Word Clouds Code
 ```
 boxes <- list()
 r <- 0
@@ -101,7 +101,7 @@ for(i in 1:length(words)) {
   }
 ```
 
-## Word Clouds in R
+### Word Clouds in R
 Of course, R has prettier functions that allow colours and the rotation of some words (at random)
 
 ```{r, echo=2:3, fig.cap="Word cloud from Crude Oil texts", dev=c('pdf'), fig.width=3, fig.height=2.5, message=FALSE, tidy=FALSE}
@@ -113,7 +113,7 @@ wordcloud(words,freq, random.order=FALSE,
 
 # Principal Components Analysis
 
-## Dimension Reduction
+### Dimension Reduction
 
 One of the goals of visualisation is dimension reduction.
 
@@ -128,7 +128,7 @@ Visualisation usually requires a small number of dimensions. We cannot easily *s
 
 We will look at two ways to do this; *Principal Components Analysis* and *Multidimensional Scaling*
 
-## Principal Components Analysis
+### Principal Components Analysis
 
 Fisher's Iris data
 
@@ -138,18 +138,18 @@ cols.iris <- unclass(iris$Species)+1
 pairs(iris[,1:4], col=cols.iris, pch=16, cex=0.5, xaxt="n", yaxt="n", gap=0.1)
 ```
 
-## Principal Components Analysis
+### Principal Components Analysis
 
 In this example it is not too difficult to visualise the 4-dimensional data. There are 150 sets of
 measurements on iris flowers, from 3 different species.
 
 Principal components is a method to try and find a low dimensional representation of the variability in the data.
 
-Suppose we $p$ measurements represented by the random variables $X_1,\ldots,X_p$
+Suppose we have $p$ measurements represented by the random variables $X_1,\ldots,X_p$
 
 In the iris data $p$ is 4 and each of the $X_i$ represent a Sepal or Petal, Length or Width.
 
-## Principal Components Analysis
+### Principal Components Analysis
 
 Each of the $p$ variables has a variance and pairs of the variables may be correlated.
 
@@ -161,7 +161,7 @@ Since $Var(aZ) = a^2Var(Z)$ we must also restrict the $a_i$'s so they are not ar
 
 $$ a_1^2 + a_2^2 + \cdots + a_p^2 = 1$$
 
-## Principal Components Analysis
+### Principal Components Analysis
 
 The $a_i$'s are actually computed using something called an Eigen Value or Singular Value Decomposition.
 
@@ -178,7 +178,7 @@ $$b_1^2 + b_2^2 + \cdots + b_p^2 = 1 \text{  AND  } a_1b_1 + a_2b_2 + \cdots + a
 
 And so on....
 
-## Principal Components Analysis
+### Principal Components Analysis
 
 ```{r, echo=2:3}
 X <- iris[,1:4]
@@ -186,7 +186,7 @@ pca <- prcomp(X)
 summary(pca)
 ```
 
-## Principal Components Analysis
+### Principal Components Analysis
 
 The summary shows the standard deviation of each of the 4 PCs for the iris data.
 
@@ -194,14 +194,14 @@ It also shows the percentage of *total variation* explained and the cumulative p
 
 The first two principal components here explain 97.8% of the total variation.
 
-## Principal Components Analysis
+### Principal Components Analysis
 ```{r, echo=FALSE,fig.cap="", dev='pdf', fig.width=4, fig.height=3}
 par(mar=c(4,4,1,1))
 plot(pca$x[,1:2], col=cols.iris, pch=16, axes=FALSE)
 box()
 ```
 
-## PCA with twitter data?
+### PCA with twitter data?
 
 ```{r, eval=FALSE, tidy=FALSE, size="footnotesize"}
 library(twitteR)
@@ -226,7 +226,7 @@ tdm = TermDocumentMatrix(corpus,
 M = as.matrix(tdm)
 ```
 
-## PCA with twitter data?
+### PCA with twitter data?
 This generates around 3000 terms on 1500 tweets.
 
 The term-document matrix as above is terms (rows) by tweets (columns). R expects the *variables* to be in columns
@@ -239,7 +239,7 @@ it is unlikely to be Normally distributed.
 
 So we make a transformation; one possibility is TF-IDF but we find a square root works better here.
 
-## PCA with twitter data?
+### PCA with twitter data?
 ```{r, echo=FALSE}
 load("TweetMatrix.RData")
 ```
@@ -250,7 +250,7 @@ plot(pca.tweet$x[,1:2], col=cols, pch=16, axes=FALSE)
 box()
 ```
 
-## PCA with twitter data?
+### PCA with twitter data?
 ```{r}
 summary(pca.tweet)$importance[,1:5]
 ```
@@ -258,7 +258,7 @@ Notice that even the first 5 principal components only explain 11% of the variat
 
 # Multidimensional Scaling
 
-## Multidimensional scaling
+### Multidimensional scaling
 
 Multidimensional scaling is a alternate way to view the dimension reduction problem.
 
@@ -266,7 +266,7 @@ If the data exists in $p$ dimensions, and there is a distance defined between al
 pairs of observations/objects in the $p$ dimensions. Can we construct a low dimensional (2D?) 
 that has as near as possible the same distances in the low dimensional space?
 
-## Multidimensional scaling
+### Multidimensional scaling
 
 We need to define the distances in the high ($p$) and low dimensional spaces.
 
@@ -279,7 +279,30 @@ $$D_{ij} = \sqrt{ \sum_k (X_{ik}-X_{jk})^2 }$$
 
 Here $X_{ik}$ is the measurement of the $k$-th variable on the $i$-th object/observation in the $p$ dimensional space
 
-## Multidimensional scaling
+
+## Distance between vectors
+
+### Eulidean Distance
+
+
+### Maximum Distance
+
+
+### Manhattan Distance
+
+
+### Canberra Distance
+
+
+### Binary Distance
+
+
+### Minkowski Distance
+
+
+
+
+### Multidimensional scaling
 
 We can use Euclidean distance in the low dimensional space also (say $d_{ij}$).
 
@@ -294,12 +317,12 @@ $$\sum_{i,j} (D_{ij} - d_{ij})^2$$
 
 We aim to choose the $Y_{ik}$ to make the Frobenius norm as small as possible.
 
-## Multidimensional scaling
+### Multidimensional scaling
 
 For the Frobenius norm, and Euclidean distance in the low dimensional space, this can all be done
 using an Eigen Value decomposition or Singular Value Decomposition.
 
-## Multidimensional scaling - Iris Data
+### Multidimensional scaling - Iris Data
 ```{r, fig.cap="", dev='pdf', fig.width=4, fig.height=2.5, echo=2:3}
 par(mar=rep(0.1,4))
 D <- dist(X)
@@ -308,7 +331,7 @@ plot(mds, col=cols.iris, pch=16, axes=FALSE)
 box()
 ```
 
-## Multidimensional scaling - Iris Data
+### Multidimensional scaling - Iris Data
 
 This plot looks very like the PCA plot for the Iris data!!
 
@@ -317,7 +340,7 @@ PCA and MDS are equivalent.
 
 Why use MDS? Because we can use different distances (in the high dimensional space usually).
 
-## Multidimensional scaling - Iris Data
+### Multidimensional scaling - Iris Data
 ```{r, fig.cap="", dev='pdf', fig.width=4, fig.height=2.5, echo=2:3}
 par(mar=rep(0.1,4))
 D <- dist(X, method="maximum")
@@ -327,7 +350,7 @@ box()
 ```
 
 
-## Multidimensional scaling - Tweets
+### Multidimensional scaling - Tweets
 
 We need to think carefully about the distance between tweets. 
 
@@ -342,7 +365,7 @@ We could consider
 Most of the terms occur very few times in each tweet. (mostly zero or one). The binary
 metric just looks at presence/absence of a term.
 
-## Binary Metric
+### Binary Metric
 
 When comparing two tweets, think of each term being either present or absent in one or both tweets.
 
@@ -362,7 +385,7 @@ Then the *Binary Metric* is $\frac{b+c}{b+c+d}$.
 It is the ratio of the count of terms occuring in only one tweet
 to the total number of terms present in one or the other tweet.
 
-## Multidimensional scaling - Tweets
+### Multidimensional scaling - Tweets
 ```{r, echo=TRUE, cache=TRUE}
 D <- dist(t(M), method="binary")
 mds.tweet <- cmdscale(D, k=2)
@@ -373,12 +396,21 @@ plot(mds.tweet, col=cols, pch=16, axes=FALSE)
 box()
 ```
 
-## Multidimensional scaling - Tweets using TF-IDF
+### Multidimensional scaling - Tweets using TF-IDF
 ```{r, echo=TRUE, cache=TRUE}
 M2 <- as.matrix(weightTfIdf(tdm))
 D <- dist(t(M2))
 mds.tweet <- cmdscale(D, k=2)
 ```
+
+\|| x - y \||^2 = ||X||^2 + ||y||^2 - 2<x,y>
+If ||x|| = 1 and ||y|| = 1,
+\|| x - y \||^2 = ||X||^2 + ||y||^2 - 2<x,y> = 2 - 2cos(x,y)
+
+\|| x - y \||^2 = ||X||^2 + ||y||^2 - 2<x,y> = 2 - 2cos(x,y)
+cos(x,y) = 1 - ||x - y||^2/2
+
+
 ```{r, echo=FALSE,fig.cap="", dev='pdf', fig.width=4, fig.height=2.5}
 par(mar=rep(0.1,4))
 plot(mds.tweet, col=cols, pch=16, axes=FALSE)
@@ -386,7 +418,7 @@ box()
 text(mean(par("usr")[1:2]), mean(par("usr")[3:4]),"YUK!")
 ```
 
-## Summary
+### Summary
 
 We looked at;
 
