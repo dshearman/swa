@@ -2,7 +2,623 @@
 ```{r setup, include=FALSE}
 opts_chunk$set(fig.path='figure/visualisation-viz-')
 opts_chunk$set(dev = 'pdf', fig.cap="")
+
+cbbPalette <- c("#000000", "#009E73", "#e79f00", "#9ad0f3", "#0072B2", "#D55E00", "#CC79A7", "#F0E442")
+palette(cbbPalette)
 ```
+
+### High dimensional data sets
+
+A data set usually consists of a set of records, where each record has
+measurements over a set of dimensions. So the number of measurements
+is the dimensionality of the data set.
+
+For example, if the records are:
+
+- people, the measurements may be height,
+  weight, age, hair colour, etc. of each individuals.
+- Expression of a gene in a biological sample. (>10,000 measurements)
+- tweets, each measurement is the frequency of each
+  known word. (>1,000,000 "measurements")
+
+It is difficult to visualise the similarity between each record when
+records are represented in a high dimensional space.
+
+We will examine two ways to project these high dimensional records into a 2D space
+using *Principal Components Analysis* and *Multidimensional Scaling*
+
+
+# Principal Components Analysis
+
+### Dimension Reduction
+
+When we take a photo, we project a three dimensional space (the scene)
+onto a two dimensional plane (a screen or a piece of paper). We want
+the two dimensional plane to capture the information from the 3D
+scene, but since we are projecting into a lower dimensional space, we
+lose information (e.g. what was behind the tree?).
+
+Principal components analysis (PCA) computes where we should position
+our camera so that the photo contains the most information from the
+scene (the least information is lost from the projection).
+
+\pause
+
+#### Principal Components Analysis
+
+Given any data set with many dimensions, PCA computes the
+projection plane that preserves the most variance in the data.
+
+We can then plot this projection to visualise the similarity between records.
+
+
+
+### 2D Example
+
+```{r echo = FALSE, fig.width=3.2, fig.height=2.5, fig.cap = "A plot of the height obtained and the length of a long jump."}
+library("mvtnorm")
+X = rmvnorm(1000, mean = c(2,1), sigma = matrix(c(1, 0.9, 0.9, 1), 2, 2))
+par(mar = c(2.5,2.5,0.1,1))
+par(mgp = c(1.5, 0.4, 0))
+plot(X, xlim = c(-5,5), ylim = c(-5,5), ylab = "Height", xlab = "Length", cex.lab=0.6, cex.axis=0.6); abline(v = 0); abline(h = 0); 
+```
+
+### 2D Example: Axis of greatest variance
+
+```{r echo = FALSE, fig.width=3.2, fig.height=2.5, fig.cap = "A plot of the height obtained and the length of a long jump, with alternate axis."}
+par(mar = c(2.5,2.5,0.1,1))
+par(mgp = c(1.5, 0.4, 0))
+plot(X, xlim = c(-5,5), ylab = "Height", xlab = "Length", cex.lab=0.6, cex.axis=0.6, ylim = c(-5,5)); abline(a = -1, b = 1); abline(a = 3, b = -1); 
+```
+
+### 2D Example: Change of coordinates
+
+```{r echo = FALSE, fig.width=4.2, fig.height=2.5, fig.cap = "Length and height shown using Principal axis."}
+z = prcomp(X)
+par(mar = c(2.5,2.5,0.1,1))
+par(mgp = c(1.5, 0.4, 0))
+plot(z$x, cex.lab=0.6, cex.axis=0.6, xlim = c(-5,5), ylim = c(-5,5)); abline(v = 0); abline(h = 0)
+```
+
+### 2D Example: Projection onto PC1
+
+```{r echo = FALSE, fig.width=4.2, fig.height=2.5, fig.cap="We retain most of the information using only the first principal axis."}
+par(mar = c(2.5,2.5,0.1,1))
+par(mgp = c(1.5, 0.4, 0))
+plot(z$x[,1], rep(0,1000), cex.lab=0.6, cex.axis=0.6, xlim = c(-5,5), ylim = c(-5,5), xlab = "PC1", ylab = "PC2"); abline(v = 0); abline(h = 0)
+```
+
+## PCA on Iris
+
+### Iris Data over four dimensions
+
+In the previous example, we can visualise the original data and the
+projection. But if the data has more that three dimensions, we are
+unable to easily visualise the record relationships. Fisher's Iris data
+is four dimensional.
+
+```{r echo = FALSE, fig.width=3, fig.height=2, fig.cap="Pairwise plots of each dimension of the Iris data."}
+par(mar = c(2.5,2.5,0.1,1))
+par(mgp = c(0.5, 0.4, 0))
+par(oma=rep(0,4))
+#par(mar=rep(0.01,4), oma=rep(0,4))
+cols.iris <- unclass(iris$Species)+1
+pairs(iris[,1:4], col=cols.iris, pch=16, xaxt="n", yaxt="n", gap=0.1, oma=c(0,0,0,0))
+```
+
+### Principal Components Analysis
+
+Each of the $p$ variables has a variance and pairs of the variables may be correlated.
+
+Principal components seeks a new variable $Y_1$ that is a linear combination of the original variables and has *maximum* variance.
+
+$$Y_1 = a_1 X_1 + a_2 X_2 + \cdots + a_p X_p$$
+
+Since $Var(aZ) = a^2Var(Z)$ we must also restrict the $a_i$'s so they are not arbitrarily big. Usually,
+
+$$ a_1^2 + a_2^2 + \cdots + a_p^2 = 1$$
+
+### Computing the Principal Components
+
+The $a_i$'s are actually computed using something called an Eigenvalue or Singular Value Decomposition.
+
+- The $a_i$'s above give the first principal component. But this is only one dimension. 
+
+- The *second* principal component is defined as the linear
+  combination of the $X_i$'s that maximises the variance
+$$Y_2 = b_1 X_1 + b_2 X_2 + \cdots + b_p X_p$$
+  AND is *orthogonal* to the first principal component.
+$$a_1b_1 + a_2b_2 + \cdots + a_pb_p = 0$$
+
+The selected $b_i$'s maximise the variance subject to the constraints that,
+$$b_1^2 + b_2^2 + \cdots + b_p^2 = 1$$
+
+Each further principal component is orthogonal to all previous principal components and maximise the remaining variance.
+
+### Principal Components in R
+
+```{r, echo=2:3}
+X <- iris[,1:4]
+pca <- prcomp(X)
+summary(pca)
+```
+
+The summary shows the standard deviation of each of the 4 PCs for the iris data.
+
+It also shows the percentage of *total variation* explained and the cumulative percentage.
+
+The first two principal components here explain 97.8% of the total variation.
+
+### Principal Components projection of Iris
+```{r, echo=FALSE,fig.cap="", dev='pdf', fig.width=4, fig.height=3}
+par(mar = c(2.5,2.5,0.1,1))
+par(mgp = c(1.5, 0.4, 0))
+plot(pca$x[,1:2], col=cols.iris, pch=16, axes=TRUE, cex.lab=0.6, cex.axis=0.6)
+#box()
+```
+
+## PCA on Tweets
+
+### Creating the term-document matrix
+
+```{r, eval=FALSE, tidy=FALSE, size="footnotesize"}
+library(twitteR)
+### Search Twitter for some "relevant" tweets
+tweets1 = searchTwitter("Kevin Rudd", n=500, lang="en")
+tweets2 = searchTwitter("Tony Abbott", n=500, lang="en")
+tweets3 = searchTwitter("Christine Milne", n=500, lang="en")
+tweets = c(tweets1, tweets2, tweets3)
+### Extract the tweet text
+stext = sapply(tweets, function(x) x$getText())
+library(tm)
+### create a corpus and create document term matrix
+corpus = Corpus(VectorSource(stext))
+stoplist =   stopwords =c("kevin","rudd","tony", "abbott", 
+                          "christine", "milne",
+                          "ausvotes", "auspol",
+                          stopwords("english"))
+tdm = TermDocumentMatrix(corpus, 
+        control = list(removePunctuation = TRUE,stopwords = stoplist,
+                       removeNumbers = TRUE, tolower = TRUE))
+### convert tdm to matrix
+M = as.matrix(tdm)
+```
+
+### Preparing term frequencies for PCA
+
+This generates around 3000 terms on 1500 tweets.
+
+The term-document matrix as above is terms (rows) by tweets (columns). R expects the *variables* to be in columns
+so we transpose. 
+
+Also, PCA works best for approximately Normally distributed data
+The term-document matrix is counts of each term (word) in each document (tweet).
+These frequencies are unlikely to be Normally distributed.
+
+So we make a transformation; one possibility is TF-IDF but we find a
+square root works better here.
+
+### 2D projection of Tweets
+
+```{r, echo=FALSE, cache=TRUE}
+load("TweetMatrix.RData")
+pca.tweet <- prcomp(sqrt(t(M)))
+```
+```{r, echo=3,fig.cap="2D projection of Tweets. Colours represent authors.", dev='pdf', fig.width=4, fig.height=2}
+cbbPalette <- c("#000000", "#009E73", "#e79f00", "#9ad0f3", "#0072B2", "#D55E00", "#CC79A7", "#F0E442")
+palette(cbbPalette)
+par(mar = c(2.5,2.5,0.1,1));
+par(mgp = c(1.5, 0.4, 0))
+plot(pca.tweet$x[,1:2], col=cols, pch=16, axes=FALSE, cex.lab=0.6, cex.axis=0.6)
+box()
+```
+
+### PCA summary of Tweet projection
+
+```{r}
+summary(pca.tweet)$importance[,1:5]
+```
+
+Notice that even the first 5 principal components only explain 11% of
+the variation. In fact, 20 components only explain 25%.
+
+# Multidimensional Scaling
+
+### Multidimensional scaling
+
+Multidimensional scaling is a alternate way to view the dimension reduction problem.
+
+If the data exists in $p$ dimensions, and there is a distance defined between all 
+pairs of observations/objects in the $p$ dimensions. Can we construct a low dimensional (2D?) 
+that has as near as possible the same distances in the low dimensional space?
+
+\pause
+Before we can do this, we will examine the properties of a distance function, and define:
+
+- Euclidean Distance
+- Manhattan Distance
+- Maximum Distance
+- Minkowski Distance
+- Binary Distance
+- Cosine Distance
+
+
+## Distance between vectors
+
+### Distance functions
+
+A distance function (a metric) for vectors is a function that
+satisfies the following properties.
+
+#### Metric Properties
+
+A distance function for a set of vectors (vector space) satisfies:
+
+1. $d(X, Y) \geq 0$: the distance is non-negative.
+2. $d(X,Y) = 0 \Leftrightarrow X=Y$: if two vectors have zero distance, they must be the same vector.
+3. $d(X,Y)=d(Y,X)$: the distance between $X$ and $Y$ is the same as between $Y$ and $X$.
+4. $d(X,Z)\leq d(X,Y)+d(Y,Z)$: the direct path is never longer than other paths.
+
+
+### Euclidean Distance
+
+Euclidean distance (named after
+[Euclid](https://en.wikipedia.org/wiki/Euclid)) is the distance of the
+straight line between two points (the distance we all know of). Useful
+when vectors represent coordinates.
+
+$$d_{ij} = \sqrt{ \sum_k (Y_{ik}-Y_{jk})^2 }$$
+
+#### Example
+
+Given the two vectors $\vec{x} = [0~1~3~0~2]$, $\vec{y} = [5~0~0~0~1]$
+\begin{align*}
+d_{ij} & = \sqrt{(0 - 5)^2 + (1 - 0)^2 + (3 - 0)^2 + (0 - 0)^2 + (2 - 1)^2} \\
+       & = \sqrt{25 + 1 + 9 + 0 + 1} = \sqrt{36} \\
+       & = 6
+\end{align*}
+
+
+
+### Manhattan Distance
+
+Manhattan (Taxicab) distance provides the distance between two points
+when we are constrained to travel on the lines of grid (just as when
+driving through a city, we must drive on the roads).
+
+$$d_{ij} = \sum_k {\left \vert Y_{ik}-Y_{jk}\right \vert }$$
+
+#### Example
+
+Given the two vectors $\vec{x} = [0~1~3~0~2]$, $\vec{y} = [5~0~0~0~1]$
+\begin{align*}
+d_{ij} & = \vert 0 - 5\vert + \vert 1 - 0\vert + \vert 3 - 0\vert + \vert 0 - 0\vert + \vert 2 - 1\vert \\
+       & = 5 + 1 + 3 + 0 + 1 \\
+       & = 10
+\end{align*}
+
+
+### Maximum Distance
+
+Maximum (Chebyshev) distance returns the maximum distance between each
+pair of vector elements.  Also known as the chessboard distance, since
+it provides the number of moves required to move a King between two
+points on a chessboard.
+
+$$d_{ij} = \max_k{\left \vert Y_{ik}-Y_{jk}\right \vert }$$
+
+#### Example
+
+Given the two vectors $\vec{x} = [0~1~3~0~2]$, $\vec{y} = [5~0~0~0~1]$
+\begin{align*}
+d_{ij} & = \max{\left (\vert 0 - 5\vert, \vert 1 - 0\vert, \vert 3 - 0\vert, \vert 0 - 0\vert, \vert 2 - 1\vert\right )} \\
+       & = \max{\left ( 5, 1, 3, 0, 1\right )} \\
+       & = 5
+\end{align*}
+
+
+
+
+### Minkowski Distance
+
+Minkowski distance is a generalisation of the previous distance functions.
+
+$$d_{ij} = {\left ( \sum_k {\left \vert Y_{ik}-Y_{jk}\right\vert }^p \right )}^{1/p}$$
+
+Note that:
+
+- If $p = 2$ we get Euclidean distance
+- If $p = 1$ we get Manhattan distance
+- If $p = \infty$ we get Maximum distance
+
+
+
+
+### Visualising distances
+
+A circle consists of the set of all points that are distance $r$ from the centre.
+
+#### Problem
+
+Which of the following are circles when using Euclidean distance,
+Manhattan distance, and Maximum distance?
+
+\begin{center}
+\begin{tikzpicture}
+\draw (-1.5,0) -- (1.5,0);
+\draw (0,-1.5) -- (0,1.5);
+\draw[step=.5cm,gray,very thin] (-1.4,-1.4) grid (1.4,1.4);
+\draw[color = orange, thick, rotate=45] (-0.707,-0.707) rectangle (0.707,0.707);
+\end{tikzpicture}
+\quad
+\begin{tikzpicture}
+\draw (-1.5,0) -- (1.5,0);
+\draw (0,-1.5) -- (0,1.5);
+\draw[step=.5cm,gray,very thin] (-1.4,-1.4) grid (1.4,1.4);
+\draw[color = red, thick] (0,0) circle [radius=1cm];
+\end{tikzpicture}
+\quad
+\begin{tikzpicture}
+\draw (-1.5,0) -- (1.5,0);
+\draw (0,-1.5) -- (0,1.5);
+\draw[step=.5cm,gray,very thin] (-1.4,-1.4) grid (1.4,1.4);
+\draw[color = blue, thick] (-1,-1) rectangle (1,1);
+\end{tikzpicture}
+\end{center}
+
+### Binary Distance
+
+The binary distance treats elements of a vector as either
+\alert{present} or \alert{absent} and ignores the weight of the
+element.
+
+$$d_{ij} = 1 - \frac{\sum_k (Y_{ik} > 0) \cap (Y_{jk} > 0)}{\sum_k (Y_{ik} > 0) \cup (Y_{jk} > 0)}$$
+
+The distance is the number of elements that are non-zero in only one of the
+vectors divided by the number of elements that are non-zero in at
+least one vector.
+
+\pause
+
+#### Example
+
+Given the two vectors $\vec{x} = [0~1~3~0~2]$, $\vec{y} = [5~0~0~0~1]$
+\begin{align*}
+d_{ij} & = 1 - \frac{0 + 0 + 0 + 0 + 1}{1 + 1 + 1 + 0 + 1} \\
+       & = 1 - \frac{1}{4} = 0.75
+\end{align*}
+
+
+
+### Cosine distance
+
+When examining document vectors (in a previous lecture), we showed
+that we compare them using the Cosine of weighted vectors. Cosine
+similarity is a similarity function, not a distance function.
+
+- A \alert{high} Cosine similarity score between documents implies that the two documents are similar.
+- But \alert{small} distances imply similarity.
+
+We know that Cosine similarity has a maximum score of 1 when two
+documents vectors have the same direction. To convert Cosine
+similarity to a distance:
+
+$$
+	d(\text{doc}_i,\text{doc}_j) = 1 - \cos{(\text{doc}_i,\text{doc}_j)}
+$$
+
+- if $\cos{(\text{doc}_i,\text{doc}_j)} = 1$, $d(\text{doc}_i,\text{doc}_j) = 0$
+- if $\cos{(\text{doc}_i,\text{doc}_j)} < 1$, $d(\text{doc}_i,\text{doc}_j) > 0$
+
+### Cosine similarity and Euclidean distance
+
+We can show the relationship between Euclidean 
+distance and Cosine similarity:
+\begin{align*}
+d(X,Y)^2 &= {\sum_k (X_{k}-Y_{k})^2 } \\
+	 &= {\sum_k X_{k}^2 + Y_{k}^2 - 2X_{k}Y_{k}} \\
+ 	 &= {\sum_k X_{k}^2} + {\sum_k Y_{k}^2} - 2{\sum_k X_{k}Y_{k}} \\
+  	 &= 1 + 1 - 2\cos(X, Y) \\
+   	 &= 2(1 - \cos(X, Y))
+\end{align*}
+if the vectors $X$ and $Y$ have length 1 ($\| X\| = 1$ and $\| Y\| = 1$).
+
+### Unit length document vectors
+
+To adjust the length of each vector so that it satisfies $\|X\| = 1$,
+we divide by its length to obtain the scaled vector:
+$$
+	X = \frac{\vec{\text{doc}_i}}{\|\vec{\text{doc}_i}\|}
+$$
+Note also that scaling a document vector changes the length but not
+the direction of the vector, so scaling a pair of vectors does not
+change their Cosine similarity (the angle between them).
+
+\pause
+Therefore we have the relationship between Cosine distance (1 - Cosine similarity) and Euclidean distance.
+$$
+	1 - \cos{(X,Y)} = d{\left(\frac{X}{\|X\|},\frac{Y}{\|Y\|} \right )}^2/2
+$$
+
+
+## Multidimensional scaling
+
+### Distance Matrix
+
+Once we have a distance function and our data (set of $N$ vectors),
+MDS requires the $N\times N$ matrix of distances between all pairs of
+records in our data.
+
+#### Problem
+
+Given the three vectors $X_1 = [1~2~3]$, $X_2 = [2~0~4]$, $X_3 = [1~0~0]$, complete the distance matrix, where distance is measured using Manhattan distance:
+$$
+D = \left [
+\begin{array}{ccc}
+  & 4 & 5\\
+  & & 5 \\
+  & & \\
+\end{array}
+\right ] 
+$$
+
+
+### Multidimensional scaling
+
+If we want to visualise the data in 2D, the process of
+Multidimensional scaling asks "which set of 2D vectors provide the
+matrix $D$ (or most similar matrix $D$), when using Euclidean
+Distance?"
+
+- MDS computes the set of vectors in the lower dimensional space that
+  best preserve the distances of the original data.
+- MDS computes distances of the lower dimensional vectors using
+  Euclidean distance to provide the best visualisation of distances.
+
+
+### Multidimensional scaling - Iris Data
+
+The following plot looks like the PCA plot for the Iris data.
+When MDS is used on data that measures distances with Euclidean distance,
+PCA and MDS are equivalent.
+
+```{r, fig.cap="", dev='pdf', fig.width=3, fig.height=1.8, echo=2:3}
+par(mar=rep(0.1,4))
+D <- dist(X) # compute distance matrix on X using Euclidean distance.
+mds <- cmdscale(D, k=2) # MDS given distances D, projected to 2D
+plot(mds, col=cols.iris, pch=16, axes=FALSE)
+box()
+```
+
+### Multidimensional scaling - Iris Data
+```{r, fig.cap="", dev='pdf', fig.width=4, fig.height=2.5, echo=2:3}
+par(mar=rep(0.1,4))
+D <- dist(X, method="maximum")
+mds <- cmdscale(D, k=2)
+plot(mds, col=cols.iris, pch=16, axes=FALSE)
+box()
+```
+
+
+
+
+## MDS on Tweets
+
+### Examining the effect of each distance function
+
+In this section we will apply MDS to the set of 1498 tweets from:
+
+- Kevin Rudd (ALP, shown in red)
+- Tony Abbott (Liberal Party, shown in blue)
+- Christine Milne (Greens, shown in green)
+
+After preprocessing, we are left with 3266 unique words appearing in
+the set of tweets, so each tweet is represented as a 3266 dimensional
+vector. We will use MDS to project the 3266 dimensional space into two
+dimensions.
+
+
+TF-IDF is applied to each of the document vectors, then we use MDS
+with the chosen distance function.
+
+
+### MDS: TF-IDF with Euclidean Distance
+
+```{r, echo=TRUE, cache=TRUE}
+M2 <- as.matrix(weightTfIdf(tdm))
+D <- dist(t(M2), method="euclidean")
+mds.tweet <- cmdscale(D, k=2)
+```
+```{r, echo=FALSE, fig.cap="Similarity of tweets measured using Euclidean Distance", dev='pdf', fig.width=4, fig.height=2}
+par(mar=rep(0.1,4))
+plot(mds.tweet, col=cols, pch=16, axes=FALSE)
+abline(v = 0)
+abline(h = 0)
+box()
+```
+
+### MDS: TF-IDF with Manhattan Distance
+
+```{r, echo=TRUE, cache=TRUE}
+M2 <- as.matrix(weightTfIdf(tdm))
+D <- dist(t(M2), method="manhattan")
+mds.tweet <- cmdscale(D, k=2)
+```
+```{r, echo=FALSE, fig.cap="Similarity of tweets measured using Manhattan Distance", dev='pdf', fig.width=4, fig.height=2}
+par(mar=rep(0.1,4))
+plot(mds.tweet, col=cols, pch=16, axes=FALSE)
+abline(v = 0)
+abline(h = 0)
+box()
+```
+
+### MDS: TF-IDF with Maximum Distance
+
+```{r, echo=TRUE, cache=TRUE}
+M2 <- as.matrix(weightTfIdf(tdm))
+D <- dist(t(M2), method="maximum")
+mds.tweet <- cmdscale(D, k=2)
+```
+```{r, echo=FALSE, fig.cap="Similarity of tweets measured using Maximum Distance", dev='pdf', fig.width=4, fig.height=2}
+par(mar=rep(0.1,4))
+plot(mds.tweet, col=cols, pch=16, axes=FALSE)
+abline(v = 0)
+abline(h = 0)
+box()
+```
+
+### MDS: TF-IDF with Binary Distance
+
+```{r, echo=TRUE, cache=TRUE}
+M2 <- as.matrix(weightTfIdf(tdm))
+D <- dist(t(M2), method="binary")
+mds.tweet <- cmdscale(D, k=2)
+```
+```{r, echo=FALSE, fig.cap="Similarity of tweets measured using Binary Distance", dev='pdf', fig.width=4, fig.height=2}
+par(mar=rep(0.1,4))
+plot(mds.tweet, col=cols, pch=16, axes=FALSE)
+abline(v = 0)
+abline(h = 0)
+box()
+```
+
+
+### MDS: TF-IDF with Cosine Distance
+```{r, echo=TRUE, cache=TRUE}
+M2 <- as.matrix(weightTfIdf(tdm))
+M3 <- M2 %*% diag(1/sqrt(colSums(M2^2))) ## divide by vector norm
+D <- dist(t(M3), method="euclidean")^2/2 ## square distance and divide by 2 to get 1 - cosine
+mds.tweet <- cmdscale(D, k=2)
+```
+
+```{r, echo=FALSE,fig.cap="Similarity of tweets measured using Cosine Distance", dev='pdf', fig.width=4, fig.height=2}
+par(mar=rep(0.1,4))
+plot(mds.tweet, col=cols, pch=16, axes=FALSE)
+abline(v = 0)
+abline(h = 0)
+box()
+#text(mean(par("usr")[1:2]), mean(par("usr")[3:4]),"YUK!")
+```
+
+
+### Analysis of results
+
+In the previous plots:
+
+- Euclidean distance and Maximum distance did not provide good
+  visualisation (all of the tweets are clumped together in a line.
+
+- Cosine and Binary give very similar visualisation of the
+  tweets. This is probably due to words only appearing either 0 or 1
+  time in a tweet (tweets are short).
+
+- Manhattan distance gave similar but more spread version of the plots
+  using Cosine and Binary distance.
+
+- Cosine, Binary and Manhattan distances shows that all of the Kevin
+  Rudd and Tony Abbott tweets were similar. There were a set from the
+  Christine Milne that were similar to the others, but some that were
+  different.
 
 
 # Word Clouds
@@ -48,7 +664,7 @@ The simple idea behind placing the words is this.
 1. Place the first word (highest frequency) in the centre.
 2. Assume some words are already placed. 
 3. Try placing the next word at the *current* position.
-   * If it doesn't fit ie. it overlaps with already placed words move the *current* position out along a *spiral* and return to 3.
+   * If it doesn't fit (ie. it overlaps with already placed words) move the *current* position out along a *spiral* and return to 3.
    * If it does fit place the word.
 4. Repeat for any remaining words.
 
@@ -85,20 +701,20 @@ mywordle(words,freq, pause=TRUE)
 ```
 
 ### Word Clouds Code
-```
+```{r eval = FALSE}
 boxes <- list()
 r <- 0
 theta <- 0
 for(i in 1:length(words)) {
-  repeat {
-    b <- box(r, theta, words[i], sizes[i])
-    if(!is.overlapped(b, boxes)) break
-    theta <- theta + thetaStep
-    r <- r + rStep
+    repeat {
+        b <- box(r, theta, words[i], sizes[i])
+        if(!is.overlapped(b, boxes)) { break }
+        theta <- theta + thetaStep
+        r <- r + rStep
     }
-  text(r*cos(theta),r*sin(theta), words[i], adj=c(0.5,0.5), cex=sizes[i])
-  boxes <- c(list(b), boxes)
-  }
+    text(r*cos(theta),r*sin(theta), words[i], adj=c(0.5,0.5), cex=sizes[i])
+    boxes <- c(list(b), boxes)
+}
 ```
 
 ### Word Clouds in R
@@ -111,320 +727,21 @@ wordcloud(words,freq, random.order=FALSE,
           colors=brewer.pal(8, "Dark2"))
 ```
 
-# Principal Components Analysis
 
-### Dimension Reduction
-
-One of the goals of visualisation is dimension reduction.
-
-Often a dataset consist of more than one measurement on each individual or observation.
-
-For example, 
-* heights and weights etc of individuals. (>2 measurement)
-* Use or not of multiple words in a tweet (usage counts). (>100 "measurements")
-* Expression of a gene in a biological sample. (>10,000 measurements)
-
-Visualisation usually requires a small number of dimensions. We cannot easily *see* very high-dimensions.
-
-We will look at two ways to do this; *Principal Components Analysis* and *Multidimensional Scaling*
-
-### Principal Components Analysis
-
-Fisher's Iris data
-
-```{r, fig.cap="", dev='pdf', fig.width=4, fig.height=3, echo=FALSE}
-par(mar=rep(0.01,4), oma=rep(0,4))
-cols.iris <- unclass(iris$Species)+1
-pairs(iris[,1:4], col=cols.iris, pch=16, cex=0.5, xaxt="n", yaxt="n", gap=0.1)
-```
-
-### Principal Components Analysis
-
-In this example it is not too difficult to visualise the 4-dimensional data. There are 150 sets of
-measurements on iris flowers, from 3 different species.
-
-Principal components is a method to try and find a low dimensional representation of the variability in the data.
-
-Suppose we have $p$ measurements represented by the random variables $X_1,\ldots,X_p$
-
-In the iris data $p$ is 4 and each of the $X_i$ represent a Sepal or Petal, Length or Width.
-
-### Principal Components Analysis
-
-Each of the $p$ variables has a variance and pairs of the variables may be correlated.
-
-Principal components seeks a new variable $Y_1$ that is a linear combination of the original variables and has *maximum* variance.
-
-$$Y_1 = a_1 X_1 + a_2 X_2 + \cdots + a_p X_p$$
-
-Since $Var(aZ) = a^2Var(Z)$ we must also restrict the $a_i$'s so they are not arbitrarily big. Usually,
-
-$$ a_1^2 + a_2^2 + \cdots + a_p^2 = 1$$
-
-### Principal Components Analysis
-
-The $a_i$'s are actually computed using something called an Eigen Value or Singular Value Decomposition.
-
-The $a_i$'s above give the first principal component. But this is only one dimension. 
-
-To plot the data 2 dimensions would be useful. So the *second* principal component is defined as the linear 
-combination of the $X_i$'s that maximizes the variance AND is *orthogonal* to the first principal component.
-
-$$Y_2 = b_1 X_1 + b_2 X_2 + \cdots + b_p X_p$$
-
-with the $b_i$'s chosen to maximise variance subject to the constraints that,
-
-$$b_1^2 + b_2^2 + \cdots + b_p^2 = 1 \text{  AND  } a_1b_1 + a_2b_2 + \cdots + a_pb_p = 0$$
-
-And so on....
-
-### Principal Components Analysis
-
-```{r, echo=2:3}
-X <- iris[,1:4]
-pca <- prcomp(X)
-summary(pca)
-```
-
-### Principal Components Analysis
-
-The summary shows the standard deviation of each of the 4 PCs for the iris data.
-
-It also shows the percentage of *total variation* explained and the cumulative percentage.
-
-The first two principal components here explain 97.8% of the total variation.
-
-### Principal Components Analysis
-```{r, echo=FALSE,fig.cap="", dev='pdf', fig.width=4, fig.height=3}
-par(mar=c(4,4,1,1))
-plot(pca$x[,1:2], col=cols.iris, pch=16, axes=FALSE)
-box()
-```
-
-### PCA with twitter data?
-
-```{r, eval=FALSE, tidy=FALSE, size="footnotesize"}
-library(twitteR)
-### Search Twitter for some "relevant" tweets
-tweets1 = searchTwitter("Kevin Rudd", n=500, lang="en")
-tweets2 = searchTwitter("Tony Abbott", n=500, lang="en")
-tweets3 = searchTwitter("Christine Milne", n=500, lang="en")
-tweets = c(tweets1, tweets2, tweets3)
-### Extract the tweet text
-stext = sapply(tweets, function(x) x$getText())
-library(tm)
-### create a corpus and create document term matrix
-corpus = Corpus(VectorSource(stext))
-stoplist =   stopwords =c("kevin","rudd","tony", "abbott", 
-                          "christine", "milne",
-                          "ausvotes", "auspol",
-                          stopwords("english"))
-tdm = TermDocumentMatrix(corpus, 
-        control = list(removePunctuation = TRUE,stopwords = stoplist,
-                       removeNumbers = TRUE, tolower = TRUE))
-### convert tdm to matrix
-M = as.matrix(tdm)
-```
-
-### PCA with twitter data?
-This generates around 3000 terms on 1500 tweets.
-
-The term-document matrix as above is terms (rows) by tweets (columns). R expects the *variables* to be in columns
-so we transpose. 
-
-Also, PCA works best for approximately Normally distributed data
-
-The term-document matrix is counts of each term (word) in each document (tweet) 
-it is unlikely to be Normally distributed.
-
-So we make a transformation; one possibility is TF-IDF but we find a square root works better here.
-
-### PCA with twitter data?
-```{r, echo=FALSE}
-load("TweetMatrix.RData")
-```
-```{r, echo=2,fig.cap="", dev='pdf', fig.width=4, fig.height=3, cache=TRUE}
-par(mar=c(4,4,1,1))
-pca.tweet <- prcomp(sqrt(t(M)))
-plot(pca.tweet$x[,1:2], col=cols, pch=16, axes=FALSE)
-box()
-```
-
-### PCA with twitter data?
-```{r}
-summary(pca.tweet)$importance[,1:5]
-```
-Notice that even the first 5 principal components only explain 11% of the variation. In fact, 20 components only explain 25%...
-
-# Multidimensional Scaling
-
-### Multidimensional scaling
-
-Multidimensional scaling is a alternate way to view the dimension reduction problem.
-
-If the data exists in $p$ dimensions, and there is a distance defined between all 
-pairs of observations/objects in the $p$ dimensions. Can we construct a low dimensional (2D?) 
-that has as near as possible the same distances in the low dimensional space?
-
-### Multidimensional scaling
-
-We need to define the distances in the high ($p$) and low dimensional spaces.
-
-We also need to define the *distance* between distances...
-
-In the simplest case, think of the distance in the high dimensional space as *Euclidean* distance. 
-In two or three dimensions this is the distance you get by measuring with a ruler/tape measure.
-
-$$D_{ij} = \sqrt{ \sum_k (X_{ik}-X_{jk})^2 }$$
-
-Here $X_{ik}$ is the measurement of the $k$-th variable on the $i$-th object/observation in the $p$ dimensional space
-
-
-## Distance between vectors
-
-### Eulidean Distance
-
-
-### Maximum Distance
-
-
-### Manhattan Distance
-
-
-### Canberra Distance
-
-
-### Binary Distance
-
-
-### Minkowski Distance
-
-
-
-
-### Multidimensional scaling
-
-We can use Euclidean distance in the low dimensional space also (say $d_{ij}$).
-
-$$d_{ij} = \sqrt{ \sum_k (Y_{ik}-Y_{jk})^2 }$$
-
-Here $Y_{ik}$ is the allocated value of the $k$-th component of the $i$-th object/observation 
-in the low dimensional space
-
-One possibility for the *distance* between *distances* is the so called Frobenius norm.
-
-$$\sum_{i,j} (D_{ij} - d_{ij})^2$$
-
-We aim to choose the $Y_{ik}$ to make the Frobenius norm as small as possible.
-
-### Multidimensional scaling
-
-For the Frobenius norm, and Euclidean distance in the low dimensional space, this can all be done
-using an Eigen Value decomposition or Singular Value Decomposition.
-
-### Multidimensional scaling - Iris Data
-```{r, fig.cap="", dev='pdf', fig.width=4, fig.height=2.5, echo=2:3}
-par(mar=rep(0.1,4))
-D <- dist(X)
-mds <- cmdscale(D, k=2)
-plot(mds, col=cols.iris, pch=16, axes=FALSE)
-box()
-```
-
-### Multidimensional scaling - Iris Data
-
-This plot looks very like the PCA plot for the Iris data!!
-
-Well actually, when both the distances are Euclidean distance, and the Frobenius norm is used,
-PCA and MDS are equivalent.
-
-Why use MDS? Because we can use different distances (in the high dimensional space usually).
-
-### Multidimensional scaling - Iris Data
-```{r, fig.cap="", dev='pdf', fig.width=4, fig.height=2.5, echo=2:3}
-par(mar=rep(0.1,4))
-D <- dist(X, method="maximum")
-mds <- cmdscale(D, k=2)
-plot(mds, col=cols.iris, pch=16, axes=FALSE)
-box()
-```
-
-
-### Multidimensional scaling - Tweets
-
-We need to think carefully about the distance between tweets. 
-
-Euclidean distance using words in tweets (term-document) is not likely to be appropriate. 
-
-We could consider
-
-* Euclidean distance of square roots.
-* Euclidean distance in the TF-IDF transformed matrix?
-* The binary metric
-
-Most of the terms occur very few times in each tweet. (mostly zero or one). The binary
-metric just looks at presence/absence of a term.
-
-### Binary Metric
-
-When comparing two tweets, think of each term being either present or absent in one or both tweets.
-
-If we count the number of terms present in one or both tweets we can summarise in a table like the following.
-
-\begin{center}
-\begin{tabular}{l|c|c}
-&\multicolumn{2}{c}{Tweet A}\\ 
-Tweet B&Absent&Present\\ \hline
-Absent&a&b\\ \hline
-Present&c&d\\
-\end{tabular}
-\end{center}
-
-Then the *Binary Metric* is $\frac{b+c}{b+c+d}$.
-
-It is the ratio of the count of terms occuring in only one tweet
-to the total number of terms present in one or the other tweet.
-
-### Multidimensional scaling - Tweets
-```{r, echo=TRUE, cache=TRUE}
-D <- dist(t(M), method="binary")
-mds.tweet <- cmdscale(D, k=2)
-```
-```{r, echo=FALSE, fig.cap="", dev='pdf', fig.width=4, fig.height=2.5}
-par(mar=rep(0.1,4))
-plot(mds.tweet, col=cols, pch=16, axes=FALSE)
-box()
-```
-
-### Multidimensional scaling - Tweets using TF-IDF
-```{r, echo=TRUE, cache=TRUE}
-M2 <- as.matrix(weightTfIdf(tdm))
-D <- dist(t(M2))
-mds.tweet <- cmdscale(D, k=2)
-```
-
-\|| x - y \||^2 = ||X||^2 + ||y||^2 - 2<x,y>
-If ||x|| = 1 and ||y|| = 1,
-\|| x - y \||^2 = ||X||^2 + ||y||^2 - 2<x,y> = 2 - 2cos(x,y)
-
-\|| x - y \||^2 = ||X||^2 + ||y||^2 - 2<x,y> = 2 - 2cos(x,y)
-cos(x,y) = 1 - ||x - y||^2/2
-
-
-```{r, echo=FALSE,fig.cap="", dev='pdf', fig.width=4, fig.height=2.5}
-par(mar=rep(0.1,4))
-plot(mds.tweet, col=cols, pch=16, axes=FALSE)
-box()
-text(mean(par("usr")[1:2]), mean(par("usr")[3:4]),"YUK!")
-```
 
 ### Summary
 
-We looked at;
+- We can visualise word frequency using a word cloud.
+- Principal Components Analysis can be used to visualise data where
+  distances are measured using Euclidean distance.
+- Multidimensional Scaling can be used to visualise data using any metric.
+- Commonly used metrics are Euclidean distance, Manhattan distance,
+  Maximum distance, Binary distance.
+- Cosine distance is not a metric, but is useful for measuring
+  document dissimilarity and can be used for MDS.
 
-* Word Clouds as a simple frequency of words visualization
-* Principal Components Analysis for dimension reduction
-* Multidimensional Scaling as a more flexible dimension reduction
-  * Including the Binary Metric
-  
+
+### Next Week
+
+Text Mining 2: Clustering
 

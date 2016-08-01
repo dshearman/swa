@@ -178,7 +178,7 @@ In this Unit, we will examine the clustering algorithms:
 K-means clustering was designed to be used in a Euclidean space,
 meaning it uses the Euclidean distance:
 $$
-	d(\vec{x}_i,\vec{x}_j) = {\sum_{n=1}^{N} {(x_{in} - x_{jn})}^2} = \norm{\vec{x}_i - \vec{x}_j}_2^2
+	d(\vec{x}_i,\vec{x}_j)^2 = {\sum_{n=1}^{N} {(x_{in} - x_{jn})}^2} = \norm{\vec{x}_i - \vec{x}_j}_2^2
 $$
 
 
