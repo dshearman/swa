@@ -205,10 +205,9 @@ load("TweetMatrix.RData")
 pca.tweet <- prcomp(sqrt(t(M)))
 ```
 ```{r, echo=3,fig.cap="2D projection of Tweets. Colours represent authors.", dev='pdf', fig.width=4, fig.height=2}
-cbbPalette <- c("#000000", "#009E73", "#e79f00", "#9ad0f3", "#0072B2", "#D55E00", "#CC79A7", "#F0E442")
-palette(cbbPalette)
 par(mar = c(2.5,2.5,0.1,1));
 par(mgp = c(1.5, 0.4, 0))
+#cols = as.numeric(factor(cols))
 plot(pca.tweet$x[,1:2], col=cols, pch=16, axes=FALSE, cex.lab=0.6, cex.axis=0.6)
 box()
 ```

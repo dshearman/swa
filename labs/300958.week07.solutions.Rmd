@@ -8,28 +8,167 @@ opts_chunk$set(fig.path='figure/week07-labsol-')
 
 `r opts_chunk$set(prompt=TRUE, comment=NA)`
 
-- Try and plot the first and third principal components. And the second and third.
+# Political tweets
 
-```{r eval=FALSE}
-plot(pca$x[,1], pca$x[,3], col=colors, pch=16)
-plot(pca$x[,2], pca$x[,3], col=colors, pch=16)
+```{r echo = FALSE}
+key = "ubhhOcX3zhqGs8WSXcuoIeSaG"
+secret = "dbBsrw3Wn6hNtrLuHkwLybuND8MiZhl7c2Tfjy8Dzp7AKcdXnJ"
+access_token = "48291971-3OOoKxx8pPmpxy2ZdZOOKucghVIHnt0I1Xom4UMqI"
+access_secret = "x3BMnolUhYfvPnnmXwJwPNpXgNdBBToO7vDL2pszCWYB0"
+
+library("twitteR")
+
+setup_twitter_oauth(key, secret, access_token, access_secret)
+
+tweets1 = userTimeline("@billshortenmp", n=100)
+tweets2 = userTimeline("@TurnbullMalcolm", n=100)
+tweets3 = userTimeline("@RichardDiNatale", n=100)
+tweets = c(tweets1, tweets2, tweets3)
 ```
 
-- Repeat using a `sqrt` transformation.
+```{r eval = FALSE}
+library("twitteR")
 
-```{r eval=FALSE}
-pca <- prcomp(t(sqrt(M)))
-plot(pca$x[,1], pca$x[,2], col=colors, pch=16)
-plot(pca$x[,1], pca$x[,3], col=colors, pch=16)
-plot(pca$x[,2], pca$x[,3], col=colors, pch=16)
+key = "your twitter API key"
+secret = "your twitter API secret"
+
+setup_twitter_oauth(key, secret)
+
+tweets1 = userTimeline("@billshortenmp", n=100, lang = "en")
+tweets2 = userTimeline("@TurnbullMalcolm", n=100, lang = "en")
+tweets3 = userTimeline("@RichardDiNatale", n=100, lang = "en")
+tweets = c(tweets1, tweets2, tweets3)
 ```
 
-- Repeat using a three dimensional representation, and plot the first v. third and second v. third dimensions.
+## Build a term-document matrix
+The  next step is to build a *term document matrix*
 
-```{r eval=FALSE}
-mds <- cmdscale(D, k=3)
-plot(mds[,1], mds[,2], col=colors, pch=16)
-plot(mds[,1], mds[,3], col=colors, pch=16)
-plot(mds[,2], mds[,3], col=colors, pch=16)
+```{r eval=TRUE, tidy=FALSE}
+library(tm)
+tweets.df = twListToDF(tweets) # convert tweets to dataframe
+corpus = Corpus(VectorSource(tweets.df$text)) # create a corpus from tweet text
+
+
+corpus = tm_map(corpus, 
+         function(x) iconv(x, to='ASCII')) # convert characters to ASCII
+
+corpus = tm_map(corpus, PlainTextDocument)
+
+
+# create document term matrix applying some transformations
+tdm = TermDocumentMatrix(corpus, 
+                         control = list(removePunctuation = TRUE,  
+                                        stopwords = TRUE,
+                                        removeNumbers = TRUE, tolower = TRUE, 
+                                        stemming=FALSE)) # No stemming 
+# remove empty tweets
+empties = which(colSums(as.matrix(tdm)) == 0)
+tdm = tdm[,-empties]
+
+# Convert to a standard R matrix
+M = as.matrix(tdm)
 ```
 
+# Draw a Wordle-esque word cloud
+
+
+Word cloud based on term frequency.
+```{r}
+# Word frequencies correspond to row Sums in this tdm.
+library(wordcloud)
+freqs = rowSums(M)
+## remove any words that have count "NA".
+#freqs = freqs[!is.na(freqs)]
+wordcloud(names(freqs), freqs, random.order=FALSE, min.freq=3)
+```
+
+Word cloud based on TF-IDF.
+```{r}
+# Word frequencies correspond to row Sums in this tdm.
+tdmw = weightTfIdf(tdm)
+T = as.matrix(tdmw)
+freqsw = rowSums(T)
+wordcloud(names(freqsw), freqsw, random.order=FALSE, min.freq=3)
+```
+
+Using term frequencies seems better than TF-IDF weights. Words that
+appear in only one document (e.g. http://...) get a large IDF weight,
+which is not what we want for these word clouds.
+
+
+```{r eval=TRUE, tidy=FALSE}
+colours = c(rep("red", length(tweets1)), 
+           rep("blue", length(tweets2)), 
+           rep("green", length(tweets3)))
+## remove colours associated to empty tweets
+colours = colours[-empties]
+
+pcaT <- prcomp(t(T))
+## plotting 1st and 2nd PC
+plot(pcaT$x[,1], pcaT$x[,2], col=colours, pch=16)
+```
+
+```{r}
+## plotting 1st and 3rd PC
+plot(pcaT$x[,1], pcaT$x[,3], col=colours, pch=16)
+```
+
+
+Using the square root transformation:
+```{r}
+pcaM <- prcomp(t(sqrt(M)))
+## plotting 1st and 2nd PC
+plot(pcaM$x[,1], pcaM$x[,2], col=colours, pch=16)
+```
+
+Examine the summaries:
+```{r}
+summary(pcaT)$importance[,1:5]
+summary(pcaM)$importance[,1:5]
+```
+
+# Multidimensional Scaling
+
+
+Verifying that MDS using Euclidean distance is the same as PCA.
+We find that the results are the same as when using PCA, except for a rotation.
+```{r}
+D = dist(t(T))
+mdsT <- cmdscale(D, k=2)
+plot(mdsT[,1], mdsT[,2], col=colours, pch=16)
+```
+
+MDS of unweighted tweets, using Binary distance.
+```{r}
+D = dist(t(M), method = "binary")
+mdsM <- cmdscale(D, k=2)
+plot(mdsM[,1], mdsM[,2], col=colours, pch=16)
+```
+
+MDS of unweighted tweets, using Cosine distance.
+```{r}
+CM = M %*% diag(1/sqrt(colSums(M^2)))
+D = dist(t(CM), method = "euclidean")^2/2
+mdsM <- cmdscale(D, k=2)
+plot(mdsM[,1], mdsM[,2], col=colours, pch=16)
+```
+
+MDS of TF-IDF tweets, using Binary distance.
+```{r}
+D = dist(t(T), method = "binary")
+mdsT <- cmdscale(D, k=2)
+plot(mdsT[,1], mdsT[,2], col=colours, pch=16)
+```
+
+MDS of TF-IDF tweets, using Cosine distance.
+```{r}
+CT = T %*% diag(1/sqrt(colSums(T^2)))
+D = dist(t(CT), method = "euclidean")^2/2
+mdsT <- cmdscale(D, k=2)
+plot(mdsT[,1], mdsT[,2], col=colours, pch=16)
+```
+
+Using TF-IDF weights with Cosine distance seems to have produced
+clustered results (all of the blue points are close to each other, all
+of the gree points are close to each other and all of the red points
+are close to each other).

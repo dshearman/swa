@@ -8,108 +8,111 @@ opts_chunk$set(fig.path='figure/week07-lab-')
 
 `r opts_chunk$set(prompt=TRUE, comment=NA)`
 
-# Setting up some Tweets data
+# Required libraries
 
-You will need the `tm` and `wordcloud` packages so `install.packages` these.
+You will need the `twitteR`, `tm` and `wordcloud` packages.
 
-## Search Twitter
+# Political tweets
 
-After setting up the authentication as in previous labs search for 3 or 4 related search terms in Twitter.
-The code we used in lectures was like this, but try and use different terms.
+In the lecture, we showed how to download the tweets mentioning one of
+three politicians, and then create a term document matrix containing
+the frequency of each word in each document.
 
-```{r eval=FALSE}
-tweets1 = searchTwitter("Kevin Rudd", n=500, lang="en")
-tweets2 = searchTwitter("Tony Abbott", n=500, lang="en")
-tweets3 = searchTwitter("Christine Milne", n=500, lang="en")
-tweets = c(tweets1, tweets2, tweets3)   # Put the three searches together
-```
+In this lab we will download the tweets published by the leaders of
+the three political parties:
 
-If there technical problems doing this the tweet examples from lectures are in an R data file called 
+- <https://en.wikipedia.org/wiki/Australian_Labor_Party>
+- <https://en.wikipedia.org/wiki/Liberal_Party_of_Australia>
+- <https://en.wikipedia.org/wiki/Australian_Greens>
+
+To do this,
+
+1. visit the above wikipedia pages to locate the names,
+2. then search for their twitter handles (beginning with @) using a Web browser.
+3. Once you have found the three handles use `userTimeline(handle, n=100, lang = "en")` for each handle, storing the results in `tweets1`, `tweets2` and `tweets3`, to obtain their most recent 100 tweets.
+4. Combine the set of tweets into the vector `tweets`
+5. Then create the term document matrix for the set of tweets.
+
+In the lecture, we set `stopwords = stoplist` in the function
+`TermDocumentMatrix`. We don't have a stoplist yet, so set `stopwords = TRUE`
+to use the default stoplist.
+
+If you have network problems, the tweet examples from lectures can be used:
 [Tweets.RData](Tweets.RData). This can be read using `load("Tweets.RData")`
+Doing so will provide you with `tweets1`, `tweets2`, and tweets3`.
 
-```{r eval=FALSE,include=FALSE}
-load("Tweets.RData")
-tweets = c(tweets1, tweets2, tweets3)
-```
-
-## Build a term-document matrix
-The  next step is to build a *term document matrix*
-
-```{r eval=FALSE, tidy=FALSE}
-library(tm)
-stext = sapply(tweets, function(x) x$getText())
-corpus = Corpus(VectorSource(stext)) # create a corpus
-# Make a stop list
-stoplist =   stopwords =c("kevin","rudd", "tony", "abbott", "christine", "milne",
-                          "ausvotes", "auspol",  stopwords("english"))
-# create document term matrix applying some transformations
-tdm = TermDocumentMatrix(corpus, 
-                         control = list(removePunctuation = TRUE,  
-                                        stopwords = stoplist,
-                                        removeNumbers = TRUE, tolower = TRUE, 
-                                        stemming=FALSE)) # No stemming 
-# Convert to a standard R matrix
-M = as.matrix(tdm)
-# Word frequencies correspond to row Sums in this tdm.
-freqs = rowSums(M)
-```
 
 # Draw a Wordle-esque word cloud
 
-Use the R `wordcloud` library to draw a word cloud of the most common tweets. If you forget the `min.freq`
-it will take a long time to draw.
+To draw a word cloud, we need a set of words and the weight of each word.
 
-```{r eval=FALSE, tidy=FALSE}
-library(wordcloud)
-wordcloud(names(freqs), freqs, random.order=FALSE, min.freq=10)
-```
+1. Create the word weight by summing the term frequencies (using either `rowSums` or `colSums`).
+2. Extract the names of the words using the function `names` on the weight vector.
+3. Using the function `wordcloud` from the library `wordcloud` to draw the word cloud. Adjust the value of min.freq to make the word cloud visually better.
 
-Experiment with the options `rot.per` and `colors` to `wordcloud`. (see the help page).
+How does the word cloud look?
 
-Add some of the least interesting words to the stoplist above and repeat the wordcloud.
+Create another word cloud, but use a TF-IDF weighted matrix. Does the
+word cloud look better or worse?
+
+Finally, if there are words that are not informative, create a
+stoplist containg the words to be removed and the words from
+`stopwords()`.
+
+When you are happy with the results, sit back and take a minute to be
+proud of your work, then move on to the next section.
+
 
 # Principal Components Analysis
 
-Using the term-document matrix from above, produce visualisation plot of the first two prinicpal components.
+Using the term-document matrix from above, produce visualisation plot of the first two prinicpal components. Remember that we are using a TF-IDF weighted term frequencies.
 
-First we generate a vector of colors to represent the (in our case 3) search terms
+First we generate a vector of colors to represent the three polical leaders.
 
 ```{r eval=FALSE, tidy=FALSE}
-colors = c(rep("red", length(tweets1)), 
+colours = c(rep("red", length(tweets1)), 
            rep("blue", length(tweets2)), 
            rep("green", length(tweets3)))
 ```
 
+Then compute the set of principal components and plot the first two.
 ```{r eval=FALSE}
 pca <- prcomp(t(M))
-plot(pca$x[,1], pca$x[,2], col=colors, pch=16)
+plot(pca$x[,1], pca$x[,2], col=colours, pch=16)
 ```
+
+Examine the PCA summary to identify the variance that the first few componenets represent.
+Which of the two leaders tweet the most similar material?
 
 Try and plot the first and third principal components. And the second and third.
 
-Repeat using a `sqrt` transformation.
+Repeat using a `sqrt` transformation and without TF-IDF weighting. Is
+there a difference in the variance that the first few components have
+captured? Would you recommend using the TF-IDF or square root
+transformation?  Compare your results to your computer lab neighbour.
 
 # Multidimensional Scaling
 
-Compute a two-dimensional representation of the term-document matrix that best matches 
-the binary metric distances between tweets. (Warning these calculations will take a few minutes to run)
+We showed how to compute MDS projections in the lecture.  Compute and
+plot the MDS 2D projection of the tweets using Euclidean distance, and
+verify that it gives the same results as PCA.
 
-```{r eval=FALSE}
-D <- dist(t(M), method="binary")
-mds <- cmdscale(D, k=2)
-plot(mds[,1], mds[,2], col=colors, pch=16)
-```
 
-Repeat using a three dimensional representation, and plot the first v. third and second v. third dimensions.
+Compute the MDS projection of the unweighted tweets (using term
+frequency) using the Binary distance and Cosine distance. Then examine
+the MDS projection with the same distances, but using TF-IDF
+weighting. Did using TF-IDF weighting make a difference?
 
 
 # Challenge - Modify the Word Cloud.
 
-The file [SimpleWordle.R](SimpleWordle.R) contains the code for a simplified version of the word cloud drawing code.
-As a challenge, try modifying this code to 
+The file [SimpleWordle.R](SimpleWordle.R) contains the code for a
+simplified version of the word cloud drawing code.  As a challenge,
+try modifying this code to
 
 1. Add colour.
 2. Add $90^\circ$ rotation of a proportion of words at random.
 
-(Hint: `runif` can generate a uniform random number so that `runif(1)< p` will be `TRUE` `p` proportion of the time.
-Also `text` takes an argument `srt=90` to write text at 90 degrees).
+(Hint: `runif` can generate a uniform random number so that `runif(1)<
+p` will be `TRUE` `p` proportion of the time.  Also `text` takes an
+argument `srt=90` to write text at 90 degrees).

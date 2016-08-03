@@ -8,7 +8,7 @@ opts_chunk$set(dev = 'pdf', fig.cap="")
 ```
 
 
-## Social Networks
+### Social Networks
 
 It is the *Network* that makes Social Networking sociable. Without the
 social network, the Web would be less dynamic. There would be less
@@ -21,7 +21,7 @@ basic graph theory, to allow us to analyse the social network.
 # What is a graph?
 
 
-## Not a graph
+### Not a graph
 
 This was a graph when you were in high school.
 This is now called a *plot*.
@@ -35,7 +35,7 @@ par(mgp = c(1.5, 0.4, 0))
 plot(x, y, xlab="Some numbers", ylab="Some other numbers", type="b", cex.lab=0.8, cex.axis=0.8,)
 ```
 
-## A graph
+### A graph
 
 Now that you have passed high school, we can let you know that this is a graph.
 
@@ -48,7 +48,7 @@ V(g)$label.cex = 0.8
 plot(g, layout=layout.fruchterman.reingold, vertex.size = 15)
 ```
 
-## Undirected Graph
+### Undirected Graph
 
 An undirected graph has no direction on the edges.
 
@@ -60,7 +60,7 @@ V(g)$label.cex = 0.8
 plot(g, layout=layout.fruchterman.reingold, vertex.size = 15)
 ```
 
-## Directed Graph
+### Directed Graph
 
 An Directed graph has direction on the edges.
 
@@ -72,7 +72,7 @@ V(g)$label.cex = 0.8
 plot(g, layout=layout.fruchterman.reingold, vertex.size = 15)
 ```
 
-## Weighted Graph
+### Weighted Graph
 
 A Weighted Graph has weighted edges.
 
@@ -88,7 +88,7 @@ plot(g, layout=layout.fruchterman.reingold, vertex.size = 15,edge.label=E(g)$wei
 
 
 
-## Formal Definition
+### Formal Definition
 
 A graph is a set of vertices, connected by edges.
 A graph is given by $G = (V,E)$, where $V$ is the set of vertices:
@@ -125,14 +125,14 @@ The number of edges is $\lvert E\rvert$ (the size of set $E$).
 \end{column}
 \end{columns}
 
-## Representing Graphs using an Adjacency List
+### Representing Graphs using an Adjacency List
 
 A graph is a set of vertices and edges. To store a graph, we do not
 need to store the image, we only need to store the vertices and edges.
 A simple method of representing a graph is an Adjacency List, listing
 each pair of vertices connected with edges.
 
-### Example Adjacency List
+#### Example Adjacency List
 \begin{columns}
 \begin{column}{0.45\textwidth}
 We define this graph as:
@@ -149,14 +149,14 @@ We define this graph as:
 \end{columns}
 
 
-## Representing Graphs using an Adjacency Matrix
+### Representing Graphs using an Adjacency Matrix
 
 An Adjacency Matrix $A$ is a $\vert V\vert\times\vert V\vert$ matrix (where $\vert V\vert$ is the
 number of vertices). The element $a_{i,j}$ in the $i$ row and $j$th
 column is 1 if there is an edge between the $i$the and $j$th vertice
 and 0 if there is no edge.
 
-### Example Adjacency Matrix
+#### Example Adjacency Matrix
 \begin{columns}
 \begin{column}{0.45\textwidth}
 We define this graph as:
@@ -176,13 +176,13 @@ A = \left [
 \end{column}
 \end{columns}
 
-## Adjacency Matrix Problem
+### Adjacency Matrix Problem
 
-### Problem
+#### Problem
 
 Write down the adjacency matrix for the following graph:
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="An undirected graph."}
 g = erdos.renyi.game(5,p=0.7, directed=FALSE)
 par(mar = c(0,0,0,0))
 V(g)$label.cex = 0.8
@@ -195,15 +195,15 @@ layout=layout.fruchterman.reingold, vertex.size = 35)
 
 # Graph Structure
 
-## Subgraphs
+### Subgraphs
 
 A subgraph $H = (V_H,E_H)$ of the graph $G = (V_G, E_G)$ contains a subset of the vertices of $G$ ($V_H \subset V_G$) and a subset of the interconnected edges ($E_H \subset E_G$).
 
-### All Subgraphs
+#### All Subgraphs
 
 There are 16 different subgraphs of the following graph. List all 16.
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Another undirected graph."}
 g = graph.formula(A-B, A-C, A-D, B-D)
 par(mar = c(0,0,0,0))
 V(g)$label.cex = 0.8
@@ -211,13 +211,13 @@ plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
 
-## Complete Graph (Clique)
+### Complete Graph (Clique)
 
 A set of vertices where all vertices have edges between them, is
 called a complete graph, or a clique.
 
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="A complete graph (clique)."}
 g = graph.formula(A-B, A-C, A-D, B-C, B-D, C-D)
 par(mar = c(0,0,0,0))
 V(g)$label.cex = 0.8
@@ -225,16 +225,16 @@ plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
 
-## Egocentric Graphs
+### Egocentric Graphs
 
 An egocentric graph is a subgraph that is centred around a chosen vertex.
 
 A degree 1 egocentric graph is a subgraph that contains the chosen
 vertex, all connected vertices and the edges between them.
 
-### Degree 1 egocentric graph of $v_1$
+#### Degree 1 egocentric graph of $v_1$
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Degree 1 egocentric graph of $v_1$."}
 g = graph.formula(A-B, A-C, A-D, B-E, B-D, C-D, C-E, C-F, D-F, F-G)
 E(g)$color = "#AAAAAA"
 V(g)$frame.color = "#AAAAAA"
@@ -251,14 +251,14 @@ expression("v"[5]),expression("v"[6]),expression("v"[7])),
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
 
-## Egocentric Graphs
+### Egocentric Graphs
 
 A degree 1.5 egocentric graph is a subgraph that contains the chosen
 vertex, all connected vertices and the edges between all vertices.
 
-### Degree 1.5 egocentric graph of $v_1$
+#### Degree 1.5 egocentric graph of $v_1$
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Degree 1.5 egocentric graph of $v_1$."}
 g = graph.formula(A-B, A-C, A-D, B-E, B-D, C-D, C-E, C-F, D-F, F-G)
 E(g)$color = "#AAAAAA"
 V(g)$frame.color = "#AAAAAA"
@@ -275,15 +275,15 @@ expression("v"[5]),expression("v"[6]),expression("v"[7])),
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
 
-## Egocentric Graphs
+### Egocentric Graphs
 
 A degree 2 egocentric graph is a subgraph that contains the chosen
 vertex, all connected vertices and edges that are at most two hops
 from the chosen vertex.
 
-### Degree 2 egocentric graph of $v_1$
+#### Degree 2 egocentric graph of $v_1$
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Degree 2 egocentric graph of $v_1$."}
 g = graph.formula(A-B, A-C, A-D, B-E, B-D, C-D, C-E, C-F, D-F, F-G)
 E(g)$color = "#AAAAAA"
 V(g)$frame.color = "#AAAAAA"
@@ -300,11 +300,11 @@ expression("v"[5]),expression("v"[6]),expression("v"[7])),
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
 
-## Extract the Graph
+### Extract the Graph
 
-### Find the degree 1 and 1.5 egocentric graph centred at vertex $1$.
+#### Find the degree 1 and 1.5 egocentric graph centred at vertex $1$.
 
-```{r, echo=FALSE, fig.width=5, fig.height=2.8}
+```{r, echo=FALSE, fig.width=5, fig.height=2.8, fig.cap="Egocentric graph problem."}
 par(mar = c(0,0,0,0))
 g = erdos.renyi.game(10,p=0.4)
 V(g)$label.cex = 0.8
@@ -315,11 +315,11 @@ plot(g, layout=layout.fruchterman.reingold, vertex.size = 15)
 # Graph Parameters
 
 
-## Vertex Degree
+### Vertex Degree
 
 The degree of a vertex is measured as the number of edges that connect to the vertex.
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.2, fig.height=1.2, fig.cap="Degree of each vertex."}
 g = graph.formula(A-B, A-C, A-D, B-E, B-D, C-D, C-E, C-F, D-F, F-G)
 
 par(mar = c(0,0,0,0))
@@ -331,16 +331,16 @@ layout=layout.fruchterman.reingold, vertex.size = 35)
 
 The degree of $v_1$ is 3. The degree of $v_7$ is 1.
 
-### Highest degree
+#### Highest degree
 
 Which vertex has the largest degree?
 
-## Degree Distribution
+### Degree Distribution
 
 By examining the degree of all of the vertices, we can compute the
 degree distribution of the graph.
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Compute the degree of each vertex to obtain the distribution."}
 g = graph.formula(A-B, A-C, A-D, B-E, B-D, C-D, C-E, C-F, D-F, F-G)
 
 par(mar = c(0,0,0,0))
@@ -359,20 +359,20 @@ Frequency & \\
 \end{tabular}
 \end{center}
 
-## Graph Density
+### Graph Density
 
 A dense graph has many edges. A sparse graph has only a few edges. The
 density of a graph is the ratio of the edges that exist, compared to
 the possible edges.
 
-### Possible number of edges
+#### Possible number of edges
 
 Given $\lvert V\rvert$ vertices, the maximum number of edges is:
 $$
 	{\sum_{i = 1}^{\lvert V\rvert} i} = \lvert V\rvert (\lvert V\rvert - 1)/2
 $$
 
-### Graph Density
+#### Graph Density
 
 The density $D$ of graph $G = (V,E)$ is:
 $$
@@ -380,14 +380,14 @@ $$
 $$ 
 
 
-## Path
+### Path
 
 A path is a sequence of edges that are connected with vertices.  Paths
 can contain the same edge multiple times. Therefore, we can make a
 path from a given start vertex and end vertex as long as we like.
 
-### Two paths from $v_1$ to $v_6$
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+#### Two paths from $v_1$ to $v_6$
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Two paths (one in red and one in blue)."}
 g = graph.formula(A-B, A-C, A-D, B-E, B-D, C-D, C-E, C-F, D-F, F-G)
 E(g)$color = "#AAAAAA"
 
@@ -402,14 +402,14 @@ expression("v"[5]),expression("v"[6]),expression("v"[7])),
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
 
-## Shortest Path
+### Shortest Path
 
 The shortest path between two vertices is the one that contains the
 least number of edges. Note the the shortest path may not be unique
 (there may be multiple paths that are just as short).
 
-### Two shortest paths from $v_1$ to $v_6$
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+#### Two shortest paths from $v_1$ to $v_6$
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Two shortest paths from $v_1$ to $v_6$."}
 g = graph.formula(A-B, A-C, A-D, B-E, B-D, C-D, C-E, C-F, D-F, F-G)
 E(g)$color = "#AAAAAA"
 
@@ -424,7 +424,7 @@ expression("v"[5]),expression("v"[6]),expression("v"[7])),
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
 
-## Graph Diameter
+### Graph Diameter
 
 The diameter of a circle is the longest straight line that can fit in
 the circle.
@@ -435,7 +435,7 @@ To find the diameter, we must find the shortest paths between all
 pairs of vertices. The diameter is the length of the longest of these
 paths.
 
-### All shortest paths
+#### All shortest paths
 
 \begin{columns}
 \begin{column}{0.45\textwidth}
@@ -455,13 +455,13 @@ The diameter of the graph is 2.
 \end{columns}
 
 
-## Graph Parameter Problem
+### Graph Parameter Problem
 
-### Problem
+#### Problem
 
 Compute the density and diameter of the following graph.
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Density and diameter."}
 g = graph.formula(A-B, A-C, A-D, B-D, B-E, D-E, B-F)
 par(mar = c(0,0,0,0))
 V(g)$label.cex = 0.8
@@ -473,7 +473,7 @@ layout=layout.fruchterman.reingold, vertex.size = 35)
 
 # Centrality
 
-## Requirements
+### Requirements
 
 Requirements for a centrality score:
 
@@ -485,7 +485,7 @@ Requirements for a centrality score:
 \end{enumerate}
 
 
-## Measures of Centrality
+### Measures of Centrality
 
 A measure of centrality directs us to the centre of an object,
 therefore the location of the centre depends on how we define the
@@ -499,7 +499,7 @@ There is usually no clear centre of a graph, therefore centrality methods
 provide a centrality score to all vertices, where the greater the score,
 the more likely the centre exists at that associated vertex.
 
-## Degree Centrality
+### Degree Centrality
 
 The simplest measure of centrality is *Degree Centrality*. The
 centrality score for each vertex is equal to the number of edges
@@ -510,7 +510,7 @@ $$
 	C_{\text{degree}}(v) = \text{deg}(v)
 $$
 
-### Example
+#### Example
 
 \begin{columns}
 \begin{column}{0.45\textwidth}
@@ -527,13 +527,13 @@ The centre of the graph is $v_1$.
 \end{column}
 \end{columns}
 
-## Degree Centrality Problem
+### Degree Centrality Problem
 
-### Problem
+#### Problem
 
 Find the most central vertex, using degree centrality.
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Compute degree centrality."}
 #g = graph.formula(A-B, A-C, A-D, B-D)
 g = erdos.renyi.game(7,p=0.6, directed=FALSE)
 par(mar = c(0,0,0,0))
@@ -545,7 +545,7 @@ layout=layout.fruchterman.reingold, vertex.size = 35)
 
 
 
-## Closeness Centrality
+### Closeness Centrality
 
 A vertex should be considered the centre if we can reach all other
 vertices from it with the shortest number of hops.
@@ -556,7 +556,7 @@ $$
 	C_{\text{closeness}}(v) = {\sum_{u \in V} d(v,u)}
 $$
 
-### Example
+#### Example
 
 \begin{columns}
 \begin{column}{0.45\textwidth}
@@ -574,13 +574,13 @@ The centre of the graph is $v_1$.
 \end{column}
 \end{columns}
 
-## Closeness Centrality Problem
+### Closeness Centrality Problem
 
-### Problem
+#### Problem
 
 Find the most central vertex, using closeness centrality.
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Compute closeness centrality."}
 #g = graph.formula(A-B, A-C, A-D, B-D)
 g = erdos.renyi.game(7,p=0.6, directed=FALSE)
 par(mar = c(0,0,0,0))
@@ -591,7 +591,7 @@ layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
 
 
-## Between Centrality
+### Between Centrality
 
 
 Centrality can be measured by the usefulness of the vertex.  If the
@@ -610,9 +610,9 @@ pass though $v$. Therefore, we can ignore all paths that begin with
 $v$ and end with $v$.
 
 
-## Between Centrality Example
+### Between Centrality Example
 
-### Example
+#### Example
 
 \begin{columns}
 \begin{column}{0.6\textwidth}
@@ -645,13 +645,13 @@ Shortest paths:
 $C_{\text{betweenness}}(v_1) = 1/1 + 2/2 + 1/1 + 0/1 + 1/2 + 0/1 = 3.5$ 
 
 
-## Between Centrality problem
+### Between Centrality problem
 
-### Problem
+#### Problem
 
 Find the most central vertex, using between centrality.
 
-```{r, echo=FALSE, fig.width=1, fig.height=1}
+```{r, echo=FALSE, fig.width=1, fig.height=1, fig.cap="Compute between centrality."}
 g = graph.formula(A-B, B-C, C-D, D-A, C-E, B-E)
 par(mar = c(0,0,0,0))
 V(g)$label.cex = 0.8
@@ -661,7 +661,7 @@ plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]
 
 
 
-## Eigenvalue Centrality
+### Eigenvalue Centrality
 
 Eigenvalue centrality computes the centre by stating that the
 centrality of a vertex is proportional to the sum of the
@@ -684,7 +684,7 @@ be many eigenvectors of $A$, but only one will contain all positive
 elements. We choose this as the solution.
 
 
-## Use of Centrality
+### Use of Centrality
 
 Kevin Bacon is not the centre of the movie universe:
 
@@ -693,7 +693,7 @@ Kevin Bacon is not the centre of the movie universe:
 
 # Random Graphs
 
-## Using random graphs
+### Using random graphs
 
 Randomly generated models allow us to examine the behaviour of random
 processes. If we obtain a graph from a social network on one day, the
@@ -701,7 +701,7 @@ graph might be different the next day. If we can find a random model
 that closely follows a random process, we gain insight into the random
 process.
 
-## Erdös-Renyi Graph
+### Erdös-Renyi Graph
 
 The simplest random graph is the Erdös-Renyi graph. The parameters of
 the random graph are the number of vertices $n$, and the probability of
@@ -711,9 +711,9 @@ each edge existing $p$.
 - For each possible edge, we sample a number from the Uniform distribution (between 0 and 1).
 - If the random sample is less than $p$, the edge is added.
 
-## Example Erdös-Renyi Graphs ($n = 5$, $p = 0.5$)
+### Example Erdös-Renyi Graphs
 
-```{r, echo=FALSE, fig.width=5, fig.height=2.8}
+```{r, echo=FALSE, fig.width=4.5, fig.height=2.2, fig.cap="Erdös-Renyi Graphs with $n = 5$, $p = 0.5$."}
 library("igraph")
 par(mar = c(0,0,0,0))
 par(mfrow=c(2,3))
@@ -724,7 +724,7 @@ plot(g, layout=layout.fruchterman.reingold, vertex.size = 35)
 }
 ```
 
-## Barabasi-Albert Graph
+### Barabasi-Albert Graph
 
 Barabasi-Albert random graph is generated in a way that reflects the
 growth of many evolving graphs such as the Web and social networks.
@@ -741,9 +741,9 @@ $$
 $$
 New vertices are more likely to added to vertices with a high degree.
 
-## Example Barabasi-Albert Graphs ($n = 5$, $k = 1$)
+### Example Barabasi-Albert Graphs
 
-```{r, echo=FALSE, fig.width=5, fig.height=2.8}
+```{r, echo=FALSE, fig.width=4.5, fig.height=2.2, fig.cap="Barabasi-Albert Graphs with $n = 5$, $k = 1$."}
 library("igraph")
 par(mar = c(0,0,0,0))
 par(mfrow=c(2,3))
@@ -754,9 +754,9 @@ plot(g, layout=layout.fruchterman.reingold, vertex.size = 35)
 }
 ```
 
-## Example Barabasi-Albert Graph ($n = 100$, $k = 1$)
+### Example Barabasi-Albert Graph
 
-```{r, echo=FALSE, fig.width=5, fig.height=2.8}
+```{r, echo=FALSE, fig.width=4.9, fig.height=2.4, fig.cap="Barabasi-Albert Graphs with $n = 100$, $k = 1$."}
 library("igraph")
 par(mar = c(0,0,0,0))
 par(mfrow=c(1,1))
@@ -766,19 +766,19 @@ plot(g, layout=layout.fruchterman.reingold, vertex.size = 10)
 ```
 
 
-## Degree Distributions
+### Degree Distributions
 
 BA model: Many vertices with low degree, few with high degree.
 
-\svspace{-6em}
-```{r, echo=FALSE, fig.width=5, fig.height=4}
-plot((1/(1:10))/sum(1/(1:100)), ylim=c(0,0.21), xlab="Degree", ylab="Probability", pch=2, col=2)
+```{r, echo=FALSE, fig.width=4, fig.height=2.2, fig.cap="Distribution of Barabasi-Albert and Erdos-Renyi random graphs."}
+par(mar = c(2.5,2.5,0.1,0))
+par(mgp = c(1.5, 0.4, 0))
+plot((1/(1:10))/sum(1/(1:100)), ylim=c(0,0.21), xlab="Degree", ylab="Probability", pch=2, col=2, cex.lab=0.6, cex.axis=0.6)
 points(dbinom(1:10, 99, 0.05), col=1, pch=1)
 legend('topright', c("Erdös-Renyi","Barabasi-Albert"), col=c(1,2), pch=c(1,2))
-
 ```
 
-## Properties of Social Networks
+### Properties of Social Networks
 
 Social Networks have shown to follow the Barabasi-Albert model, having
 a power law distribution (exponentially decreasing) of vertex degree.
@@ -797,7 +797,7 @@ The Barabasi-Albert model is a good model for simulating social networks.
 
 
 
-## Summary
+### Summary
 
 
 - Graph theory is essential for analysis of social networks.
@@ -808,7 +808,7 @@ The Barabasi-Albert model is a good model for simulating social networks.
 - We are able to generate random graphs using statistics from real graphs.
 - Social networks resemble a Barabasi-Albert random graph.
 
-## Next Week
+### Next Week
 
 Visualisation.
 

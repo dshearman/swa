@@ -10,7 +10,7 @@ opts_chunk$set(dev = 'pdf', fig.cap="", fig.width=4.4, fig.height=3.1)
 library("mvtnorm")
 ```
 
-## Motivation
+### Motivation
 
 We have 1000 tweets. What are they about? Can we summarise them?
 
@@ -19,13 +19,13 @@ to identify topics in the document set.
 
 # Introduction to Clustering
 
-## What is Clustering?
+### What is Clustering?
 
-### Clustering
+#### Clustering
 
 To gather objects into clusters.
 
-### Cluster
+#### Cluster
 
 A subset where each element of the subset is similar using some
 measurement and each element is dissimilar to element of other
@@ -35,7 +35,7 @@ clusters.
 Therefore, for a given clustering, items in a cluster should be close,
 but items in different clusters should be distant.
 
-## Simple Clustering Example
+### Simple Clustering Example
 
 \newenvironment{latexcode}{}{}
 \begin{latexcode}
@@ -104,7 +104,7 @@ but items in different clusters should be distant.
 \end{center}
 \end{latexcode}
 
-## Clustering by observation
+### Clustering by observation
 
 Clusters may be identifiable for low dimensional data, or data projected to two dimensions using Multidimensional Scaling:
 
@@ -118,7 +118,7 @@ par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
 plot(X.k[,1], X.k[,2], xlab=expression("x"[1]), ylab=expression("x"[2]))
 ```
 
-## Clustering Text
+### Clustering Text
 
 Unfortunately, text data is very high dimensional and may be difficult
 to visualise. We saw in the Text Mining 1 lecture that we can
@@ -136,7 +136,7 @@ are similar and which are dissimilar. We do this by defining a
 similarity metric for the document vectors. 
 
 
-## Similarity for Document Vectors
+### Similarity for Document Vectors
 
 In this Unit, we have seen the dissimilarity functions:
 
@@ -149,7 +149,7 @@ and the similarity function:
 
 
 
-### Similarity vs. Dissimilarity
+#### Similarity vs. Dissimilarity
 
 Dissimilarity measures how different items are, so a dissimilarity of
 0 means the items are the same. As the difference in the items
@@ -160,7 +160,7 @@ the items are different.  The more similar the items are, the greater
 the similarity score. The Cosine measure has a maximum of 1, meaning
 that if two items are the same, the similarity score is 1.
 
-## Computing Clusters
+### Computing Clusters
 
 Once we have a vector space and a (dis)similarity function for the
 vectors, we can use a clustering algorithm to cluster the vectors.
@@ -173,7 +173,7 @@ In this Unit, we will examine the clustering algorithms:
 
 # K-means Clustering
 
-## K-means
+### K-means
 
 K-means clustering was designed to be used in a Euclidean space,
 meaning it uses the Euclidean distance:
@@ -190,18 +190,18 @@ $K$ is the number of clusters, $C(i) = k$ if point $\vec{x}_i$ belongs to cluste
 sum of the distances between all points in each cluster. By minimising $W(C)$, we obtain tight clusters.
 
 
-## K-means Algorithm
+### K-means Algorithm
 
 K-means iterates through two steps, until the centres stabilise (stop moving).
 
-### Compute which object belongs to which cluster
+#### Compute which object belongs to which cluster
 
 For each object $\vec{x}_i$:
 $$
 	C(i) = \argmin_{1 \le k \le K}{\norm{\vec{x}_i - \vec{m}_k}}
 $$
 
-### Compute the centre of each cluster
+#### Compute the centre of each cluster
 
 For each cluster $k$:
 $$
@@ -211,7 +211,7 @@ $$
 \end{aligned}
 $$
 
-## Complete K-means Algorithm
+### Complete K-means Algorithm
 
 1. Choose $K$ the number of clusters wanted.
 2. Assign the cluster centres $\vec{m}_k$ randomly.
@@ -219,7 +219,7 @@ $$
     i. Assign each object to its closest cluster centre.
     ii. Compute the cluster mean from the cluster objects.
 
-## K-means Example: Assign Centres
+### K-means Example: Assign Centres
 
 ```{r, echo=FALSE}
 cluster1 = rmvnorm(30, mean = c(7,5), sigma = matrix(c(1,0,0,1),2,2))
@@ -244,7 +244,7 @@ points(means[,1], means[,2], pch=22, bg=c(1:4))
 
 
 
-## K-means Example: Assign cluster membership
+### K-means Example: Assign cluster membership
 
 ```{r, echo=FALSE}
 cluster.distance = function(x, means) {
@@ -262,7 +262,7 @@ plot(X.k[,1], X.k[,2], xlab=expression("x"[1]), ylab=expression("x"[2]), col=clu
 points(means[,1], means[,2], pch=22, bg=c(1:4))
 ```
 
-## K-means Example: Recompute cluster centres
+### K-means Example: Recompute cluster centres
 
 ```{r, echo=FALSE}
 means = compute.means(X.k, clusters)
@@ -271,7 +271,7 @@ plot(X.k[,1], X.k[,2], xlab=expression("x"[1]), ylab=expression("x"[2]), col=clu
 points(means[,1], means[,2], pch=22, bg=c(1:4))
 ```
 
-## K-means Example: Reassign cluster membership
+### K-means Example: Reassign membership
 
 ```{r, echo=FALSE}
 clusters = cluster.membership(X.k, means)
@@ -280,7 +280,7 @@ plot(X.k[,1], X.k[,2], xlab=expression("x"[1]), ylab=expression("x"[2]), col=clu
 points(means[,1], means[,2], pch=22, bg=c(1:4))
 ```
 
-## K-means Example: Recompute cluster centres
+### K-means Example: Recompute cluster centres
 
 ```{r, echo=FALSE}
 means = compute.means(X.k, clusters)
@@ -289,7 +289,7 @@ plot(X.k[,1], X.k[,2], xlab=expression("x"[1]), ylab=expression("x"[2]), col=clu
 points(means[,1], means[,2], pch=22, bg=c(1:4))
 ```
 
-## K-means numerical Example
+### K-means numerical Example
 
 Five two dimensional data points. Let's find two clusters.
 
@@ -299,7 +299,7 @@ print(Y)
 ```
 \pause
 
-### Problem
+#### Problem
 
 Find 3 clusters using the initial centres:
 ```{r, echo=FALSE}
@@ -308,7 +308,7 @@ print(centres)
 ```
 
 
-## Problems with K-means
+### Problems with K-means
 
 K-means clustering is one of the most widely used clustering
 algorithms due to its simplicity. But it does have problems.
@@ -327,14 +327,14 @@ algorithms due to its simplicity. But it does have problems.
 
 
 
-## Spherical K-means Algorithm
+### Spherical K-means Algorithm
 
 We may want to use K-means with the Cosine similarity, rather than
 Euclidean distance (remember that Cosine similarity measures the
 Cosine of the angle between the vectors). If we normalise the points
 ($\vec{z}_i = \vec{x}_i/\norm{\vec{x}_i}$):
 
-### Compute which object belongs to which cluster
+#### Compute which object belongs to which cluster
 
 For each object $\vec{x}_i$:
 $$
@@ -342,14 +342,14 @@ $$
 	= \argmin_{1 \le k \le K}{\vec{z}_i \cdot \vec{m}_k}
 $$
 
-### Compute the centre of each cluster
+#### Compute the centre of each cluster
 
 For each cluster $k$:
 $$
 	\vec{m}_k = \frac{\sum_{C(i) = k} \vec{z}_i}{\norm{\sum_{C(i) = k} \vec{z}_i}}
 $$
 
-## Spherical K-means numerical Example
+### Spherical K-means numerical Example
 
 Five two dimensional data points. Let's find two clusters using Spherical K-means.
 
@@ -359,7 +359,7 @@ print(Y)
 ```
 \pause
 
-### Problem
+#### Problem
 
 Find 3 clusters using the initial centres:
 ```{r, echo=FALSE}
@@ -370,7 +370,7 @@ print(centers)
 
 # Choosing the number of clusters
 
-## Number of Clusters
+### Number of Clusters
 
 What makes a good clustering?
 
@@ -385,7 +385,7 @@ par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
 plot(X.large[,1], X.large[,2], xlab=expression("x"[1]), ylab=expression("x"[2]),)
 ```
 
-## Choosing the number of Clusters
+### Choosing the number of Clusters
 
 K-means requires us to set the number of clusters before we run the
 algorithm.
@@ -403,7 +403,7 @@ To measure the closeness of points within and between clusters, we will use:
 
 
 
-## Total Sum of Squares (SST)
+### Total Sum of Squares (SST)
 
 ```{r, echo=FALSE}
 cluster1 = rmvnorm(5, mean = c(5,5), sigma = matrix(c(1,0,0,1),2,2))
@@ -421,7 +421,7 @@ for (a in 1:point.count) {
 }
 ```
 
-## Total Sum of Squares Calculation
+### Total Sum of Squares Calculation
 
 SST is the sum of squares of all points from the centre of the data.
 
@@ -438,7 +438,7 @@ where $N$ is the number of points.
 
 To define SSW and SSB, we need to choose cluster centres.
 
-## Cluster Centres
+### Cluster Centres
 
 ```{r, echo=FALSE}
 c1 = apply(cluster1,2,mean)
@@ -451,7 +451,7 @@ centres = rbind(c1,c2,c3,c4)
 points(centres[,1],centres[,2], pch=2, col=2)
 ```
 
-## Between Cluster Sum of Squares (SSB)
+### Between Cluster Sum of Squares (SSB)
 
 ```{r, echo=FALSE}
 par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
@@ -463,7 +463,7 @@ segments(m[1],m[2],c3[1],c3[2], col=2)
 segments(m[1],m[2],c4[1],c4[2], col=2)
 ```
 
-## Within Cluster Sum of Squares (SSW)
+### Within Cluster Sum of Squares (SSW)
 
 ```{r, echo=FALSE}
 par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
@@ -475,7 +475,7 @@ for (a in 1:point.count) {
 }
 ```
 
-## Within and Between Sum of Squares Calculations
+### Within and Between Sum of Squares Calculations
 
 SSB is the between cluster sum of squares. It is the same as SST, where we move all points to the cluster centre.
 
@@ -491,7 +491,7 @@ $$
 	SSW =  {\sum_{i=1, k = C(\vec{x}_i)}^{N} {\left ( \vec{x}_i - \vec{c}_k \right )}^2}
 $$
 
-## Relationship between SST, SSW and SSB
+### Relationship between SST, SSW and SSB
 
 We want to choose the number of clusters that maximises SSB (large
 separation between clusters), and minimises SSW (points in cluster are
@@ -506,7 +506,7 @@ $$
 
 Therefore, if SSB increases, SSW must decrease.
 
-## Comparing SSW and SSB
+### Comparing SSW and SSB
 
 For the previous set of points, we have SSB and SSW:
 
@@ -524,9 +524,9 @@ points(1:15, bss, type="b", col=2, pch=2)
 legend("right", c("SSW","SSB"), pch=c(1,2), col=c(1,2))
 ```
 
-## Computing SSW
+### Computing SSW
 
-### Problem
+#### Problem
 
 Compute SST, SSW and SSB for the following five data points:
 
@@ -544,7 +544,7 @@ print(centers)
 
 
 
-## Elbow method
+### Elbow method
 
 When choosing the number of clusters:
 
@@ -553,13 +553,13 @@ When choosing the number of clusters:
 
 How do we trade off between minimising the number of clusters and minimising SSB?
 
-### Elbow method
+#### Elbow method
 
 The number of clusters is provided by the clustering where the
 reduction of SSW slows (the elbow bend).
 
 
-## Elbow method example
+### Elbow method example
 
 The number of clusters is given by the position of the *elbow* bend.
 
@@ -570,7 +570,7 @@ points(1:15, bss, type="b", col=2, pch=2)
 legend("right", c("SSW","SSB"), pch=c(1,2), col=c(1,2))
 ```
 
-## Elbow method problems
+### Elbow method problems
 
 How many clusters should we find based on these elbow plots?
 
@@ -595,7 +595,7 @@ plot(clusters, ssw4, type="b", xlab="Number of Clusters", ylab="SSW")
 # Hierarchical Clustering
 
 
-## Hierarchy of Points
+### Hierarchy of Points
 
 A hierarchy shows the order of its items, usually in the form of a
 tree. The higher an item is in the tree, the more important it is.
@@ -604,7 +604,7 @@ Hierarchical clustering provides us with a tree of clusters, called a
 \alert{dendrogram} that shows the division of clusters.
 
 
-## Hierarchical Clustering Example
+### Hierarchical Clustering Example
 
 ```{r, echo=FALSE}
 d = dist(X)
@@ -615,14 +615,14 @@ plot(h, xlab="x")
 
 
 
-## Types of Hierarchical Clustering
+### Types of Hierarchical Clustering
 
-### Agglomerative Clustering (bottom up)
+#### Agglomerative Clustering (bottom up)
 
 1. Treat all points as clusters
 2. Iteratively merge the most closest clusters, until we are left with one cluster of all points.
 
-### Divisive Clustering (top down)
+#### Divisive Clustering (top down)
 
 1. Treat all points as being in one cluster
 2. Iteratively split the cluster with the largest gap, until all points are in their own cluster.
@@ -630,7 +630,7 @@ plot(h, xlab="x")
 We will not further examine Divisive Clustering in this Unit.
 
 
-## Types of Agglomerative Clustering
+### Types of Agglomerative Clustering
 
 
 Agglomerative clustering requires us to select the two most similar
@@ -648,7 +648,7 @@ Each of these methods begin with all points as a cluster, then the
 clusters are merged one by one until we have one cluster of all
 points.
 
-## Single Linkage Clustering
+### Single Linkage Clustering
 
 Single linkage clustering defines the distance between clusters $G$ and $H$ as:
 $$
@@ -657,7 +657,7 @@ $$
 where $d_{ij}$ is the distance between points $\vec{x}_i$ and $\vec{x}_j$.
 
 
-## Complete Linkage Clustering
+### Complete Linkage Clustering
 
 Complete linkage clustering defines the distance between clusters $G$ and $H$ as:
 $$
@@ -666,7 +666,7 @@ $$
 where $d_{ij}$ is the distance between points $\vec{x}_i$ and $\vec{x}_j$.
 
 
-## Group Average Clustering
+### Group Average Clustering
 
 Group average clustering defines the distance between clusters $G$ and $H$ as:
 $$
@@ -677,7 +677,7 @@ $\vec{x}_j$, and $N_G$ and $N_H$ are the number of points in clusters
 $G$ and $H$ respectively.
 
 
-## Single Linkage Example
+### Single Linkage Example
 
 ```{r, echo=FALSE}
 rpoints = rmvnorm(5, mean = c(5,5), sigma = matrix(c(1,0,0,1),2,2))
@@ -685,9 +685,9 @@ par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
 plot(rpoints, xlab=expression("x"[1]), ylab=expression("x"[2]))
 ```
 
-## Complete Linkage Problem
+### Complete Linkage Problem
 
-### Problem 
+#### Problem 
 Find the hierarchy of clusters from the following plot using complete linkage.
 
 ```{r, echo=FALSE, fig.width=4, fig.height=2.2}
@@ -697,7 +697,7 @@ plot(rpoints, xlab=expression("x"[1]), ylab=expression("x"[2]))
 ```
 
 
-## Single Linkage using a Distance Matrix
+### Single Linkage using a Distance Matrix
 
 We saw that Multidimensional Scaling is a powerful dimension reduction
 method because it works off the distance matrix, rather than on the
@@ -711,7 +711,7 @@ To perform clustering:
 2. Merge the rows $i$ and $j$ and columns $i$ and $j$ by taking the minimum of each cell.
 3. Repeat until we have 1 cluster.
 
-## Single Linkage Distance Matrix Example
+### Single Linkage Distance Matrix Example
 
 The distance between points $x_1$, $x_2$, $x_3$, $x_4$ and $x_5$. 
 
@@ -739,9 +739,9 @@ the same as the distance between $x_j$ and $x_i$.
 2. Merge the associated points.
 
 
-## Single Linkage Distance Matrix Problem
+### Single Linkage Distance Matrix Problem
 
-### Problem
+#### Problem
 
 Find the hierarchy of clusters from the following dissimilarity matrix
 using single linkage clustering.
@@ -763,7 +763,7 @@ $x_5$ & 9 & 6 & 1 & 3 & 0 \\\hline
 \end{center}
 
 
-## Summary
+### Summary
 
 From this lecture, we have learnt:
 
@@ -777,6 +777,6 @@ From this lecture, we have learnt:
 
 
 
-## Next Week
+### Next Week
 
 Graphs 2: Link Analysis
