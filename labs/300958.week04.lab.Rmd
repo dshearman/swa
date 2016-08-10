@@ -178,7 +178,7 @@ k = length(age)
 
 To test if a given sample comes from a multinomial distribution, we use the $\chi^2$ test:
 $$
-	\chi^2 = {\sum_{i = 1}^{k} \frac{X_{i} - np_i}{np_i}}
+	\chi^2 = {\sum_{i = 1}^{k} \frac{{\left (X_{i} - np_i\right )}^2}{np_i}}
 $$
 where $X_i$ are the frequencies in the sample, $n$ is the sample size, $k$ is the number of categories, and $p_i$ are the proportions assumed under $H_0$.
 
