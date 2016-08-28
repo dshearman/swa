@@ -19,6 +19,8 @@ to identify topics in the document set.
 
 # Introduction to Clustering
 
+## Defining Clustering
+
 ### What is Clustering?
 
 #### Clustering
@@ -118,6 +120,8 @@ par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
 plot(X.k[,1], X.k[,2], xlab=expression("x"[1]), ylab=expression("x"[2]))
 ```
 
+## Clustering Text
+
 ### Clustering Text
 
 Unfortunately, text data is very high dimensional and may be difficult
@@ -172,6 +176,8 @@ In this Unit, we will examine the clustering algorithms:
 
 
 # K-means Clustering
+
+## Examining K-means
 
 ### K-means
 
@@ -291,20 +297,19 @@ points(means[,1], means[,2], pch=22, bg=c(1:4))
 
 ### K-means numerical Example
 
-Five two dimensional data points. Let's find two clusters.
-
-```{r, echo=FALSE}
-Y = matrix(c(1,1,2,4,4,1,2,1,4,5),5,2)
-print(Y)
-```
-\pause
-
 #### Problem
 
-Find 3 clusters using the initial centres:
+Three two dimensional data points. Let's find two clusters.
+
 ```{r, echo=FALSE}
-centres = matrix(c(1,3,4,1,2,3),3,2)
-print(centres)
+Y = matrix(c(1,2,4,1,1,5),3,2)
+print(Y)
+```
+
+Begin with the randomly allocated centres:
+```{r, echo=FALSE}
+C = matrix(c(2,3,2,3),2,2)
+print(C)
 ```
 
 
@@ -313,97 +318,63 @@ print(centres)
 K-means clustering is one of the most widely used clustering
 algorithms due to its simplicity. But it does have problems.
 
-- K means requires the cluster centres to allocated before the
-  iteration begins. The initial cluster centres are chosen randomly,
-  so there is a chance that we obtain different clusters each time we
-  run K-means.
+1. K means requires that the cluster centres are positioned somewhere
+   before the iteration begins. The initial cluster centres are usually chosen
+   randomly, so there is a chance that we obtain \alert{different clusters}
+   each time we run K-means.
 
-- K-means uses Euclidean distance, which may not be appropriate for
-  us. We will next examine Spherical K-means to use Cosine similarity.
+2. K-means requires us to set the number of clusters before the
+   algorithm is run, but we usually \alert{don't know how many clusters} there
+   are. We will later examine how to set the number of clusters.
 
-- K-means requires us to set the number of clusters before the
-  algorithm is run, but we usually don't know how many clusters there
-  are. We will later examine how to set the number of clusters.
+3. K-means uses Euclidean distance, which \alert{may not be appropriate for
+   our data}. How can we ensure that our data distances are measured using
+   Euclidean distance?
 
 
-
-### Spherical K-means Algorithm
-
-We may want to use K-means with the Cosine similarity, rather than
-Euclidean distance (remember that Cosine similarity measures the
-Cosine of the angle between the vectors). If we normalise the points
-($\vec{z}_i = \vec{x}_i/\norm{\vec{x}_i}$):
-
-#### Compute which object belongs to which cluster
-
-For each object $\vec{x}_i$:
-$$
-	C(i) = \argmin_{1 \le k \le K}{\frac{\vec{x}_i \cdot \vec{m}_k}{\norm{\vec{x}_i}\norm{\vec{m}_k}}}
-	= \argmin_{1 \le k \le K}{\vec{z}_i \cdot \vec{m}_k}
-$$
-
-#### Compute the centre of each cluster
-
-For each cluster $k$:
-$$
-	\vec{m}_k = \frac{\sum_{C(i) = k} \vec{z}_i}{\norm{\sum_{C(i) = k} \vec{z}_i}}
-$$
-
-### Spherical K-means numerical Example
-
-Five two dimensional data points. Let's find two clusters using Spherical K-means.
-
-```{r, echo=FALSE}
-Y = matrix(c(1,1,2,4,4,1,2,1,4,5),5,2)
-print(Y)
-```
 \pause
+We will now examine how to deal with these problems.
 
-#### Problem
+## Initial position of cluster centres
 
-Find 3 clusters using the initial centres:
-```{r, echo=FALSE}
-centers = matrix(c(1,2,3,1,2,3),3,2)
-print(centers)
-```
+### Initialisation of Cluster Centres
 
+The location of the initial cluster centres can effect the final
+clustering. How can we place these points to ensure a good clustering?
 
-# Choosing the number of clusters
+We can either:
 
-### Number of Clusters
+1. Use another clustering algorithm to identify rough cluster centres, or
 
-What makes a good clustering?
+2. Run k-means many times using random initialisation and use the
+   \alert{best} custering.
 
-```{r, echo=FALSE}
-cluster1 = rmvnorm(30, mean = c(7,5), sigma = matrix(c(1,0,0,1),2,2))
-cluster2 = rmvnorm(30, mean = c(2,12), sigma = matrix(c(1,0,0,1),2,2))
-cluster3 = rmvnorm(30, mean = c(15,12), sigma = matrix(c(1,0,0,1),2,2))
-cluster4 = rmvnorm(30, mean = c(14,3), sigma = matrix(c(1,0,0,1),2,2))
-X.large = rbind(cluster1,cluster2,cluster3,cluster4)
-#par(mar = (c(3.5, 3.5, 4, 2) + 0.1))
-par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
-plot(X.large[,1], X.large[,2], xlab=expression("x"[1]), ylab=expression("x"[2]),)
-```
+We can perform choice 2 in R's `kmeans` function using the `nstart` parameter.
 
-### Choosing the number of Clusters
+But what does \alert{best} clustering mean?
 
-K-means requires us to set the number of clusters before we run the
-algorithm.
+### k means best clustering
 
-To decide on the number of clusters, we must remember that a good clustering will have:
+K means defines the best clustering of point to satisfy:
 
 - all points within a cluster are close
 - all points in different clusters are distant.
 
-To measure the closeness of points within and between clusters, we will use:
+Where the distance is measured using Euclidean distance. There are
+many distances, we need to combine them into a single score.
 
-- SST: Total Sum of Squares
-- SSW: Within Sum of Squares
-- SSB: Between Sum of Squares
+\pause
 
+To combine the distances use use sum of squares:
 
+- SSW: Within Sum of Squares (sum of squared distances between points and cluster centre)
+- SSB: Between Sum of Squares (sum of squared distances between cluster centre and centre of all points)
 
-### Total Sum of Squares (SST)
+So if we have two different clusterings (from different random
+starts), we choose the clustering that has the smallest SSW and the
+largest SSB.
+
+### Within Sum of Squares (SSW) distances
 
 ```{r, echo=FALSE}
 cluster1 = rmvnorm(5, mean = c(5,5), sigma = matrix(c(1,0,0,1),2,2))
@@ -414,6 +385,88 @@ cluster.number = c(rep(1,5),rep(2,5),rep(3,5),rep(4,5))
 X = rbind(cluster1,cluster2,cluster3,cluster4)
 m = apply(X,2,mean)
 point.count = nrow(X)
+c1 = apply(cluster1,2,mean)
+c2 = apply(cluster2,2,mean)
+c3 = apply(cluster3,2,mean)
+c4 = apply(cluster4,2,mean)
+centres = rbind(c1,c2,c3,c4)
+```
+
+```{r, echo=FALSE}
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+plot(X[,1], X[,2], xlab=expression("x"[1]), ylab=expression("x"[2]))
+centres = rbind(c1,c2,c3,c4)
+points(centres[,1],centres[,2], pch=2, col=2)
+for (a in 1:point.count) {
+    segments(centres[cluster.number[a],1],centres[cluster.number[a],2],X[a,1],X[a,2], col=2)
+}
+```
+
+### Within Sum of Squares
+
+The Euclidean distance from a point to the point's cluster centre is:
+$$
+	d(x,c) = {\|x - c\|}
+$$
+The Within Sum of Squares (SSW) is the sum of all squared distances from each point to its cluster centre:
+$$
+	SSW = {\sum_{x, c = C(x)}{\|x - c\|}^2}
+$$
+where $c = C(x)$ is the centre of the cluster containing $x$.
+
+
+
+### Between Cluster Sum of Squares (SSB) distances
+
+```{r, echo=FALSE}
+par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+plot(X[,1], X[,2], xlab=expression("x"[1]), ylab=expression("x"[2]))
+points(centres[,1],centres[,2], pch=2, col=2)
+segments(m[1],m[2],c1[1],c1[2], col=2)
+segments(m[1],m[2],c2[1],c2[2], col=2)
+segments(m[1],m[2],c3[1],c3[2], col=2)
+segments(m[1],m[2],c4[1],c4[2], col=2)
+```
+
+### Between Sum of Squares
+
+The Euclidean distance from a point's cluster centre to the mean of all points is:
+$$
+	d(c,\bar{x}) = {\|c - \bar{x}\|}
+$$
+The Between Sum of Squares (SSB) is the sum of all squared distances from each point's cluster centre to the mean of all points:
+$$
+	SSB = {\sum_{x, c = C(x)}{\|c - \bar{x}\|}^2}
+$$
+where $c = C(x)$ is the centre of the cluster containing $x$, and $\bar{x} = {\sum x}/n$, $n$ is the number of points. 
+
+Note that we \alert{sum over the set of all points}, not the set of clusters.
+
+
+### Comparing SSW and SSB
+
+We choose the clustering that has the smallest SSB and largest SSW,
+but what if one clustering has the smallest SSB and another has the
+largest SSW?
+
+\pause
+
+It can never happen! The value SSW + SSB is constant for any set of
+points! So as SSW increases, SSB must decrease at the same rate.
+
+#### Total sum of squares (SST)
+
+The total sum of squares is the sum of squared distances of each point
+to the mean of the set of points (not dependent on clustering).
+
+$$
+SST = SSW + SSB
+$$
+
+### Total Sum of Squares (SST)
+
+
+```{r, echo=FALSE}
 par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
 plot(X[,1], X[,2], xlab=expression("x"[1]), ylab=expression("x"[2]))
 for (a in 1:point.count) {
@@ -436,75 +489,62 @@ $$
 $$
 where $N$ is the number of points.
 
-To define SSW and SSB, we need to choose cluster centres.
+Note that both SSW and SSB depend on the position of the cluster centres, but SST does not.
 
-### Cluster Centres
+### Computing SSW, SSB and SST
 
-```{r, echo=FALSE}
-c1 = apply(cluster1,2,mean)
-c2 = apply(cluster2,2,mean)
-c3 = apply(cluster3,2,mean)
-c4 = apply(cluster4,2,mean)
-par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
-plot(X[,1], X[,2], xlab=expression("x"[1]), ylab=expression("x"[2]))
-centres = rbind(c1,c2,c3,c4)
-points(centres[,1],centres[,2], pch=2, col=2)
-```
+#### Problem
 
-### Between Cluster Sum of Squares (SSB)
+Compute SSW, SSB and SST for the given set of points and the
+previously computed cluster centres.
 
 ```{r, echo=FALSE}
-par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
-plot(X[,1], X[,2], xlab=expression("x"[1]), ylab=expression("x"[2]))
-points(centres[,1],centres[,2], pch=2, col=2)
-segments(m[1],m[2],c1[1],c1[2], col=2)
-segments(m[1],m[2],c2[1],c2[2], col=2)
-segments(m[1],m[2],c3[1],c3[2], col=2)
-segments(m[1],m[2],c4[1],c4[2], col=2)
+Y = matrix(c(1,2,4,1,1,5),3,2)
+print(Y)
 ```
 
-### Within Cluster Sum of Squares (SSW)
+Compare to the SSW, SSB and SST using the initial cluster centres.
+```{r, echo=FALSE}
+C = matrix(c(2,3,2,3),2,2)
+print(C)
+```
+
+
+
+
+
+## Choosing the number of clusters
+
 
 ```{r, echo=FALSE}
-par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
-plot(X[,1], X[,2], xlab=expression("x"[1]), ylab=expression("x"[2]))
-centres = rbind(c1,c2,c3,c4)
-points(centres[,1],centres[,2], pch=2, col=2)
-for (a in 1:point.count) {
-    segments(centres[cluster.number[a],1],centres[cluster.number[a],2],X[a,1],X[a,2], col=2)
-}
+cluster11 = rmvnorm(30, mean = c(7,5), sigma = matrix(c(1,0,0,1),2,2))
+cluster12 = rmvnorm(30, mean = c(2,12), sigma = matrix(c(1,0,0,1),2,2))
+cluster13 = rmvnorm(30, mean = c(15,12), sigma = matrix(c(1,0,0,1),2,2))
+cluster14 = rmvnorm(30, mean = c(14,3), sigma = matrix(c(1,0,0,1),2,2))
+X.large = rbind(cluster11,cluster12,cluster13,cluster14)
+##par(mar = (c(3.5, 3.5, 4, 2) + 0.1))
+#par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+#plot(X.large[,1], X.large[,2], xlab=expression("x"[1]), ylab=expression("x"[2]),)
 ```
 
-### Within and Between Sum of Squares Calculations
+### Choosing the number of Clusters
 
-SSB is the between cluster sum of squares. It is the same as SST, where we move all points to the cluster centre.
+K-means requires us to set the number of clusters before we run the
+algorithm.
 
-$$
-	SSB =  {\sum_{i=1, k = C(\vec{x}_i)}^{N} {\left ( \vec{c}_k - \vec{\bar{x}}\right )}^2}
-$$
-where $C(\vec{x}_i)$ is the cluster number for point $\vec{x}_i$ and $\vec{c}_k$ is the centre of cluster $k$.
+To decide on the number of clusters, we must remember that a good clustering will have:
 
-SSW is the within cluster sum of squares. It is the same as SST, where
-we use the cluster centre instead of the mean.
+- Small SSW (all points within a cluster are close), and
+- Large SSB (all points in different clusters are distant)
 
-$$
-	SSW =  {\sum_{i=1, k = C(\vec{x}_i)}^{N} {\left ( \vec{x}_i - \vec{c}_k \right )}^2}
-$$
+Therefore, we can examine the SSW for clusterings with 2, 3, 4, \ldots
+clusters, and choose the clustering with the smallest SSW.
 
-### Relationship between SST, SSW and SSB
+\pause
+Unfortunately, as we increase the number of clusters SSW will decrease.
 
-We want to choose the number of clusters that maximises SSB (large
-separation between clusters), and minimises SSW (points in cluster are
-close to each other).
+Let's examine the change in SSW as we increase the number of clusters.
 
-For a given set of points, SST is constant (does not depend on the clustering).
-
-For any clustering:
-$$
-	SST = SSB + SSW
-$$
-
-Therefore, if SSB increases, SSW must decrease.
 
 ### Comparing SSW and SSB
 
@@ -514,7 +554,7 @@ For the previous set of points, we have SSB and SSW:
 wss <- (nrow(X.large)-1)*sum(apply(X.large,2,var))
 bss = 0
 for (i in 2:15) {
-    z = kmeans(X.large, centers=i)
+    z = kmeans(X.large, centers=i, nstart = 5)
     wss[i] <- z$tot.withinss
     bss[i] <- z$betweenss
 }
@@ -523,25 +563,6 @@ plot(1:15, wss, type="b", xlab="Number of Clusters", ylab="Sum of squares")
 points(1:15, bss, type="b", col=2, pch=2)
 legend("right", c("SSW","SSB"), pch=c(1,2), col=c(1,2))
 ```
-
-### Computing SSW
-
-#### Problem
-
-Compute SST, SSW and SSB for the following five data points:
-
-```{r, echo=FALSE}
-Y = matrix(c(1,1,2,4,4,1,2,1,4,5),5,2)
-print(Y)
-```
-
-using the cluster centres:
-
-```{r, echo=FALSE}
-centers = matrix(c(1.33, 4.00, 1.33, 4.50),2,2)
-print(centers)
-```
-
 
 
 ### Elbow method
@@ -561,7 +582,7 @@ reduction of SSW slows (the elbow bend).
 
 ### Elbow method example
 
-The number of clusters is given by the position of the *elbow* bend.
+The number of clusters is given by the position of the \alert{elbow} bend.
 
 ```{r, echo=FALSE, fig.width=4.4, fig.height=2.8}
 par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
@@ -587,6 +608,32 @@ plot(clusters, ssw2, type="b", xlab="Number of Clusters", ylab="SSW")
 plot(clusters, ssw3, type="b", xlab="Number of Clusters", ylab="SSW")
 plot(clusters, ssw4, type="b", xlab="Number of Clusters", ylab="SSW")
 ```
+
+## Forcing Euclidean Distance
+
+### K-means with non-Euclidean distance
+
+We stated that K-means identifies clusters where Euclidean distance is used.
+
+But what if our data metric is not Euclidean distance?
+
+\pause
+
+We project our data into a Euclidean space using Multi-dimensional Scaling (MDS)!
+
+\pause
+
+#### K-means with non-Euclidean metric
+
+We previously used MDS to visualise our data by projecting the data into
+a 2D Euclidean space (space using Euclidean distance), but remember
+that projecting into a small dimensional space may lead to data loss.
+
+\vspace{1em}
+We can project our data into a \alert{higher dimensional Euclidean space using MDS} to
+minise the data loss, then use K-means on the projected data.
+
+We will explore this in the lab.
 
 
 
@@ -620,7 +667,7 @@ plot(h, xlab="x")
 #### Agglomerative Clustering (bottom up)
 
 1. Treat all points as clusters
-2. Iteratively merge the most closest clusters, until we are left with one cluster of all points.
+2. Iteratively merge the closest clusters, until we are left with one cluster of all points.
 
 #### Divisive Clustering (top down)
 
@@ -656,6 +703,10 @@ $$
 $$
 where $d_{ij}$ is the distance between points $\vec{x}_i$ and $\vec{x}_j$.
 
+The distance between two clusters is the \alert{minimum distance} over all
+pairs of points $A$ and $B$, where point $A$ belongs to one cluster
+and point $B$ belongs to the other cluster.
+
 
 ### Complete Linkage Clustering
 
@@ -664,6 +715,10 @@ $$
 	d_{\text{CL}}(G,H) = \max_{i \in G, j \in H}{d_{ij}}
 $$
 where $d_{ij}$ is the distance between points $\vec{x}_i$ and $\vec{x}_j$.
+
+The distance between two clusters is the \alert{maximum distance} over all
+pairs of points $A$ and $B$, where point $A$ belongs to one cluster
+and point $B$ belongs to the other cluster.
 
 
 ### Group Average Clustering
@@ -675,6 +730,11 @@ $$
 where $d_{ij}$ is the distance between points $\vec{x}_i$ and
 $\vec{x}_j$, and $N_G$ and $N_H$ are the number of points in clusters
 $G$ and $H$ respectively.
+
+The distance between two clusters is the \alert{average distance} over all
+pairs of points $A$ and $B$, where point $A$ belongs to one cluster
+and point $B$ belongs to the other cluster.
+
 
 
 ### Single Linkage Example
