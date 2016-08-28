@@ -19,8 +19,6 @@ to identify topics in the document set.
 
 # Introduction to Clustering
 
-## Defining Clustering
-
 ### What is Clustering?
 
 #### Clustering
@@ -120,54 +118,12 @@ par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
 plot(X.k[,1], X.k[,2], xlab=expression("x"[1]), ylab=expression("x"[2]))
 ```
 
-## Clustering Text
-
-### Clustering Text
-
-Unfortunately, text data is very high dimensional and may be difficult
-to visualise. We saw in the Text Mining 1 lecture that we can
-represent a text document (or tweet) using an $M$ dimensional vector:
-$$
-  \vec{d}_i = [ w_{d_it_1} ~ w_{d_it_2} ~ w_{d_it_3} ~ \ldots ~ w_{d_it_M} ]
-$$
-where $M$ is the number of unique words in the document collection,
-and $w_{d_it_j}$ is the weight of term $t_j$ in document $d_i$.  We
-also saw that the set of document vectors can be combined to form the
-document-term matrix $A$.
-
-To cluster these vectors, we need to be able to compute which vectors
-are similar and which are dissimilar. We do this by defining a
-similarity metric for the document vectors. 
-
-
-### Similarity for Document Vectors
-
-In this Unit, we have seen the dissimilarity functions:
-
-- Euclidean Distance (Text Mining 1, Visualisation)
-- Binary metric (Visualisation)
-
-and the similarity function:
-
-- Cosine measure (Text Mining 1)
-
-
-
-#### Similarity vs. Dissimilarity
-
-Dissimilarity measures how different items are, so a dissimilarity of
-0 means the items are the same. As the difference in the items
-increases, the dissimilarity increases.
-
-Similarity measures how similar items are, so a similarity of 0 means
-the items are different.  The more similar the items are, the greater
-the similarity score. The Cosine measure has a maximum of 1, meaning
-that if two items are the same, the similarity score is 1.
 
 ### Computing Clusters
 
-Once we have a vector space and a (dis)similarity function for the
-vectors, we can use a clustering algorithm to cluster the vectors.
+Once we have a set of objects (e.g tweets) and a distance metric over the objects
+(e.g. TF-IDF with cosine, or binary metric),
+we can use a clustering algorithm to cluster the objects.
 
 In this Unit, we will examine the clustering algorithms:
 
@@ -347,7 +303,7 @@ We can either:
 1. Use another clustering algorithm to identify rough cluster centres, or
 
 2. Run k-means many times using random initialisation and use the
-   \alert{best} custering.
+   \alert{best} clustering.
 
 We can perform choice 2 in R's `kmeans` function using the `nstart` parameter.
 
@@ -537,11 +493,12 @@ To decide on the number of clusters, we must remember that a good clustering wil
 - Small SSW (all points within a cluster are close), and
 - Large SSB (all points in different clusters are distant)
 
-Therefore, we can examine the SSW for clusterings with 2, 3, 4, \ldots
-clusters, and choose the clustering with the smallest SSW.
+Therefore, we can examine the SSW for clusterings with 2, 3, 4,
+\ldots, $k$ clusters, and choose the clustering with the smallest SSW.
 
 \pause
-Unfortunately, as we increase the number of clusters SSW will decrease.
+Unfortunately, as we increase the number of clusters SSW will
+decrease, so SSW will always be the smallest for $k$ clusters.
 
 Let's examine the change in SSW as we increase the number of clusters.
 
@@ -573,6 +530,8 @@ When choosing the number of clusters:
 - If we choose to have too many clusters, the clustering becomes worthless.
 
 How do we trade off between minimising the number of clusters and minimising SSB?
+
+\pause
 
 #### Elbow method
 
@@ -631,7 +590,7 @@ that projecting into a small dimensional space may lead to data loss.
 
 \vspace{1em}
 We can project our data into a \alert{higher dimensional Euclidean space using MDS} to
-minise the data loss, then use K-means on the projected data.
+minimise the data loss, then use K-means on the projected data.
 
 We will explore this in the lab.
 
@@ -739,7 +698,10 @@ and point $B$ belongs to the other cluster.
 
 ### Single Linkage Example
 
-```{r, echo=FALSE}
+Let's find the hierarchy of clusters using the following set of points
+and Euclidean distance.
+
+```{r, echo=FALSE, fig.width=4, fig.height=2.5}
 rpoints = rmvnorm(5, mean = c(5,5), sigma = matrix(c(1,0,0,1),2,2))
 par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
 plot(rpoints, xlab=expression("x"[1]), ylab=expression("x"[2]))
@@ -750,9 +712,10 @@ plot(rpoints, xlab=expression("x"[1]), ylab=expression("x"[2]))
 #### Problem 
 Find the hierarchy of clusters from the following plot using complete linkage.
 
-```{r, echo=FALSE, fig.width=4, fig.height=2.2}
+```{r, echo=FALSE, fig.width=4, fig.height=2.5}
 rpoints = rmvnorm(5, mean = c(5,5), sigma = matrix(c(1,0,0,1),2,2))
 par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+
 plot(rpoints, xlab=expression("x"[1]), ylab=expression("x"[2]))
 ```
 
