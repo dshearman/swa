@@ -1,6 +1,6 @@
 ## Make sure image URL directory is not readable, only executable!
 
-cat('`r require("igraph"); image_path = "graphs_intro"; image_url = "http://www.scem.uws.edu.au/~lapark/300958/images/graphs_intro"`')
+cat('`r require("igraph"); image_path = "graphs_intro"; image_url = "https://vuws.westernsydney.edu.au/bbcswebdav/users/30027430/Images"`')
   
 questions = list(
     list(

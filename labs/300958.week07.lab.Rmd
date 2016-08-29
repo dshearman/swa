@@ -1,4 +1,4 @@
-% Visualization of Social Web Data
+% Visualisation of Social Web Data
 % 300958 Social Web Analysis 
 % Week 7 Lab
 
@@ -31,7 +31,7 @@ To do this,
 2. then search for their twitter handles (beginning with @) using a Web browser.
 3. Once you have found the three handles use `userTimeline(handle, n=100, lang = "en")` for each handle, storing the results in `tweets1`, `tweets2` and `tweets3`, to obtain their most recent 100 tweets.
 4. Combine the set of tweets into the vector `tweets`
-5. Then create the term document matrix for the set of tweets.
+5. Then create the term document matrix for the set of tweets (as done in the week 5 lab).
 
 In the lecture, we set `stopwords = stoplist` in the function
 `TermDocumentMatrix`. We don't have a stoplist yet, so set `stopwords = TRUE`
@@ -47,7 +47,7 @@ Doing so will provide you with `tweets1`, `tweets2`, and tweets3`.
 To draw a word cloud, we need a set of words and the weight of each word.
 
 1. Create the word weight by summing the term frequencies (using either `rowSums` or `colSums`).
-2. Extract the names of the words using the function `names` on the weight vector.
+2. Extract the names of the words using the function `names` on the above weight vector.
 3. Using the function `wordcloud` from the library `wordcloud` to draw the word cloud. Adjust the value of min.freq to make the word cloud visually better.
 
 How does the word cloud look?
@@ -56,7 +56,7 @@ Create another word cloud, but use a TF-IDF weighted matrix. Does the
 word cloud look better or worse?
 
 Finally, if there are words that are not informative, create a
-stoplist containg the words to be removed and the words from
+stoplist containing the words to be removed and the words from
 `stopwords()`.
 
 When you are happy with the results, sit back and take a minute to be
@@ -65,9 +65,11 @@ proud of your work, then move on to the next section.
 
 # Principal Components Analysis
 
-Using the term-document matrix from above, produce visualisation plot of the first two prinicpal components. Remember that we are using a TF-IDF weighted term frequencies.
+Using the term-document matrix from above, produce a visualisation plot
+of the first two principal components. Remember that we are using a
+TF-IDF weighted term frequencies.
 
-First we generate a vector of colors to represent the three polical leaders.
+First we generate a vector of colours to represent the three political leaders.
 
 ```{r eval=FALSE, tidy=FALSE}
 colours = c(rep("red", length(tweets1)), 
@@ -81,7 +83,7 @@ pca <- prcomp(t(M))
 plot(pca$x[,1], pca$x[,2], col=colours, pch=16)
 ```
 
-Examine the PCA summary to identify the variance that the first few componenets represent.
+Examine the PCA summary to identify the variance that the first few components represent.
 Which of the two leaders tweet the most similar material?
 
 Try and plot the first and third principal components. And the second and third.
@@ -97,22 +99,9 @@ We showed how to compute MDS projections in the lecture.  Compute and
 plot the MDS 2D projection of the tweets using Euclidean distance, and
 verify that it gives the same results as PCA.
 
-
 Compute the MDS projection of the unweighted tweets (using term
 frequency) using the Binary distance and Cosine distance. Then examine
 the MDS projection with the same distances, but using TF-IDF
 weighting. Did using TF-IDF weighting make a difference?
 
 
-# Challenge - Modify the Word Cloud.
-
-The file [SimpleWordle.R](SimpleWordle.R) contains the code for a
-simplified version of the word cloud drawing code.  As a challenge,
-try modifying this code to
-
-1. Add colour.
-2. Add $90^\circ$ rotation of a proportion of words at random.
-
-(Hint: `runif` can generate a uniform random number so that `runif(1)<
-p` will be `TRUE` `p` proportion of the time.  Also `text` takes an
-argument `srt=90` to write text at 90 degrees).

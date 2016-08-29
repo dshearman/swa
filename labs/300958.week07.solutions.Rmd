@@ -1,4 +1,4 @@
-% Visualization of Social Web Data
+% Visualisation of Social Web Data
 % 300958 Social Web Analysis 
 % Week 7 Lab Solutions
 
@@ -62,6 +62,10 @@ tdm = TermDocumentMatrix(corpus,
                                         removeNumbers = TRUE, tolower = TRUE, 
                                         stemming=FALSE)) # No stemming 
 # remove empty tweets
+# if a tweet contains all stop words, then after preprocessing, it will be empty
+# We remove these from the tweet set so they don't effect the calculations (an
+# empty tweet is represented as a vector with all zeros, the Cosine with this
+# vector does not make sense.)
 empties = which(colSums(as.matrix(tdm)) == 0)
 tdm = tdm[,-empties]
 
@@ -95,6 +99,7 @@ Using term frequencies seems better than TF-IDF weights. Words that
 appear in only one document (e.g. http://...) get a large IDF weight,
 which is not what we want for these word clouds.
 
+# Principal Components Analysis
 
 ```{r eval=TRUE, tidy=FALSE}
 colours = c(rep("red", length(tweets1)), 
@@ -126,6 +131,11 @@ Examine the summaries:
 summary(pcaT)$importance[,1:5]
 summary(pcaM)$importance[,1:5]
 ```
+
+We can see that even though the plot of PCA using TF-IDF looks
+terrible, it explains more of the variance of the original data
+compared to when using the square root transformation.
+
 
 # Multidimensional Scaling
 
@@ -170,5 +180,14 @@ plot(mdsT[,1], mdsT[,2], col=colours, pch=16)
 
 Using TF-IDF weights with Cosine distance seems to have produced
 clustered results (all of the blue points are close to each other, all
-of the gree points are close to each other and all of the red points
+of the green points are close to each other and all of the red points
 are close to each other).
+
+The previous clusterings (using other metrics) have provided many
+"blobs" of points in each colour, while this clustering has provided a
+single blob for each colour. We can see that the centre of the plot
+(near 0,0) is covered by all colours, meaning that there is a set of
+points from all colours that have similar topics. We also see that
+blue and red branch out in their own directions, meaning that there
+is set of blue and red tweets that have their own topics. Green
+seems to branch out down the plot, but is still close to red points.
