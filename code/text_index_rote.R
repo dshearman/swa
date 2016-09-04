@@ -1,5 +1,6 @@
 #!/usr/bin/R
-
+# The automatic document query problem generator
+# To run this script, open R and type source("text_index_rote.R")
 
 generateDocument = function(terms, prob, avgDocLen) {
     prob = sample(prob)
@@ -21,7 +22,10 @@ printDocument = function(document) {
 }
 
 printDocuments = function(documents) {
-    print(lapply(documents, printDocument))
+    D = lapply(documents, printDocument)
+    for (d in D) {
+        cat(d, "\n")
+    }
 }
 
 IDF = function(docTable) {
@@ -76,9 +80,9 @@ generateProblem = function(
 
 printProblem = function(problem) {
     N = length(problem$documents)
-    cat("Given the following", N, "documents:\n")
+    cat("Given the following ", N, " documents:\n", sep="")
     printDocuments(problem$documents)
-    cat("and query", problem$query, ", compute the document scores using TF-IDF weighting and Cosine similarity.\nRun computeDocumentScores(problem) to see the solution.\n")
+    cat("and query ", printDocument(problem$query), ", compute the document scores using TF-IDF weighting and\nCosine similarity.\nRun computeDocumentScores(problem) to see the solution.\n", sep="")
 }
 
 computeDocumentScores = function(problem) {
@@ -87,7 +91,7 @@ computeDocumentScores = function(problem) {
     tfIdf = TFIDF(problem$docTable, idf)
     qfIdf = TFIDF(problem$queryTable, idf)
     scores = cosineSimilarity(tfIdf,qfIdf)
-    return(scores)
+    return(list(IDF = idf, TFIDF = tfIdf, queryTFIDF = qfIdf, scores = scores))
 }
 
 problem = generateProblem(
@@ -99,5 +103,4 @@ problem = generateProblem(
 
 
 printProblem(problem)
-
-computeDocumentScores(problem)
+#computeDocumentScores(problem)

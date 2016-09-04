@@ -32,7 +32,7 @@ load the tweets: Download the tweet file
 [Tweets.Rdata](http://staff.scm.uws.edu.au/~lapark/300958/labs/Tweets.RData)
 to your **working directory**, and load the file:
 ```{r eval=FALSE}
-load("Tweets.RData")
+ load("Tweets.RData")
 ```
 Extract the tweets into data frames and combine the tweet text into a vector:
 ```{r eval=FALSE}
@@ -45,12 +45,9 @@ Now that we have the text in a vector, we can create a corpus:
 ```{r eval=FALSE}
 tweet.corpus = Corpus(VectorSource(tweet.text))
 ```
-then convert the characters to UTF8:
+then convert the characters to ASCII:
 ```{r eval=FALSE}
-tweet.corpus = tm_map(tweet.corpus,
-         function(x) iconv(x, to='UTF8', sub='byte')) # for Windows
-tweet.corpus = tm_map(tweet.corpus, 
-	     function(x) iconv(x, to='UTF-8-MAC', sub='byte')) # for OS X
+tweet.corpus = tm_map(tweet.corpus, function(x) iconv(x, to='ASCII'))
 ```
 Finally, we will remove unwanted characters, remove stopwords and stem the words:
 ```{r eval=FALSE}
@@ -68,6 +65,9 @@ So we extract the matrix and apply TFIDF weighting:
 tweet.dtm = DocumentTermMatrix(tweet.corpus)
 tweet.wdtm = weightTfIdf(tweet.dtm)
 tweet.matrix = as.matrix(tweet.wdtm)
+## remove empty tweets
+empties = which(rowSums(abs(tweet.matrix)) == 0)
+tweet.matrix = tweet.matrix[-empties,]
 ```
 We now have the set of weighted document vectors as rows of the matrix `tweet.matrix`.
 
@@ -186,131 +186,70 @@ Once we have the values of SSW for 1 to 15 clusters, we can view the elbow plot:
 ```{r eval=FALSE}
 plot(1:15,SSW, type="b")
 ```
-From the plot, we will see that there is no elbow (the SSW does not flatten out).
-This means the we are not clustering the data correctly.
+From the plot, we will see that there is an elbow at 9 clusters, but the SSW drops afterwards, meaning that there may be a better clustering at a higher number of clusters. This is a large number of clusters, meaning that we are not clustering the data correctly.
 
 A likely cause of the poor clustering is that k-means uses Euclidean distance,
 which is not appropriate for document vectors. We need to use k-means with the
-cosine similarity function, also known as Spherical k-means.
+cosine similarity function, so we need to comine Multi-dimensional scaling with K-means.
 
 
-## Spherical K-means
+## K-means with cosine distance
 
-First download and install the Spherical k-means package:
+The k-means algorithm only clusters using Euclidean distance,
+therefore to use Cosine distance, we must convert the cosine distances
+to Euclidean distance. To do this, we use Multi-dimensional scaling (MDS).
+
+
+To perform k-means using Cosine distance, we first create the distance matrix,
+containing Cosine distances.
+
 ```{r eval=FALSE}
-install.packages("skmeans")
-library("skmeans")
+## first normalise all tweets to unit length (divide by their norm)
+norm.tweet.matrix = diag(1/sqrt(rowSums(tweet.matrix^2))) %*% tweet.matrix
+## then create the distance matrix
+D = dist(norm.tweet.matrix, method = "euclidean")^2/2
+## perform MDS using 300 dimensions
+mds.tweet.matrix <- cmdscale(D, k=300)
 ```
+We now have the set of tweets projected into a 300 dimsional Euclidean space.
 
-Computing spherical k-means clusters is very similar to computing
-k-means clusters. We use the function `skmeans` instead of `kmeans`.
-To perform the clustering, we provide the data as a matrix and the
-number of clusters we want.
-```{r eval=FALSE}
-SK = skmeans(tweet.matrix, 3)
-```
-Rather than centres, `skmeans` provides us with prototype points,
-which are the centre vectors using cosine similarity. We can view the
-prototype for the first cluster:
-```{r eval=FALSE}
-cluster.number = 1
-SK$prototypes[cluster.number,]
-```
-We can also view the cluster allocation of each tweet:
-```{r eval=FALSE}
-SK$cluster
-```
-Since there are so many tweets, we can tabulate the cluster
-allocation, to see how many tweets are associated to each cluster:
-```{r eval=FALSE}
-table(SK$cluster)
-```
-We should find that each of the clusters contain a similar number of
-points, showing that spherical k-means is more suited to this data
-than k-means.
-
-To identify an appropriate number of clusters, we must compute the
-within sum of squares using the cosine dissimilarity. The function below
-`cosine.dissimilarity` computes the dissimilarity between two vectors.
-```{r eval=FALSE}
-vec.norm = function(x) {
-  # compute the norm of vector x
-  return(sqrt(x %*% x))
-}
-
-normalise.vector = function(x) {
-  # scale the vector x to be unit length
-  return(x/vec.norm(x))
-}
-
-cosine.dissimilarity = function(x,y) {
-  # normalise row vector lengths
-  norm.x = normalise.vector(x)
-  norm.y = normalise.vector(y)
-  # return 1 - inner product of the normalised vectors
-  return(1 - (norm.x %*% norm.y))
-}
-```
-To compute SSW, we need to compute the dissimilarity between each
-tweet vector and its cluster prototype. To compute the dissimilarity
-between the first tweet vector and its cluster prototype:
-```{r eval=FALSE}
-tweet.number = 1
-cosine.dissimilarity(tweet.matrix[tweet.number,], SK$prototype[SK$cluster[tweet.number],])
-```
-
-**Write** and run the function `ssw.cosine`, containing a for loop, to compute
-  the dissimilarity between each tweet vector and its cluster
-  prototype, then sum the values to obtain the within sum of squares.
-
-We now need to find the elbow in the SSW values.
-
-**Write** the for loop to compute the SSW value (using the above
-  function `ssw.cosine`) for spherical k-means using 2 to 15 clusters.
-
-**Plot** the set of SSW values against the cluster number. Can any
-  elbows be seen the plot?
+**Use** the elbow method to identify an appropriate number of
+  clusters, then compute the clusters and store them in `K`.
 
 
 To finish this section, we will visualise the data using multidimensional scaling.
-To perform multidimensional scaling,we need to compute the distance matrix containing
-the cosine dissimilarities.
-To use the cosine dissimilarity function, we can take advantage of the
-fact that the cosine of two vectors is the inner product of the
-normalised vectors. So to compute the distance matrix, we normalise
-all document vectors using the `normalise.vector` function we wrote above:
+We first project the tweets into a 2D space for visualisation.
 ```{r eval=FALSE}
-norm.tweet.matrix = apply(tweet.matrix, 1, normalise.vector)
+## perform MDS using 2 dimensions
+mds2.tweet.matrix <- cmdscale(D, k=2)
 ```
-Then the inner product of all vectors is the matrix multiplied with
-itself. We want dissimilarity, so we subtract it from 1.
+Then we can colour the points using their cluster number.
 ```{r eval=FALSE}
-D = 1 - norm.tweet.matrix %*% t(norm.tweet.matrix)
-```
-We then perform the multidimensional scaling and plot the tweets with their cluster colour.
-```{r eval=FALSE}
-tweet.matrix.2d.cosine = cmdscale(D)
-plot(tweet.matrix.2d.cosine, col = SK$cluster)
+plot(mds2.tweet.matrix, col = K$cluster)
 ```
 **Are** the clusters visible after performing the multidimesional scaling?
 
-
-
-
 ## Examining the cluster contents.
 
-To begin this section, we will run spherical k-means on our data, using five clusters.
+To begin this section, we will run k-means on our data, using three clusters.
 ```{r eval=FALSE}
-SK = skmeans(tweet.matrix, 5)
+K = kmeans(mds.tweet.matrix, 3, nstart = 20)
 ```
 We can now examine the top ten words associated to each cluster by
-selecting the cluster prototype and ordering the words by the
-prototype weight. For the first cluster, we use:
+selecting the tweets associated to the cluster number, and ordering the words by the
+mean TF-IDF weight in the cluster. For the first cluster, we use:
 ```{r eval=FALSE}
 cluster.number = 1
-sort(SK$prototypes[cluster.number,], decreasing=TRUE)[1:10]
+## find position of tweets in cluster
+clusterTweetsId = which(K$cluster == cluster.number)
+## extract tweets vectors for cluster
+clusterTweets = tweet.matrix[clusterTweetsId,]
+## combine the tweets into a mean tweet
+clusterTermWeight = colMeans(clusterTweets)
+## show the top 10 weighted words
+sort(clusterTermWeight, decreasing = TRUE)[1:10]
 ```
-**Examine** the top ten words for the other four clusters. Can you
+**Examine** the top ten words for the three clusters. Can you
   identify any themes associated to the clusters?
 
 Looking at the top ten words gives us some information about the
@@ -373,55 +312,19 @@ frequent.words = which(apply(tweet.matrix > 0,2,sum) > 50)
 ```
 We now extract only those columns from the tweet matrix.
 ```{r eval=FALSE}
-sub.tweet.matrix = tweet.matrix[,frequent.words]
+term.matrix = tweet.matrix[,frequent.words]
 ```
 
-Let's first examine the clusters produced using Euclidean
-distance. Note that we must transpose `sub.tweet.matrix` using the
-function `t` to compute the distances between words, instead of
-distances between tweets.
+Since we are now clustering the terms and not the tweets, we must normalise the columns (not rows) when performing Cosine distance calculations.
 ```{r eval=FALSE}
-D = dist(t(sub.tweet.matrix))
-h = hclust(D)
-plot(h)
-```
-**Examine** the dendrogram produced. Do the clusters make sense?
-
-**Perform** clustering using single linkage clustering instead. Which
-  of the two method provides more reasonable clusters?
-
-
-## Hierarchical clustering with the Cosine distance.
-
-The hierarchical clustering function take a distance matrix. So we can
-compute the distance using any metric, then provide the computed
-distance matrix to `hclust`.
-
-As we did before, to use the cosine dissimilarity function, we can
-take advantage of the fact that the cosine of two vectors is the inner
-product of the normalised vectors. So to compute the distance matrix,
-we normalise all word vectors (note: in the previous section we
-normalised the documents, in this section we are normalising the words
-because we want to cluster the words) using the `normalise.vector`
-function we wrote above:
-```{r eval=FALSE}
-norm.sub.tweet.matrix = apply(sub.tweet.matrix, 2, normalise.vector)
-```
-Then the inner product of all vectors is the matrix multiplied with
-itself. We subtract it from 1 to get the dissimilarities.
-```{r eval=FALSE}
-D = 1 - t(norm.sub.tweet.matrix) %*% norm.sub.tweet.matrix
-```
-We then convert the distance matrix to the `dist` type, so it can be used with `hclust`:
-```{r eval=FALSE}
-D = as.dist(D)
-```
-We can now cluster the words and plot them:
-```{r eval=FALSE}
-h = hclust(D)
-plot(h)
+norm.term.matrix = term.matrix %*% diag(1/sqrt(colSums(term.matrix^2)))
+## preserve column names (terms associated to each column)
+colnames(norm.term.matrix) = colnames(term.matrix)
 ```
 
-**After** viewing the dendrograms based on Euclidean and Cosine
-  distance, which do you think provded a better clustering?
+**Compute** the distance matrix containing the Cosine distance between
+  all chosen terms, then compute and plot the hierarchical
+  clustering. Does changing from single linkage clustering to complete
+  linkage clustering make a difference to the clustering results?
+
 

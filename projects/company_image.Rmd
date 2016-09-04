@@ -145,7 +145,26 @@ By including this statement, we the authors of this work, verify that:
 
 
 A company is investigating its public image and has approached your
-team to identify what the public associated with the company name.
+team to identify what the public associates with the company name.
+The analysis is to be broken into three steps:
+
+1. Analysis of the twitter community. Use a random sample of tweets
+   <http://staff.scm.uws.edu.au/~lapark/300958/project/randomSample2016.csv>
+   to examine the proportion of all words. Show the top 20 most common
+   words and top 20 least common words.
+
+2. Analysis of the twitter community mentioning the company. Use the
+   function `searchTwitter` to download a set of approximately 1000
+   tweets mentioning the company.
+
+3. Analysis of the twitter community from the company
+
+
+
+
+randomSample = read.csv("randomSample2016.csv")
+
+
 
 1. The company want to obtain an understanding of the general Twitter
 community sentiment. Obtain a random sample of tweets (at least 1000)
