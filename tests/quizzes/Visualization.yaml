@@ -29,35 +29,6 @@ questions:
        - "A low dimensional representation of a collection of documents that matches distances in high dimensions closely"
       correct_answer: 4
 
-    - type: MC
-      question: "<p>The Binary Metric is a distance measure that compares two documents by; </p>"
-      choices:
-       - "taking the sum of the differences in word frequencies squared, then taking a square root"
-       - "taking the number of distinct words in NOT in common in the documents divided the number of distinct words in total"
-       - "visualising the frequencies with which words occur in the documents"
-       - "using a Frobenius norm"
-      correct_answer: 2
-
-    - type: NUM
-      question: "<p>After stoplist processing etc, Tweet A has 7 distinct words and Tweet B has 11. There are 4 words in common. What is the Binary Metric distance between Tweets A and B (to 2 decimal places)?</p>"
-      answer: "0.71"
-      tolerance: "0.01"
-
-    - type: NUM
-      question: "<p>After stoplist processing etc, Tweet A has 9 distinct words and Tweet B has 10. There are 2 words in common. What is the Binary Metric distance between Tweets A and B (to 2 decimal places)?</p>"
-      answer: "0.88"
-      tolerance: "0.01"
-
-    - type: NUM
-      question: "<p>After stoplist processing etc, Tweet A has 8 distinct words and Tweet B has 12. There are 6 words in common. What is the Binary Metric distance between Tweets A and B (to 2 decimal places)?</p>"
-      answer: "0.57"
-      tolerance: "0.01"
-
-    - type: NUM
-      question: "<p>After stoplist processing etc, Tweet A has 11 distinct words and Tweet B has 7. There are 6 words in common. What is the Binary Metric distance between Tweets A and B (to 2 decimal places)?</p>"
-      answer: "0.50"
-      tolerance: "0.01"
-
     - type: NUM
       question: '<p>R produces the following output from a principal components analysis. What PERCENTAGE of variation is explained by the first TWO principal components (to 2 decimal places)?</p>
 <TABLE border=1>
