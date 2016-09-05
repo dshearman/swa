@@ -5,7 +5,7 @@
 # Aim
 
 The Group Project provides us with a chance to analyse the Social Web
-using the knowledge obtained from this unit with assistance from a
+using knowledge obtained from this unit with assistance from a
 computer based statistical package. For this project, we will focus on
 identifying a chosen companies Twitter image.
 
@@ -42,7 +42,7 @@ To complete this project:
 
 # Group Size and Organisation
 
-Students in groups of size 1, 2, 3 or 4 are to work together to complete
+Students in groups of size 4 are to work together to complete
 this project.  One project report is to be submitted per group.
 
 The group must be formed by signing-up to a group within the Project
@@ -93,12 +93,15 @@ Marks  Criteria Satisfied
 
 11-15  Three of the project parts have been completed correctly.
 
-16-20  The required work has been completed correctly.
+16-20  All of the project parts have been completed correctly.
 
 21-25  The required work has been completed correctly and the company questions have been answered based on the results.
-
-26-30  The required work has been completed correctly and the company questions have been answered based on the results of multiple investigations.
 --------------------------------------------------------------------------
+
+There are also five marks allocated to presentation (based on the
+report formatting, style, grammar and mathematical notation). If the
+report looks like something that would be submitted to an employer,
+then the full five marks will be awarded.
 
 If a report is submitted late, the maximum mark it can achieve will be
 reduced by 10% (3 marks) per day. E.g., if a report is submitted five
@@ -146,50 +149,68 @@ By including this statement, we the authors of this work, verify that:
 
 A company is investigating its public image and has approached your
 team to identify what the public associates with the company name.
-The analysis is to be broken into three steps:
+The company wants the four pieces of analysis to be performed.
 
-1. Analysis of the twitter community. Use a random sample of tweets
-   <http://staff.scm.uws.edu.au/~lapark/300958/project/randomSample2016.csv>
-   to examine the proportion of all words. Show the top 20 most common
-   words and top 20 least common words.
+## Analysis of Twitter language
 
-2. Analysis of the twitter community mentioning the company. Use the
-   function `searchTwitter` to download a set of approximately 1000
-   tweets mentioning the company.
+In this section, we want to examine the language used in tweets.
 
-3. Analysis of the twitter community from the company
+1. Download the random sample of tweets
+   [randomSample2016.csv](http://staff.scm.uws.edu.au/~lapark/300958/project/randomSample2016.csv),
+   and load using `randomSample = read.csv("randomSample2016.csv")`
+2. Use the `tm` library to construct a document-term matrix of term frequencies.
+3. Sum the columns to obtain a vector of term frequencies summed over all tweets.
+4. Compute the proportion of each term in the random sample, from the vector of term frequencies.
+5. List the top 10 words and their proportion.
 
+What do these words tell us about the random sample?
 
+## Analysis of the company image on Twitter
 
+In this section we want to examine if the tweets about the company are
+of random topics, or if they contain specific information.
 
-randomSample = read.csv("randomSample2016.csv")
+1. Use the `searchTwitter` function from the `twitteR` library to
+   search for 1000 tweets about the company.
+2. Combine the company tweets with the random sample of tweets from
+   part 1 and construct the document-term matrix of term frequencies over
+   all tweets.
+3. Sum the rows associated to the company tweets to obtain a vector of
+   term frequencies over all company tweets, and do the same for the
+   random tweets.
+4. Combine the two vectors (of company tweets and random tweets) to
+   create a $2\times M$ table (where $M$ is the number of terms, and
+   also the length of the vectors), then perform a $\chi^2$ test for
+   independence on this table.
 
+What do the results of the test tell us about the company tweets and
+random sample of tweets?
 
+## Connection between public and company.
 
-1. The company want to obtain an understanding of the general Twitter
-community sentiment. Obtain a random sample of tweets (at least 1000)
-and report the most representative words of the sample. What do these
-words say about the Twitter community?
+In this section, we want to determine what the public and company are
+tweeting about, when tweeting about the company.
 
-2. The company wants to identify specifically what the Twitter community is
-saying about the company. Identify words that the Twitter public associate to
-the company (have the greatest increase in proportion when compared to the
-random sample).
+1. Use the function `userTimeline` from the `twitteR` library to
+   download the last 1000 tweets from the company.
+2. Combine the tweets about the company from part 2 with the tweets
+   from the company and cluster the tweets using an appropriate
+   clustering method.
+3. List the set of terms associated to each cluster.
+4. Compute the proportion of company tweets in each cluster.
 
-3. The company has questioned whether the tweets coming from the Twitter
-community are different from the tweets from within the company.  Obtain a set
-of tweets from the companies timeline, combine them with the random sample and
-the public tweets (from parts 1 and 2) and cluster the set. Identify if the
-clusters show that the company tweets are different from the public tweets. 
+What do these results tell us about the tweet topics from the company
+and public about the company?
 
-4. When presenting these results to the committee, you have been asked
-to identify any problems with the analytical process used in each part
-and how these problems could be corrected. In this section, do not
-explain difficulties in writing code or getting programs to
-run. Explain how the methods used could lead to misleading results
-(e.g. was random sampling used when obtaining the tweets?).
+## Company Image
 
-The company want the above analysis to be written up in a professional
-report. Each part should have its own section of the report and all
-questions should have thoughtful answers. Any code that is used should
-be included and clearly explained (include comments in the code).
+By combining all of this information, what can we say about the
+company's image on Twitter?  Also identify any problems with the
+analytical process used in each part and how the results may have been
+effected by these problem (do not include programming problems).
+
+The company want the above four parts of analysis to be written up in
+a professional report. Each part should have its own section of the
+report and all questions should have thoughtful answers. Any code that
+is used should be included and clearly explained (include comments in
+the code).
