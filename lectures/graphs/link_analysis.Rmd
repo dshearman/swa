@@ -9,7 +9,7 @@ opts_chunk$set(dev = 'pdf', fig.cap="")
 library("igraph")
 ```
 
-## Motivation
+### Motivation
 
 Similar to centrality measures, link analysis methods allow us to
 identify the popularity of a vertex, based on the structure of the
@@ -23,7 +23,7 @@ results.
 
 # Random walk on a Graph
 
-## Random Walk
+### Random Walk
 
 A random walk is a traversal of some space, where we take $n$ steps (some
 number of steps), and each step is decided randomly.
@@ -32,13 +32,13 @@ Examples of random walks in 1, 2, and 3 dimensional space can be seen at:
 <http://en.wikipedia.org/wiki/Random_walk>
 
 
-## Random Walk on a Graph
+### Random Walk on a Graph
 
 Random walks can be taken on graphs, where each step moves us to a
 vertex and the edges of each vertex provide a path between vertices.
 
-### Two random walks from $v_1$ of length 3
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+#### Two random walks from $v_1$ of length 3
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Two random walks of length 4 starting from $v_1$ shown in red and blue."}
 g = graph.formula(A-B, A-C, A-D, B-E, B-D, C-D, C-E, C-F, D-F, F-G)
 E(g)$color = "#AAAAAA"
 
@@ -52,15 +52,15 @@ expression("v"[5]),expression("v"[6]),expression("v"[7])),
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
 
-## Random Walk on a Graph and Probabilities
+### Random Walk on a Graph and Probabilities
 
 By taking a random walk of length 1, we choose an edge at random that
 is connected to the current vertex and follow it. The probability of
 following a particular edge is equal to $1/\text{degree}(v)$, starting at
 vertex $v$.
 
-### Probability of arriving at vertex.
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+#### Probability of arriving at vertex.
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="After a random walk of length 1 beginning at $v_1$, the probability of arriving at $v_2$ is $1/4$."}
 g = graph.formula(A-B, A-C, A-D, A-E, B-D)
 
 par(mar = c(0,0,0,0))
@@ -69,28 +69,31 @@ plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]
 expression("v"[5])),
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
-After a random walk of length 1 beginning at $v_1$, the probability of arriving at $v_2$ is $1/4$.
 
-## Random walk probability
 
-### Problem 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
-g = graph.formula(A-B, A-C, A-D, A-E, B-D)
+### Random walk probability
 
-par(mar = c(0,0,0,0))
-V(g)$label.cex = 0.8
-plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]),expression("v"[4]),
-expression("v"[5])),
-layout=layout.fruchterman.reingold, vertex.size = 35)
-```
+#### Problem 
+
 After a random walk of length 1:
 
 - What is the probability of arriving at $v_3$, when beginning at $v_1$?
 - What is the probability of arriving at $v_2$, when beginning at $v_4$?
 - What is the probability of arriving at $v_5$, when beginning at $v_3$?
 
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Random walk of length 1 problem."}
+g = graph.formula(A-B, A-C, A-D, A-E, B-D)
 
-## State distribution
+par(mar = c(0,0,0,0))
+V(g)$label.cex = 0.8
+plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]),expression("v"[4]),
+expression("v"[5])),
+layout=layout.fruchterman.reingold, vertex.size = 35)
+```
+
+
+
+### State distribution
 
 The state of a random walk is the vertex in which the walk has ended
 on.  After a random walk of length $n$, there is a chance of being in
@@ -100,7 +103,7 @@ a probability.
 The collection of probabilities forms a distribution over the set of
 states.
 
-## State distribution example
+### State distribution example
 ```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
 g = graph.formula(A-B, A-C, A-D)
 
@@ -109,6 +112,8 @@ V(g)$label.cex = 0.8
 plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]),expression("v"[4])),
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
+\quad
+
 A random walk of length n, starting at $v_1$ gives the state distribution:
 
 \begin{center}
@@ -123,11 +128,11 @@ $\vec{p}_1$ & 0     & 1/3   & 1/3   & 1/3   \\
 \end{tabular}
 \end{center}
 
-## State distribution
+### State distribution
 
-### Problem
+#### Problem
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="State distribution problem."}
 g = graph.formula(A-B, B-C, C-D, D-A)
 par(mar = c(0,0,0,0))
 V(g)$label.cex = 0.8
@@ -138,7 +143,7 @@ layout=layout.fruchterman.reingold, vertex.size = 35)
 Compute the state distribution after a length $n = 1, 2, 3$ random walk, when starting at $v_1$.
 
 
-## Probability Transition
+### Probability Transition
 
 We find that the state distribution of a length $n$ random walk can be
 computed using the graph and the knowledge of the previous state
@@ -156,7 +161,7 @@ $$
 where $\vec{p}_n$ is the state distribution after a length $n$ random walk.
 
 
-## Transition Probability Matrix
+### Transition Probability Matrix
 
 The transition probability matrix $T$ of graph $G$ provides us with
 the probability of moving to a state, given the probability of the
@@ -172,13 +177,13 @@ $$
 $$
 All of the columns of $T$ should sum to 1.
 
-## Transition Probability Matrix
+### Transition Probability Matrix
 
-### Example
+#### Example
 
 Write the transition probability matrix for the following graph:
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Transition probability matrix example."}
 g = graph.formula(A-B, B-C, C-D, D-A, A-E, B-D, B-E)
 par(mar = c(0,0,0,0))
 V(g)$label.cex = 0.8
@@ -186,13 +191,13 @@ plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
 
-## Transition Probability Matrix
+### Transition Probability Matrix
 
-### Problem
+#### Problem
 
 Write the transition probability matrix for the following graph:
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Transition probability matrix problem."}
 g = graph.formula(A-B, A-C, A-D, B-E, C-E, A-E)
 par(mar = c(0,0,0,0))
 V(g)$label.cex = 0.8
@@ -200,11 +205,10 @@ plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
 
-## One Step Transition
+### One Step Transition
 
 Given any state distribution, we can take a random step by multiplying
 the state with the transition probability matrix. Let's examine the previous example.
-
 ```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
 g = graph.formula(A-B, B-C, C-D, D-A)
 par(mar = c(0,0,0,0))
@@ -212,6 +216,7 @@ V(g)$label.cex = 0.8
 plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]),expression("v"[4])),
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
+
 
 We begin at $v_1$, so the initial state distribution is:
 $$
@@ -221,7 +226,7 @@ Let's find the state distribution after $n = 1$, 2 and 3 steps.
 
 
 
-## Infinite Random Walk on a Graph
+### Infinite Random Walk on a Graph
 
 The probability of arriving at vertex $v$ after a random walk is a
 good measure of the vertex's popularity or influence in the graph.
@@ -238,7 +243,7 @@ state distribution $\vec{p}_{\infty}$ becomes independent of the
 initial state $\vec{p}_0$.
 
 
-## Stationary Distribution
+### Stationary Distribution
 
 The state distribution of a random walk on a graph converges, therefore:
 $$
@@ -257,13 +262,13 @@ The stationary distribution is the probability distribution over the set of
 vertices, where taking a random step on the graph does not change the
 distribution (it is stationary).
 
-## Stationary Distribution Example
+### Stationary Distribution Example
 
-### Example 
+#### Example 
 
 Find the stationary distribution of the following graph:
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Stationary distribution example."}
 g = graph.formula(A-B, A-C, B-C)
 par(mar = c(0,0,0,0))
 V(g)$label.cex = 0.8
@@ -271,16 +276,16 @@ plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]
 layout=layout.fruchterman.reingold, vertex.size = 35)
 ```
 
-## Stationary Distribution Solution
+### Stationary Distribution Solution
 
 We are able to find the stationary distribution, when given an
 undirected graph. Before we present the solution, we must first define
 the Volume of a graph.
 
 
-## Graph Volume
+### Graph Volume
 
-### Volume of an Undirected Graph
+#### Volume of an Undirected Graph
 
 The volume of an undirected graph $G = (V,E)$ is equal to the sum of the
 degree of all vertices.
@@ -288,7 +293,7 @@ $$
 	\text{vol}(G) = {\sum_{v \in V} \text{deg}(v)}
 $$
 
-### Volume of a Directed  Graph
+#### Volume of a Directed  Graph
 
 The volume of a directed graph $G = (V,E)$ is equal to the sum of the
 in or out degree of all vertices.
@@ -301,7 +306,7 @@ since each edge in the graph has one in and one out end.
 
 
 
-## Undirected Graph Stationary Distribution
+### Undirected Graph Stationary Distribution
 
 Let $\vec{p}$ be a vector containing the probability of arriving at each vertex after a random walk, where
 $$
@@ -321,7 +326,7 @@ $$
 \end{aligned}
 $$
 
-## Undirected Graph Stationary Distribution
+### Undirected Graph Stationary Distribution
 
 So, if we begin with the vertex state probability $\vec{p}$, given by
 $$
@@ -331,12 +336,11 @@ and take a random step, the vertex state probability does not change.
 Therefore, the above defined vector $\vec{p}$ is the stationary
 distribution of undirected graph $G$.
 
-## Undirected Graph Stationary Distribution
+### Undirected Graph Stationary Distribution
 
-### Example
+#### Example
 
 For the following graph:
-
 ```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
 g = graph.formula(A-B, B-C, C-D, D-A, A-C)
 par(mar = c(0,0,0,0))
@@ -350,12 +354,11 @@ layout=layout.fruchterman.reingold, vertex.size = 35)
 3. Show that $\vec{p} = T\vec{p}$
 
 
-## Undirected Graph Stationary Distribution
+### Undirected Graph Stationary Distribution
 
-### Problem
+#### Problem
 
 For the following graph:
-
 ```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
 g = graph.formula(A-B, B-C, C-D, D-B)
 par(mar = c(0,0,0,0))
@@ -371,7 +374,7 @@ layout=layout.fruchterman.reingold, vertex.size = 35)
 
 # Random Walk on a Directed Graph
 
-## Random Walk on Directed Graphs
+### Random Walk on Directed Graphs
 
 We have seen how to perform a random walk on an undirected graph and
 compute the stationary distribution.
@@ -382,10 +385,10 @@ The edges in a directed graph are one way, meaning that when
 performing the random walk, we may only follow edges in the direction
 they are pointing.
 
-## Example Random Walk on a Directed Graph
+### Example Random Walk on a Directed Graph
 
-### Two random walks from $v_1$ of length 3
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+#### Two random walks from $v_1$ of length 3
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Random walk on a directed graph starting from $v_1$."}
 g = graph.formula(A-+B, A+-C, A-+D, B+-E, B-+D, C+-D, C-+E, C+-F, D-+F, F+-G)
 E(g)$color = "#AAAAAA"
 
@@ -400,11 +403,12 @@ expression("v"[5]),expression("v"[6]),expression("v"[7])),
 layout=layout.fruchterman.reingold, vertex.size = 35, edge.arrow.size=0.4)
 
 ```
+
 The blue random walk is legal, the red random walk is illegal since it
 does not obey the edge directions.
 
 
-## Probability Transition Matrices for Directed Graphs
+### Probability Transition Matrices for Directed Graphs
 
 The probability transition matrix for a random walk on a directed
 graph is constructed just as when using an undirected graph, but the
@@ -413,13 +417,13 @@ matrix is not symmetric.
 When adding the probabilities to the matrix, we must take into account
 the direction of the edges.
 
-## Probability Transition Matrices for Directed Graphs
+### Probability Transition Matrices for Directed Graphs
 
-### Example
+#### Example
 
 Construct the transition probability matrix for the following graph:
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Directed probability transition matrix example."}
 g = graph.formula(A-+B, B-+C, C-+D, D-+A, A-+C)
 
 par(mar = c(0,0,0,0))
@@ -429,13 +433,13 @@ layout=layout.fruchterman.reingold, vertex.size = 35, edge.arrow.size=0.4)
 
 ```
 
-## Probability Transition Matrices for Directed Graphs
+### Probability Transition Matrices for Directed Graphs
 
-### Problem
+#### Problem
 
 Construct the transition probability matrix for the following graph:
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Directed probability transition matrix problem."}
 g = graph.formula(A-+B, A-+D, B-+C, C-+D, D-+A)
 
 par(mar = c(0,0,0,0))
@@ -445,7 +449,7 @@ layout=layout.fruchterman.reingold, vertex.size = 35, edge.arrow.size=0.4)
 
 ```
 
-## Stationary Distribution for Directed Graphs
+### Stationary Distribution for Directed Graphs
 
 We saw that we can easily find the stationary distribution for
 undirected graphs. Unfortunately there is no closed form solution for
@@ -463,16 +467,22 @@ We can find $\vec{p}$ using either:
 - Eigenvalue decomposition
 - Power method
 
-## Eigenvalue solution
+### Eigenvalue solution
+
+We have seen the eigenvalues being used in previous lectures, and now
+we have found another problem that can be solved using the eigenvalue
+decomposition!
+\pause
 
 Given a square matrix $A$, the eigenvalue decomposition finds the
 eigenvectors $\vec{x}$ and the eigenvalues $\lambda$ that satisfy:
 $$
 	\lambda\vec{x} = A\vec{x}
 $$
+\pause
 
 If we find the eigenvalue decomposition of $T$, then the eigenvector
-with eigenvalue 1 is the stationary distribution.
+with eigenvalue $\lambda = 1$ is the stationary distribution.
 
 Using R, we can compute the eigenvalue decomposition of matrix `T` and store the result in `p` using:
 ```{r, eval=FALSE}
@@ -480,7 +490,7 @@ p = eigen(T)
 ```
 The eigenvalues are stored in `p$values` and the vectors in `p$vectors`.
 
-## Power Method
+### Power Method
 
 An alternative to using the eigenvalue decomposition for finding the
 stationary distribution, is to use the Power Method.
@@ -501,13 +511,13 @@ while(p != p.new) {
 ```
 The stationary distribution is found in `p`.
 
-## Examining the Stationary Distribution
+### Examining the Stationary Distribution
 
-### Example 
+#### Example 
 
 Let's use R to compute the stationary distribution for the following graph:
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Stationary distribution example."}
 g = graph.formula(A-+B, B-+C, C-+D, D-+A, A-+C)
 
 par(mar = c(0,0,0,0))
@@ -523,7 +533,7 @@ stationary distribution?
 
 # PageRank
 
-## PageRank vs Graph Stationary Distribution
+### PageRank vs Graph Stationary Distribution
 
 PageRank is a score given to a Web page based on its indegree. It is
 very similar to the stationary distribution over a directed graph.
@@ -533,7 +543,7 @@ graphs. The method used to compute PageRank, alters the graph to
 ensure that there is always a stationary distribution.
 
 
-## Ergodicity
+### Ergodicity
 
 \begin{block}{Definition}
 \alert{Ergodic}: Relating to or denoting systems or processes with the property that,
@@ -545,7 +555,7 @@ selection of points
 A graph is *ergodic* if we can find a finite path between all pairs of
 vertices. The right graph is not ergodic (there is no path to $v_1$).
 
-```{r, echo=FALSE, fig.width=3, fig.height=1.4}
+```{r, echo=FALSE, fig.width=3, fig.height=1.4, fig.cap="One ergodic, and one non-ergodic graph."}
 g = graph.formula(A-+B, B-+C, C-+D, D-+A)
 V(g)$label.cex = 0.8
 g2 = graph.formula(A-+B, B-+C, C-+D, D+-A)
@@ -558,13 +568,13 @@ layout=layout.fruchterman.reingold, vertex.size = 35, edge.arrow.size=0.4)
 
 ```
 
-## Ergodic Graphs
+### Ergodic Graphs
 
-### Problem
+#### Problem
 
 Which of the following graphs are ergodic?
 
-```{r, echo=FALSE, fig.width=4.5, fig.height=2.1}
+```{r, echo=FALSE, fig.width=4.5, fig.height=2.1, fig.cap="Find the ergodic graphs."}
 g1 = graph.formula(A-+B, A-+C, A-+D, D-+B)
 g2 = graph.formula(A-+B, B-+A, B-+C, C+-+D, D-+B)
 g3 = graph.formula(A+-+B, C+-+D)
@@ -599,7 +609,7 @@ box()
 ```
 
 
-## Non-Ergodicity
+### Non-Ergodicity
 
 If a graph is non-ergodic, it is usually because there are vertices
 with only outgoing or incoming edges. These vertices are a problem when
@@ -612,9 +622,35 @@ So vertices with only outgoing edges obtain 0 probability in the
 stationary distribution, and vertices with only incomming edges force
 all other vertices to have 0 probability in the stationary
 distribution.
+\pause
+
+Remember from the language model lecture that we do not like zero
+probability! How do we remove zero probabilities? We smooth the
+distribution (just as we did for the language model distributions).
+
+### Smoothed Probability Transition Matrix
+
+Recall that to smooth a distribution $p$, we require a background
+distribution $b$ (what we expect the probabilities to be) and
+smoothing constant $\lambda \in [0,1]$.
+
+The smoothed distribution is:
+$$
+	s = \lambda p + (1-\lambda)b
+$$
+
+- If $\lambda = 1$, then $s = p$
+- If $\lambda = 0$, then $s = b$
+- If $0 < \lambda < 1$, then $s$ is between $p$ and $b$
+
+So we want $\lambda$ to be close to 1, but not 1.
+
+\pause
+
+We have the probability of each transition $T$, but what we we choose as the background probability $B$ and the smoothing parameter $\lambda$?
 
 
-## Random Surfer Model
+### Random Surfer Model
 
 The random surfer model was developed by Google to compute the
 stationary distribution of the set of Web pages on the Web graph.
@@ -622,43 +658,23 @@ stationary distribution of the set of Web pages on the Web graph.
 To avoid the problems caused by non-ergodic graphs, the probability of
 moving from Web page to Web page (vertex to vertex) is given as:
 
-- Follow link: the random surfer follows a Web page link with probability $\alpha$
-- Random jump: the random surfer jumps to a random Web page with probability $1-\alpha$
+- Follow link: the random surfer follows a Web page link with probability $\lambda$
+- Random jump: the random surfer jumps to a random Web page with probability $1-\lambda$
 
 The random jump ensures that there is a probability of entering and
 leaving all pages, making the graph ergodic.
 
 
-## Random Surfer Probability
-
-Under the random surfer model, the probability of moving from page
-$v_i$ to page $v_j$ is:
-$$
-	P(v_i \rightarrow v_j) = \left \{
-	\begin{array}{ll}
-		\frac{\alpha}{\text{outdeg}(v_i)} + \frac{1-\alpha}{\norm{V}} & \text{if } e_{i,j}\in E \\
-		\frac{1-\alpha}{\norm{V}} & \text{if } e_{i,j}\not\in E
-	\end{array}
-	\right .
-$$
-where $V$ is the set of vertices, $E$ is the set of directed edges,
-$e_{i,j}$ is the edge from vertex $v_i$ to vertex $v_j$ and $\alpha
-\in [0,1]$ (usually 0.8).
-
-## Random Surfer Probability Transition Matrix
-
-The random surfer probability transition matrix is a linear
-combination of the graph probability transition matrix and a random
-jump matrix.
+### Random Surfer Probability Transition Matrix
 
 For a given graph $G$ with probability transition matrix $T$, the
 random surfer probability transition matrix is:
 $$
-	\alpha T + (1 - \alpha)J
+	\lambda T + (1 - \lambda)B
 $$
-where random jump matrix $J$ is:
+where the background probability matrix $B$ is:
 $$
-J = \left [
+B = \left [
 \begin{array}{cccc}
 	1/N & 1/N & \ldots & 1/N \\
 	1/N & 1/N & \ldots & 1/N \\
@@ -669,25 +685,29 @@ J = \left [
 $$
 and $N$ = $\norm{V}$.
 
-## PageRank
+Note that the background distribution is Uniform (all pages have the same probability of $1/N$).
+
+
+### PageRank
 
 PageRank is used (maybe) by Google to weight search results in terms
 of popularity.
 
-The PageRank scores are the probabilities in the stationary
-distribution of the Random Surfer probability transition matrix from
+The PageRank scores are the \alert{probabilities in the stationary
+distribution}	     of the Random Surfer probability transition matrix from
 the set of Web pages.
 
 A Web page's PageRank is found in the pages position in the stationary
 distribution.
 
-## Random Surfer Probability Transition Matrix
+### Smoothed Probability Transition Matrix
 
-### Example
+#### Example
 
-1. Compute the random surfer probability transition matrix for the following graph, using $\alpha = 0.8$:
+1. Compute the random surfer probability transition matrix for the following graph, using $\lambda = 0.8$:
+2. Use R to compute the PageRank (stationary distribution) for the set of vertices.
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Smoothed probability transition matrix example."}
 g = graph.formula(A-+B, B-+C, C-+A, D-+A)
 
 par(mar = c(0,0,0,0))
@@ -696,15 +716,16 @@ plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]
 layout=layout.fruchterman.reingold, vertex.size = 35, edge.arrow.size=0.4)
 
 ```
-2. Compute the PageRank (stationary distribution) for the set of vertices.
 
-## Random Surfer Probability Transition Matrix
 
-### Problem
+### Smoothed Probability Transition Matrix
 
-1. Compute the random surfer probability transition matrix for the following graph, using $\alpha = 0.8$:
+#### Problem
 
-```{r, echo=FALSE, fig.width=1.5, fig.height=1.5}
+1. Compute the random surfer probability transition matrix for the following graph, using $\lambda = 0.8$:
+2. Verify that the stationary distribution is $\vec{p} = [~0.47~0.05~0.05~0.43~]$
+
+```{r, echo=FALSE, fig.width=1.5, fig.height=1.5, fig.cap="Smoothed probability transition matrix problem."}
 g = graph.formula(A+-B, A+-C, A-+D, D-+A)
 
 par(mar = c(0,0,0,0))
@@ -713,12 +734,10 @@ plot(g, vertex.label = c(expression("v"[1]),expression("v"[2]),expression("v"[3]
 layout=layout.fruchterman.reingold, vertex.size = 35, edge.arrow.size=0.4)
 
 ```
-2. Verify that the stationary distribution is
-$\vec{p} = [~0.47~0.05~0.05~0.43~]$
 
 
 
-## Summary
+### Summary
 
 In this lecture, we found:
 
@@ -743,6 +762,6 @@ In this lecture, we found:
 
 
 
-## Next Lecture
+### Next Lecture
 
 Time 1 (trends, trend periodicity)

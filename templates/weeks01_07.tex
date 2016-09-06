@@ -1,0 +1,210 @@
+
+%\title{Unit Notes}
+%\date{Weeks 1 to 7}
+
+
+
+\renewcommand{\subsubsection}[1]{\paragraph{#1}}
+
+\usepackage{fancyvrb}
+\fvset{fontsize=\normalsize}
+% Prints a trailing space in a smart way.
+\usepackage{xspace}
+\usepackage{fullwidth}
+
+
+% Prints an epigraph and speaker in sans serif, all-caps type.
+\newcommand{\openepigraph}[2]{%
+  %\sffamily\fontsize{14}{16}\selectfont
+  \begin{fullwidth}
+  \sffamily\large
+  \begin{doublespace}
+  \noindent\allcaps{#1}\\% epigraph
+  \noindent\allcaps{#2}% author
+  \end{doublespace}
+  \end{fullwidth}
+}
+
+% Inserts a blank page
+\newcommand{\blankpage}{\newpage\hbox{}\thispagestyle{empty}\newpage}
+
+% Prints the month name (e.g., January) and the year (e.g., 2008)
+\newcommand{\monthyear}{%
+  \ifcase\month\or January\or February\or March\or April\or May\or June\or
+  July\or August\or September\or October\or November\or
+  December\fi\space\number\year
+}
+
+\usepackage{units}
+
+%\title{300958 Social Web Analytics}
+%\author{Laurence Park and Glenn Stone}
+%University of Western Sydney}
+% moved to article.sty
+
+\begin{document}
+
+~\vspace{3cm}
+
+\begin{titlepage}
+  \begin{center}
+    {\Huge\bfseries \printsubjectname{} \par}
+    \vspace{1cm}
+    {\huge Western Sydney University \par}
+    \vspace{1cm}
+    {\huge Weeks 1 to 7. Spring 2016 \par}
+    
+  \end{center}
+
+\vspace*{\fill}
+
+
+%\frontmatter
+% r.3 full title page
+
+
+%\thispagestyle{empty}
+%\maketitle
+
+
+% v.4 copyright page
+%\newpage
+\thispagestyle{empty}
+%~
+
+\vfill
+
+%\begin{fullwidth}
+%\setlength{\parindent}{0pt}
+%\setlength{\parskip}{\baselineskip}
+% Copyright \copyright\ \the\year\ \thanklessauthor
+% \par\smallcaps{Published by \thanklesspublisher}
+% \par\smallcaps{tufte-latex.googlecode.com}
+{\small%\itshape
+Level: 3,  Edition: Spring 2016. \\[0.5em]
+\copyright{} Copyright: University of Western Sydney, \the\year. \\[0.5em]
+No part of this publication may be reproduced or transmitted in any
+form or by any means, electronic or mechanical, including
+photocopying, recording, or by any information storage and retrieval
+system, without the prior written permission from the Dean, School of
+Computing, Engineering and Mathematics. Copyright for acknowledged
+materials reproduced herein is retained by the copyright holder. All
+readings in this publication are copied under licence in accordance
+with Part VB of the Copyright Act 1968. 
+}
+\par\textit{First printing, \monthyear}
+%\end{fullwidth}
+\end{titlepage}
+%\newpage
+
+\setcounter{tocdepth}{1}
+% r.5 contents
+\tableofcontents
+
+%\listoffigures
+%\listoftables
+
+
+\newcounter{week}
+
+\setcounter{week}{1}
+
+
+%\tableofcontents
+
+\mainmatter
+
+%% Week 1
+\setweek{0}
+
+\thispagestyle{plain}
+\graphicspath{lectures/introduction/}
+\lecturepart{Introduction to the Social Web}{Week 1}{week 1}{~}
+\input{lectures/introduction/intro.tex}
+
+\graphicspath{{lab/}}
+\section{Lab Exercises}
+\input{labs/300958.week02.lab.tex}
+\lecturepartend
+
+\setweek{1}
+%% Week 2
+\thispagestyle{plain}
+\lecturepart{Introduction to R and accessing Social Web data}{Week  2}{week 2}{~}
+\graphicspath{{lectures/Rprogramming/}}
+\input{lectures/Rprogramming/Rprogram.tex}
+\graphicspath{{lectures/api/}}
+\input{lectures/api/api.tex}
+\hrule
+\graphicspath{{lab/}}
+\section{Lab Exercises}
+\input{labs/300958.week03.lab.tex}
+\lecturepartend
+
+
+%% Week 3
+\makeatletter
+\addto@hook\every@verbatim{\footnotesize}
+\makeatother
+\RecustomVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},fontsize=\footnotesize}
+
+\setweek{2}
+\thispagestyle{plain}
+\lecturepart{Simple Exposure Analysis}{Week  3}{week 3}{~}
+\graphicspath{{lectures/}{lectures/exposure/}}
+\input{lectures/exposure/Exposure.tex}
+\graphicspath{{lab/}}
+\section{Lab Exercises}
+\input{labs/300958.week04.lab.tex}
+\lecturepartend
+
+
+%% Week 4
+\setweek{3}
+\thispagestyle{plain}
+\lecturepart{Text Mining 1: Indexing and Querying Text}{Week 4}{week 4}{~}
+\graphicspath{{lectures/}{lectures/text_analysis/}}
+\input{lectures/text_analysis/text_index.tex}
+\graphicspath{{lab/}}
+\section{Lab Exercises}
+\input{labs/300958.week05.lab.tex}
+\lecturepartend
+
+%% Week 5
+\setweek{4}
+\thispagestyle{plain}
+\lecturepart{Graphs 1: Introduction to graphs and their parameters}{Week 5}{week 5}{~}
+\graphicspath{{lectures/graphs/}}
+\input{lectures/graphs/graphs_intro.tex}
+\graphicspath{{lab/}}
+\section{Lab Exercises}
+\input{labs/300958.week06.lab.tex}
+\lecturepartend
+
+\makeatletter
+\addto@hook\every@verbatim{\footnotesize}
+\makeatother
+\RecustomVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},fontsize=\footnotesize}
+
+\setweek{5}
+\thispagestyle{plain}
+\lecturepart{Visualization of Social Web Data}{Week  6}{week 6}{~}
+\graphicspath{{lectures/visualization/}}
+\input{lectures/visualization/Viz.tex}
+\graphicspath{{lab/}}
+\section{Lab Exercises}
+\input{labs/300958.week07.lab.tex}
+\lecturepartend
+
+\setweek{6}
+\thispagestyle{plain}
+\lecturepart{Text Mining 2: Clustering}{Week  7}{week 7}{~}
+\graphicspath{{lectures/text_analysis}}
+\input{lectures/text_analysis/clustering.tex}
+\graphicspath{{lab/}}
+\section{Lab Exercises}
+\input{labs/300958.week08.lab.tex}
+\lecturepartend
+
+
+\end{document}

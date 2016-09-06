@@ -13,21 +13,25 @@ identifying a chosen companies Twitter image.
 
 To complete this project:
 
-1. Read through this specification
+1. Read through this specification.
 
 2. Form a group and register your group in the vUWS 300958 Project
    section.
 
-3. Choose a company that is active on Twitter and send Laurence an
-   email with subject "[300958 Project Company] Group: x; Company: y",
-   where x is your group number and y is your wanted wanted company
-   Twitter handle.  (e.g. if group 12 were choosing Telstra, the email
-   subject would be "[300958 Project Company] Group: 12; Company:
-   Telstra"). Laurence will reply to let you know if the company is
-   acceptable. Note that a given company cannot be allocated to more
-   than one group.
+3. Choose a company that is active on Twitter, check that it not
+   already on the list of [company
+   names](http://staff.scm.uws.edu.au/~lapark/300958/project/company_name2016.txt)
+   and send Laurence an email with subject "[300958 Project Company]
+   Group: x; Company: y", where x is your group number and y is your
+   wanted wanted company Twitter handle.  (e.g. if group 12 were
+   choosing Telstra, the email subject would be "[300958 Project
+   Company] Group: 12; Company: Telstra"). If your project name is
+   approved by Laurence, it will appear on the list of [company
+   names](http://staff.scm.uws.edu.au/~lapark/300958/project/company_name2016.txt)
+   within the week.  Note that a given company cannot be allocated to
+   more than one group.
 
-4. Complete the data analysis required by the specification
+4. Complete the data analysis required by the specification.
 
 5. Write up your analysis using your favourite word
    processing/typesetting program, making sure that all of the working
