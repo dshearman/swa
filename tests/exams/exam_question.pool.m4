@@ -2831,7 +2831,7 @@ working for them is dependent on their nationality. They obtained the following 
 \begin{enumerate}
 \item State the Null and alternative hypothesis of the test that needs to be conducted.
 
-\item State the which test statistic should be used for the test.
+\item State the which test statistic should be used for the test and provide its equation.
 
 \item Describe the randomisation process to obtain the distribution of
   the test statistic.
@@ -2846,8 +2846,6 @@ working for them is dependent on their nationality. They obtained the following 
   % end.rcode
 \end{center}
 
-\item What is wrong with this experiment and how could the experiment be improved?
-  
 \end{enumerate}
 
   \begin{workingbox}
@@ -2856,7 +2854,7 @@ working for them is dependent on their nationality. They obtained the following 
 \item $H_0$: Age and Nationality are independent. \xmark{1}
   $H_A$: They are not independent. \xmark{1}
 
-\item The $\chi^2$ statistic should be used to compare the sample to the expected independent values. \xmark{1}
+\item The $\chi^2$ statistic should be used to compare the sample to the expected independent values. \xmark{2}
   
 \item The randomisation distribution shows the distribution of $\chi^2$
   when age and nationality are independent. If we shuffle the ages,
@@ -2864,11 +2862,8 @@ working for them is dependent on their nationality. They obtained the following 
   random $\chi^2$ when $H_0$ is true. By repeating this many times we
   obtain the randomisation distribution. \xmark{2}
   
-\item The critical value of the distribution is \rinline{quantile(rchisq, 0.95)} compare this to \rinline{chisqs} to draw a conclusion. \xmark{1}
+\item The critical value of the distribution is \rinline{quantile(rchisq, 0.95)} compare this to \rinline{chisqs} to draw a conclusion. \xmark{2}
 
-\item The data identifies the people who have visited the LinkedIn
-  page. These people may not want a job. The data should be collected
-  from job applications. \xmark{2}
 
 \end{enumerate}
     
@@ -3222,15 +3217,13 @@ m4_define(_sentiment_q5,<[
   require("tm")
   $@
   
-  tweet = "furious happy"
+
   tweetWords = strsplit(tweet, " ")[[1]]
 
   a = c("happy","calm","furious","mean")
   
   tweetTable = table(factor(tweetWords, levels = a))
   
-  p = c(0.1,0.2,0.3,0.4)
-  n = c(0.1,0.1,0.1,0.7)
   names(p) = a
   names(n) = a
   ## P(T|S)

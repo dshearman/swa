@@ -6,7 +6,7 @@ m4_include(`exam_question.pool.m4')
 
 
 % Set up class variables
-\testtitle{Final Exam}
+\testtitle{Deferred Exam}
 \unitsession{Spring Session 2016}
 \unitname{Social Web Analytics}
 \unitcode{300958}
@@ -49,11 +49,11 @@ _precision(4)
   \begin{questions}[]
   
     _SimpleExposure_q4(<[
-    SEED = 12345
-    chisqs = 3.1;
-    pA = c(0.2,0.3);
-    pB = c(0.3,0.3);
-    pC = c(0.3,0.5);
+    SEED = 22345
+    chisqs = 4.5;
+    pA = c(0.8,0.3);
+    pB = c(0.3,0.5);
+    pC = c(0.4,0.5);
     pD = c(0.3,0.5);
     ]>)
 
@@ -65,8 +65,8 @@ _precision(4)
   \begin{questions}[]
     
     _text_index_q4(<[
-    d = list(c("do da da da do"),c("di di di do do"),c("da da da da da da"));
-    query = c("da di");
+    d = list(c("do da da da da"),c("di di da do do"),c("di di"));
+    query = c("do do");
     ]>)
     
   \end{questions}
@@ -76,7 +76,7 @@ _precision(4)
   \begin{questions}[]
   
   %graphs_q3(<[ g = graph.formula(A-B, A-C, A-D, C-E, B-F) ]>)
-    _graphs_q5(<[ g = graph.formula(A-B, B-C, C-D, B-E, C-F) ]>)
+    _graphs_q5(<[ g = graph.formula(A-B, B-C, C-D, D-E, E-F, F-A, B-E, E-C) ]>)
     
   \end{questions}
 
@@ -87,10 +87,10 @@ _precision(4)
     
     _clustering_q5(<[ 
     X = t(matrix(c(
-    0,2,
-    1,5,
-    3,2,
-    3,3),2,4)); missing = c(1,4);
+    0,0,
+    2,9,
+    0,1,
+    3,2),2,4)); missing = c(1,4);
     c1 = c(8,8); c2 = c(12,12); ]>)
     
   \end{questions}
@@ -103,7 +103,7 @@ _precision(4)
    %link_analysis_q3(<[
    % g = graph.formula(A+-+B, A+-C, A+-D, A-+E, B+-C, B-+D, D+-+E); ]>)
     _link_analysis_q5(<[
-    g = graph.formula(A+-+B, A+-+C, A+-+D, A+-+E, B+-+C, D+-+E); ]>)
+    g = graph.formula(A+-+B, A+-+C, A+-+D, A+-+E, B+-+C, D+-+E, B+-+D); ]>)
     
   \end{questions}
 
@@ -113,8 +113,8 @@ _precision(4)
   \begin{questions}[]
   
     _Trend_q5(<[ 
-    SEED = 80;
-    s = c(10,70,40,30)
+    SEED = 50;
+    s = c(10,20,40,50)
     trend = seq(10, 60, length=12)
     ]>)
     
@@ -127,8 +127,8 @@ _precision(4)
     
     _sentiment_q5(<[
     tweet = "furious happy";
-    p = c(0.1,0.2,0.3,0.4);
-    n = c(0.1,0.1,0.1,0.7);
+    p = c(0.4,0.1,0.1,0.4);
+    n = c(0.1,0.2,0.2,0.5);
     ]>)
     
   \end{questions}
