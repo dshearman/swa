@@ -81,11 +81,11 @@
 
 \RequirePackage{array}
 
-\RequirePackage{graphics}
+\RequirePackage{graphicx}
 
 \RequirePackage{ifthen}
 %\RequirePackage[hmargin={1.5cm,1.5cm},vmargin={3cm,3cm}, landscape]{geometry} 
-\RequirePackage[hmargin={1.5cm,1.5cm},vmargin={3cm,3cm}]{geometry} 
+\RequirePackage[hmargin={1.5cm,1.5cm},vmargin={3cm,2.5cm}]{geometry} 
 
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
@@ -142,6 +142,14 @@
    \fancyfoot[R]{\footnotesize (No page number- coversheet only)}
 }
 
+\fancypagestyle{coverstyle}
+{
+   \renewcommand\headrulewidth{0pt} % Removes funny header line 
+   \fancyhf{}
+   \fancyfoot[C]{\footnotesize Page \thepage\ of \pageref{LastPage}}
+   %\fancyfoot[R]{\footnotesize (No page number- coversheet only)}
+}
+
 
 \newcommand{\testend}{
   \answersection{
@@ -150,7 +158,7 @@
       \checkme Total: \arabic{totalmarks} marks
     \end{flushright}
   }
-  \begin{center}\textbf{\MakeUppercase{End of Examination Paper}}
+  \begin{center}\textbf{\MakeUppercase{End of Exam Paper}}
   \end{center}}
 
 
@@ -382,7 +390,8 @@
 \newcommand{\coversheet}{%
 %\begin{titlepage}
 
-\thispagestyle{firststyle}
+%% allows first page to be unnumbered
+\thispagestyle{coverstyle}
 
 ~\vspace{-5em}
 
@@ -395,8 +404,11 @@
 %\end{center}
 %{\large
 %Assessment and Graduation Unit }\\[0.5em]
+\begin{center}
+\includegraphics[scale=0.6]{WSU_Logo_RGB.pdf}
+\end{center}
 {\Large
-WESTERN SYDNEY UNIVERSITY \\[0.5em]
+%WESTERN SYDNEY UNIVERSITY \\[0.5em]
 \textbf{\@testtitle} -- \@unitsession
 } \\[1em]
 {\large
@@ -444,7 +456,7 @@ WESTERN SYDNEY UNIVERSITY \\[0.5em]
 \renewcommand{\arraystretch}{1.7}
 \begin{tabularx}{\textwidth}{|>{\raggedright}p{0.3\textwidth}|>{\raggedright\arraybackslash}X|}
 \hline
-\multicolumn{2}{|c|}{\underline{\textbf{STUDENT DETAILS}}} \\[-0.5em]
+%\multicolumn{2}{|c|}{\underline{\textbf{STUDENT DETAILS}}} \\[-0.5em]
 \multicolumn{2}{|l|}{\footnotesize \textit{Complete your details in this section when instructed by the Exam Supervisor at the start of the exam.}} \\[-1em]
 \multicolumn{2}{|l|}{\footnotesize \textit{You should also complete your details on any answer booklets provided.}} \\
 \hline
@@ -476,7 +488,7 @@ WESTERN SYDNEY UNIVERSITY \\[0.5em]
 \hline
 \multicolumn{2}{|c|}{\underline{\textbf{EXAM INSTRUCTIONS}}} \\[-0.5em]
 \multicolumn{2}{|l|}{\footnotesize \textit{Read all the information below and follow any instructions carefully before proceeding.}} \\[-1em]
-\multicolumn{2}{|l|}{\footnotesize \textit{You must comply with all directions given by Exam Supervisors.}} \\[-1em]
+\multicolumn{2}{|l|}{\footnotesize \textit{This exam is printed on both sides of the paper – ensure you answer all the questions.}} \\[-1em]
 \multicolumn{2}{|l|}{\footnotesize \textit{You may begin writing when instructed by the Exam Supervisor at the start of the exam.}} \\[-1em]
 \multicolumn{2}{|l|}{\footnotesize \textit{Clearly indicate which question you are answering on any Examination Answer Booklets used.}} \\
 \hline
@@ -488,7 +500,7 @@ WESTERN SYDNEY UNIVERSITY \\[0.5em]
 \hline
 \textbf{Total Number of Pages:} & \pageref{LastPage} \\
 \hline
-\textbf{Value of Questions:} & Exam questions are worth 8 marks, giving a total of 64 marks. \\
+\textbf{Value of Questions:} & Exam questions are worth 8 marks, giving a total of 56 marks. \\
 \hline
 \textbf{Answering Questions:} & Answer all questions in the Examination Answer Booklet provided. \\
 \hline
@@ -517,8 +529,6 @@ Any calculator which has the primary function of a calculator is allowed.  For e
 \end{tabularx}
 \renewcommand{\arraystretch}{1.3}
 %\end{center}
-
-
 \testsection{
 %  \begin{center}
 %    \textbf{INSTRUCTIONS} \\
@@ -529,14 +539,21 @@ Any calculator which has the primary function of a calculator is allowed.  For e
 %  }
 \hfill
   \begin{center}
-    \underline{\textbf{DO NOT TAKE THIS PAPER FROM THE EXAMINATION ROOM}}
+    \underline{\textbf{DO NOT TAKE THIS PAPER FROM THE EXAM ROOM}}
   \end{center}
 }
 
 %\end{titlepage}}
 \newpage
+\vspace*{\fill}
+  \begin{center}
+    \textbf{This page intentionally left blank}
+  \end{center}
+\vspace*{\fill}
+\newpage
 \clearpage
-\setcounter{page}{1}
+%% reset page numbering
+%\setcounter{page}{1}
 }
 
 \newcommand{\studentinstructionstesttwo}{

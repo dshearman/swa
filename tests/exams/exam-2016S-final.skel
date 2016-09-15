@@ -1,0 +1,137 @@
+% -*- Rnw -*-
+\documentclass{uwsexamTFS}
+
+m4_include(`exam_question.pool.m4')
+
+
+
+% Set up class variables
+\testtitle{Final Exam}
+\unitsession{Spring Session 2016}
+\unitname{Social Web Analytics}
+\unitcode{300958}
+\testtime{2 hours, includes reading time}
+\questioncount{7}
+\lecturername{Laurence Park}
+\studentinstructions{
+\begin{enumerate}
+\item Write your name and student number on the top of this exam paper
+  and on all answer booklets.
+\item All exams include reading time, which allows you to spend some
+  time at the start of the examination composing yourself, reading the
+  exam paper, and planning which questions to answer, and how. We
+  advise you to read the instructions and questions carefully, before
+  you begin writing. \textbf{However, you are allowed to begin writing
+    straight away if you wish}.
+\item This is an ``open book'' exam. Any written or printed material
+  may be brought into the exam.
+\item Scientific, non-programmable hand held calculators are
+  permitted.
+\item Answer all questions in the answer booklet provided.
+\item There are 56 marks available. The marks assigned to each problem
+  are presented at the top of the problem. All working must be shown
+  to gain full marks.
+\item All 8 questions must be answered to obtain full marks.
+\end{enumerate}}
+
+
+
+
+\begin{document}
+
+\coversheet
+
+% Set the precision of the results
+_precision(4)
+
+  \question{Question 1}{2 + 1 + 2 + 1 + 2 = 8 marks}
+  
+  \begin{questions}[]
+  
+    _SimpleExposure_q4(<[
+    SEED = 12345
+    chisqs = 3.1;
+    pA = c(0.2,0.3);
+    pB = c(0.3,0.3);
+    pC = c(0.3,0.5);
+    pD = c(0.3,0.5);
+    ]>)
+
+  \end{questions}
+
+  \pagebreak
+  \question{Question 2}{2 + 2 + 2 + 2 = 8 marks}
+
+  \begin{questions}[]
+    
+    _text_index_q4(<[
+    d = list(c("do da da da do"),c("di di di do do"),c("da da da da da da"));
+    query = c("da di");
+    ]>)
+    
+  \end{questions}
+
+  \question{Question 3}{2 + 2 + 2 + 2 = 8 marks}
+
+  \begin{questions}[]
+  
+  %graphs_q3(<[ g = graph.formula(A-B, A-C, A-D, C-E, B-F) ]>)
+    _graphs_q5(<[ g = graph.formula(A-B, B-C, C-D, B-E, C-F) ]>)
+    
+  \end{questions}
+
+
+  \question{Question 4}{2 + 2 + 2 + 2 = 8 marks}
+
+  \begin{questions}[]
+    
+    _clustering_q5(<[ 
+    X = t(matrix(c(
+    0,2,
+    1,5,
+    3,2,
+    3,3),2,4)); missing = c(1,4);
+    c1 = c(8,8); c2 = c(12,12); ]>)
+    
+  \end{questions}
+
+
+  \question{Question 5}{2 + 2 + 2 + 2 = 8 marks}
+
+  \begin{questions}[]
+    
+   %link_analysis_q3(<[
+   % g = graph.formula(A+-+B, A+-C, A+-D, A-+E, B+-C, B-+D, D+-+E); ]>)
+    _link_analysis_q5(<[
+    g = graph.formula(A+-+B, A+-+C, A+-+D, A+-+E, B+-+C, D+-+E); ]>)
+    
+  \end{questions}
+
+  \pagebreak
+  \question{Question 6}{2 + 2 + 2 + 2 = 8 marks}
+  
+  \begin{questions}[]
+  
+    _Trend_q5(<[ 
+    SEED = 80;
+    s = c(10,70,40,30)
+    trend = seq(10, 60, length=12)
+    ]>)
+    
+  \end{questions}
+
+  \pagebreak
+  \question{Question 7}{2 + 2 + 2 + 2 = 8 marks}
+
+  \begin{questions}[]
+    
+    _sentiment_q5(<[
+    ]>)
+    
+  \end{questions}
+  
+  \testend
+
+
+\end{document}
+

@@ -318,11 +318,11 @@ on the graph by multiplying $T\vec{p}$. If we examine the probability
 of moving to vertex $v_j$:
 $$
 \begin{aligned}
-	(T\vec{p})_j &= {\sum_{v_i \rightarrow v_j} p_{v_i} T_{v_i,v_j}} \\
-	         &= {\sum_{v_i \rightarrow v_j} \frac{\text{deg}(v_i)}{\text{vol}(G)} \frac{1}{\text{deg}(v_i)}} \\
-	         &= {\sum_{v_i \rightarrow v_j} \frac{1}{\text{vol}(G)}}
-	         = \frac{\text{deg}(v_j)}{\text{vol}(G)}
-	         = p_j
+	(T\vec{p})_i &= {\sum_{v_j \rightarrow v_i} p_{v_i} T_{v_i,v_j}} \\
+	         &= {\sum_{v_j \rightarrow v_i} \frac{\text{deg}(v_j)}{\text{vol}(G)} \frac{1}{\text{deg}(v_j)}} \\
+	         &= {\sum_{v_j \rightarrow v_i} \frac{1}{\text{vol}(G)}}
+	         = \frac{\text{deg}(v_i)}{\text{vol}(G)}
+	         = p_i
 \end{aligned}
 $$
 

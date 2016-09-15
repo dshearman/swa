@@ -2789,3 +2789,619 @@ TweetMe have obtained the count of tweets containing references to their company
 
 
 ]>)
+
+
+
+
+m4_define(_SimpleExposure_q4,<[
+\squestion
+
+% begin.rcode echo=FALSE, results="hide", message=FALSE
+
+$@
+
+
+set.seed(SEED)
+
+X = rbind(
+t(rmultinom(1, 100, pA)),
+t(rmultinom(1, 80, pB)),
+t(rmultinom(1, 70, pC)),
+t(rmultinom(1, 50, pD)))
+
+
+age = c("17-25", "26-35","36-45","46-55")
+nation = c("Australian", "Not Australian")
+rownames(X) = age
+colnames(X) = nation
+X = t(X)
+df = (nrow(X) - 1)*(ncol(X) - 1)
+
+rchisq = rchisq(1000, df = df)
+% end.rcode
+
+FunkyFones want to determine if the age of people interested in
+working for them is dependent on their nationality. They obtained the following data, containing the number of visits from people of a given nationality and age group,  from their LinkedIn page.
+\begin{center}
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(X)
+  % end.rcode
+\end{center}
+
+\begin{enumerate}
+\item State the Null and alternative hypothesis of the test that needs to be conducted.
+
+\item State the which test statistic should be used for the test.
+
+\item Describe the randomisation process to obtain the distribution of
+  the test statistic.
+  
+\item Given the following randomisation distribution and sample test
+  statistic value of \rinline{chisqs}, what is the conclusion of the
+  test?
+
+\begin{center}
+  % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
+  hist(rchisq, main = "Randomisation distribution", xlab = "Randomised statistic")
+  % end.rcode
+\end{center}
+
+\item What is wrong with this experiment and how could the experiment be improved?
+  
+\end{enumerate}
+
+  \begin{workingbox}
+
+\begin{enumerate}
+\item $H_0$: Age and Nationality are independent. \xmark{1}
+  $H_A$: They are not independent. \xmark{1}
+
+\item The $\chi^2$ statistic should be used to compare the sample to the expected independent values. \xmark{1}
+  
+\item The randomisation distribution shows the distribution of $\chi^2$
+  when age and nationality are independent. If we shuffle the ages,
+  construct the table, and compute the $\chi^2$ value, we obtain one
+  random $\chi^2$ when $H_0$ is true. By repeating this many times we
+  obtain the randomisation distribution. \xmark{2}
+  
+\item The critical value of the distribution is \rinline{quantile(rchisq, 0.95)} compare this to \rinline{chisqs} to draw a conclusion. \xmark{1}
+
+\item The data identifies the people who have visited the LinkedIn
+  page. These people may not want a job. The data should be collected
+  from job applications. \xmark{2}
+
+\end{enumerate}
+    
+    
+  \end{workingbox}
+
+
+]>)
+
+
+m4_define(_text_index_q4,<[
+
+  %%%% construct text index, weight and query
+  
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide", message=FALSE
+  $@
+
+
+  s = sapply(d,strsplit," ")
+  terms = unique(unlist(s))
+  ftable = function(x) { table(factor(x, levels = terms)) }
+  A = t(sapply(s, ftable))
+  rownames(A) = c("D1","D2","D3")
+  
+  IDF = log(nrow(A)/apply(A > 0,2,sum))
+  TF = log(A + 1)
+  TF.IDF = TF %*% diag(IDF)
+
+
+  qs = strsplit(query ," ")
+  qt = ftable(qs[[1]])
+
+  qw = log(qt + 1)*IDF
+  
+  ip = TF.IDF[1,] %*% qw
+  qwn = sqrt(sum(qw^2))
+  dwn = sqrt(sum(TF.IDF[1,]^2))
+  
+  s1 = ip/(qwn*dwn)
+
+  % end.rcode 
+
+  Tweets have started to appear from unknown sources, using an alien
+  language. The three most recent tweets are:
+  \begin{itemize}
+  \item \rinline{d[[1]]}
+  \item \rinline{d[[2]]}
+  \item \rinline{d[[3]]}
+  \end{itemize}
+
+    
+  \begin{enumerate}
+
+  \item Should we perform stop word removal and/or stemming on these three tweets?
+    
+  \item Construct the document term frequency matrix.
+   
+  \item Compute the TF-IDF weights for the first tweet.
+
+  \item Given the query ``\rinline{query}'', compute the document score for the first tweet,
+    using the Cosine similarity between the TF-IDF weighted first tweet
+    and TF-IDF weighted query.
+
+  \end{enumerate}
+  
+  \begin{workingbox}
+    \begin{enumerate}
+    \item Stop words and stemming is specific to the language. Since
+      we are unfamiliar with the alien language, we should not remove
+      stop words or stem. \xmark{2}
+      
+    \item   
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(A)
+      % end.rcode 
+      \xmark{2}
+
+    \item IDF = [\rinline{IDF}], TF = [\rinline{TF[1,]}], TF-IDF = [\rinline{TF.IDF[1,]}] \xmark{2}
+
+    \item The weighted query vector is [\rinline{qw}]. The Cosine similarity is $qd_1/(\|q\|\|d\|)$.
+      $qd_1 = \rinline{ip}$, $\|q\| = \rinline{qwn}$, $\|d_1\| = \rinline{dwn}$. So the document score for $d_1$ is \rinline{s1}. \xmark{2}
+    \end{enumerate}
+    
+    
+  \end{workingbox}
+]>)
+
+
+
+m4_define(_graphs_q5,<[
+
+  \squestion
+  
+  % begin.rcode echo=FALSE, results="hide", message=FALSE
+  require("igraph")
+  $@
+  #g = graph.formula(A-B, A-C, A-D, B-D)
+  A = as.matrix(get.adjacency(g))
+  d = degree(g)
+  close = 1/closeness(g)
+  n = length(d)
+  V(g)$color = "white"
+  V(g)$label.color = "black"
+  E(g)$color = "black"
+  names(d) = LETTERS[1:n]
+  close = 1/closeness(g)
+  % end.rcode 
+
+  The aliens have also transmitted the following matrix, that may represent a graph.
+  % begin.rcode echo=FALSE,results="verbatim"
+  A
+  % end.rcode 
+
+  Using this adjacency matrix:
+  \begin{enumerate}
+  \item Draw the graph that is represented by the adjacency matrix.
+  \item Tabulate the degree distribution and state if the graph is
+    more similar to a Erdös-Renyi graph or Barabasi-Albert graph.
+  \item Compute the closeness centrality score for each vertex, and
+    identify which vertex is the most central according to closeness
+    centrality.
+  \item After viewing the graph, a colleague has suggested that the
+    graph may represent the constellation (pattern) of stars that the aliens
+    live near. Why is this not likely to be true.
+  \end{enumerate}
+  
+  \begin{workingbox}
+    \marknote{For each of these four questions, give 1 mark for the correct
+      working and 1 mark for the right answer.}
+    
+    \begin{enumerate}
+    \item The graph is:
+      \begin{center}
+        % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
+        par(mar = c(0,0,0,0))
+        plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:n])
+        % end.rcode 
+      \end{center}
+    \item The degree distribution is:
+      \begin{center}
+        \begin{minipage}{0.5\textwidth}
+          % begin.rcode echo=FALSE,results="verbatim"
+          table(factor(degree(g), c(0,1,2,3,4,5)))
+          % end.rcode 
+        \end{minipage}
+        \xmark{1}
+      \end{center}
+      If the distribution is similar to Poisson, the graph is a
+      Erdös-Renyi graph. If the distribution is similar to
+      Exponential, the graph is a Barabasi-Albert graph. \xmark{1}
+
+    \item The closeness centrality score for each vertex is [\rinline{close}]. The most central vertex is vertex \rinline{names(which(close == max(close)))} with a score of \rinline{max(close)}. \xmark{2}
+      
+    \item Star constellations have a specific pattern, allowing is to
+      identify them. The graph we drew can be drawn in many different
+      ways, as long and the edges are connected to the correct
+      vertices. So even if the graph represented a constellation, it
+      is not likely that we drew the constellation correctly. \xmark{2}
+      
+    \end{enumerate}
+    
+  \end{workingbox}
+]>)
+
+
+m4_define(_clustering_q5,<[
+  
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide", message=FALSE
+  
+  set.seed(1)
+  $@
+
+  rownames(X) = LETTERS[1:nrow(X)]
+  d = dist(X, method = "manhattan")
+  D = as.matrix(d)
+  D.missing = D
+  z = D[missing[1],missing[2]]
+  D.missing[missing[1],missing[2]] = NA
+  D.missing[missing[2],missing[1]] = NA
+
+  M = cmdscale(D,2)
+  
+  h = hclust(d, method="single")
+  min.dist = function(D) {
+    a = dim(D)[1]
+    row = which.min(apply(D + diag(rep(10,a)), 2, min))
+    col = apply(D + diag(rep(10,a)), 2, which.min)[row]
+    return(c(row,col))
+  }
+  
+  merge.rows = function(D, pos) {
+    a = D[pos[2],,drop=FALSE]
+    A = D[-pos[2],,drop=FALSE]
+    A[pos[1],] = apply(rbind(A[pos[1],,drop=FALSE],a),2,min)
+    return(A)
+  }
+  
+  merge.row.col = function(D, pos) {
+   pos = sort(pos)
+   Dt = merge.rows(D,pos)
+   E = merge.rows(t(Dt),pos)
+   mname = paste(colnames(D)[pos[1]],"-",colnames(D)[pos[2]], sep="")
+   colnames(E)[pos[1]] = mname
+   rownames(E)[pos[1]] = mname
+   return(E)
+  }
+  % end.rcode 
+
+  A colleague has provided the following data containing four objects:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(X)
+  % end.rcode 
+  and the partially completed distance matrix of the four objects:
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(D.missing)
+  % end.rcode 
+  \begin{enumerate}
+  \item Which metric was used to compute the distances?
+  \item Compute the missing distance (marked ``NA'').
+  \item Your colleague wants to use k-means clustering on the four
+    objects to obtain two clusters. Explain why k-means can't be
+    applied directly the the four objects, and how to transform the
+    data into an appropriate form for k-means clustering.
+  \item After transforming the data, we have obtained the four points below:
+    \begin{center}
+      % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=3, fig.height=3
+      plot(M)
+      % end.rcode 
+    \end{center}
+    Your colleague wants to initialise the two k-means cluster
+    centres to $c_1 = [\rinline{c1}]$ and $c_2 = [\rinline{c2}]$.
+    Which objects do you predict will belong to each cluster $c_1$
+    and $c_2$ after performing the k-means clustering?
+  \end{enumerate}
+  
+  \begin{workingbox}
+    
+    \begin{enumerate}
+    \item Manhattan distance. \xmark{2}
+    \item The missing distance is \rinline{z}. \xmark{2}
+    \item k-means clusters based on Euclidean distance, but the object
+      distances are measured using Manhattan distance. We must
+      transform the objects to a Euclidean distance space using
+      Multi-Dimensional scaling before using k-means. \xmark{2}
+    \item After one iteration all points belong to $c_1$ and none to
+      $c_2$, therefore depending on the algorithm, $c_2$ will either
+      disappear, or not move, so all points will belong to cluster
+      $c_1$. Further iterations will not change the clusters. \xmark{2}
+    \end{enumerate}
+  
+  \end{workingbox}
+]>)
+
+
+
+
+
+m4_define(_link_analysis_q5,<[
+
+  %%%% Mean, standard deviation, mode, median, quantiles
+
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide"
+  require("igraph")
+  $@
+
+  V(g)$color = "white"
+  V(g)$label.color = "black"
+  E(g)$color = "black"
+  N = length(V(g))
+  alpha = 0.8
+  A = t(as.matrix(get.adjacency(g)))
+  T = A %*% diag(1/apply(A,2,sum))
+  p = degree(g, mode="out")
+  p = p/sum(p)
+
+  % end.rcode 
+  
+
+  Using the following directed graph:
+  
+  \begin{center}
+    % begin.rcode echo=FALSE,results="asis", fig=TRUE, fig.width=4, fig.height=4
+    par(mar = c(0,0,0,0))
+    plot(g, layout=layout.fruchterman.reingold, vertex.size = 35, vertex.label = LETTERS[1:N])
+    % end.rcode 
+  \end{center}
+  
+  \begin{enumerate}
+  \item Construct the probability transition matrix.
+  \item State if the graph is ergodic and why or why not.
+  \item Construct the random surfer probability transition matrix using $\lambda = 1$.
+  \item Compute the stationary distribution.
+  \end{enumerate}
+  
+  \begin{workingbox}
+    
+    \begin{enumerate}
+    \item The probability transition matrix is:
+      \begin{center}
+      \begin{minipage}{0.5\textwidth}
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(T)
+      % end.rcode 
+      \end{minipage}
+      \xmark{2}
+      \end{center}
+    \item The graph is ergodic if there is a path from all vertices to
+      all other vertices. This student should report if all paths
+      exist, and if not, where a path does not exist. \xmark{2}
+      
+    \item The random surfer probability transition matrix using $\lambda = 1$ is $\lambda T + (1 - \lambda)B = T$ when $\lambda = 1$. So the random surfer probability transition matrix is:
+      
+      \begin{center}
+      \begin{minipage}{0.5\textwidth}
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(T)
+      % end.rcode 
+      \end{minipage}
+      \xmark{2}
+      \end{center}
+    \item We can see that even though the graph is directional, all
+      edges are bidirectional, which is equivalent to
+      undirectional. Therefore the stationary distribution is proportional
+      to the degree of each vertex.
+      % begin.rcode echo=FALSE,results="verbatim"
+      print(p)
+      % end.rcode 
+      \xmark{2}
+      
+    \end{enumerate}
+    
+    
+  
+  \end{workingbox}
+]>)
+
+
+
+
+m4_define(_sentiment_q5,<[
+
+  \squestion
+  
+  % begin.rcode echo=FALSE,results="hide",message=FALSE
+  require("tm")
+  $@
+  
+  tweet = "furious happy"
+  tweetWords = strsplit(tweet, " ")[[1]]
+
+  a = c("happy","calm","furious","mean")
+  
+  tweetTable = table(factor(tweetWords, levels = a))
+  
+  p = c(0.1,0.2,0.3,0.4)
+  n = c(0.1,0.1,0.1,0.7)
+  names(p) = a
+  names(n) = a
+  ## P(T|S)
+  X = rbind(p,n)
+  rownames(X) = c("Positive","Negative")
+  ## P(S)
+  ps = 0.6
+  ## P(S|T) = P(T|S)P(S)/P(T)
+
+  ## P(T) = sum(P(T|S)*P(S))
+
+  
+  pTS = diag(c(ps,1-ps)) %*% X
+  pT = colSums(pTS)
+
+  pTweet = prod(pT^tweetTable)
+  pTweetP = prod(p^tweetTable)
+  pTweetN = prod(n^tweetTable)
+  
+  pSPTweet = pTweetP*ps/pTweet
+  pSNTweet = pTweetN*(1-ps)/pTweet
+  
+  llr = log(pSPTweet/pSNTweet)
+  
+  % end.rcode 
+
+  
+  The angry tweet naive Bayes classifier computes the tweet sentiment
+  based on the following term probabilities (e.g. $P(\text{term = happy}\vert \text{sentiment = Pos}) = 0.1$).
+  % begin.rcode echo=FALSE,results="verbatim"
+  print(X)
+  % end.rcode 
+  We want to compute the sentiment of a chosen tweet containing the
+  words ``furious happy!'' using a Naive Bayes Classifier.  Given that
+  the probability of a randomly chosen tweet having Positive sentiment
+  is $P(\text{sentiment = Pos}) = \rinline{ps}$:
+  \begin{enumerate} 
+  \item Compute the probability of the chosen tweet given that the tweet has
+    positive sentiment $P(\text{tweet}\vert \text{sentiment = Pos})$,
+    and the probability given that the tweet has negative \\ sentiment
+    $P(\text{tweet}\vert \text{sentiment = Neg})$.
+  \item Compute $P(\text{term})$ for all four terms, then compute the
+    probability of the chosen tweet $P(\text{tweet})$.
+  \item Compute the probability that the tweet has positive sentiment
+    $P(\text{sentiment = Pos}\vert \text{tweet})$, and
+    the probability that the tweet has negative sentiment
+    $P(\text{sentiment = Neg}\vert \text{tweet})$.
+  \item Compute the log likelihood ratio of the tweet's sentiment and
+    predict the sentiment based on the result.
+  \end{enumerate}
+  
+  \begin{workingbox}
+  \begin{enumerate} 
+  \item $P(\text{tweet}\vert \text{sentiment = Pos}) = {\prod_{\text{term in tweet}} P(\text{term}\vert \text{sentiment = Pos})}$ = \rinline{pTweetP}. \\
+      $P(\text{tweet}\vert \text{sentiment = Neg}) = {\prod_{\text{term in tweet}} P(\text{term}\vert \text{sentiment = Neg})}$ = \rinline{pTweetN}. \xmark{2}
+
+  \item $P(\text{term}) = {\sum_{\text{sentiment}} P(\text{term}\vert \text{sentiment})P(\text{sentiment})}$ \\
+    The probabilities $P(\text{term}\vert \text{sentiment})P(\text{sentiment})$ are:
+    % begin.rcode echo=FALSE,results="verbatim"
+    print(pTS)
+    % end.rcode 
+    The final probabilities $P(\text{term})$ are:
+    % begin.rcode echo=FALSE,results="verbatim"
+    print(pT)
+    % end.rcode 
+    $P(\text{tweet}) = {\prod_{\text{terms in tweet}} P(\text{term})}$ = \rinline{pTweet}.\xmark{2}
+
+    \item 
+      $P(\text{sentiment = Pos}\vert \text{tweet}) = 
+      P(\text{tweet}\vert \text{sentiment = Pos})P(\text{sentiment = Pos})/P(\text{tweet})$ = $\rinline{pTweetP}\times\rinline{ps}/\rinline{pTweet}$ = \rinline{pSPTweet}. \\
+      $P(\text{sentiment = Neg}\vert \text{tweet}) = 
+      P(\text{tweet}\vert \text{sentiment = Neg})P(\text{sentiment = Neg})/P(\text{tweet})$ = $\rinline{pTweetN}\times\rinline{1-ps}/\rinline{pTweet}$ = \rinline{pSNTweet}. \xmark{2}
+    \item The log likelihood ratio is 
+      $\log{(P(\text{sentiment = Pos}\vert \text{tweet})/P(\text{sentiment = Neg}\vert \text{tweet}))}$ = \rinline{llr}. If \rinline{llr} > 0, then the tweet has positive sentiment, otherwise it has negative sentiment. \xmark{2}
+    \end{enumerate}
+  
+    
+  \end{workingbox}
+]>)
+
+
+
+
+m4_define(_Trend_q5,<[
+\squestion
+
+
+
+Apple have recorded the number of tweets per season over three years,
+containing the hashtag \#appleproblems, to gauge the trend in negative
+sentiment towards the company.  They want to use this information to
+work out which time of year they should begin their advertising
+campaign.
+\begin{center}
+  % begin.rcode echo=FALSE,results="verbatim"
+$@
+#set.seed(56235)
+#require("xtable")
+set.seed(SEED)
+xx = rpois(length(trend), trend + s)
+tmp = matrix(xx, ncol=4, byrow=TRUE)
+dnames = list(paste("Year",1:3), c("Summer","Autumn","Winter","Spring"))
+dimnames(tmp) = dnames
+#print(xtable(tmp), floating=FALSE)
+print(tmp)
+% end.rcode
+\end{center}
+
+The square root of the tweet counts are presented below split into
+their estimated trend and periodic components.
+
+\begin{center}
+{\bf Trend}\\[1ex]
+% begin.rcode echo=FALSE, results="verbatim"
+d = stats::decompose(ts(sqrt(xx), freq=4))
+et = as.numeric(d$trend)
+etc = formatC(et, format="f", digits=2)
+tmp = matrix(et, ncol=4, byrow=TRUE)
+dimnames(tmp) = dnames
+
+tmp[2,2] = NA #missing.symbol
+adat = round(sqrt(xx)[4:8],3)
+#print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
+print(tmp)
+% end.rcode
+
+{\bf Periodic}\\[1ex]
+% begin.rcode echo=FALSE, results="verbatim"
+ss = d$figure
+#ssc = formatC(ss, format="f", digits=3)
+tmp = matrix(ss, ncol=4, byrow=TRUE)
+dimnames(tmp) = list("Periodic", dnames[[2]])
+
+tmp[1,2] = NA #missing.symbol
+ansS = -sum(as.numeric(tmp[1,-2]))
+#print(xtable(tmp), floating=FALSE, sanitize.text.function=function(x) x)
+print(tmp)
+% end.rcode
+\end{center}
+
+% begin.rcode echo=FALSE, results="verbatim"
+m = lm(et ~ I(1:length(et)))
+grad = coef(m)[2]
+% end.rcode
+
+
+\begin{enumerate}
+\item Compute the missing trend component for Autumn of Year 2.
+\item Compute the missing periodic component for Autumn.
+\item Which Season should Apple begin its advertising campaign and why?
+\item It was found that the trend component can be closely modelled
+  using a linear regression with gradient \rinline{grad}. Using this
+  gradient, and the trend and periodic data, how many tweets do we
+  predict contain "\#appleproblems" in the Winter of Year 3?
+\end{enumerate}
+
+\begin{workingbox}
+\begin{enumerate}
+\item The trend is a 4-point moving average on the sqrt scale, so is
+\begin{center}
+(\rinline{adat[1]}/2 + \rinline{paste(adat[2:4], collapse="+")} + \rinline{adat[5]}/2)/3 = \rinline{(adat %*% c(0.5,1,1,1,0.5))/4}
+\end{center}
+\xmark{2}
+
+\item The seasonal component should sum to zero so the missing component is \rinline{ansS}
+\xmark{2}
+
+\item Autumn has the largest periodic component, meaning that month has the most tweets containing "\#appleproblems". Starting the advertising campaign in Autumn might be best to increase everyone's positive sentiment. \xmark{2}
+
+\item Given that the gradient is \rinline{grad} and that the trend component of Autumn in Year 3 is \rinline{et[10]}, we predict that the trend for Winter in Year 3 is \rinline{et[10] + grad}. Adding in the periodic effect gives \rinline{et[10] + grad + ss[3]}. Finally, we square it to remove the square root transformation, giving \rinline{(et[10] + grad + ss[3])^2} expected tweets in Winter of Year 3. \xmark{2}
+\end{enumerate}
+\end{workingbox}
+
+]>)

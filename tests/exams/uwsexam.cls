@@ -126,7 +126,7 @@
       \checkme Total: \arabic{totalmarks} marks
     \end{flushright}
   }
-  \begin{center}\textbf{\MakeUppercase{End of Examination Paper}}
+  \begin{center}\textbf{\MakeUppercase{End of Exam Paper}}
   \end{center}}
 
 

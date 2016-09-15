@@ -15,21 +15,21 @@ To complete this project:
 
 1. Read through this specification.
 
-2. Form a group and register your group in the vUWS 300958 Project
-   section.
+2. Form a group and register your group using the [300958 dashboard](http://staff.scm.uws.edu.au/~lapark/300958/dashboard/login.php)
 
-3. Choose a company that is active on Twitter, check that it not
+3. Choose a company that is active on Twitter, check that it is not
    already on the list of [company
-   names](http://staff.scm.uws.edu.au/~lapark/300958/project/company_name2016.txt)
-   and send Laurence an email with subject "[300958 Project Company]
-   Group: x; Company: y", where x is your group number and y is your
-   wanted wanted company Twitter handle.  (e.g. if group 12 were
-   choosing Telstra, the email subject would be "[300958 Project
-   Company] Group: 12; Company: Telstra"). If your project name is
-   approved by Laurence, it will appear on the list of [company
-   names](http://staff.scm.uws.edu.au/~lapark/300958/project/company_name2016.txt)
-   within the week.  Note that a given company cannot be allocated to
-   more than one group.
+   names](http://staff.scm.uws.edu.au/~lapark/300958/dashboard/names.php)
+   (login required).  Then submit the Twitter handle of the company
+   using the "Submit Twitter handle" section of the [300958
+   dashboard](http://staff.scm.uws.edu.au/~lapark/300958/dashboard/upload_file.php).
+   Once submitted, your chosen Twitter handle will appear on the the
+   list of [company
+   names](http://staff.scm.uws.edu.au/~lapark/300958/dashboard/names.php)
+   with a time stamp.  Note that a given company cannot be allocated
+   to more than one group. If duplicate companies are found on the
+   list, the group with the later time stamp will be asked to find a
+   new company.
 
 4. Complete the data analysis required by the specification.
 
@@ -41,8 +41,9 @@ To complete this project:
    report. Please make sure that the names and student numbers of each
    group member are clearly displayed on the front page.
 
-7. Submit the report as a PDF by the due date.
-
+7. Submit the report as a PDF by the due date using the "Upload Assignment" section of the 
+   [300958
+   dashboard](http://staff.scm.uws.edu.au/~lapark/300958/dashboard/upload_file.php).
 
 # Group Size and Organisation
 
