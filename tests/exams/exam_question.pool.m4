@@ -2831,7 +2831,7 @@ working for them is dependent on their nationality. They obtained the following 
 \begin{enumerate}
 \item State the Null and alternative hypothesis of the test that needs to be conducted.
 
-\item State the which test statistic should be used for the test and provide its equation.
+\item State which test statistic should be used for the test and provide its equation.
 
 \item Describe the randomisation process to obtain the distribution of
   the test statistic.
@@ -3088,7 +3088,7 @@ m4_define(_clustering_q5,<[
   \item Which metric was used to compute the distances?
   \item Compute the missing distance (marked ``NA'').
   \item Your colleague wants to use k-means clustering on the four
-    objects to obtain two clusters. Explain why k-means can't be
+    objects to obtain two clusters. Explain why k-means should not be
     applied directly the the four objects, and how to transform the
     data into an appropriate form for k-means clustering.
   \item After transforming the data, we have obtained the four points below:
@@ -3251,8 +3251,7 @@ m4_define(_sentiment_q5,<[
   % end.rcode 
 
   
-  The angry tweet naive Bayes classifier computes the tweet sentiment
-  based on the following term probabilities (e.g. $P(\text{term = happy}\vert \text{sentiment = Pos}) = 0.1$).
+  The Angry Tweet Company has provided the following term probabilities given positive or negative sentiment (e.g. $P(\text{term = happy}\vert \text{sentiment = Pos}) = 0.1$).
   % begin.rcode echo=FALSE,results="verbatim"
   print(X)
   % end.rcode 

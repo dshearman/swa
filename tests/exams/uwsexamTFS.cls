@@ -522,7 +522,7 @@
 \multicolumn{1}{|c|}{\underline{\textbf{RESOURCES ALLOWED}}} \\[-0.5em]
 {\footnotesize \textit{Only the resources listed below are allowed in this exam.}} \\
 \hline
-All printed materials, books, handwritten or printed notes, and calculators are allowed. \\
+All printed materials, books, handwritten or printed notes are allowed. \\
 Any calculator which has the primary function of a calculator is allowed.  For example, calculators on mobile phones or similar electronic devices are not allowed.\\
 %All printed materials, books, handwritten or printed notes are allowed. \\
 \hline

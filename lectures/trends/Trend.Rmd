@@ -4,25 +4,25 @@ opts_chunk$set(fig.path='figure/trend-trend-')
 opts_chunk$set(dev = 'pdf', fig.cap="")
 ```
 
-## Looking for Trends
+### Looking for Trends
 
 Looking for Trends in Facebook reach or Twitter mentions can relate to important business problems.
 For example,
 
 * Is our online profile increasing or decreasing.
 * Are our competitors profiles increasing or decreasing.
-* What are the *trending* topics? Twitter do this.
+* What are the \alert{trending} topics? Twitter do this.
 * Did some event have an impact? (Advertising campaign, product release?)
 
-Focussing on Twitter, the first two relate to looking at the number of mentions over time. The third, Twitter already do, and we will look at how. The fourth, event impact, will be looked at in another lecture.
+Focusing on Twitter, the first two relate to looking at the number of mentions over time. The third, Twitter already do, and we will look at how. The fourth, event impact, will be looked at in another lecture.
 
 # Twitter Trending Topics
 
-## Twitter Trending Topics
+### Twitter Trending Topics
 
 \begin{columns}
   \begin{column}{0.6\textwidth}
-Twitter produce a list of Trending topics. These can be made location specific eg. Australian trends. But the basic 
+Twitter produce a list of Trending topics. These can be made location specific e.g. Australian trends. But the basic 
 technique for determining them is the same.
 
 Taken from a presentation by 
@@ -33,19 +33,19 @@ Taken from a presentation by
 \end{column}
 \end{columns}
 
-## What is a Topic?
+### What is a Topic?
 
 Firstly, though we need to decide what is a topic?
 
 * Can be a simple commonly occurring word or phrase
     * Of course, we would ignore stop words etc.
-    * There is a problem, becuase there are a large number of possibilities.
+    * There is a problem, because there are a large number of possibilities.
 * Another possibility is to use a dictionary.
-    * Extract common phrases from  other sources eg. wikipedia, usernames, sources specific to an application.
+    * Extract common phrases from  other sources e.g. Wikipedia, usernames, sources specific to an application.
   
 Given a (large) list of topics, what is trending?
 
-## What is Trending? Simple counting.
+### What is Trending? Simple counting.
 
 * Count the number of times a topic occurs (in Australia?) in a fixed time period.
 * Look at the ratio of current frequency to the past.
@@ -53,13 +53,13 @@ Given a (large) list of topics, what is trending?
 
 Problems
 
-* What about a *new* topic? Past frequency will zero (or close)
+* What about a \alert{new} topic? Past frequency will zero (or close)
 * What about overall frequency? Is an increase from 10 to 20 the same as 10,000 to 20,000?
 * What is a high ratio?
 
-## Trends using a $\chi^2$-test
+### Trends using a $\chi^2$-test
 
-Alternative is to establish an *expected* frequency using historical data, and compare the observed frequency (current)
+Alternative is to establish an \alert{expected} frequency using historical data, and compare the observed frequency (current)
 to the expected frequency (past). We can compare observed to expected using a $\chi^2$ statistic
 
 $$\chi^2 = \sum \frac{(O-E)^2}{E}$$
@@ -71,7 +71,7 @@ Topic | A | B | C
 Num. tweets Current| 201 | 323 | 241 
 Num. tweets Past| 181 | 299 | 254
 
-## Trends using a $\chi^2$-test
+### Trends using a $\chi^2$-test
 
 There are problems with this approach, not least, some tweets may contain multiple topics.
 So Twitter use a simplified version.
@@ -83,102 +83,273 @@ Past| 181 | 299
 
 (This is equivalent to Proportion test, but Twitter uses $\chi^2$)
 
-## Trends using a $\chi^2$-test
+### Twitter's $\chi^2$ score
 
 Procedure; 
 
 * collect $N$ tweets from past, and $N$ tweets from today. (In fact $N$ needn't be the same)
-* See which past tweets contains topic of interest, say $X$ of them.
-* See which of current tweets contains topic of interest say $Y$ of them.
-* Calculate $\chi^2$ statistic (treats past as *expected*)
+* Count $X$, the number of past tweets that contain the topic of interest.
+* Count $Y$, the number of current tweets that contain the topic of interest.
+* Calculate $\chi^2$ statistic (treats past as \alert{expected})
+\begin{align*}
+\chi^2 &= \frac{(Y-X)^2}{X} + \frac{((N-Y) - (N-X))^2}{(N-X)} \\
+       &= \frac{(Y-X)^2}{X} + \frac{(X-Y)^2}{(N-X)}
+\end{align*}
+
+If $N >> X ,Y$ then the second term will be very small and can be ignored.
+
+### Trending grand final
+
+\begin{block}{Problem}
+
+Out of five hundred tweets, 17 mention topic ``grand final'' in a past
+period, and 27 in the current. Calculate Twitter's $\chi^2$ score.
+
+$$\chi^2 = \frac{(Y-X)^2}{X} + \frac{(X-Y)^2}{(N-X)}$$
+
+\end{block}
+
+\pause
+Note that we get the same $\chi^2$ value if $Y = 7$, so the $\chi^2$
+statistic is measuring change, not increase. We must ensure that $Y >
+X$ to detect a trending topic.
+
+\pause
+\begin{block}{Warning}
+Both $X$ and $Y$ are a sample, meaning that we should expect variation
+in them even if there is no increasing or decreasing trend.
+So we should not be treating $X$ as the expected frequency.
+\end{block}
+
+### What should we be testing?
+
+If there is no increasing or decreasing trend, then the proportion of
+tweets should not change over time, meaning that the tweet count
+should be independent of time:
+
+- $H_0$: The proportion of on topic tweets is independent of time.
+- $H_A$: The proportion of on topic tweets is not independent of time.
+
+This is a $\chi^2$ test for independence.
+
+\pause
 
 $$
-\chi^2 = \frac{(Y-X)^2}{X} + \frac{((N-Y) - (N-X))^2}{(N-X)}
+\chi^2 = \sum_i \sum_j \frac{(X_{ij} - np_iq_j)^2}{np_iq_j}
 $$
 
+- $X_{ij}$ as the count of the $i$th row, $j$th column,
+- $n$ as the sample size (sum of all counts),
+- $p_i$ as the expected proportion of $i$th row and
+- $q_j$ as the expected proportion of the $j$th column.
+- $np_iq_j$ is the expected count in cell $ij$, assuming $H_0$.
+
+If all $X_{ij}$ are equal to the expected $np_iq_j$, $\chi^2 = 0$. The
+more different $X_{ij}$ is to $np_iq_j$, the greater $\chi^2$.
+
+### Trending grand final again
+
+\begin{block}{Problem}
+
+Out of five hundred tweets, 17 mention topic "grand final" in a past
+period, and 27 in the current. Calculate the $\chi^2$ statistic when
+testing independence.
+
 $$
-\chi^2 = \frac{(Y-X)^2}{X} + \frac{(X-Y)^2}{(N-X)}
+\chi^2 = \sum_i \sum_j \frac{(X_{ij} - np_iq_j)^2}{np_iq_j}
 $$
 
-If $N >> X ,Y$ then the second term can be ignored.
+\end{block}
 
-## Example
+### $\chi^2$ distribution assuming $H_0$
 
-Out of five hundred tweets, 17 mention topic A in a past period, and 27 in the current what is the $\chi^2$ statistic
+We have shown how to compute the test statistic. If the test statistic
+is large, then we reject the Null hypothesis.
 
-$$\chi^2 = \frac{(Y-X)^2}{X} + \frac{(X-Y)^2}{(N-X)} = \frac{(27-17)^2}{17} + \frac{(17-27)^2}{(500-17)}$$
-$$ = `r (27-17)^2/17` + `r (17-27)^2/(500-17)` = `r (27-17)^2/17+(17-27)^2/(500-17)`$$
+But how large does the $\chi^2$ test statistic have to be to be \alert{large}?
 
-## Trends using a $\chi^2$-test
+Let's examine the $\chi^2$ distribution when $H_0$ is true (when both
+proportions are equal, meaning the difference in proportions is zero).
 
-Twitter could use the $p$-value from the $\chi^2$ test to say if a topic *is* trending.
 
-_Null hypothesis_ is that its not.
+### Trend randomisation distribution
 
-But more usual to do ranking based on the statistic.
+- We have $X$ out of $N$ past tweets that contain the topic.
+- We have $Y$ out of $N$ current tweets that contain the topic.
+- If there is no trend, then we can swap past and current tweets
+  without effecting the trend. Note that if there is a trend, this
+  swapping will effect the trend, but we assume $H_0$ until we can
+  reject it.
 
-What if the Expected count is zero. Simply add 1.
+\pause
 
-# Issues with Twitter's method
+Randomisation process:
 
-## Issues with Twitter's method
+1. Combine the current and past tweets and randomly divide them into
+   two groups of size $N$ that represent past and current.
+2. Using the two groups, we recompute the $\chi^2$ statistic and store it.
+3. Repeat at least 1000 times to obtain the $\chi^2$ distribution for $H_0$.
 
-As a statistician, I have some issues with Twitter's method. 
+### Randomisation Example
 
-Firstly, their expected counts are based on an historical *sample*. Secondly, they treat the low count case in pretty ad-hoc ways.
+If we have $N = 5$, $X = 1$, $Y = 4$, then we have the sample:
 
-## Issues with Twitter's method
+\begin{center}
+\begin{tabular}{cccccccccc}
+\toprule
+%\multicolumn{10}{c}{Combined tweets} \\
+%\midrule
+\multicolumn{5}{c}{Past tweets} &
+\multicolumn{5}{c}{Current tweets} \\
+\cmidrule(r){1-5}
+\cmidrule(r){6-10} 
+1 & 0 & 0 & 0 & 0 & 1 & 1 & 1 & 1 & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\pause
+We then randomly divide the 10 tweets into two groups of $N = 5$.
+\begin{center}
+\begin{tabular}{cccccccccc}
+\toprule
+%\multicolumn{10}{c}{Combined tweets} \\
+%\midrule
+\multicolumn{5}{c}{Past tweets} &
+\multicolumn{5}{c}{Current tweets} \\
+\cmidrule(r){1-5}
+\cmidrule(r){6-10}
+1 & 1 & 0 & 1 & 0 & 0 & 1 & 0 & 1 & 0 \\
+\bottomrule
+\end{tabular}
+\pause
+$\rightarrow$
+\begin{tabular}{rcc}
+\toprule
+ & Topic & No Topic \\
+\midrule
+Past    & 3 & 2 \\
+Curr & 2 & 3 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\pause
+Giving $\chi^2 = (3 - 10\times 0.5\times 0.5)^2/(10\times 0.5\times 0.5)$ + $(2 - 10\times 0.5\times 0.5)^2/(10\times 0.5\times 0.5)$ + $(3 - 10\times 0.5\times 0.5)^2/(10\times 0.5\times 0.5)$
++ $(2 - 10\times 0.5\times 0.5)^2/(10\times 0.5\times 0.5)$ = 0.4
 
-An alternative would be a two-sample proportion test.
+\pause
+Repeat 1000 times to obtain the $\chi^2$ distribution given $H_0$.
 
-* Proportion of Tweets with topic before is estimated as $X/N$.
-* Proportion of Tweets with topic after is estimated as $Y/N$.
-* Compare proportions
-    * $z$-test if $N$ is large and proportions not too small
-    * Binomial test otherwise.
+### $\chi^2$ Distribution
 
-Twitter may have chosen their approach for computational reasons, and it may not matter.
+#### Problem
 
-# Other methods for Trends --- Simple Linear Regression
+```{r echo=FALSE}
+# Current| 201 | 323 
+# Past| 181 | 299 
 
-## Regression
+X = 181
+NX = 181 + 299 
+Y = 201
+NY = 201 + 323
 
-Another possible way to think about trends in Twitter counts is via a model for each topic.
+m0 = matrix(c(X, NX - X, Y, NY - Y), 2, 2)
 
-For example, if $Y_t$ is the count of tweets on a topic in time period $t$ we _might_ model this as
+#X = 17
+#Y = 27
+#N = 500
+
+expectedIndependent = function(X) {
+    n = sum(X)
+    p = rowSums(X)/sum(X)
+    q = colSums(X)/sum(X)
+    return(p %o% q * n) # outer product creates table
+}
+
+me = expectedIndependent(m0)
+
+chiSquaredStatistic = function(X, E) {
+    return(sum((X - E)^2/E))
+}
+
+library(ggplot2, quietly=TRUE)
+
+pool = c(rep(1, X+Y), rep(0, (NY-Y)+(NX-X)))
+
+chisq0 = chiSquaredStatistic(m0, me)
+
+chisqDist = function(pool) {
+  spool = sample(pool)
+  Xs = sum(spool[1:NX] == 1)
+  Ys = sum(spool[(NX+1):(NX+NY)] == 1)
+  m = matrix(c(Xs, NX - Xs, Ys, NY - Ys), 2, 2)
+  chisq = chiSquaredStatistic(m, me)
+  return(chisq)
+}
+h = replicate(10000, chisqDist(pool))
+pval = mean(h > chisq0)
+```
+
+Below is the $\chi^2$ distribution for our previous example. Do we reject $H_0$ when $\chi^2 = `r chisq0`$?
+
+```{r echo=FALSE, fig.width=4.2, fig.height=2.1, fig.cap="Distribution of chi squared statistic."}
+qplot(h,geom="histogram",binwidth=1) + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("Randomisation distribution") + xlim(0,20)
+#hist(h, main = "")
+```
+
+### $\chi^2$ test using R
+
+The $\chi^2$ test output in R provides the value of the test statistic
+and the $p$ value.
+
+```{r echo=TRUE}
+m0 = matrix(c(181, 299, 201, 323), 2, 2)
+chisq.test(m0, simulate.p.value=TRUE)
+```
+
+# Simple Linear Regression
+
+### Regression
+
+If we model the count of tweets containing the topic over time, and
+the model shows us an increase in tweets over time, we have found a
+trend.
+
+One type of model we can use is a Simple Linear Regression (SLR).
+
+#### Simple Linear Regression of tweets over time
+
+If $Y_t$ is the count of tweets on a topic in time period $t$ we can examine the model:
 
 $$ Y_t = \alpha + \beta t + \varepsilon$$
 
-Where $\alpha$ represents the tweet count at time zero, $\beta$ is the slope --- the change in count per unit time.
+Where $\alpha$ represents the tweet count at time zero, $\beta$ is the
+slope (the change in count per unit time). If $\beta$ is positive, \alert{we
+have found a trend}.
 
 The term $\varepsilon$ represents an additive random noise element. 
 
-__This is an example of Simple Linear Regression__
 
-## Simple Linear Regression in one slide!
 
-\begin{align*}
-y=\alpha+\beta x + \varepsilon && \varepsilon \sim N(0,\sigma^2) \text{ independent}\\
-SS_X = \sum (x_i-\bar{x})^2 && SS_{XY} = \sum (y_i-\bar{y})(x_i-\bar{x})\\
-\hat{\beta} = SS_{XY}/SS_X && \hat{\alpha} = \bar{y} - \hat{\beta} \bar{x}\\
-RSS = \sum (y_i - \hat{y}_i)^2 && s^2 = RSS/(n-2)\\
-\frac{\hat{\beta}-\beta}{s/\sqrt{SS_X}} \sim t_{n-2}
-\end{align*}
-
-## Simple Linear Regression for Twitter data?
+### Simple Linear Regression for Twitter data?
 
 For tweets there are problems. 
 
-* Counts are rarely Normally distributed, and their variance $\sigma^2$ is not constant.
-* Also the errors might occur in runs ie be over the line in a group then under the line. This means they are NOT independent.
-* The trend may not be very linear.
+1. SLR assumes that $\varepsilon$ is Normally distributed and has constant variance over time. Counts are rarely Normally distributed, and their variance $\sigma^2$ is not constant.
+2. SLR assumes that all $\varepsilon$ are independent. The actual errors might occur in runs i.e. be over the regression line in a group then under the line. This means they are NOT independent.
+3. SLR is linear. The trend may not be very linear.
 
-The first can often be fixed with a transformation --- typically a log or square root. 
-Taking logs or square roots usually has the effect of making count data more Normally distributed and stabilising the variance.
+\pause
 
-In fact, for Poisson counts, the square root is the _Variance Stabilising Transformation_ and doesn't have an issue with zero counts.
+The first can often be fixed with a transformation --- typically a log
+or square root.  Taking logs or square roots usually has the effect of
+making count data more Normally distributed and stabilising the
+variance.
 
-## Variance Stabilising Transformation
+In fact, for Poisson counts, the square root is the _Variance
+Stabilising Transformation_ and doesn't have an issue with zero
+counts.
+
+### Variance Stabilising Transformation
 
 ```{r, echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Variance of 10000 Poisson RV (right=square root) Scales are not equal"}
 lambda = exp(seq(-1, 3, length=10))
@@ -186,11 +357,11 @@ v1 = sapply(lambda, function(x) var(rpois(10000,x)))
 v2 = sapply(lambda, function(x) var(sqrt(rpois(10000,x))))
 par(mfrow=c(1,2), mar=c(4,3,1,1), cex=0.5)
 plot(lambda, v1, type="l", lty=1, lwd=2, col="blue", xlab="mean")
-plot(lambda, v2, type="l", lty=1, lwd=2, col="green", xlab="mean")
+plot(lambda, v2, type="l", lty=1, lwd=2, col="green", xlab="mean", ylim=c(0,5))
 #box("outer")
 ``` 
 
-## Simple Linear Regression for Twitter data?
+### Simple Linear Regression for Twitter data?
 
 The second problem is that the counts are probably not independent. 
 
@@ -206,8 +377,8 @@ The third problem is nonlinear trends
 * This has limited use.
 * Other methods are beyond the scope of this unit.
 
-## Example of simple linear regression
-Data collected by *ScraperWiki* (may be sampled?)
+### Example of simple linear regression
+Data collected by \alert{ScraperWiki}.
 
 ```{r, echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Counts of #iPhone5 tweets for a period in 2013"}
 df = data.frame( count = c(1042, 1409, 1325, 1189, 1229, 1277, 
@@ -225,68 +396,38 @@ plot(count~day, data=df2, pch=16)
 #box("outer")
 ```
 
-## Example of simple linear regression
+### Example of simple linear regression
 
-```{r, echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Square root Counts of #iPhone5 tweets for a period in 2013"}
+```{r, echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Square root Counts of #iPhone5 tweets for a period in 2013 and fitted SLR"}
+m = lm(I(sqrt(count)) ~ day, data = df2)
 par(mar=c(4,4,1,1), cex=0.7)
 plot(sqrt(count)~day, data=df2, pch=16)
+abline(m)
 #box("outer")
 ```
 
-## Example of simple linear regression
+### Example of simple linear regression
 
-```{r echo=FALSE}
-Xbar = mean(df2$day)
-Ybar = mean(sqrt(df2$count))
-SSX = sum((df2$day-Xbar)^2)
-SSXY = with(df2, sum((day-Xbar)*(sqrt(count)-Ybar)))
-bhat = SSXY/SSX
-ahat = Ybar - bhat*Xbar
-RSS = with(df2, sum((sqrt(count)- ahat - bhat*day)^2))
-s2 = RSS/(nrow(df2)-2)
+Linear regression with R. The $p$ value for `day` shows that there is a trend.
+
+```{r echo=TRUE}
+m = lm(I(sqrt(count)) ~ day, data = df2)
+summary(m)
 ```
 
-Simple linear regression of $\sqrt{count}$ against day. ($n= `r nrow(df2)`$)
 
-Given that 
+# Trend and Seasonality
 
-\begin{align*}
-\bar{x} = `r Xbar` && \bar{y} = `r Ybar`\\
-SS_X = `r SSX` && SS_{XY} = `r SSXY` \\
-RSS = `r RSS`
-\end{align*}
-
-What are $\hat{\beta}$ and $\hat{\alpha}$?
-
-## Example of simple linear regression
-
-Results of simple linear regression of $\sqrt{count}$ against day. ($n= `r nrow(df2)`$)
-
-\begin{align*}
-\bar{x} = `r Xbar` && \bar{y} = `r Ybar`\\
-SS_X = `r SSX` && SS_{XY} = `r SSXY` \\
-\hat{\beta} = `r bhat` && \hat{\alpha} = `r ahat` \\
-RSS = `r RSS` && s^2 = `r s2`
-\end{align*}
-
-Is slope non-zero ($\beta\ne 0$)? 
-
-$$t=\frac{\hat{\beta}}{s/\sqrt{SS_X}} = `r bhat/sqrt(s2/SSX)` \text{ and } t_{0.025, `r nrow(df2)-2`} = `r qt(0.975, nrow(df2)-2)`$$
-
-so yes!
-
-# Other methods for Trends --- Trend and Seasonality
-
-## Twitter counts as a time series
+### Twitter counts as a time series
 
 If we are counting the number of tweets in a fixed time period, 
-for a sequence of equally spaced times, this is an example of a __time series__ in statistics.
+for a sequence of equally spaced times, this is an example of a \alert{time series} in statistics.
 
 There are many models for time series data that allow for all the issues. (Normality, Independence, nonlinear trend)
 
 Here we will look at a simple (descriptive) technique.
 
-## Trend, Seasonal and Irregular components
+### Trend, Seasonal and Irregular components
 
 The basic idea is that a time series can be broken down into 3 components.
 $$ Y_t = T_t + S_t +\varepsilon_t$$
@@ -297,19 +438,19 @@ where
 * $S_t$ is the seasonal component. (See below)
 * $\varepsilon_t$ is the irregular or random component.
 
-## Trend, Seasonal and Irregular components
+### Trend, Seasonal and Irregular components
 
 The trend is a smooth component that varies slowly and represents how the mean value of the data changes over time.
 
 The seasonal component consist of any periodic/cyclical behaviour in the data. For example, 
 in temperature data, we expect certain months to be hotter than others in a systematic way.
 
-If the seasonal cycle consists of $m$ time periods, (eg. $m=12$ for monthly weather data with an annual seasonal cycle), then we have two properties of the seasonal component. 
+If the seasonal cycle consists of $m$ time periods, (e.g. $m=12$ for monthly weather data with an annual seasonal cycle), then we have two properties of the seasonal component. 
 
-* $S_{t+m} = S_t$ --- the seasonal component is __periodic__
-* $\sum_{t=1}^m S_t = 0$ --- the seasonal component over one cycle __sums to zero__ --- this means, the mean seasonal effect is zero.
+* $S_{t+m} = S_t$ : the seasonal component is \alert{periodic}
+* $\sum_{t=1}^m S_t = 0$ : the seasonal component over one cycle \alert{sums to zero} --- this means, the mean seasonal effect is zero.
 
-## Trend, Seasonal and Irregular components
+### Trend, Seasonal and Irregular components
 
 Other examples of _seasonal_ cycles are;
 
@@ -321,7 +462,7 @@ Other examples of _seasonal_ cycles are;
 The irregular component represents random variation not explained by trend and seasonal components. 
 It has mean (expected value) zero.
 
-## Moving Averages
+### Moving Averages
 
 One way to estimate the trend in the above _model_ is to use a moving average. 
 
@@ -343,7 +484,7 @@ fun(3, "green")
 fun(4, "cyan")
 ```
 
-## Moving Averages
+### Moving Averages
 
 The central point of the window is then replaced by the moving average. 
 
@@ -356,7 +497,7 @@ but use a half weight at the end points, so the sum of the weights is still $k$.
 $$Z_t = \frac{1}{k} (\frac{1}{2} Y_{t-j} + \sum_{i= -j+1}^{j-1} Y_{t+i} + \frac{1}{2} Y_{t+j})
 \qquad \forall \quad j < t \le n-j$$
 
-## Moving Averages for Trend estimation
+### Moving Averages for Trend estimation
 
 Since $\sum_{i=1}^m S_i =0$, if we take a moving average with window size $m$, we eliminate the seasonal component.
 
@@ -370,14 +511,14 @@ And the middle term disappears since $S_{t+m} = S_t$ and $\sum_{i=1}^m S_i =0$
 
 $Z_t$ is then taken as an _estimate_ of $T_t$. If $T_t$ is _smooth_ it will be a good estimate.
 
-## IPhone5 hashtag
+### IPhone5 hashtag
 ```{r, echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Square root Counts of #iPhone5 tweets for a period in 2013"}
 par(mar=c(4,4,1,1), cex=0.7)
 plot(sqrt(count)~day, data=df2, pch=16)
 #box("outer")
 ```
 
-## IPhone5 hashtag
+### IPhone5 hashtag
 
 This data is counts on 45 consecutive days in the middle of 2013. 
 
@@ -390,15 +531,15 @@ plot(cbind(Y,T<-filter(Y, rep(1/7,7))), plot.type="single", col=c("blue", "green
 legend("bottomright", lty=1, col=c("blue", "green"), lwd=2, legend=c("Data", "Moving average trend m=7"))
 ```
  
-## IPhone5 hashtag
+### IPhone5 hashtag
 
-For this data $Y_t$ the response is the __square root__ of counts of tweets at each day, starting at day 210, finishing at day 254.
+For this data $Y_t$ the response is the \alert{square root} of counts of tweets at each day, starting at day 210, finishing at day 254.
 So for a 7-point moving average we can start at day 213, and go up to day 251.
 
 For example, the trend at day 213, is $$ (Y_{210}+Y_{211}+Y_{212}+Y_{213}+Y_{214}+Y_{215}+Y_{216})/7 $$
 
 ```{r echo=FALSE, results="asis"}
-require(xtable, quietly=TRUE)
+suppressWarnings(library(xtable, quietly=TRUE))
 print(xtable(t(df2[1:7,c(2,1)]), digits=0),floating=FALSE, include.colnames=FALSE, comment=FALSE)
 ```
 
@@ -407,7 +548,7 @@ $$T_{213}= (`r paste(formatC(Y[1:7], digits=2, format="f"), collapse="+")`)/7 = 
 Trend at 214 would be
 $$ (Y_{211}+Y_{212}+Y_{213}+Y_{214}+Y_{215}+Y_{216}+Y_{217})/7 $$
 
-## Moving average with an Even window
+### Moving average with an Even window
 
 If $m$ is even, we use the adjusted version, so that the moving average 
 is over an odd number of points
@@ -426,7 +567,38 @@ $$T_{213}= (\frac{1}{2} \times `r formatC(Y[2], digits=2, format="f")` +
 So the moving average is actually over 5 points, but the _weights_ add up to 4.
 
 
-## Seasonal Component
+### Computing moving averages
+
+#### Example
+
+Compute the trend component in the fifth position of the following
+sequence, with seasonal cycle of length 4.
+
+\begin{center}
+\begin{tabular}{cccccccccccc}
+\toprule
+7 & 6 & 5 & 4 & 8 & 7 & 5 & 4 & 6 & 6 & 4 & 3 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\pause
+
+#### Problem
+
+Compute the trend component in the seventh position of the following
+sequence, with seasonal cycle of length 3.
+
+\begin{center}
+\begin{tabular}{cccccccccccc}
+\toprule
+7 & 6 & 5 & 4 & 8 & 7 & 5 & 4 & 6 & 6 & 4 & 3 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+### Seasonal Component
 
 The above has assumed a 7-day seasonal or period component. How do we estimate this component?
 
@@ -436,16 +608,16 @@ $$\tilde{S}_t = \frac{1}{n_t} \sum_j (Y_{t+jm} - T_{t+jm})   \qquad \forall \qua
 
 where the sum is over all $j$ such that $t+jm$ is in the data, and $n_t$ is the number of terms that occur.
 
-Unfortunately, these $\tilde{S}_t$ do not necessary __sum to zero__, which a seasonal component should do, so we subtract the mean, and set $$ S_t = \tilde{S}_t - \frac{1}{m} \sum_{j=1}^m \tilde{S}_j \qquad \forall \quad t=1,\ldots,m$$  
+Unfortunately, these $\tilde{S}_t$ do not necessary \alert{sum to zero}, which a seasonal component should do, so we subtract the mean, and set $$ S_t = \tilde{S}_t - \frac{1}{m} \sum_{j=1}^m \tilde{S}_j \qquad \forall \quad t=1,\ldots,m$$  
 
-## Seasonal Component
+### Seasonal Component
 
 One way to think about this is to configure the data as a table/matrix, with $m$ rows and $n/m$ columns, 
 with _time_ running down each column.
 
 The seasonal is the average along the rows after the trend is subtracted.
 
-### Iphone5 hashtag
+#### Iphone5 hashtag
 
 The data has $n=45$ data points and $m=7$ for a weekly cycle.
 
@@ -458,32 +630,32 @@ mmat = function(x, m, d=0) {
 mmat(df2$count,7)
 ```
 
-## Iphone5 hashtag
+### Iphone5 hashtag
 
 We are using the square roots of the counts.
 
-### Data
+#### Data
 ```{r echo=FALSE, results="asis"}
 mmat(as.numeric(Y),7, 2)
 ```
 
-## Iphone5 hashtag
+### Iphone5 hashtag
 
 Trend is a 7 point moving average
 
-### Trend
+#### Trend
 ```{r echo=FALSE, results="asis"}
 mmat(as.numeric(T),7, 2)
 ```
 
-## Iphone5 hashtag
+### Iphone5 hashtag
 
-### Difference
+#### Difference
 ```{r echo=FALSE, results="asis"}
 M=mmat(as.numeric(Y-T),7, 2)
 ```
 
-## Iphone5 hashtag
+### Iphone5 hashtag
 
 $\tilde{S}_t$
 ```{r echo=FALSE, results="asis"}
@@ -498,13 +670,13 @@ print(xtable(matrix(St,nrow=1), digits=3),floating=FALSE, include.rownames=FALSE
 ```
 
 
-### Irregular component 
+#### Irregular component 
 
 The irregular component is simply everything that is left over.
 
 $$ Y_t - T_t - S_t$$ 
 
-## Iphone5 hashtag
+### Iphone5 hashtag
 
 ```{r, echo=FALSE, dev="pdf", fig.width=4, fig.height=2.5, fig.cap="Seasonal component for iphone5 hashtag"}
 par(mar=c(4,4,1,1), cex=0.7)
@@ -513,14 +685,47 @@ text(1,-0.7, "Day 1 is actually Tuesday", pos=4)
 #box("outer")
 ``` 
 
-## Summary
+### Seasonal problem
+
+#### Problem
+
+```{r echo=FALSE}
+x = c(7,6,5,4,8,7,5,4,6,6,4,3)
+t = ts(x, frequency = 4)
+d = decompose(t)
+s = d$seasonal[1:4]
+s[3] = NA
+```
+
+Given the following data with seasonal cycle of length 4:
+\begin{center}
+\begin{tabular}{cccccccccccc}
+\toprule
+7 & 6 & 5 & 4 & 8 & 7 & 5 & 4 & 6 & 6 & 4 & 3 \\
+\bottomrule
+\end{tabular}
+\end{center}
+with seasonal components:
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+`r paste(s, collapse=" & ")` \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Compute the third seasonal component.
+
+
+
+### Summary
 
 So in this lecture we looked at
 
 * Twitter's method for finding _Twitter Trends_
 * Revised _Simple Linear Regression_ as a simple way to look at trends
 * Saw how moving averages can be used to estimate trends and seasonality 
-     * We will look at how to do this in R in the lab.
+
 
 Next time, _Events_
 
