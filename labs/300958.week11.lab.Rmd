@@ -10,13 +10,16 @@ opts_chunk$set(fig.path='figure/week11-lab-')
 
 # Twitter Trends
 
-Complete the following R-code to write a function to compute Twitter's $\chi^2$ statistic for trends.
+Complete the following R-code to write a function to compute Twitter's
+$\chi^2$ statistic for trends.
 
 ```{r eval=FALSE, prompt=FALSE}
 TwitterChi = function(tweetsBefore, tweetsNow, N) {
-  ## tweetsBefore is the number of tweets out of N on a topic of interest in a previous period
-  ## tweetsNow is the number of tweets out of N on a topic of interest in the current period
-  ## N is the number of tweets the samples 
+
+  ## tweetsBefore is the number of tweets out of N on a topic of
+  ## interest in a previous period tweetsNow is the number of tweets
+  ## out of N on a topic of interest in the current period N is the
+  ## number of tweets the samples
   
   
 }
@@ -25,7 +28,7 @@ TwitterChi = function(tweetsBefore, tweetsNow, N) {
 Test your code on the following 3 data sets.
 
 ```{r echo=FALSE, results="asis"}
-require(xtable, quietly=TRUE)
+suppressWarnings(require(xtable, quietly=TRUE))
 set.seed(5272)
 sim = function(p1,p2,N) {
   X = matrix(c(rbinom(2, N, c(p1,p2)),N), nrow=1)
@@ -40,44 +43,37 @@ x2 = sim(0.02,0.05, 10000)
 x3 = sim(0.02,0.05, 20000)
 ```
 
-You should be able to compute $\chi^2$ statistics with a calculator, so this would be a good time to practice!
+## Test for independence between past and current tweets
 
-## more R
+We saw in the lecture that if there is a trend, then the tweet counts
+of tweets containing the topic, will be dependent on time. We can
+examine if there is a dependence by performing a $\chi^2$ test for
+independence (just as we did in the Simple Exposure Analysis lab).
 
-The R function `chisq.test` can be used to calculate this value (including the second term from lectures). 
-But it is done in a slightly odd way, because Twitter assumes that the tweet count before __is__ the expected (ie. is not from a sample).
-If `X` and `Y` are the tweet counts from before and now (as in lectures) and `N` is the sample size. The R-code is below, try it on the above examples to check your function.
+Using the data from the previous section, create the $2\times 2$ table
+(contains topic/does not contain topic vs. before/now) and perform the
+randomisation test for independence using your code from the Simple
+Exposure Analysis lab.
 
-```{r eval=FALSE}
-chisq.test(c(Y,N-Y), p= c(X,N-X)/N)
-```
+## Using R's test for independence
 
-Perhaps a better way is to acknowledge that both are samples. Then the $\chi^2$ statistic would be computed using (for example).
-```{r eval=FALSE}
-chisq.test(cbind(c(Y,N-Y),c(X,N-X)), correct=FALSE)
-```
-
-Or using the `prop.test` (proportions test) function.
-
-```{r eval=FALSE}
-prop.test(c(X,Y), n=c(N,N), correct=FALSE)
-```
-
-Compare the results of this method to those above. 
+Use the function `chisq.test` to compute the test $p$-value and
+compare the results with your randomisation test.
 
 ## Which method is correct?
 
-Since Twitter probably only use these $\chi^2$ statistics for ranking, it probably doesn't matter which is used.
+Since Twitter probably only use these $\chi^2$ statistics for ranking,
+it probably doesn't matter which is used.
 
-# Linear Regression in R
+# Linear Regression for trends
 
-Of course we can do all the calculations for simple linear regression in R. For example, 
-the mean of a vector `x` is given by `mean(x)`, and a sum of squares for `x` can be computed with `sum((x-mean(x))^2)`.
 
 ## Tweet count data
 
-Using the data below (from lectures) compute $\bar{x}$, $\bar{y}$, $SS_X$, $SS_{XY}$ and 
-therefore $\hat{\beta}$ and $\hat{\alpha}$. You should use, $x=\text{day}$ and  $y=\sqrt{\text{count}}$.
+Using the data below, fit the linear regression model and identify the
+values of the intercept and the gradient. Also identify if the
+gradient is significant (identify if the population gradient is not
+likely to be zero).
 
 ```{r prompt=FALSE, results="hide"}
 count = c(135, 145, 133, 102, 105, 108, 128, 144, 
@@ -91,61 +87,74 @@ day = c(210,
 250, 251, 252, 253, 254)
 ```
 
+You should use, $x=\text{day}$ and $y=\sqrt{\text{count}}$.
 
-## R linear regression function
+To fit and analyse the model, use the functions `lm` (linear model), and
+`summary` (to examine the summary of the model).
 
-Of course, R has a specific function for linear regression called `lm`. It produces a fit object that can then be interogated.
-Here is an example using some data included with R. The data has two variables, the stopping distance of cars and the speed.
-
-```{r}
-x = cars$speed
-y = cars$dist    ### Actually no need to do this
-fit = lm(y~x)    ### Equivalently,  fit = lm(dist~speed, data=cars)
-summary(fit)
-```
-
-Use the `lm` function to check your results on the Twitter counts from above.
 
 # Trend, Seasonality, Irregular decomposition
 
-In lectures, we looked at a simple method using moving averages, to compute trend and seasonal components.
-Here we will look at how to do this in R. The data from lectures are the counts given above, but we will work with square roots.
+In lectures, we looked at a simple method using moving averages, to
+compute trend and seasonal components.  Here we will look at how to do
+this in R. The data from lectures are the counts given above, but we
+will work with square roots.
 
 ```{r}
 Y = sqrt(count)
 ```
 
-Again you should be able to do this with a calculator.
-
 ## Moving averages using a loop
 
-The following is a moving average (as defined in lectures) function using a `for` loop.
+The following is a moving average (as defined in lectures) function
+using a `for` loop.  The function `moving.average` calls the function
+`windowWeights` to obtain the set of weights used when combining the
+windowed values. When the window length $m$ is odd, we want the
+average of the window, this is the same as multiplying each value in
+the window by $1/m$, then summing the values. When the window length
+is even, we increase the window length by 1 to make it odd (so that it
+have a centre), but we half the end elements of the window before
+computing the average. So the window weights become 1/(2m) at the ends
+and 1/m for the remaining positions.
 
 ```{r prompt=FALSE}
-moving.average = function(x, m) {
+windowWeights = function(m) {
   if( m%%2 ) { 
      ## m is odd
      w = rep(1,m)/m
    } else { 
     ## m is even
-    w = c(0.5, rep(1,m-1), 0.5)/m
+
+    ## insert code here to compute w for an even sized window
   }
+  return(w)
+}
+
+moving.average = function(x, m) {
+
+  ## compute window weights
+  w = windowWeights(m)
+
   j = floor(m/2)
   offsets = (-j):j
   n = length(x)
   res = rep(NA, n)
+  ## slide window and apply window weights to obtain averages
   for(i in (j+1):(n-j)) {
     res[i] = sum(w*x[i+offsets])
-    }
+  }
   return(res)
 }
 ```
 
-Make sure you understand this function and use it to compute the 7 point moving average of the tweet count data. Remember to square root first.
+The above function `windowWeights` is missing a line of code. Write
+the missing code, then use the functions to compute the trend
+components of the data. Remember to square root first.
 
 ## Seasonal component
 
-The following function computes a seasonal component by averaging over all observations that are $m$ apart.
+The following function computes a seasonal component by averaging over
+all observations that are $m$ apart.
 
 ```{r prompt=FALSE}
 seasonal = function(x ,m) {
@@ -160,12 +169,15 @@ seasonal = function(x ,m) {
 }
 ```
 
-Make sure you understand this function and use it to compute the seasonal component for the tweet count data. Remember to subtract the trend first.
+Make sure you understand this function and use it to compute the
+seasonal component for the tweet count data. Remember to subtract the
+trend first.
 
 ## R function
 
-Of course, R has all this functionality built in, using the function `decompose`. R expects the data to be a _time series_ 
-which is a special R data structure. 
+Of course, R has all this functionality built in, using the function
+`decompose`. R expects the data to be a _time series_ which is a
+special R data structure.
 
 ```{r lab11-yts, fig.width=7, fig.height=5, fig.cap=""}
 Yts = ts(sqrt(count), freq=7)

@@ -4,36 +4,36 @@ opts_chunk$set(dev = 'pdf', fig.cap="")
 ```
 
 
-## Testing for Impact 
+### Testing for Impact 
 
-Twitter could be regarded as information about the _buzz_ surrounding
+Twitter could be regarded as information about the \alert{buzz} surrounding
 a product, brand or service. 
 
 For example, a large number of tweets about a new phone may indicate a lot of interest in that phone.
 
-Of course, this may be negative or positive _interest_. Sentiment will discussed in another lecture.
+Of course, this may be negative or positive \alert{interest}. Sentiment will be discussed in another lecture.
 
 In this lecture, we focus on the impact of an intervention, For example, 
 
-* Does an advertising campaign produce a _buzz_ about a product?
+* Does an advertising campaign produce a \alert{buzz} about a product?
 * Does a product release by a competitor, decrease interest in our product?
 * Does an external event, affect the tweet stream about our brand?
 
 # Comparing Tweet rates
 
-## What is an impact?
+### What is an impact?
 
 For the purposes of this unit we think of an impact as a change in tweet rates caused by some event.
 
 Events might be planned or unplanned, but they are chosen externally to the tweet data.
 
-That is, we __don't__ look for a change in tweet rate and then test it. This would be a biased approach.
+That is, we \alert{don't} look for a change in tweet rate and then test it. This would be a biased approach.
 
-As far as the event is concerned we need to think about _before_ and _after_ the event and compare (usually) tweet rates.
+As far as the event is concerned we need to think about \alert{before} and \alert{after} the event and compare (usually) tweet rates.
 
 Obviously, this is applicable to Facebook like rates and reach, before and after an event
 
-## What do we compare?
+### What do we compare?
 
 Tweet rates are one obvious thing to compare.
 
@@ -45,138 +45,135 @@ For example,
 * the number of tweets may decrease when a competitor releases a new model.
 
 
-## Example --- Optophone Mobile Company
+### Example: Optophone Mobile Company
 
-The Optophone Mobile Company, is going to revamp its website. In order to justify the expense
-they will monitor the hit rate on the website before and after the switch-over to the new site. Additionally, they 
-try to assess the buzz around their product they will also monitor the number tweets _referring to the company_.
+The Optophone Mobile Company, is going to revamp its website. In order
+to justify the expense they will monitor the hit rate on the website
+before and after the switch-over to the new site. Additionally, they
+try to assess the buzz around their product they will also monitor the
+number tweets \alert{referring to the company}.
 
-They collect the number of tweets (ignoring sentiment) for five randomly chosen days before the switch-over and five randomly
-chosen days shortly after the switch-over.
+They collect the number of tweets (ignoring sentiment) for five
+randomly chosen days before the switch-over and five randomly chosen
+days shortly after the switch-over.
 
 The following counts were obtained.
 
+\begin{center}
 ```{r echo=FALSE, results="asis"}
 options(scipen=1, digits=2)
-require(xtable, quietly=TRUE)
+suppressWarnings(require(xtable, quietly=TRUE))
 set.seed(56223)
 n = 5
 before = rpois(n, 140)
 after = rpois(n, 175)
 mm = rbind(before, after)
 dimnames(mm) = list(c("Before", "After"), paste("day", 1:n))
-print(xtable(mm, digits=0), floating=FALSE, comment=FALSE)
+print(xtable(mm, digits=0), floating=FALSE, comment=FALSE, booktabs=TRUE)
 ```
+\end{center}
 
 Has the website switch over had an impact on tweet rate?
 
-## Example --- Optophone Mobile Company
+### Example --- Optophone Mobile Company
 
 ```{r include=FALSE}
 mb = mean(before)
 ma = mean(after)
 ```
 
-The average number of tweets  is `r mb`  before and `r ma` after, so it _looks_ like an increase.
+The average number of tweets is `r mb` before and `r ma` after, giving
+a difference in sample means of `r ma - mb`, so it \alert{looks} like
+an increase.
 
-But could this have occurred by chance? Or how _likely_ is it to have occurred by chance?
+But could this have occurred by chance? Or how \alert{likely} is it to
+have occurred by chance?
 
-That is, what is the chance that even if the true underlying tweet rates were the same before and after, we could see
-a mean after, this much larger than the mean before?
+\pause
 
-If this chance is small, we could argue that its likely that the underlying tweet rate has changed.
+That is, what is the chance that even if the true underlying tweet
+rates were the same before and after, we could see a mean after, this
+much larger than the mean before?
 
-## Comparing means in two groups --- $t$-test
+If this chance is small, we could argue that its likely that the
+underlying tweet rate has changed.
 
-Comparing means in two groups like this is a $t$-test.
+\pause
 
-If the data are (approximately) Normally distributed, and $\mu_B$ is the mean before and
-$\mu_A$ is the mean after (unknown _population_ means) then we are asking is $\mu_B \ne \mu_A$.
+To observe the probability of this difference in sample means
+happening by chance when the population means are equal, we must
+examine the distribution of the \alert{difference in sample means},
+given that the population means are equal.
 
-We _test_ this using samples; if $\bar{y}_B$ is sample mean __before__ the event, $s_B$ is the 
-sample standard deviation, and $n_B$ is the sample size; and the $\bar{y}_A$, $s_A$ and $n_A$ are the 
-equivalent __after__ the event.
+### Thinking about the randomisation distribution
 
-The we want to see if $\bar{y}_A - \bar{y}_B$ is consistent with no change in tweet rate at the time of the event.
+Our hypotheses are:
 
-## Comparing means in two groups --- $t$-test
+- $H_0$: there is no difference in population means ($\mu_B = \mu_A$).
+- $H_A$: there is a difference in population means ($\mu_B \ne \mu_A$).
 
-\begin{align*}
-H_0 :& \mu_A = \mu_B\\
-H_A :&  \mu_A \neq \mu_B\\
-\text{test statistic }& t = \frac{\bar{y}_A - \bar{y}_B}{s_p \sqrt{\left ( \frac{1}{n_A}+ \frac{1}{n_B}\right) }}\\
-\text{where }& s_p^2 = \frac{(n_A-1)s_A^2 + (n_B-1)s_B^2}{n_A+n_B-2}\\
-\text{rejection region } & \text{reject } H_0 \text{ if } t > t_{\alpha/2, n_A+n_B-2} \text{ or }
-t < - t_{\alpha/2, n_A+n_B-2}
-\end{align*}
+We want to identify what the difference in sample means can be, if the
+population means are equal. To do so, we build a randomisation
+distribution of \alert{differences in sample means}.
 
-## Comparing means in two groups --- $t$-test
+\pause
 
-Usually $\alpha = 0.05$ and the relevant $t_{\alpha/2, n_A+n_B-2}$ for values of $n_A+n_B-2$ are
+If we assume $H_0$, then:
 
-```{r echo=FALSE, results="asis"}
-require(xtable, quietly=TRUE)
-xtab = function(n, alpha){
-  tab = matrix(qt(1-alpha/2, n), nrow=1)
-  colnames(tab)=n
-  print(xtable(tab, digits=3), floating=FALSE, include.rownames=FALSE, comment=FALSE)
-}
-xtab(4:11, 0.05)
-xtab(12:19, 0.05)
-xtab(20:27, 0.05)
-xtab(28:35, 0.05)
-```
+- both the before and after sample have the same population mean.
+- we can combine the before and after sample to obtain a larger sample
+  with the same population mean.
+- if we randomy split the combined sample into two piles, each will
+  have the same population mean.
 
-And it approaches $1.960$ as $n_A+n_B-2$ gets larger.
+### Creating the randomisation distribution
 
-## Example --- Optophone Mobile Company
+To create the randomisation distribution:
 
-Tweets before and After revamp
+1. Combine the two samples into a combined sample.
+2. Randomly divide the combined sample into two samples, each with the
+   same size as the original samples.
+3. Compute the difference in means of the two new samples.
+4. Repeat at least 1000 times to obtain 1000 difference in mean values
+   and examine the distribution.
 
-```{r echo=FALSE, results="asis"}
-print(xtable(mm, digits=0), floating=FALSE, comment=FALSE)
-```
-
-Are these Normally distributed? As they are counts, probably not! Again take a square root transformation.
-
-Summary Statistics (after square root)
 
 ```{r echo=FALSE}
-mm = sqrt(mm)
-mB = mean(mm[1,])
-sB = round(sd(mm[1,]),2)
-nB = length(mm[1,])
-mA = mean(mm[2,])
-sA = round(sd(mm[2,]),2)
-nA = length(mm[2,])
-sP2 = ((nA-1)*sA^2 + (nB-1)*sB^2)/(nA+nB-2)
-sP = round(sqrt(sP2),2)
-tt = round((mA-mB)/(sP*sqrt(1/nA+1/nB)),3)
+library(ggplot2, quietly=TRUE)
+
+both = c(before, after)
+randDist = replicate(10000, {
+pos1 = sample(10, 5, replace = FALSE)
+pos2 = (1:10)[-pos1]
+mean(both[pos1]) - mean(both[pos2])})
+mu0 = mean(before) - mean(after)
+pVal = mean(abs(randDist) > abs(mu0))
 ```
 
-Sample | Mean | Std. Dev. | n
----|---|---|---
-Before | `r mB` | `r sB` | `r nB`
-After | `r mA` | `r sA` | `r nA`
+### Randomisation distribution
 
-## Example --- Optophone Mobile Company
+The difference in the sample means of the data is `r ma - mb`. Could
+this have happened by chance if the population means are equal?
 
-Therefore
-$$ s_p^2 = \frac{(n_A-1)s_A^2 + (n_B-1)s_B^2}{n_A+n_B-2} = `r sP2`$$
-$$ s_p = `r sP`$$
+```{r echo=FALSE, fig.width=4.2, fig.height=2.5, fig.cap="Distribution of difference in sample means."}
+qplot(randDist,geom="histogram",binwidth=5) + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("Difference in sample means")
+#hist(h, main = "")
+```
 
-Test Statistic 
+### Test conclusion
 
-$$t = \frac{\bar{y}_A - \bar{y}_B}{s_p \sqrt{\left ( \frac{1}{n_A}+ \frac{1}{n_B}\right) }}
-= \frac{`r mA` - `r mB`}{`r sP` \sqrt{\left ( \frac{1}{`r nA`}+ \frac{1}{`r nB`}\right) }}$$
-$$= `r tt`$$
+Since it is not likely that the population means are equal (the $p$
+value is `r pVal`), we reject $H_0$. We have evidence of a difference
+in population means.
 
-$t_{0.025,8} = `r round(qt(1-0.025, 8),3)`$ so we reject $H_0$ ie there is a difference.
+The changes to the Optophone Web site has lead to an increase in the
+number of tweets about Optophone.
 
 
-# Example --- Commonpoverty Bank
 
 ## Example --- Commonpoverty Bank
+
+###  Commonpoverty Bank
 ```{r include=FALSE}
 set.seed(86755)
 n = 4
@@ -186,46 +183,54 @@ BCx = rpois(n, 52)
 ACx = rpois(n, 85)
 ```
 
-The Commonpoverty Bank is starting an advertising campaign. They beleive that the Twitter buzz around the 
-campaign may be a lead indicator to increased sales of mortgages. 
+#### Problem
 
-They decide to collect data before and after the campaign on the number of tweets per day relating to their bank.
+The Commonpoverty Bank is starting an advertising campaign. They
+believe that the Twitter buzz around the campaign may be a lead
+indicator to increased sales of mortgages.
 
+They decide to collect data before and after the campaign on the
+number of tweets per day relating to their bank.
+
+\begin{center}
 ```{r results="asis", echo=FALSE}
 mm = rbind(BIx, AIx)
 dimnames(mm) = list(c("Before", "After"), paste("day", 1:n))
-print(xtable(mm, digits=0), floating=FALSE, comment=FALSE)
+print(xtable(mm, digits=0), floating=FALSE, comment=FALSE, booktabs=TRUE)
 ```
+\end{center}
 
-## Example --- Commonpoverty Bank
+Show how to compute one value of the randomisation distribution.
 
-After a square root transformation the following summary statistics were found.
+
+### Example --- Commonpoverty Bank
+
+#### Problem (continued)
 
 ```{r echo=FALSE}
-mm = sqrt(mm)
-mB = round(mean(mm[1,]),2)
-sB = round(sd(mm[1,]),2)
-nB = length(mm[1,])
-mA = round(mean(mm[2,]),2)
-sA = round(sd(mm[2,]),2)
-nA = length(mm[2,])
-sP2 = ((nA-1)*sA^2 + (nB-1)*sB^2)/(nA+nB-2)
-sP = round(sqrt(sP2),2)
-tt = round((mA-mB)/(sP*sqrt(1/nA+1/nB)),3)
+library(ggplot2, quietly=TRUE)
+
+both = c(BIx, AIx)
+n = length(both)
+randDist = replicate(10000, {
+pos1 = sample(n, length(AIx), replace = FALSE)
+pos2 = (1:n)[-pos1]
+mean(both[pos1]) - mean(both[pos2])})
+mu0 = mean(AIx) - mean(BIx)
+pVal = mean(abs(randDist) > abs(mu0))
 ```
 
-Sample | Mean | Std. Dev. | n
----|---|---|---
-Before | `r mB` | `r sB` | `r nB`
-After | `r mA` | `r sA` | `r nA`
+Given the following randomisation distribution for the difference in
+sample means when $H_0$ is true, what is the conclusion of the test?
 
-1. Compute the pooled standard deviation $s_p$
-2. Compute the $t$-statistic
-3. Test whether there has been a significant change in tweet rate
+```{r echo=FALSE, fig.width=4.2, fig.height=2.5, fig.cap="Distribution of difference in sample means."}
+qplot(randDist,geom="histogram",binwidth=4) + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("Difference in sample means")
+#hist(h, main = "")
+```
 
 # Introducing a control
 
-## Introducing a control
+### Introducing a control
 
 How do we know that the difference is due to the event?
 
@@ -235,78 +240,229 @@ One way to get more information would be to collect tweet data on a similar busi
 
 Ideally, this business would not be affected by the event, but would be affected by all other factors, that might affect the primary business.
 
-## Introducing a control
+### Introducing a control
 
-This type of entity is called a control. We would collect tweet numbers _before_ and _after_ the event
-on both the potentially _impacted_ company and the _control_ company.
+This type of entity is called a control. We would collect tweet
+numbers \alert{before} and \alert{after} the event on both the
+potentially \alert{impacted} company and the \alert{control} company.
 
+\begin{center}
 ```{r echo=FALSE, results="asis"}
 require(xtable, quietly=TRUE)
 set.seed(56223)
 n = 5
 before = rpois(n, 140)
 after = rpois(n, 175)
-cbefore = rpois(n, 75)
-cafter = rpois(n, 75)
+cbefore = rpois(n, 75) 
+cafter = rpois(n, 75) #75)
 m2 = rbind(cbefore, cafter,before, after )
 mtmp = matrix(apply(m2, 1, paste, collapse=","), ncol=2)
 dimnames(mtmp) = list(c("Before", "After"), c("Control", "Impact"))
-print(xtable(mtmp, digits=0), floating=FALSE, comment=FALSE)
+print(xtable(mtmp, digits=0), floating=FALSE, comment=FALSE, booktabs=TRUE)
 ```
-Desings like this are used a lot in _environmental_ data. They are called __BACI__ designs
-after the initial letters of _before_, _after_, _control_, _impact_.
 
-## Analysis of BACI designs
+```{r echo=FALSE}
+impact = c(before, after)
+control = c(cbefore, cafter)
+gamma0 = (mean(after) + mean(cbefore)) - (mean(before) + mean(cafter))
 
-We assume that the number in each of the four cells is the same. ($n$) This simplifies the analysis. We just add up the numbers in each cell.
+gammaDist = replicate(10000, {
+rimpact = sample(impact)
+rcontrol = sample(control)
+rib = rimpact[1:n]
+ria = rimpact[(n+1):(2*n)]
+rcb = rcontrol[1:n]
+rca = rcontrol[(n+1):(2*n)]
+(mean(ria) + mean(rcb)) - (mean(rca) + mean(rib))})
 
-|| Control | Impact
----|---|---
-Before | BC | BI
-After | AC | AI
+
+aibc = c(after, cbefore)
+acbi = c(cafter, before)
+gamma0 = sum(aibc)/n - sum(acbi)/n
+all = c(aibc,acbi)
+gamma = replicate(1000, {
+pos = sample(4*n, 2*n)
+saibc = all[pos]
+sacbi = all[-pos]
+sum(saibc)/n - sum(sacbi)/n
+})
+pVal = mean(gamma > gamma0)
+
+
+# Randomised $p$ = `r pVal`
+
+
+```
+
+
+
+\end{center}
+
+Designs like this are used a lot in \alert{environmental} data. They
+are called \alert{BACI} designs after the initial letters of
+\alert{before}, \alert{after}, \alert{control}, \alert{impact}.
+
+### Analysis of BACI designs
+
+We assume that the sample size for each of the four cells is the same ($n$).
+This simplifies the analysis, allowing us to work with the sum of the numbers in each cell.
+
+|        | Control | Impact |
+|--------|---------|--------|
+| Before | BC      | BI     |
+| After  | AC      | AI     |
 
 
 In a BACI design;
 
-* the difference in row totals is called a contrast for the before/after effect.
-    * (AC+AI) - (BC+BI) 
-* the difference in column totals is the contrast for the control/impact effect.
-    * (AI+BI) - (AC+BC)
+* the difference in row totals is called a \alert{contrast for the
+  before/after effect} (AC+AI) - (BC+BI)
+* the difference in column totals is the \alert{contrast for the
+  control/impact effect} (AI+BI) - (AC+BC)
 
 
+### Analysis of BACI designs
 
-## Analysis of BACI designs
+We are not really interested in these contrasts.  They relate to the
+overall change before/after and the overall difference between
+companies
 
-We are not really interested in these contrasts. 
-They relate to the overall change before/after and the overall difference between companies
+We are interested in whether the impacted company after, can be
+predicted as simply the combination of difference between companies
+and the before/after difference.
 
-We are interested in whether the impacted company after, 
-can be predicted as simply the combination of difference between companies and the  before/after difference.
+If it \alert{cannot} then the there is an effect that cannot be
+explained by either the change in time or company, so the event has
+had an impact
 
-If it _cannot_ then the event has had an impact
-
-## Analysis of BACI designs
+### Analysis of BACI designs
 
 Mathematically we can write this as
 
-|| Control | Impact
----|---|---
-Before | $\mu$ | $\mu+\alpha$
-After | $\mu+\beta$ | $\mu + \alpha+\beta+\gamma$
+|        | Control     | Impact                          |
+|--------|-------------|---------------------------------|
+| Before | $\mu$       | $\mu + \alpha$                  |
+| After  | $\mu+\beta$ | $\mu + \alpha + \beta + \gamma$ |
+
+- $\alpha$ is the effect caused by the change in company
+- $\beta$ is the effect caused by the change in time
+- $\gamma$ is the effect that cannot be explained by either time or
+  change in company. If $\gamma$ is not zero, then the event we are
+  examining \alert{has} had an effect.
 
 Does $\gamma = 0$?
 
-We use  a contrast in estimating $\gamma$
+We use a contrast in estimating $\gamma$. Interaction contrast is
+(BC+AI) - (AC+BI) (difference in diagonals), since ($\mu$ + $\mu +
+\alpha + \beta + \gamma$) - ($\mu + \alpha$ + $\mu + \beta$) =
+$\gamma$.
 
-Interaction contrast is (BC+AI) - (AC+BI) --- difference in diagonals.
+### Analysis of BACI designs
 
-## Analysis of BACI designs
+Using the contrasts, we can estimate the parameters $\alpha$, $\beta$
+and $\gamma$.
 
 Contrasts
 
 * before/after --- (AC+AI) - (BC+BI) 
 * companies --- (AI+BI) - (AC+BC)
 * interaction --- (BC+AI) - (AC+BI)
+
+Our sample estimates are given as the contrast/$2n$.
+
+- $a = \text{(AI+BI) - (AC+BC)}/2n$, estimate of $\alpha$
+- $b = \text{(AC+AI) - (BC+BI)}/2n$, estimate of $\beta$
+- $c = \text{(BC+AI) - (AC+BI)}/2n$, estimate of $\gamma$
+
+### Hypothesis Test for $\gamma$
+
+We have an estimate $c$ of $\gamma$, we must ask \alert{what is the
+probability that $\gamma = 0$}? If $\gamma = 0$, then our event has
+had no effect. If $\gamma \ne 0$, then our event has had an effect.
+
+Our hypotheses are:
+
+- $H_0$: $\gamma = 0$, the event has had no effect.
+- $H_A$: $\gamma \ne 0$, the event has had an effect.
+
+\pause
+
+So under the Null Hypothesis, we have:
+
+|        | Control     | Impact                 |
+|--------|-------------|------------------------|
+| Before | $\mu$       | $\mu + \alpha$         |
+| After  | $\mu+\beta$ | $\mu + \alpha + \beta$ |
+
+
+Residuals error $\varepsilon$ (difference between the data and the
+model) have the usual assumptions of Normality, constant variance and
+independence.
+
+### Test statistic and distribution
+
+How large does $c$ have to be for us to have evidence that $\gamma \ne 0$?
+
+We must examine the distribution $\Gamma$, the distribution of $c$
+when $\gamma = 0$.
+
+- If the $c$ computed from our data looks like it could have been
+  sampled from $\Gamma$, then we cannot say that $\gamma \ne 0$.
+
+- If the $c$ computed from our data looks like it could not have been
+  sampled from $\Gamma$, then we have evidence that $\gamma \ne 0$.
+
+But how can we compute this distribution?
+
+\pause
+
+We must use randomisation to simulate $\gamma = 0$.
+
+### Randomisation distribution
+
+Remember that the residuals error $\varepsilon$ (difference between
+the data and the model) are assumed to be Normal, have constant
+variance and independence.
+
+Therefore, we can remove the residuals from the data, shuffle them,
+then reattach them without effecting the distribution of the data, as
+long as $\gamma = 0$. Therefore, by shuffing the residuals, we are
+able to build the randomisation distribution under $H_0$: \gamma = 0$.
+
+
+### Computing the randomisation distribution
+
+#### Example
+
+Given the sample:
+
+|        | Control | Impact   |
+|--------|---------|----------|
+| Before | 4, 0, 3 | 8, 2, 6  |
+| After  | 3, 8, 8 | 11, 3, 8 |
+
+and the statistics $m = 2.83$, $a = 2$, $b = 3$
+
+
+
+
+4  0  3  3  8  8
+8  2  6 11  3  8
+
+
+
+
+We have the model:
+
+$$
+	y = \mu + \alpha + \beta + \gamma + \varepsilon
+$$
+
+If $\gamma = 0$, we have the model:
+
+$$
+	y = \mu + \alpha + \beta  + \varepsilon
+$$
 
 For each contrast,
 
@@ -315,9 +471,9 @@ $$\text{Sum of Squares} = \frac{\text{contrast}^2}{4n}$$
 
 There are three contrasts so three sums of squares. We call them $SS_{BA}$, $SS_{CI}$ and $SS_{Int}$ 
 
-## Sum of squares for error ($SS_E$)
+### Sum of squares for error ($SS_E$)
 
-The total sum of squares ($SS_{Total}$) is  the sum of all the data points minus their mean squared.
+The total sum of squares ($SS_{Total}$) is the sum of all the data points minus their mean, then squared.
 
 $$SS_{Total} = \sum_{ij} (y_{ij} - \bar{y})^2$$
 
@@ -327,13 +483,13 @@ $$SS_E= SS_{Total} - SS_{BA} - SS_{CI} - SS_{Int}$$
 
 Also Mean Square for error is $MS_E = SS_E/ (4\times(n-1))$
 
-## Is the interaction different from zero?
+### Is the interaction different from zero?
 
 We use the fact that the $F$ statistic 
 
 $$ F = \frac{SS_{Int}}{MS_E}$$ 
 
-Has an _$F$ distribution_ on 1 and $4(n-1)$ degrees of freedom so reject $H_0$ (no interaction)
+Has an \alert{$F$ distribution} on 1 and $4(n-1)$ degrees of freedom so reject $H_0$ (no interaction)
 if $F$ exceeds the critical value.
 
 Table of $\alpha=0.05$ critical values for degrees of freedom $= 1$ and $4(n-1)$
@@ -341,10 +497,10 @@ Table of $\alpha=0.05$ critical values for degrees of freedom $= 1$ and $4(n-1)$
 ```{r echo=FALSE, results="asis"}
 ftab = matrix(qf(1-0.025, 1, 4*(1:5)), nrow=1)
 colnames(ftab) = 4*(1:5)
-print(xtable(ftab, digits=3), floating=FALSE, comment=FALSE, include.rownames=FALSE)
+print(xtable(ftab, digits=3), floating=FALSE, comment=FALSE, include.rownames=FALSE, booktabs=TRUE)
 ```
 
-## Example --- Optophone Mobile Company
+### Example --- Optophone Mobile Company
 
 ```{r echo=FALSE, results="asis"}
 m2 = round(sqrt(m2),3)
@@ -356,7 +512,7 @@ CCI = (AI+BI) - (AC+BC)
 CInt = (BC+AI) - (AC+BI) 
 SSE = SStotal - (CBA^2+CCI^2+CInt^2)/20
 options(scipen=1)
-print(xtable(mtmp, digits=0), floating=FALSE, comment=FALSE)
+print(xtable(mtmp, digits=0), floating=FALSE, comment=FALSE, booktabs=TRUE)
 ```
 
 For the same reasons as before we use a square root transformation
@@ -364,10 +520,10 @@ For the same reasons as before we use a square root transformation
 ```{r echo=FALSE, results="asis"}
 mtmp2 = matrix(apply(formatC(m2, digits=2, format="f"), 1, paste, collapse=","), ncol=2)
 dimnames(mtmp2) = list(c("Before", "After"), c("Control", "Impact"))
-print(xtable(mtmp2, digits=0), floating=FALSE, comment=FALSE)
+print(xtable(mtmp2, digits=0), floating=FALSE, comment=FALSE, booktabs=TRUE)
 ```
 
-## Example --- Optophone Mobile Company
+### Example --- Optophone Mobile Company
 
 Total sum of squares is `r SStotal`.
 
@@ -380,7 +536,7 @@ After | `r AC` | `r AI`
 
 Test for an impact of the website revamp.
 
-## Example --- Optophone Mobile Company
+### Example --- Optophone Mobile Company
 
 Solution 
 
@@ -400,7 +556,7 @@ ci = c(rep("control", 10), rep("impact",10))
 summary(aov(tmp~ba*ci))
 ```
 
-## Example --- Optophone Mobile Company
+### Example --- Optophone Mobile Company
 
 $F$ statistic for the interaction
 
@@ -411,17 +567,17 @@ Using the table the $\alpha=0.05$, $F$ critical value for 1 and 16 degrees of fr
 
 # Example --- Commonpoverty Bank revisited
 
-## Example --- Commonpoverty Bank and Not Another Bank
+### Example --- Commonpoverty Bank and Not Another Bank
 
 A company executive points out that all the banks were in the news around the time of the advertising campaign,
 and that maybe this was responsible for the Tweet increase?
 
-Luckily, they had also collected tweet count data on their competitor _Not Another Bank_. 
+Luckily, they had also collected tweet count data on their competitor \alert{Not Another Bank}. 
 
 ```{r results="asis", echo=FALSE}
 mm = rbind(BCx, ACx)
 dimnames(mm) = list(c("Before", "After"), paste("day", 1:4))
-print(xtable(mm, digits=0), floating=FALSE, comment=FALSE)
+print(xtable(mm, digits=0), floating=FALSE, comment=FALSE, booktabs=TRUE)
 ```
 
 ```{r include=FALSE}
@@ -443,7 +599,7 @@ SSInt = CInt^2/16
 SSE = SStotal - SSBA-SSCI -SSInt
 ```
 
-## Example --- Commonpoverty Bank and Not Another Bank
+### Example --- Commonpoverty Bank and Not Another Bank
 
 After a square root transformation the following summaries were obtained.
 
@@ -456,7 +612,7 @@ Sums of square roots of counts.
 Before| `r sumBC` | `r sumBI`
 After| `r sumAC`| `r sumAI`
 
-## Example --- Commonpoverty Bank and Not Another Bank
+### Example --- Commonpoverty Bank and Not Another Bank
 
 1. Compute the contrasts for Before/After, between banks, and the interaction.
 2. Compute the sums of squares for the same as above.
@@ -465,9 +621,9 @@ After| `r sumAC`| `r sumAI`
 
 # Summary
 
-## Summary
+### Summary
 
-Today we looked at a two-sample $t$-test to compare tweet rates before and after an _event_.
+Today we looked at a two-sample $t$-test to compare tweet rates before and after an \alert{event}.
 
-We also looked at including a _control_ organisation to eliminate external effects.
+We also looked at including a \alert{control} organisation to eliminate external effects.
 

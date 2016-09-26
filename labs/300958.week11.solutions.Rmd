@@ -8,7 +8,8 @@ opts_chunk$set(fig.path='figure/week11-labsol-')
 
 `r opts_chunk$set(prompt=TRUE, comment=NA)`
 
-- Complete the following R-code to write a function to compute Twitter's $\chi^2$ statistic for trends.
+- Complete the following R-code to write a function to compute
+  Twitter's $\chi^2$ statistic for trends.
 
 ```{r eval=FALSE, prompt=FALSE}
 TwitterChi = function(tweetsBefore, tweetsNow, N) {
@@ -19,9 +20,104 @@ TwitterChi = function(tweetsBefore, tweetsNow, N) {
 }
 ```
 
+Using the matrix:
+```{r echo=FALSE}
+p1 = 0.05; p2 = 0.07; N = 1000
+X = matrix(c(rbinom(2, N, c(p1,p2)),N), nrow=1)
+dimnames(X) = list("Number of Tweets", c("Before", "Now", "Sample Size"))
+print(X)
+```
+
+We can convert it into a matrix:
+```{r}
+Y = matrix(0,2,2)
+Y[,1] = X[1:2]
+Y[,2] = X[3] - X[1:2]
+colnames(Y) = c("Topic","No Topic")
+rownames(Y) = c("Before","After")
+```
 
 
-- Using the data below (from lectures) compute $\bar{x}$, $\bar{y}$, $SS_X$, $SS_{XY}$ and therefore $\hat{\beta}$ and $\hat{\alpha}$. You should use, $x=\text{day}$ and  $y=\sqrt{\text{count}}$.
+
+We can stretch it into the long form:
+```{r}
+stretchTable = function(tab, variableNames) {
+    tabx = rep(rownames(tab), rowSums(tab))
+    l = ncol(tab)
+    m = nrow(tab)
+    cn = colnames(tab)
+    taby = c()
+    for (a in 1:m) {
+        for (b in 1:l) {
+            taby = c(taby, rep(cn[b], tab[a,b]))
+        }
+    }
+
+    d = data.frame(x = tabx, y = taby)
+    colnames(d) = variableNames
+    return(d)
+}
+
+Z = stretchTable(Y, c("Time","Topic"))
+```
+And examine the top few items in the stretched list.
+```{r}
+head(Z)
+```
+
+
+Then tabulate it to confirm that we have not made any mistakes:
+```{r}
+table(Z)
+```
+
+Compute the $\chi^2$ randomisation distribution.
+```{r}
+## define the functions to use
+expectedIndependent = function(X) {
+    n = sum(X)
+    p = rowSums(X)/sum(X)
+    q = colSums(X)/sum(X)
+    return(p %o% q * n) # outer product creates table
+}
+
+chiSquaredStatistic = function(X, E) {
+    return(sum((X - E)^2/E))
+}
+
+## compute the expected table
+E = expectedIndependent(table(Z)) # compute expected counts if independent
+
+## compute the randomisation distribution
+x2dist = replicate(1000, { # compute 1000 randomised chi-squared statistics
+  timeShuffle = sample(Z$Time)
+  topicShuffle = sample(Z$Topic)
+  Yindep = table(timeShuffle, topicShuffle)
+  chiSquaredStatistic(Yindep, E)
+})
+
+hist(x2dist)
+```
+
+Compute the $\chi^2$ statistic for the original data.
+```{r}
+x2 = chiSquaredStatistic(table(Z), E)
+```
+
+Compute the $p$ value of the test.
+```{r}
+## pval is the proportion of x2dist that is greater than x2
+pval = mean(x2dist > x2)
+print(pval)
+```
+
+- Using R's $\chi^2$ test:
+```{r}
+chisq.test(Y, simulate.p.value = TRUE)
+```
+
+
+- Linear regression
 
 ```{r}
 count = c(135, 145, 133, 102, 105, 108, 128, 144, 
@@ -34,27 +130,20 @@ day = c(210,
 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 
 250, 251, 252, 253, 254)
 
-x = day
-y = sqrt(count)
-xbar = mean(x)
-ybar = mean(y)
-SSx = sum((x - xbar)^2)
-SSxy = sum((x - xbar)*(y - ybar))
-b = SSxy/SSx
-a = ybar - b*xbar
-print(c(a,b))
+m = lm(sqrt(count) ~ day)
+summary(m)
 ```
 
-- Use the `lm` function to check your results on the Twitter counts from above.
+The above summary shows the intercept 2.80411, and the gradient
+0.03714.  The $p$-value for the gradient (0.000703), shows that the
+population gradient is not likely to be zero.
 
+
+- Moving averages using a loop
+
+The completed function is:
 ```{r}
-summary(lm(y ~ x))
-```
-
-The following is a moving average (as defined in lectures) function using a `for` loop.
-
-```{r prompt=FALSE}
-moving.average = function(x, m) {
+windowWeights = function(m) {
   if( m%%2 ) { 
      ## m is odd
      w = rep(1,m)/m
@@ -62,25 +151,37 @@ moving.average = function(x, m) {
     ## m is even
     w = c(0.5, rep(1,m-1), 0.5)/m
   }
+}
+
+moving.average = function(x, m) {
+
+  ## compute window weights
+  w = windowWeights(m)
+
   j = floor(m/2)
   offsets = (-j):j
   n = length(x)
   res = rep(NA, n)
+  ## slide window and apply window weights to obtain averages
   for(i in (j+1):(n-j)) {
     res[i] = sum(w*x[i+offsets])
-    }
+  }
   return(res)
 }
+
 ```
 
-- Make sure you understand this function and use it to compute the 7 point moving average of the tweet count data. Remember to square root first.
+- Make sure you understand this function and use it to compute the 7
+  point moving average of the tweet count data. Remember to square
+  root first.
 
 ```{r}
 trend = moving.average(sqrt(count), 7)
 print(trend)
 ```
 
-The following function computes a seasonal component by averaging over all observations that are $m$ apart.
+The following function computes a seasonal component by averaging over
+all observations that are $m$ apart.
 
 ```{r prompt=FALSE}
 seasonal = function(x ,m) {
@@ -95,7 +196,9 @@ seasonal = function(x ,m) {
 }
 ```
 
-- Make sure you understand this function and use it to compute the seasonal component for the tweet count data. Remember to subtract the trend first.
+- Make sure you understand this function and use it to compute the
+  seasonal component for the tweet count data. Remember to subtract
+  the trend first.
 
 ```{r fig.cap="Data split into trend and seasonal components."}
 centred = sqrt(count) - trend # remove trend
@@ -103,7 +206,6 @@ zcentred = centred[!is.na(centred)] # remove NAs at boundaries
 s = seasonal(zcentred, 7) # compute seasonal component
 print(s)
 plot(day, sqrt(count))
-lines(day, trend, col=2)
 lines(day, trend, col=2)
 lines(day[!is.na(centred)], trend[!is.na(centred)] + rep_len(s, length.out = sum(!is.na(centred))))
 ```

@@ -1,6 +1,5 @@
 ## Make sure image URL directory is not readable, only executable!
-cat('`r require("igraph"); library("Matrix"); library("methods"); library("lattice"); library("xtable"); image_path = "link_analysis"; image_url = "http://www.scem.uws.edu.au/~lapark/300958/images/link_analysis"`')
-
+cat('`r require("igraph"); library("Matrix"); library("methods"); library("lattice"); library("xtable"); image_path = "link_analysis"; image_url = "https://vuws.westernsydney.edu.au/bbcswebdav/users/30027430/Images"`')
 
 
 questions = list(
@@ -14,7 +13,7 @@ questions = list(
     list(
       type =  'NUM',
       known.parameters =  'file_name g',
-      question = '`r png(paste(image_path, file_name, sep="/")); par(mar = c(0,0,0,0)); V(g)$label.cex = 1.8; plot(g, layout=layout.fruchterman.reingold, vertex.size = 15); dev.off();  A = t(get.adjacency(g)); n = length(V(g)); D = diag(1/apply(A,2,sum)); T = A %*% D; E = matrix(1/n,n,n); P = alpha*T + (1-alpha)*E;` <p>Using the Random Surfer probability transition matrix of the following graph, with &alpha; = `r alpha`, what is the probability of beginning at vertex 1 and moving to vertex 2 in a random walk of length 1 (given at two decimal places)?</p><img src="`r paste(image_url, file_name, sep="/")`">',
+      question = '`r png(paste(image_path, file_name, sep="/")); par(mar = c(0,0,0,0)); V(g)$label.cex = 1.8; plot(g, layout=layout.fruchterman.reingold, vertex.size = 15); dev.off();  A = t(get.adjacency(g)); n = length(V(g)); D = diag(1/apply(A,2,sum)); T = A %*% D; E = matrix(1/n,n,n); P = alpha*T + (1-alpha)*E;` <p>Using the Random Surfer probability transition matrix of the following graph, with &lambda; = `r alpha`, what is the probability of beginning at vertex 1 and moving to vertex 2 in a random walk of length 1 (given at two decimal places)?</p><img src="`r paste(image_url, file_name, sep="/")`">',
       answer = '`r P[2,1]`',
       tolerance = "0.01"
     ),
