@@ -53,9 +53,13 @@ before and after the switch-over to the new site. Additionally, they
 try to assess the buzz around their product they will also monitor the
 number tweets \alert{referring to the company}.
 
+\pause
+
 They collect the number of tweets (ignoring sentiment) for five
 randomly chosen days before the switch-over and five randomly chosen
 days shortly after the switch-over.
+
+\pause
 
 The following counts were obtained.
 
@@ -73,9 +77,11 @@ print(xtable(mm, digits=0), floating=FALSE, comment=FALSE, booktabs=TRUE)
 ```
 \end{center}
 
+\pause
+
 Has the website switch over had an impact on tweet rate?
 
-### Example --- Optophone Mobile Company
+### Difference in means
 
 ```{r include=FALSE}
 mb = mean(before)
@@ -101,9 +107,9 @@ underlying tweet rate has changed.
 \pause
 
 To observe the probability of this difference in sample means
-happening by chance when the population means are equal, we must
+happening by chance when the population means are equal ($p$-value), we must
 examine the distribution of the \alert{difference in sample means},
-given that the population means are equal.
+given that the population means are equal ($H_0$).
 
 ### Thinking about the randomisation distribution
 
@@ -123,7 +129,7 @@ If we assume $H_0$, then:
 - both the before and after sample have the same population mean.
 - we can combine the before and after sample to obtain a larger sample
   with the same population mean.
-- if we randomy split the combined sample into two piles, each will
+- if we randomly split the combined sample into two piles, each will
   have the same population mean.
 
 ### Creating the randomisation distribution
@@ -171,7 +177,6 @@ number of tweets about Optophone.
 
 
 
-## Example --- Commonpoverty Bank
 
 ###  Commonpoverty Bank
 ```{r include=FALSE}
@@ -200,10 +205,11 @@ print(xtable(mm, digits=0), floating=FALSE, comment=FALSE, booktabs=TRUE)
 ```
 \end{center}
 
-Show how to compute one value of the randomisation distribution.
+1. Compute the sample difference in means.
+2. Show how to compute one value of the randomisation distribution.
 
 
-### Example --- Commonpoverty Bank
+### Commonpoverty Bank
 
 #### Problem (continued)
 
@@ -230,15 +236,17 @@ qplot(randDist,geom="histogram",binwidth=4) + theme_grey(base_size = 10) + theme
 
 # Introducing a control
 
-### Introducing a control
+### Did the event cause the increase?
 
 How do we know that the difference is due to the event?
 
-Maybe the tweet rate increased for everyone. Or at least for people in the same industry.
+Maybe the tweet rate increased for everyone. Or at least for people in
+the same industry.
 
-One way to get more information would be to collect tweet data on a similar business or entity.
-
-Ideally, this business would not be affected by the event, but would be affected by all other factors, that might affect the primary business.
+One way to get more information would be to \alert{collect tweet data
+on a similar business or entity}.  Ideally, this business would not be
+affected by the event, but would be affected by all other factors,
+that might affect the primary business.
 
 ### Introducing a control
 
@@ -370,14 +378,14 @@ Contrasts
 
 Our sample estimates are given as the contrast/$2n$.
 
-- $a = \text{(AI+BI) - (AC+BC)}/2n$, estimate of $\alpha$
-- $b = \text{(AC+AI) - (BC+BI)}/2n$, estimate of $\beta$
-- $c = \text{(BC+AI) - (AC+BI)}/2n$, estimate of $\gamma$
+- $a = (\text{(AI+BI) - (AC+BC)})/2n$, estimate of $\alpha$
+- $b = (\text{(AC+AI) - (BC+BI)})/2n$, estimate of $\beta$
+- $c = (\text{(BC+AI) - (AC+BI)})/2n$, estimate of $\gamma$
 
 ### Hypothesis Test for $\gamma$
 
 We have an estimate $c$ of $\gamma$, we must ask \alert{what is the
-probability that $\gamma = 0$}? If $\gamma = 0$, then our event has
+probability of obtaining $c$, given that $\gamma = 0$}? If $\gamma = 0$, then our event has
 had no effect. If $\gamma \ne 0$, then our event has had an effect.
 
 Our hypotheses are:
@@ -395,7 +403,7 @@ So under the Null Hypothesis, we have:
 | After  | $\mu+\beta$ | $\mu + \alpha + \beta$ |
 
 
-Residuals error $\varepsilon$ (difference between the data and the
+Residual error $\varepsilon$ (difference between the data and the
 model) have the usual assumptions of Normality, constant variance and
 independence.
 
@@ -426,204 +434,243 @@ variance and independence.
 
 Therefore, we can remove the residuals from the data, shuffle them,
 then reattach them without effecting the distribution of the data, as
-long as $\gamma = 0$. Therefore, by shuffing the residuals, we are
-able to build the randomisation distribution under $H_0$: \gamma = 0$.
+long as $\gamma = 0$.
+
+The randomisation process is:
+
+1. Shuffle the residuals
+2. Add them back on to the fitted values to obtain new sample data.
+3. Compute $c$ from the new sample data
+
+Repeat this at least 1000 times to obtain the distribution of $c$ when $\gamma = 0$.
 
 
 ### Computing the randomisation distribution
 
 #### Example
 
-Given the sample:
+Given the below sample, we compute the statistics $m = 2.83$, $a = 2$,
+$b = 3$ to obtain the expected values.
 
-|        | Control | Impact   |
-|--------|---------|----------|
-| Before | 4, 0, 3 | 8, 2, 6  |
-| After  | 3, 8, 8 | 11, 3, 8 |
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+& Control & Impact \\
+\midrule
+Before & 4, 0, 3 & 8, 2, 6  \\
+After  & 3, 8, 8 & 11, 3, 8 \\
+\bottomrule
+\end{tabular}
+$\rightarrow$
+\begin{tabular}{lcc}
+\toprule
+& Expect Control & Expect Impact \\
+\midrule
+Before & 2.83, 2.83, 2.83 & 4.83, 4.83, 4.83 \\
+After  & 5.83, 5.83, 5.83 & 7.83, 7.83, 7.83 \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-and the statistics $m = 2.83$, $a = 2$, $b = 3$
+Giving the sets of residuals.
 
+|        | Resid Control     | Resid Impact      |
+|--------|-------------------|-------------------|
+| Before | 1.17, -2.83, 0.17 | 3.17, -2.83, 1.17 |
+| After  | -2.83, 2.17, 2.17 | 3.17, -4.83, 0.17 |
 
+### Permuted residuals
 
+#### Example
 
-4  0  3  3  8  8
-8  2  6 11  3  8
+We permute the residuals.
 
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+& Control & Impact \\
+\midrule
+Before & 1.17,  -2.83, 2.17 & 2.17, 0.17, -2.83 \\
+After & 3.17, -4.83, 3.17 & 0.17, 1.17, -2.83 \\
+\bottomrule
+\end{tabular}
+\end{center}
 
+and add them back on to the fitted model to obtain new data where $\gamma = 0$.
 
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+& Control & Impact \\
+\midrule
+Before & 4, 0, 5 & 7, 5, 2 \\
+After & 9, 1, 9 & 8, 9, 5 \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-We have the model:
+Then compute the $c$ (sample interaction) from the new data.
+If we repeat this at least 1000 times, we will obtain a distribution
+of $c$, when $\gamma = 0$.
 
-$$
-	y = \mu + \alpha + \beta + \gamma + \varepsilon
-$$
+### Randomisation distribution of $c$, when $\gamma = 0$
 
-If $\gamma = 0$, we have the model:
+#### Example
 
-$$
-	y = \mu + \alpha + \beta  + \varepsilon
-$$
+```{r echo=FALSE}
+suppressWarnings(library(dae, quietly=TRUE))
 
-For each contrast,
+n = 3
+xs = c(4, 0, 3, 3, 8, 8, 8, 2, 6, 11, 3, 8)
+when = factor(c(rep("before", n), rep("after", n), rep("before", n),
+       rep("after", n)), levels = c("before", "after"))
+company = factor(c(rep("control", 2 * n), rep("impact", 2 * n)),
+	levels = c("control","impact"))
 
-$$\text{Effects} =  \frac{\text{contrast}}{2n}$$
-$$\text{Sum of Squares} = \frac{\text{contrast}^2}{4n}$$
+m = aov(xs ~ when + company)
+f = predict(m)
 
-There are three contrasts so three sums of squares. We call them $SS_{BA}$, $SS_{CI}$ and $SS_{Int}$ 
+### compute residuals
+r = residuals(m)
 
-### Sum of squares for error ($SS_E$)
+### permute residuals and replace
+R = 1000
+gSet = rep(0,R)
+for (m in 1:R) {
+    y = f + sample(r)
+    gSet[m] = yates.effects(aov(y ~ when * company))[3]
+}
 
-The total sum of squares ($SS_{Total}$) is the sum of all the data points minus their mean, then squared.
-
-$$SS_{Total} = \sum_{ij} (y_{ij} - \bar{y})^2$$
-
-And then the Sum of Squares for error $SS_{E}$ is the difference,
-
-$$SS_E= SS_{Total} - SS_{BA} - SS_{CI} - SS_{Int}$$
-
-Also Mean Square for error is $MS_E = SS_E/ (4\times(n-1))$
-
-### Is the interaction different from zero?
-
-We use the fact that the $F$ statistic 
-
-$$ F = \frac{SS_{Int}}{MS_E}$$ 
-
-Has an \alert{$F$ distribution} on 1 and $4(n-1)$ degrees of freedom so reject $H_0$ (no interaction)
-if $F$ exceeds the critical value.
-
-Table of $\alpha=0.05$ critical values for degrees of freedom $= 1$ and $4(n-1)$
-
-```{r echo=FALSE, results="asis"}
-ftab = matrix(qf(1-0.025, 1, 4*(1:5)), nrow=1)
-colnames(ftab) = 4*(1:5)
-print(xtable(ftab, digits=3), floating=FALSE, comment=FALSE, include.rownames=FALSE, booktabs=TRUE)
+gVal = yates.effects(aov(xs ~ when * company))[3]
+pVal = mean(abs(gSet) > abs(gVal))
 ```
 
-### Example --- Optophone Mobile Company
+```{r echo=FALSE, fig.width=4.2, fig.height=2.5, fig.cap="Distribution of sample interaction."}
+qplot(gSet,geom="histogram",binwidth=1) + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("Sample interaction (c)")
+```
 
+### Test conclusion
+
+#### Example
+
+Since the alternative ($H_A$) is $\gamma \ne 0$, the test is two sided
+(both positive and negative sides).
+
+If the interaction from the data is $c = `r gVal`$, we get a $p$ value
+of `r pVal`, so we do not reject $H_0$.
+
+
+### Randomisation algorithm
+
+```{r eval=TRUE}
+# Setup the data
+count = c(4, 0, 3, 3, 8, 8, 8, 2, 6, 11, 3, 8)
+n = 3
+when = factor(c(rep("before", n), rep("after", n), rep("before", n),
+       rep("after", n)), levels = c("before", "after"))
+company = factor(c(rep("control", 2 * n), rep("impact", 2 * n)),
+	levels = c("control","impact"))
+
+X = data.frame(when = when, company = company, count = count)
+print(X)
+```
+
+### Randomisation algorithm continued
+
+```{r eval=FALSE}
+library(dae) # for yates.effects()
+
+m = aov(count ~ when + company, data = X) # fit the Null model (no gamma)
+f = predict(m)   # computed expected values
+r = residuals(m) # compute residuals
+
+### permute residuals and replace
+R = 1000
+cSet = rep(0,R)
+for (m in 1:R) {
+    y = f + sample(r) # shuffle residuals and add to fitted
+    # compute c and store in cSet
+    cSet[m] = yates.effects(aov(count ~ when * company, data = X))[3]
+}
+# compute c from data
+cVal = yates.effects(aov(count ~ when * company, data = X))[3]
+# compute p value
+pVal = mean(abs(cSet) > abs(cVal))
+```
+
+
+
+
+### Back to our data
+
+#### Problem
+
+\begin{center}
 ```{r echo=FALSE, results="asis"}
-m2 = round(sqrt(m2),3)
-SStotal = sum( (m2-mean(m2))^2)
-sums = apply(m2, 1, sum)
-BC = sums[1]; AC= sums[2]; BI = sums[3]; AI = sums[4]
-CBA = (AC+AI) - (BC+BI) 
-CCI = (AI+BI) - (AC+BC)
-CInt = (BC+AI) - (AC+BI) 
-SSE = SStotal - (CBA^2+CCI^2+CInt^2)/20
-options(scipen=1)
 print(xtable(mtmp, digits=0), floating=FALSE, comment=FALSE, booktabs=TRUE)
 ```
+\end{center}
 
-For the same reasons as before we use a square root transformation
 
-```{r echo=FALSE, results="asis"}
-mtmp2 = matrix(apply(formatC(m2, digits=2, format="f"), 1, paste, collapse=","), ncol=2)
-dimnames(mtmp2) = list(c("Before", "After"), c("Control", "Impact"))
-print(xtable(mtmp2, digits=0), floating=FALSE, comment=FALSE, booktabs=TRUE)
+Compute the estimates of $\alpha$, $\beta$ and $\gamma$.
+
+### Concluding the test
+
+#### Problem
+
+Based on the estimate of $\alpha$, $\beta$ and $\gamma$ and the
+below distribution of $c$, given $\gamma = 0$, what is the conclusion
+of the test?
+
+
+```{r echo=FALSE}
+n = 5
+xs = c(cbefore, cafter, before, after)
+when = factor(c(rep("before", n), rep("after", n), rep("before", n),
+       rep("after", n)), levels = c("before", "after"))
+company = factor(c(rep("control", 2 * n), rep("impact", 2 * n)),
+	levels = c("control","impact"))
+
+m = aov(xs ~ when + company)
+f = predict(m)
+
+### compute residuals
+r = residuals(m)
+
+### permute residuals and replace
+R = 1000
+gSet = rep(0,R)
+for (m in 1:R) {
+    y = f + sample(r)
+    gSet[m] = yates.effects(aov(y ~ when * company))[3]
+}
+
+gVal = yates.effects(aov(xs ~ when * company))[3]
+pVal = mean(abs(gSet) > abs(gVal))
 ```
 
-### Example --- Optophone Mobile Company
-
-Total sum of squares is `r SStotal`.
-
-Totals
-
-|| Control | Impact
----|---|---
-Before | `r BC` | `r BI`
-After | `r AC` | `r AI`
-
-Test for an impact of the website revamp.
-
-### Example --- Optophone Mobile Company
-
-Solution 
-
-Source | Contrast | Effect | SSQ
----|---|---|---
-before/after |  (AC+AI) - (BC+BI) = `r CBA`| `r CBA/10` |`r CBA^2/20`
-companies |(AI+BI) - (AC+BC) = `r CCI`| `r CCI/10` |`r CCI^2/20`
-interaction |  (BC+AI) - (AC+BI) =`r CInt`| `r CInt/10`| `r CInt^2/20`
-
-So
-$$SS_E= SS_{Total} - SS_{BA} - SS_{CI} - SS_{Int} = `r SSE`$$
-
-```{r include=FALSE}
-tmp = c(t(m2))
-ba = rep(c(rep("before",5), rep("after",5)),2)
-ci = c(rep("control", 10), rep("impact",10))
-summary(aov(tmp~ba*ci))
+```{r echo=FALSE, fig.width=4.2, fig.height=2.5, fig.cap="Distribution of sample interaction."}
+qplot(gSet,geom="histogram",binwidth=1) + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("Sample interaction (c)")
 ```
 
-### Example --- Optophone Mobile Company
 
-$F$ statistic for the interaction
-
-$$ F = \frac{SS_{Int}}{MS_E} = \frac{`r CInt^2/20`}{`r SSE`/16} = `r round(CInt^2/20/(SSE/16),2)`$$
-
-Using the table the $\alpha=0.05$, $F$ critical value for 1 and 16 degrees of freedom is 
-`r round(qf(1-0.025,1,16),3)`
-
-# Example --- Commonpoverty Bank revisited
-
-### Example --- Commonpoverty Bank and Not Another Bank
-
-A company executive points out that all the banks were in the news around the time of the advertising campaign,
-and that maybe this was responsible for the Tweet increase?
-
-Luckily, they had also collected tweet count data on their competitor \alert{Not Another Bank}. 
-
-```{r results="asis", echo=FALSE}
-mm = rbind(BCx, ACx)
-dimnames(mm) = list(c("Before", "After"), paste("day", 1:4))
-print(xtable(mm, digits=0), floating=FALSE, comment=FALSE, booktabs=TRUE)
-```
-
-```{r include=FALSE}
-tmp = sqrt(c(BCx,ACx, BIx, AIx))
-ba = rep(c(rep("before",4), rep("after",4)),2)
-ci = c(rep("control", 8), rep("impact",8))
-summary(aov(tmp~ba*ci))
-SStotal = round(sum( (tmp-mean(tmp))^2),2)
-sumBI = round(sum(sqrt(BIx)),2)
-sumAI = round(sum(sqrt(AIx)),2)
-sumBC = round(sum(sqrt(BCx)),2)
-sumAC = round(sum(sqrt(ACx)),2)
-CBA = (sumAI+sumAC) - (sumBI+sumBC)
-CCI = (sumAI+sumBI) - (sumAC+sumBC)
-CInt = (sumBC+sumAI) - (sumBI+sumAC)
-SSBA = CBA^2/16
-SSCI = CCI^2/16
-SSInt = CInt^2/16
-SSE = SStotal - SSBA-SSCI -SSInt
-```
-
-### Example --- Commonpoverty Bank and Not Another Bank
-
-After a square root transformation the following summaries were obtained.
-
-Total sum of square ($SS_{Total}$) = `r SStotal`
-
-Sums of square roots of counts.
-
-||Not Another Bank| Commonpoverty Bank
----|---|---
-Before| `r sumBC` | `r sumBI`
-After| `r sumAC`| `r sumAI`
-
-### Example --- Commonpoverty Bank and Not Another Bank
-
-1. Compute the contrasts for Before/After, between banks, and the interaction.
-2. Compute the sums of squares for the same as above.
-3. Compute the sum of squares for error.
-4. Test whether the advertising campaign really had an impact.
-
-# Summary
 
 ### Summary
 
-Today we looked at a two-sample $t$-test to compare tweet rates before and after an \alert{event}.
+- We can test the impact of an event by counting the number of tweets
+  that mention it.
 
-We also looked at including a \alert{control} organisation to eliminate external effects.
+- By collecting tweets before and after the event, we can test if the
+  difference in mean tweet count is zero. If it is not zero, the event
+  has had an impact.
 
+- By introducing a control, we are able to identify if actual event
+  lead to the change in tweet counts.
+
+- We also saw how to obtain a randomisation distribution by
+  shuffling residuals.
+
+
+### Next Week
+
+Sentiment Analysis
