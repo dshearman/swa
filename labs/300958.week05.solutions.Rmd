@@ -42,7 +42,7 @@ corpus = tm_map(corpus, stemDocument) # convert all words to their stems
   containing the values of $w_{d,t}$.
 
 ```{r eval=FALSE}
-N = ncol(tweet.matrix)
+N = nrow(tweet.matrix)
 IDF = log(N/colSums(tweet.matrix > 0))
 TF = log(tweet.matrix + 1)
 tweet.weighted.matrix = TF %*% diag(IDF)
