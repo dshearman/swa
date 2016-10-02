@@ -4,7 +4,7 @@ opts_chunk$set(fig.path='figure/spatial-spatial-')
 opts_chunk$set(dev = 'pdf', fig.cap="")
 ```
 
-## Spatial Analysis of Twitter
+### Spatial Analysis of Twitter
 
 Twitter collects the location of tweets and can provide this in the result of a search.
 
@@ -19,7 +19,7 @@ Location or Spatial information can be useful in a number of ways, e.g..
 
 # Twitter Geocoding
 
-## Twitter Geocoding
+### Twitter Geocoding
 
 Associating a spatial location with a piece of data is called _geocoding_.
 
@@ -29,7 +29,7 @@ Twitter Geocodes tweets based on;
 * Otherwise, if the from field of the Twitter users profile is completed (usually the city or origin), Twitter uses this location as the geocode for tweets
 * Otherwise, the location is  blank
 
-## Limitations of Twitter Geocoding
+### Limitations of Twitter Geocoding
 
 The Twitter location data has a lot of limitations
 
@@ -37,7 +37,7 @@ The Twitter location data has a lot of limitations
 * Home location matching is problematic --- Newcastle --- NSW or UK?
 * Users with home locations who are away from home (on holidays) still get their tweets marked with their home location.
 
-## Twitter geocodes
+### Twitter geocodes
 
 Set up OAuth, then,
 
@@ -53,7 +53,7 @@ x = df$longitude
 y = df$latitude
 ```
 
-## Twitter geocodes
+### Twitter geocodes
 
 Find the number of tweets that don't have a missing longitude.
 
@@ -66,7 +66,7 @@ round(100*sum(!is.na(x))/nrow(df),2)
 ```
 
 
-## Twitter geocodes
+### Twitter geocodes
 
 ```{r echo=-1,dev="pdf", fig.width=5, fig.height=2.5, fig.cap="Kevin Bacon Tweets"}
 par(mar=rep(0.1,4))
@@ -75,7 +75,7 @@ map("world")
 points(x,y,pch=16, col="red")
 ```
 
-## Twitter geocodes
+### Twitter geocodes
 
 In a larger dataset (run on ScraperWiki.com), we found that 2--3% of tweets had a usable geocode.
 
@@ -86,7 +86,7 @@ This means that
 
 # The DOLLY project
 
-## The DOLLY project
+### The DOLLY project
 
 > The DOLLY Project (Digital OnLine Life and You) is a repository of billions of geolocated 
 > tweets that allows for real-time research and analysis.
@@ -97,7 +97,7 @@ This means that
 
 More info [http://www.floatingsheep.org/p/dolly.html](http://www.floatingsheep.org/p/dolly.html)
 
-## YouTube clips
+### YouTube clips
 
 * "grits" in the US. [https://www.youtube.com/watch?v=Nh-nwLSMIPo](https://www.youtube.com/watch?v=Nh-nwLSMIPo)
 
@@ -105,7 +105,7 @@ More info [http://www.floatingsheep.org/p/dolly.html](http://www.floatingsheep.o
 
 # A real application
 
-## The Geography of Hate
+### The Geography of Hate
 
 __WARNING__ this web site contains words that some people may find offensive!
 
@@ -113,7 +113,7 @@ __WARNING__ this web site contains words that some people may find offensive!
 
 \includegraphics[width=0.8\linewidth]{GeoHate.png}
 
-## The Geography of Hate
+### The Geography of Hate
 
 * The map is based on every geocoded tweet in the United States from June 2012 - April 2013 containing one of the _hate words_. (>150,000 tweets)
 * From the DOLLY project based at the University of Kentucky. 
@@ -121,7 +121,7 @@ __WARNING__ this web site contains words that some people may find offensive!
 
 [http://users.humboldt.edu/mstephens/hate/hate_map.html](http://users.humboldt.edu/mstephens/hate/hate_map.html)
 
-## The Geography of Hate
+### The Geography of Hate
 
 > To produce the map all tweets containing each 'hate word' were aggregated to the county level and normalized by the total twitter traffic in each county. 
 > Counties were reduced to their centroids and assigned a weight derived from this normalization process. 
@@ -131,7 +131,7 @@ __WARNING__ this web site contains words that some people may find offensive!
 
 From the web site.
 
-## The Geography of Hate
+### The Geography of Hate
 
 * Look at the distribution of _wetback_
 * Look at the distribution of _nigger_
@@ -139,7 +139,7 @@ From the web site.
 
 # Using R and Twitter to track epidemics
 
-## Tweets containing "flu"
+### Tweets containing "flu"
 
 It might be interesting to look at the spatial distribution of tweets containing the word _flu_.
 
@@ -151,7 +151,7 @@ We downloaded these and found that 815 had a latitude and longitude (ie. were ge
 
 We can use the `maps` package in R to plot the tweets on a world map.
 
-## Tweets containing "flu"
+### Tweets containing "flu"
 
 ```{r echo=-1, dev="pdf", fig.width=5, fig.height=2.5, fig.cap="Tweets containing flu"}
 par(mar=rep(0.1,4))
@@ -161,7 +161,7 @@ map('world')
 points(flu.pts, pch=16, col=2)  ### use solid red circles
 ```
 
-## Tweets containing "flu"
+### Tweets containing "flu"
 
 We might like to estimate the _spatial intensity_ of tweets.
 
@@ -175,7 +175,7 @@ $$N(x,y) = Poisson( \lambda(x,y))$$
 
 Given tweets, we see only their location $(x_i, y_i)$. What is this chance of seeing a tweet near here?
 
-## Intensity estimation
+### Intensity estimation
 
 The Geography of Hate project looked at counties in the US, and calculated averages over the counties.
 
@@ -185,7 +185,7 @@ $$\lambda_R(x,y) = \frac{\text{Number of Tweets within } R \text{ of } (x,y)}{\p
 
 In fact, it is better to use a _weighted local average_
 
-## Weighted local average
+### Weighted local average
 
 The local average can also be written
 
@@ -196,7 +196,7 @@ $d_i(x,y) < R$ and zero otherwise.
 
 A weighted average replaces the $I(\ldots) = 1$ with a weight other than $1$.
 
-## Weighted local average
+### Weighted local average
 
 $$\lambda_h(x,y) = \frac{1}{nh} \sum_i K(d_i(x,y)/h)$$
 
@@ -210,7 +210,7 @@ curve(dnorm(x), from=-3, to=3, axes=FALSE, xlab="distance")
 box()
 ```
 
-## Tweets containing "flu"
+### Tweets containing "flu"
 
 In R we do this with a function called `density` and we need the `spatstat` package.
 
@@ -230,7 +230,7 @@ plot(den1, ribbon=FALSE)
 map('world', add=TRUE)
 ```
 
-## Tweets containing "flu"
+### Tweets containing "flu"
 
 ```{r echo=FALSE, dev="pdf", fig.width=4.5, fig.height=2.5, fig.cap="Tweets containing flu"}
 par(mar=rep(0.1,4))
@@ -239,7 +239,7 @@ plot(den1, ribbon=FALSE, main="")
 map('world', add=TRUE)
 ```
 
-## Tweets containing "flu"
+### Tweets containing "flu"
 
 This data is __NOT__ normalised.  So there are possible problems.
 
@@ -249,7 +249,7 @@ This data is __NOT__ normalised.  So there are possible problems.
 
 How can we normalise?
 
-## Tweets containing "the"
+### Tweets containing "the"
 
 We do not have access to total number of tweets, by geocode. We can only search.
 
@@ -257,7 +257,7 @@ Searched for tweets containing an unrelated non-specific word --- "the"
 
 Over a similar period, found 200,000+ tweets of which 3558 are geocoded.
 
-## Tweets containing "the"
+### Tweets containing "the"
 
 ```{r echo=-1, dev="pdf", fig.width=5, fig.height=2.5, fig.cap="Tweets containing the"}
 par(mar=rep(0.1,4))
@@ -265,7 +265,7 @@ map('world')
 points(the.pts, pch=16, col=2)  ### use solid red circles
 ```
 
-## Tweets containing "the"
+### Tweets containing "the"
 
 Again we can estimate a density using the same procedure as before.
 
@@ -280,7 +280,7 @@ plot(den2, ribbon=FALSE)
 map('world', add=TRUE)
 ```
 
-## Tweets containing "the"
+### Tweets containing "the"
 
 ```{r echo=FALSE, dev="pdf", fig.width=4.5, fig.height=2.5, fig.cap="Tweets containing the"}
 par(mar=rep(0.1,4))
@@ -288,14 +288,14 @@ plot(den2, ribbon=FALSE, main="")
 map('world', add=TRUE)
 ```
 
-## Tweets containing "the"
+### Tweets containing "the"
 
 * Note the very high use of "the" in the UK?
 * The _flu_ hotspot in Brazil (Rio de Janeiro?) is not there
 * Maybe _flu_ means something in Portuguese?
 * Perhaps _the_ is not the best word to normalise with?
 
-## Relative Risk
+### Relative Risk
 
 To normalise we really want to say, 
 
@@ -310,7 +310,7 @@ $$\frac{\text{Number tweets near } (x,y) \text{ containing flu}}{\text{Number tw
 
 This is called _Relative Risk_
 
-## Relative Risk
+### Relative Risk
 
 Relative Risk is estimated in a similar way to the intensity.
 
@@ -328,7 +328,7 @@ r = relrisk(both, sigma=5)
 
 sigma=5 is probably too much smoothing
 
-## Relative Risk
+### Relative Risk
 
 ```{r echo=FALSE, dev="pdf", fig.width=4.5, fig.height=2.5, fig.cap="Relative Risk sigma =5"}
 par(mar=rep(0.1,4))
@@ -336,7 +336,7 @@ plot(r, ribbon=FALSE, main="")
 map('world', add=TRUE)
 ```
 
-## Relative Risk
+### Relative Risk
 
 ```{r echo=FALSE, dev="pdf", fig.width=4.5, fig.height=2.5, fig.cap="Relative Risk sigma =1"}
 par(mar=rep(0.1,4))
@@ -345,7 +345,7 @@ plot(r, ribbon=FALSE, main="")
 map('world', add=TRUE)
 ```
 
-## Relative Risk
+### Relative Risk
 
 Still very difficult to see because of very speckley image.
 
@@ -357,7 +357,7 @@ We have to do this kind of manually.
 r$v[den2$v<0.0001] = NA
 ```
 
-## Relative Risk
+### Relative Risk
 
 ```{r echo=FALSE, dev="pdf", fig.width=4.5, fig.height=2.5, fig.cap="Relative Risk masked"}
 par(mar=rep(0.1,4))
@@ -365,14 +365,14 @@ plot(r, ribbon=FALSE, main="")
 map('world', add=TRUE)
 ```
 
-## Issues
+### Issues
 
 * Use of the word _the_ to normalise
 * Still quite a small number of geocoded tweets for flu globally
 * Imagine a rare disease? Or a smaller geographic region
 * Cloud collect over a longer time (eg DOLLY), but then less useful for short-term events like epidemics
 
-## Summary
+### Summary
 
 We looked at 
 
