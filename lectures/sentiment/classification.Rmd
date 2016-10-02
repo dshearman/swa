@@ -23,9 +23,6 @@ are tweeting on how annoyed they are of our new product?
 We need to examine the sentiment of the tweets to determine this.
 
 
-
-
-
 # Sentiment Analysis
 
 ### Sentiment
@@ -196,7 +193,7 @@ for Dinner == Yes'' class.
 
 To obtain a useful model, we generally require:
 
-- a large sample size of bloth classes (the more the better)
+- a large sample size of both classes (the more the better)
 - balanced sample (similar number of samples for each of the positive
   and negative classes)
 
@@ -257,7 +254,7 @@ You choose the number $k$.
 Since we are measuring distances, we must:
 
 - choose an appropriate form for each tweet (we represent the tweet as
-  a document vector containig weighted term frequencies).
+  a document vector containing weighted term frequencies).
 
 - make sure we choose an appropriate distance metric (usually Cosine distance for tweets).
 
@@ -453,7 +450,7 @@ Description:
 
 \pause
 
-How do we compute these probabilties from our training set of labelled tweets?
+How do we compute these probabilities from our training set of labelled tweets?
 
 ### Sentiment probability
 
@@ -493,7 +490,7 @@ $$
 
 \pause
 
-Due to the variation in english (or any language), the number of
+Due to the variation in English (or any language), the number of
 training tweets the same as the new tweet is likely to be zero, so the
 probability will be zero, meaning we cannot perform the
 classification of new tweets. But we know the probability is not zero
@@ -532,7 +529,7 @@ $$
 
 ### Working from term probabilities
 
-Rather than examing all of the training tweets when classifying,
+Rather than examining all of the training tweets when classifying,
 it is common to store only the values of:
 
 - $P(\text{term}\vert \text{sentiment} = \text{Pos})$ and
@@ -674,7 +671,7 @@ P(\text{sentiment} = \text{Neg} \vert \text{tweet})}
 
 - If the score is positive, we predict the sentiment to be positive.
 - If the score is negative, we predict the sentiment to be negative.
-- If the score is zero, then we are unceratin of the sentiment.
+- If the score is zero, then we are uncertain of the sentiment.
 
 ### Computing the sentiment score
 
