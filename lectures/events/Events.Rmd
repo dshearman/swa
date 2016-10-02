@@ -590,7 +590,7 @@ cSet = rep(0,R)
 for (m in 1:R) {
     y = f + sample(r) # shuffle residuals and add to fitted
     # compute c and store in cSet
-    cSet[m] = yates.effects(aov(count ~ when * company, data = X))[3]
+    cSet[m] = yates.effects(aov(y ~ when * company, data = X))[3]
 }
 # compute c from data
 cVal = yates.effects(aov(count ~ when * company, data = X))[3]

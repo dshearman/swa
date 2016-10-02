@@ -9,68 +9,57 @@ opts_chunk$set(fig.path='figure/week12-labsol-')
 `r opts_chunk$set(prompt=TRUE, comment=NA, fig.cap="")`
 
 
-# Two Sample t-test
+# Difference in means
 
-Complete the following R-code to write a function to compute the two sample $t$-statistic.
 
-```{r}
-tStat = function(before, after) {
-  # before - vector of the number of tweets per day before the event
-  # after - vector of the number of tweets per day after the event
-  mean.before = mean(before)
-  sd.before = sd(before)
-  n.before = length(before)
-
-  mean.after = mean(after)
-  sd.after = sd(after)
-  n.after = length(after)
-
-  ## assuming equal variance
-  s = sqrt(((n.before - 1)*sd.before^2 + (n.after - 1)*sd.after^2)/(n.before + n.after - 2))
-  t = (mean.before - mean.after)/(s*sqrt(1/n.before + 1/n.after))
-  return(t)
-  
+```{r echo=FALSE}
+options(scipen=1, digits=2)
+suppressWarnings(require(xtable, quietly=TRUE))
+set.seed(56223)
+sim.one = function(mb, ma, n) {
+before = rpois(n, mb)
+after = rpois(n, ma)
+cat("before = ")
+dput(before, control=NULL)
+cat("after = ")
+dput(after, control=NULL)
+return(list(before = before, after = after))
 }
 ```
 
-- Test your code on the following 3 data sets.
 
-```{r}
-before = c(115, 131, 135, 123, 134)
-after = c(181, 163, 168, 195, 190)
-tStat(sqrt(before), sqrt(after))
+Using the data:
+```{r echo=FALSE}
+x = sim.one(140,175,5)
+before = x$before
+after = x$after
 ```
 
+
 ```{r}
-before = c(207, 236, 220, 204)
-after = c(222, 221, 246, 226)
-tStat(sqrt(before), sqrt(after))
+shuffleMean = function(before, after) {
+
+  combined = c(before, after)
+  chosen = sample(length(combined), size = length(before), replace = FALSE)
+  shuffledBefore = combined[chosen]
+  shuffledAfter = combined[-chosen]
+  return(mean(shuffledAfter) - mean(shuffledBefore))
+}
+
+randDist = replicate(1000, shuffleMean(before, after))
+hist(randDist)
+
+# compute p value
+meanDiff = mean(after) - mean(before)
+print(meanDiff)
+pVal = mean(abs(randDist) > abs(meanDiff))
+print(pVal)
 ```
 
-```{r}
-before = c(93, 109, 98, 92, 104, 102)
-after = c(198, 176, 196, 213, 199, 206)
-tStat(sqrt(before), sqrt(after))
-```
 
-- Use this code to check your answers from above.
-
+Using the $t$ test we obtain:
 ```{r}
-before = c(115, 131, 135, 123, 134)
-after = c(181, 163, 168, 195, 190)
-t.test(sqrt(before), sqrt(after), var.equal=TRUE)
-```
-
-```{r}
-before = c(207, 236, 220, 204)
-after = c(222, 221, 246, 226)
-t.test(sqrt(before), sqrt(after), var.equal=TRUE)
-```
-
-```{r}
-before = c(93, 109, 98, 92, 104, 102)
-after = c(198, 176, 196, 213, 199, 206)
-t.test(sqrt(before), sqrt(after), var.equal=TRUE)
+t.test(before, after)
 ```
 
 
@@ -78,105 +67,81 @@ t.test(sqrt(before), sqrt(after), var.equal=TRUE)
 
 # BACI designs 
 
-Write an R function to compute the contrasts, sums of squares and $F$-statistic for a BACI design. The template below will give you a start.
+Using the data
 
-```{r}
-fStat = function(before.control, after.control, before.impact, after.impact) {
-  # before.control - vector of the number of tweets per day before the event 
-  #   for the control entity
-  # after.impact - vector of the number of tweets per day after the event 
-  #   for the impacted entity (etc)
-  # all should be vectors of the same length (we dont bother to check this)
-  n = length(before.control)
-  # tmp will contain all the square root transformed data
-  tmp = sqrt(c(before.control, after.control, before.impact, after.impact))
-  SStotal = sum((tmp-mean(tmp))^2)
-  BC = sum(sqrt(before.control))
-  AC = sum(sqrt(after.control))
-  BI = sum(sqrt(before.impact))
-  AI = sum(sqrt(after.impact))
-  
-  contrastBA = (AC + AI) - (BC + BI)
-  contrastCI = (AI + BI) - (AC + BC)
-  contrastInt = (BC + AI) - (AC + BI)
-  
-  SSBA = contrastBA^2/(4*n)
-  SSCI = contrastCI^2/(4*n)
-  SSInt = contrastInt^2/(4*n)
-
-  SSe = SStotal - SSBA - SSCI - SSInt
-  MSE = SSe/(4*(n-1))
-
-  F = SSInt/MSE
-
-  return(F)
+```{r echo=FALSE}
+set.seed(86755)
+sim.two = function(BIm, AIm, BCm, ACm, n) {
+BIx = rpois(n, 96)
+AIx = rpois(n, 129)
+BCx = rpois(n, 52)
+ACx = rpois(n, 85)
+cat("before.control = ")
+dput(BCx, control=NULL)
+cat("after.control = ")
+dput(ACx, control=NULL)
+cat("before.impact = ")
+dput(BIx, control=NULL)
+cat("after.impact = ")
+dput(AIx, control=NULL)
+return(list(BC = BCx, AC = ACx, BI = BIx, AI = AIx))
 }
+x = sim.two(96,129,52,85, 4)
+before.control = x$BC
+after.control = x$AC
+before.impact = x$BI
+after.impact = x$AI
 ```
 
-- Test your code on the following 3 data sets.
+## Shaping the data
 
 ```{r}
-before.control = c(43, 47, 58, 61)
-after.control = c(81, 78, 90, 79)
-before.impact = c(99, 116, 107, 93)
-after.impact = c(129, 143, 119, 120)
-fStat(before.control, after.control, before.impact, after.impact)
+count = c(before.control, after.control, before.impact, after.impact)
+n = 4
+when = factor(c(rep("before", n), rep("after", n), rep("before", n),
+       rep("after", n)), levels = c("before", "after"))
+company = factor(c(rep("control", 2 * n), rep("impact", 2 * n)),
+	levels = c("control","impact"))
+d = data.frame(when = when, company = company, count = count)
+print(d)
 ```
+
+## Building the randomisation distribution
+
 
 ```{r}
-before.control = c(54, 55, 43, 50, 57)
-after.control = c(87, 83, 99, 94, 87)
-before.impact = c(93, 90, 92, 84, 104)
-after.impact = c(133, 143, 110, 121, 134)
-fStat(before.control, after.control, before.impact, after.impact)
+suppressWarnings(library(dae, quietly = TRUE)) # for yates.effects()
+
+m = aov(count ~ when + company, data = d) # fit the Null model (no gamma)
+f = predict(m)   # computed expected values
+r = residuals(m) # compute residuals
+
+### permute residuals and replace
+R = 1000
+randDist = rep(0,R)
+for (m in 1:R) {
+    y = f + sample(r) # shuffle residuals and add to fitted
+    # compute c and store in cSet
+    randDist[m] = yates.effects(aov(y ~ when * company, data = d))[3]
+}
+hist(randDist)
 ```
+
+## Computing the $p$ value
 
 ```{r}
-before.control = c(49, 54, 52, 42, 41, 53)
-after.control = c(92, 105, 78, 78, 99, 62)
-before.impact = c(89, 112, 92, 85, 87, 98)
-after.impact = c(145, 135, 129, 139, 126, 125)
-fStat(before.control, after.control, before.impact, after.impact)
+# compute c from data
+g = yates.effects(aov(count ~ when * company, data = d))[3]
+print(g)
+# compute p value
+pVal = mean(abs(randDist) > abs(g))
+print(pVal)
 ```
 
-
-
-
-- Check your results using this code.
+## Using AOV
 
 ```{r}
-before.control = c(43, 47, 58, 61)
-after.control = c(81, 78, 90, 79)
-before.impact = c(99, 116, 107, 93)
-after.impact = c(129, 143, 119, 120)
-data = sqrt(c(before.control, after.control, before.impact, after.impact))
-n = length(before.control)
-when = c(rep("before", n), rep("after",n), rep("before", n), rep("after",n))
-company = c( rep("control", 2*n), rep("impact", 2*n))
-summary(aov(data~when*company))
+summary(aov(count ~ when*company, data = d))
 ```
 
-```{r}
-before.control = c(54, 55, 43, 50, 57)
-after.control = c(87, 83, 99, 94, 87)
-before.impact = c(93, 90, 92, 84, 104)
-after.impact = c(133, 143, 110, 121, 134)
-data = sqrt(c(before.control, after.control, before.impact, after.impact))
-n = length(before.control)
-when = c(rep("before", n), rep("after",n), rep("before", n), rep("after",n))
-company = c( rep("control", 2*n), rep("impact", 2*n))
-summary(aov(data~when*company))
 
-```
-
-```{r}
-before.control = c(49, 54, 52, 42, 41, 53)
-after.control = c(92, 105, 78, 78, 99, 62)
-before.impact = c(89, 112, 92, 85, 87, 98)
-after.impact = c(145, 135, 129, 139, 126, 125)
-data = sqrt(c(before.control, after.control, before.impact, after.impact))
-n = length(before.control)
-when = c(rep("before", n), rep("after",n), rep("before", n), rep("after",n))
-company = c( rep("control", 2*n), rep("impact", 2*n))
-summary(aov(data~when*company))
-```

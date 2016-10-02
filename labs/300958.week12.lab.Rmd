@@ -9,28 +9,17 @@ opts_chunk$set(fig.path='figure/week12-lab-')
 `r opts_chunk$set(prompt=TRUE, comment=NA, fig.cap="")`
 
 
-# Two Sample t-test
+# Difference in means
 
-Complete the following R-code to write a function to compute the two sample $t$-statistic.
+We saw in the lecture that we are able to test for a difference in
+means by shuffling the values between samples, when keeping the the
+sample sizes the same.
 
-```{r eval=FALSE, prompt=FALSE}
-tStat = function(before, after) {
-  # before - vector of the number of tweets per day before the event
-  # after - vector of the number of tweets per day after the event
-  mean.before = mean(before)
-  sd.before = sd(before)
-  n.before = length(before)  
-  
-  # Insert code here.
-  
-}
-```
-
-Test your code on the following 3 data sets.
+Using the following before and after data:
 
 ```{r echo=FALSE}
 options(scipen=1, digits=2)
-require(xtable, quietly=TRUE)
+suppressWarnings(require(xtable, quietly=TRUE))
 set.seed(56223)
 sim.one = function(mb, ma, n) {
 before = rpois(n, mb)
@@ -41,53 +30,63 @@ cat("after = ")
 dput(after, control=NULL)
 }
 sim.one(140,175,5)
+```
+
+write the function `shuffleMean` to:
+
+1. take the two samples
+2. shuffle the items betwen the groups
+3. compute the difference in means of the two groups
+
+Then compute view the randomisation distribution using:
+```{r eval = FALSE}
+randDist = replicate(1000, shuffleMean(before, after))
+hist(randDist)
+```
+
+To perform shuffling, we can combine the two vectors, sample a set of
+positions, then split the vector into the items at those positions,
+and the items not at those positions. E.g.
+```{r eval=FALSE}
+combined = c(before, after)
+chosen = sample(length(combined), size = length(before), replace = FALSE)
+shuffledBefore = combined[chosen]
+shuffledAfter = combined[-chosen]
+```
+
+
+Complete the test by:
+
+1. computing the sample difference in means of the data.
+2. computng the $p$ value using the sample difference in means and `randDist`. 
+
+Was there evidence of a difference in population means?
+
+Perform the same test on the following data.
+
+```{r echo=FALSE}
 sim.one(220, 240, 4)
 sim.one(100,197, 6)
 ```
 
-You should also be comfortable doing these computations with a calculator.
 
-## R code
-
-R has a built in function to do $t$-tests. The form that we
-have used, requires a call like the following,
-
-```{r eval=FALSE}
-t.test(sqrt(before), sqrt(after), var.equal=TRUE)
+Finaly compare the $p$ value to the $p$ value produced when using:
+```{r eval = FALSE}
+t.test(before, after)
 ```
+The above test assumes that either the data is Normal, or the sample size is large.
+The $p$ values should be similar to those you have computed. Use this to check your answers.
 
-Use this code to check your answers from above.
+
 
 # BACI designs 
 
-Write an R function to compute the contrasts, sums of squares and $F$-statistic for a BACI design. The template below will give you a start.
 
-```{r eval=FALSE, prompt=FALSE, tidy=FALSE, tidy=FALSE}
-tStat = function(before.control, after.control, before.impact, after.impact) {
-  # before.control - vector of the number of tweets per day before the event 
-  #   for the control entity
-  # after.impact - vector of the number of tweets per day after the event 
-  #   for the impacted entity (etc)
-  # all should be vectors of the same length (we dont bother to check this)
-  n = length(before.control)
-  # tmp will contain all the square root transformed data
-  tmp = sqrt(c(before.control, after.control, before.impact, after.impact))
-  SStotal = sum((tmp-mean(tmp))^2)
-  BC = sum(sqrt(before.control))
-  AC = sum(sqrt(after.control))
-  BI = sum(sqrt(before.impact))
-  AI = sum(sqrt(after.impact))
-  
-  contrastBA = (AC+AI) - (BC+BI)
-  
-  SSBA = contrastBA^2/(4*n)
-  
-  # Insert code here
-  
-}
-```
+We also saw in the lecture that we can examine the impact of an event
+when using a control.
 
-Test your code on the following 3 data sets.
+We have obtained tweet counts from before and after and event from the
+impacted company and a control company.
 
 ```{r echo=FALSE}
 set.seed(86755)
@@ -106,28 +105,86 @@ cat("after.impact = ")
 dput(AIx, control=NULL)
 }
 sim.two(96,129,52,85, 4)
+```
+
+We want to test if the interaction term $\gamma = 0$.
+
+## Shaping the data
+
+To perform the analysis, we need to shuffle to data. In order to
+shuffle the data, we must first convert the data to a data frame.
+
+Create the data frame `d` with three columns:
+
+- the first column called `company`, containing either `impact` or `control`.
+- the second column called `when`, containing either `before` or `after`.
+- the third column called `count`, containing the tweet counts
+
+Since there are 16 tweet counts, the data frame should have 16 rows.
+
+
+## Building the randomisation distribution
+
+To perform the randomisation required for the hypothesis test, we need
+to shuffle the fitted model residuals. Therefore, we fit the model and
+compute the fitted values and residuals.
+
+```{r eval=FALSE}
+library(dae) # for yates.effects()
+
+m = aov(count ~ when + company, data = d) # fit the Null model (no gamma)
+f = predict(m)   # computed expected values
+r = residuals(m) # compute residuals
+```
+
+We now need to shuffle the residuals, add them back to the fitted
+values, then recompute the model with the interaction term included.
+
+```{r eval=FALSE}
+y = f + sample(r) # shuffle residuals and add to fitted
+x = yates.effects(aov(y ~ when * company, data = d)) # compute the model coefficients using the new data y
+interaction = x[3] # store the interaction coefficient
+````
+
+Write the code to generate 1000 interaction coefficients using
+shuffled residuals. Store the 1000 interaction coefficients in the varaible `randDist`.
+Examine the histogram of `randDist`.
+
+## Computing the $p$ value
+
+To finish the test, compute the interaction coefficient from the data:
+```{r eval = FALSE}
+z = yates.effects(aov(count ~ when * company, data = d)) # compute the model coefficients
+gamma = x[3]
+```
+
+And compare it to `randDist` to compute the $p$ value.
+
+
+
+## More data
+
+Use your code to test the following data.
+
+```{r echo=FALSE}
 sim.two(140, 175, 75,75, 5)
 sim.two(200,210, 150,145, 6)
 ```
 
-You should also be comfortable doing these computations with a calculator.
 
-## R code
+## Using AOV
 
-R has built in functions to analyse this kind of data. It is a special case of a statistical technique
-called _analysis of variance_. To set the data up for the R function `aov` we need to use the following;
+R has built in functions to analyse this kind of data. It is a special
+case of a statistical technique called _analysis of variance_.
 
+Using the data frame `d`, run the code:
 ```{r eval=FALSE, prompt=FALSE}
-data = sqrt(c(before.control, after.control, before.impact, after.impact))
-n = length(before.control)
-when = c(rep("before", n), rep("after",n), rep("before", n), rep("after",n))
-company = c( rep("control", 2*n), rep("impact", 2*n))
-summary(aov(data~when*company))
+summary(aov(count ~ when*company, data = d))
 ```
 
 This produces output, like the following,
 
-```{r echo=1:4}
+```{r echo=FALSE}
 before.control = c(43, 47, 58, 61)
 after.control = c(81, 78, 90, 79)
 before.impact = c(99, 116, 107, 93)
@@ -141,8 +198,8 @@ summary(aov(data ~ when * company))
 
 The result we are interested in, is the row corresponding to `when:company` in this table. 
 It has the $F$-statistic and the $p$ value `Pr(>F)` for the interaction.
+Compare this to the $p$ value computed using randomisation.
 
-Check your results using this code.
 
 # Broken Stick models   (Extra material for those interested)
 
