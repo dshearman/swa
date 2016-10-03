@@ -29,8 +29,14 @@ questions = list(
     are three of the seasonal components. Calculate the fourth component.</p> <p>`r s`</p>',
     answer = '`r  -sum(s)`',
     tolerance = "0.05"
-  )
-  
+      ),
+  list(
+    type =  'NUM',
+    known.parameters =  'a b `r suppressWarnings(require("xtable")); day = 1:30; count = a +b*day + rnorm(30, mean = 0, sd = 10); m = lm(count ~ day)`',
+    question = '<p>We have used Simple Linear Regression to test if a linear trend exists in our data of day vs tweet count. Given the following output from the R function lm, what is the p value when testing the Null hypothesis that the gradient is zero, versus the Alternative hypothesis that the gradient is not zero? Provide your answer to two decimal places.</p> `r gsub("\\n","",c(print(xtable(summary(m)$coefficients, digits = 4), type="html", comment=FALSE)))`',
+    answer = '`r round((summary(m))$coefficients[2,4], digits = 3)`',
+    tolerance = "0.01"
+      )    
 )
 
 
@@ -66,3 +72,16 @@ for(i in c(5,10,14,23,21,28,31,34,37,40)) {
 
 set.seed(78865)
 for(i in 1:10) yaml.out(questions[[4]], "s=round(rnorm(3),3)")
+
+
+yaml.out(questions[[5]], ' a = 10; b = 0.001')
+yaml.out(questions[[5]], ' a = 10; b = 0.005')
+yaml.out(questions[[5]], ' a = 10; b = 0.007')
+yaml.out(questions[[5]], ' a = 10; b = 0.01')
+yaml.out(questions[[5]], ' a = 10; b = 0.05')
+yaml.out(questions[[5]], ' a = 10; b = 0.07')
+yaml.out(questions[[5]], ' a = 10; b = 0.1')
+yaml.out(questions[[5]], ' a = 10; b = 0.2')
+yaml.out(questions[[5]], ' a = 10; b = 0.5')
+yaml.out(questions[[5]], ' a = 10; b = 1')
+
