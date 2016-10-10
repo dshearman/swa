@@ -8,65 +8,148 @@ opts_chunk$set(fig.path='figure/week13-labsol-')
 opts_chunk$set(dev = 'png', fig.cap="", eval=FALSE)
 ```
 
+# Preliminaries
 
-- Compute $P(C = 0)$ and store the value in the variable `pC.0`.
-
-```{r eval=FALSE}
-pC.0 = mean(C.train == "negative")
-```
-
-- Compute the frequency of each of the $m$ words in the positive tweet
-collection and store the vector in the variable
-`total.each.positive.word`.
-
-```{r eval=FALSE}
-total.each.positive.word = colSums(A.train[C.train == "positive",])
-```
-
-
-The probability of each word in the set of positive tweets is computed as:
 ```{r}
-pX.C.1 = total.each.positive.word/total.positive.words
+library("tm")
+
+load("tweet_sentiment.Rdata")
+## Use only positive and negative tweets
+tweet.sentiment = subset(tweet.sentiment, sentiment == "positive" | sentiment == "negative")
+corpus = Corpus(VectorSource(tweet.sentiment$text))
+
+corpus = tm_map(corpus, function(x) iconv(x, to='ASCII', sub=' ')) # remove special characters
+corpus = tm_map(corpus, removeNumbers) # remove numbers
+corpus = tm_map(corpus, removePunctuation) # remove punctuation
+corpus = tm_map(corpus, stripWhitespace) # remove whitespace
+corpus = tm_map(corpus, tolower) # convert all to lowercase
+corpus = tm_map(corpus, removeWords, stopwords()) # remove stopwords
+corpus = tm_map(corpus, PlainTextDocument)
+corpus = tm_map(corpus, stemDocument) # convert all words to their stems
+
+tweet.dtm = DocumentTermMatrix(corpus) # create the DocumentTermMatrix object
+tweet.matrix = as.matrix(tweet.dtm) # convert to a matrix
 ```
 
-- Use the above information to compute $P(X = x_i\vert C = 0)$
-(probability of each word in the set of negative tweets), and store
-the result in the variable `pX.C.0`.
+## Training and Validation split
 
-```{r eval=FALSE}
-total.negative.words = sum(A.train[C.train == "negative",])
-total.each.negative.word = colSums(A.train[C.train == "negative",])
-pX.C.0 = total.each.negative.word/total.negative.words
+```{r}
+tweet.count = nrow(tweet.matrix)
+train.positions = sample(tweet.count,round(0.5*tweet.count))
+A.train = tweet.matrix[train.positions,]
+C.train = tweet.sentiment$sentiment[train.positions]
+
+A.validate = tweet.matrix[-train.positions,]
+C.validate = tweet.sentiment$sentiment[-train.positions]
 ```
 
-- Examine the sentiment weight for each word and the bias, making sure that they make sense.
+# Naive Bayes
 
-```{r eval=FALSE}
-sentiment.weight = log(pX.C.1/pX.C.0)
-bias = log(total.positive.words/total.negative.words)
+```{r}
+pS.Pos = mean(C.train == "positive")
+pS.Neg = mean(C.train == "negative")
+
+total.positive.tweets = sum(C.train == "positive")
+total.negative.tweets = sum(C.train == "negative")
+
+## checking for zero counts, leading to zero probability
+term.positive.tweets = colSums(A.train[C.train == "positive",] > 0)
+term.negative.tweets = colSums(A.train[C.train == "negative",] > 0)
+
+## recomputing probability after adding 1
+term.positive.tweets = term.positive.tweets + 1
+term.negative.tweets = term.negative.tweets + 1
+
+## compute probabilities
+pterm.S.Pos = term.positive.tweets/total.positive.tweets
+pterm.S.Neg = term.negative.tweets/total.positive.tweets
+
+
+## examine the tweet words in validation tweet 1
+which(A.validate[1,] > 0)
+
+## compute P(tweet|S = Pos)
+## We multiply the probabilities for every occurrence of the term,
+## to do this, we compute the probability to the power of the frequency of
+## the term in the tweet.
+ptweet.S.Pos = prod(pterm.S.Pos^A.validate[1,])
+ptweet.S.Neg = prod(pterm.S.Neg^A.validate[1,])
+
+## Now we compute the probability of the tweet (shown in the lecture)
+ptweet = ptweet.S.Pos * pS.Pos + ptweet.S.Neg * pS.Neg
+
+## the sentiment score of the tweet is
+score = log((ptweet.S.Pos*pS.Pos/ptweet)/(ptweet.S.Neg*pS.Neg/ptweet))
+print(score)
+
+## the predicted sentiment is:
+if (score < 0) {
+   sentiment = "Negative"
+} else {
+   sentiment = "Positive"
+}
+print(sentiment)
+
+## the actual sentiment is
+print(C.validate[1])
 ```
 
-- Write a for loop to compute the sentiment score of all validation
-  tweets. Examine the scores and compare them to the actual sentiment.
+To compute the sentiment for all tweets, we need to write a function
+to compute the sentiment score.
 
-```{r eval=FALSE}
-tweetSentiment = function(tweetVector, sentiment.weight, bias) {
-  word.positions = which(tweetVector > 0)
-  tweet.score = bias + sum(sentiment.weight[word.positions])
-  return(tweet.score)
+```{r}
+tweetSentiment = function(tweetVector, pterm.S.Pos, pterm.S.Neg, pS.Pos, pS.Neg) {
+
+    ptweet.S.Pos = prod(pterm.S.Pos^tweetVector)
+    ptweet.S.Neg = prod(pterm.S.Neg^tweetVector)
+
+    ## Now we compute the probability of the tweet (shown in the lecture)
+    ptweet = ptweet.S.Pos * pS.Pos + ptweet.S.Neg * pS.Neg
+
+    ## the sentiment score of the tweet is
+    score = log((ptweet.S.Pos*pS.Pos/ptweet)/(ptweet.S.Neg*pS.Neg/ptweet))
+    return(score)
 }
 
-n = nrow(A.validate)
-scores = rep(0,n)
-for (a in 1:n) {
-  scores[a] = tweetSentiment(A.validate[tweet.number, ], sentiment.weight, bias)
-}
-print(cbind(scores, C.validate))
+## this should give the same sentiment score as before
+tweetSentiment(A.validate[1,], pterm.S.Pos, pterm.S.Neg, pS.Pos, pS.Neg)
 ```
 
+Now we can classify the sentiment of all validation tweets, using a loop.
+```{r}
+validCount = nrow(A.validate)
+scores = rep(0,validCount)
+for (a in 1:validCount) {
+    scores[a] = tweetSentiment(A.validate[a,], pterm.S.Pos, pterm.S.Neg, pS.Pos, pS.Neg)
+}
+```
 
-- Complete the function below:
+Now that we have all the score, we can convert them into predictions.
+```{r}
+predictedSentiment = scores
+predictedSentiment[predictedSentiment > 0] = "Positive"
+predictedSentiment[predictedSentiment < 0] = "Negative"
+predictedSentiment[predictedSentiment == 0] = "Neutral"
+```
 
+We can now compare the computed sentiment to the actual sentiment using
+a table
+```{r}
+table(C.validate, predictedSentiment)
+```
+We can see there is some error (negative tweets classified as positive
+and positive classified as negative). But the majority of the tweets
+were classified correctly.
+
+# k Nearest Neighbours
+
+```{r}
+binary.metric <- function(x,y) {
+  return(mean(xor(x,y)))
+}
+```
+
+The distance of a given tweet to the set of training tweets is computed as:
 ```{r}
 tweet.distance <- function(tweet, train.tweets) {
 
@@ -77,32 +160,66 @@ tweet.distance <- function(tweet, train.tweets) {
   }
   return(d)
 }
+
+## test function with first validation tweet
+tweet.distance(A.validate[1,], A.train)
 ```
 
+We can then classify the tweet by examining the mode of the k closest neighbours.
+```{r}
+kNN.classify <- function(tweet, train.tweets, train.classes, k) {
+  # identify the k closest tweets
+  d = tweet.distance(tweet, train.tweets)
+  closest.k.tweet.positions = order(d)[1:k]
 
-- Write a function to compute the class of all tweets in the matrix `A.validate`.
+  # select classes of closest tweets
+  close.classes = train.classes[closest.k.tweet.positions]
 
+  # return the most frequently appearing class (the mode)
+  t = table(close.classes)
+  return(names(which.max(t)))
+}
+
+## test function with first validation tweet
+kNN.classify(A.validate[1,], A.train, C.train, k = 10)
+```
+
+To compute the class of all validation tweet, we must loop through them.
 ```{r eval=FALSE}
 kNN.classify.all = function(tweets, train.tweets, train.classes, k) {
-  n = nrow(A.validate)
+  n = nrow(tweets)
   validate.classes = rep(0, n)
   for (a in 1:n) {
     validate.classes[a] = kNN.classify(tweets[a,], train.tweets, train.classes, k)
   }
   return(validate.classes)
 }
+
+## compute validation tweet sentiment predictions
+P.validate = kNN.classify.all(A.validate, A.train, C.train, k = 10)
 ```
 
+The accuracy of the classification can be examined by comparing the predicted class to the actual class:
+```{r}
+## compare the predicted sentiment to actual sentiment
+table(P.validate, C.validate)
+```
 
-- Write the function `specificity` to compute the specificity of the prediction.
+# Evaluation
+
+The sensitivity and specificity functions:
 
 ```{r}
+sensitivity <- function(predicted.class, actual.class) {
+  positive.positions = which(actual.class == "positive")
+  return(mean(predicted.class[positive.positions] == "positive"))
+}
+
 specificity <- function(predicted.class, actual.class) {
-  negative.positions = which(actual.class == "negative")]
+  negative.positions = which(actual.class == "negative")
   return(mean(predicted.class[negative.positions] == "negative"))
 }
 ```
-
 
 Once these functions have been written, **examine** the sensitivity and
 specificity of the Naive Bayes and kNN results. Does one provide

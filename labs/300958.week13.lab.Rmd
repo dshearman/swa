@@ -45,14 +45,14 @@ We find that there are more than two sentiment classes, but we want
 only positive and negative. We can extract the positive and negative
 sentiment tweets using the function `subset`:
 ```{r}
-tweet.sentiment.pn = subset(tweet.sentiment, sentiment == "positive" | sentiment == "negative")
+tweet.sentiment = subset(tweet.sentiment, sentiment == "positive" | sentiment == "negative")
 ```
 
 ## Arrange the data
 
 The tweets are given as text. Use functions in the library `tm` to
 convert the set of tweets into a document-term matrix called
-`tweet.text.matrix`. The details of this process are found in the
+`tweet.matrix`. The details of this process are found in the
 [Text Mining section of lab
 5](http://staff.scm.uws.edu.au/~lapark/300958/labs/300958.week05.lab.html#text-mining).
 Note: we want a document-term matrix containing term frequencies, not
@@ -62,19 +62,19 @@ weighted term frequencies. Do not use TF-IDF weights.
 ## Training and Validation split
 
 To evaluate each of the classification methods, we must split the data
-into a training and validataion sets.
+into a training and validation sets.
 
 Let's randomly choose 50% of the tweets for training:
 ```{r}
-tweet.count = nrow(tweet.text.matrix)
+tweet.count = nrow(tweet.matrix)
 train.positions = sample(tweet.count,round(0.5*tweet.count))
-A.train = tweet.text.matrix[train.positions,]
-C.train = tweet.sentiment.pn$sentiment[train.positions]
+A.train = tweet.matrix[train.positions,]
+C.train = tweet.sentiment$sentiment[train.positions]
 ```
 and the remaining 50% for validation.
 ```{r}
-A.validate = tweet.text.matrix[-train.positions,]
-C.validate = tweet.sentiment.pn$sentiment[-train.positions]
+A.validate = tweet.matrix[-train.positions,]
+C.validate = tweet.sentiment$sentiment[-train.positions]
 ```
 
 We now have a set of vectors and classes for training and validation
@@ -88,76 +88,139 @@ unique words, we have $m$ variables.
 
 We showed in the lecture that a tweet can be classified using:
 $$
-	L = \log{\left (\frac{P(C = 1)}{P(C = 0)}\right )} + 
-	{\sum_{x_i \in \text{tweet}} \log{\left (\frac{P(X_i = x_i\vert C = 1)}{P(X_i = x_i\vert C = 0)}\right )}}
+\begin{align}
+	L &= \log{\left( \frac{P(\text{S = Pos}\vert \text{tweet})}{P(\text{S = Neg}\vert \text{tweet})}\right )} \\
+	&= \log{\left( \frac{P(\text{tweet}\vert \text{S = Pos})P(\text{S = Pos})/P(\text{tweet})}{P(\text{tweet}\vert \text{S = Neg})P(\text{S = Neg})/P(\text{tweet})}\right )}
+\end{align}
 $$
-The first term contains $P(C = 1)$, meaning the probability of a tweet
-having positive sentiment, and $P(C = 0)$, meaning the probability of
-a tweet having negative sentiment. $P(C = 1)$ is computed as:
+where the probability of the tweet is computed as:
+$$
+P(\text{tweet}|\text{S = Pos}) = {\prod_{\text{term} \in \text{tweet}}  P(\text{term}\vert \text{S = Pos})} \\
+P(\text{tweet}|\text{S = Neg}) = {\prod_{\text{term} \in \text{tweet}}  P(\text{term}\vert \text{S = Neg})} \\
+$$
+
+The first term contains $P(\text{S = Pos})$, meaning the probability of a tweet
+having positive sentiment, and $P(\text{S = Neg})$, meaning the probability of
+a tweet having negative sentiment. $P(\text{S = Pos})$ is computed as:
 ```{r}
-pC.1 = mean(C.train == "positive")
+pS.Pos = mean(C.train == "positive")
 ```
-**Compute** $P(C = 0)$ and store the value in the variable `pC.0`.
+**Compute** $P(\text{S = Neg})$ and store the value in the variable `pS.Neg`. 
 
-The probability $P(X = x_i\vert C = 1)$ is the probability of putting our
-hand in the positive sentiment bag and pulling out the word $x_i$.
-Therefore $P(X = x_i\vert C = 1)$ is given as:
+The probability $P(\text{term}\vert \text{S = Pos})$ is the
+probability of putting our hand in the bag of tweets with positive
+sentiment and pulling one out that contains the given term.
+Therefore $P(\text{term}\vert \text{S = Pos})$ is given as
 $$
-	P(X = x_i\vert C = 1) = \frac{\text{Frequency of $x_i$ in positive tweets}}{\text{Word count in positive tweets}}
+	P(\text{term}\vert \text{S = Pos}) = \frac{\text{Number of tweets with positive sentiment containing term}}{\text{Number of tweets with positive sentiment}}
 $$
-The word count in positive tweets is given as:
+The tweet count for positive tweets is given as:
 ```{r}
-total.positive.words = sum(A.train[C.train == "positive",])
+total.positive.tweets = sum(C.train == "positive")
 ```
-**Compute** the frequency of each of the $m$ words in the positive tweet
-collection and store the vector in the variable
-`total.each.positive.word`.
+**Compute** the number of negative tweets and store in `total.negative.tweets`.
 
-The probability of each word in the set of positive tweets is computed as:
+Computing the number of tweets containing a given term has been seen before when we compute the IDF in TF-IDF weighting. In this case we must limit the tweet set to only the positive tweets.
 ```{r}
-pX.C.1 = total.each.positive.word/total.positive.words
+term.positive.tweets = colSums(A.train[C.train == "positive",] > 0)
 ```
 
-**Use** the above information to compute $P(X = x_i\vert C = 0)$
-(probability of each word in the set of negative tweets), and store
-the result in the variable `pX.C.0`.
+**Use** the above information to compute $P(\text{term}\vert \text{S =
+Pos})$ and $P(\text{term}\vert \text{S = Neg})$ for all terms, and
+store the result in the variables `pterm.S.Pos` and `pterm.S.Neg`.
 
-We can now compute the log ratio probability for each word. This value
-shows the contribution of each word toward the sentiment of the tweet.
-We compute these values as:
-$$
-	\text{sentiment weight}(x_i) = {\log{\left (\frac{P(X_i = x_i\vert C = 1)}{P(X_i = x_i\vert C = 0)}\right )}}
-$$
-store this vector of weights in `sentiment.weight`.
-We can also compute the bias:
-$$
-	b = \log{\left (\frac{P(C = 1)}{P(C = 0)}\right )}
-$$
-store this value in `bias`.
-
-**Examine** the sentiment weight for each word and the bias, making sure that they make sense.
-
-Were there problems with any of the scores? If there is a word that
-does not appear in the positive or negative sentiment set, then we
-find that it gets a score of $\infty$ or $-\infty$.
+Before we proceed, we must make sure that there are no zero
+probabilities in $P(\text{term}\vert \text{S = Pos})$ or
+$P(\text{term}\vert \text{S = Neg})$.  If there is a word that does
+not appear in the positive or negative sentiment set, then we find
+that tweets containing them get a sentiment score of either $\infty$
+or $-\infty$.
 
 To fix this problem, we can use the [Rule of
 Succession](http://en.wikipedia.org/wiki/Rule_of_Succession).  This
-requires us to add 1 to all values in `A.train` and then recompute the
-sentiment weights.
+requires us to add 1 to all values in `term.positive.tweets` and
+`term.negative.tweets` and then recompute the sentiment weights. Do
+this now if there are zero probabilities.
 
-We can now use the sentiment weight and bias to compute the sentiment of a new tweet.
-The first tweet vector in the validation set is `A.validate[1,]`
-The sentiment of the first validation tweet is computed as:
+
+Let's now compute the sentiment of the first validation tweet. We need to compute:
+
+- $P(\text{tweet}|\text{S = Pos})$
+- $P(\text{tweet}|\text{S = Neg})$
+- $P(\text{tweet})$
+
+We need to multiply the probability of each term in the tweets. To do
+this, we can take each probability to the power of their frequency in
+the validation tweet and multiply the result. Remember that $x^0 = 1$,
+so if the word does not appear, we take the probability to the power
+of 0, making the result 1, meaning it has no effect.
+
+So, $P(\text{tweet}|\text{S = Pos})$, where tweet is the first validation tweet, is computed as:
 ```{r}
-tweet.number = 1
-word.positions = which(A.validate[tweet.number,] > 0)
-tweet.score = bias + sum(sentiment.weight[word.positions])
+ptweet.S.Pos = prod(pterm.S.Pos^A.validate[1,])
 ```
-**Compare** the score to the actual sentiment class `C.validate[1]`. Does the score reflect the sentiment?
+***Compute*** $P(\text{tweet}|\text{S = Neg})$ and store the result in `ptweet.S.Neg`.
 
-**Write** a for loop to compute the sentiment score of all validation
-  tweets. Examine the scores and compare them to the actual sentiment.
+***Use*** the above variables to compute $P(\text{tweet})$ using the equation shown in the lecture.
+
+***Combine***
+$P(\text{tweet}|\text{S = Pos})$,
+$P(\text{tweet}|\text{S = Neg})$,
+$P(\text{tweet})$,
+$P(\text{S = Pos})$, and 
+$P(\text{S = Neg})$ to compute the sentiment score for the tweet and predict the sentiment class based on the score.
+
+Now we will take what we have done and convert it into a function so
+that we can use it on many validation tweets.
+
+***Complete*** the below function to compute the sentiment for a given tweet vector:
+```{r}
+tweetSentiment = function(tweetVector, pterm.S.Pos, pterm.S.Neg, pS.Pos, pS.Neg) {
+
+  ptweet.S.Pos = prod(pterm.S.Pos^tweetVector)
+  ptweet.S.Neg = prod(pterm.S.Neg^tweetVector)
+
+  ## Now we compute the probability of the tweet (shown in the lecture)
+
+  ## compute the sentiment score
+
+  return(score)
+}
+```
+
+If the function is correct, this code should give the same sentiment
+score as before:
+```{r}
+tweetSentiment(A.validate[1,], pterm.S.Pos, pterm.S.Neg, pS.Pos, pS.Neg)
+```
+
+Now we can classify the sentiment of all validation tweets, using a loop:
+```{r}
+validCount = nrow(A.validate)
+scores = rep(0,validCount)
+for (a in 1:validCount) {
+    scores[a] = tweetSentiment(A.validate[a,], pterm.S.Pos, pterm.S.Neg, pS.Pos, pS.Neg)
+}
+```
+
+And then convert the scores into predictions:
+```{r}
+predictedSentiment = scores
+predictedSentiment[predictedSentiment > 0] = "Positive"
+predictedSentiment[predictedSentiment < 0] = "Negative"
+predictedSentiment[predictedSentiment == 0] = "Neutral"
+```
+
+We can now compare the computed sentiment to the actual sentiment using
+a table.
+```{r}
+table(C.validate, predictedSentiment)
+```
+
+We can see there is some error (negative tweets classified as positive
+and positive classified as negative). But the majority of the tweets
+were classified correctly.
+
 
 
 
@@ -208,7 +271,8 @@ kNN.classify <- function(tweet, train.tweets, train.classes, k) {
 
 The function `kNN.classify` computes the class of one tweet. **Write**
 a function to compute the class of all tweets in the matrix
-`A.validate`.
+`A.validate`. Note that this classification of all validation tweets
+will take a few minutes to run.
 
 
 **Examine** the classification for different values of $k$. Does $k$ vary the results?
