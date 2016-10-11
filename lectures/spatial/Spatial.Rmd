@@ -8,9 +8,9 @@ opts_chunk$set(dev = 'pdf', fig.cap="")
 
 Twitter collects the location of tweets and can provide this in the result of a search.
 
-Tweets can also be search for using a spatial location.
+Tweets can also be searched for using a spatial location.
 
-Location or Spatial information can be useful in a number of ways, e.g..
+Location or Spatial information can be useful in a number of ways, e.g.
 
 * Localising other analyses to a spatial location, for example, looking for trends in Sydney or Parramatta.
 * Detecting the spatial extent of the impact of an event or advertising campaign
@@ -156,7 +156,7 @@ We can use the `maps` package in R to plot the tweets on a world map.
 ```{r echo=-1, dev="pdf", fig.width=5, fig.height=2.5, fig.cap="Tweets containing flu"}
 par(mar=rep(0.1,4))
 load("FluThe.RData")
-require(maps)
+library(maps)
 map('world')
 points(flu.pts, pch=16, col=2)  ### use solid red circles
 ```
@@ -183,9 +183,9 @@ Another approach is to say that the intensity at any location is a local average
 
 $$\lambda_R(x,y) = \frac{\text{Number of Tweets within } R \text{ of } (x,y)}{\pi R^2}$$
 
-In fact, it is better to use a _weighted local average_
 
-### Weighted local average
+
+### Local average
 
 The local average can also be written
 
@@ -194,21 +194,140 @@ $$\lambda_R(x,y) = \frac{1}{\pi R^2} \sum_i I(d_i(x,y) < R)$$
 where $d_i(x,y)$ is the distance of tweet $i$ to $(x,y)$ and $I(d_i(x,y) < R) = 1$ if
 $d_i(x,y) < R$ and zero otherwise.
 
-A weighted average replaces the $I(\ldots) = 1$ with a weight other than $1$.
+
+### Computing the local average
+
+#### Example
+
+```{r, echo=FALSE, fig.width=3.3, fig.height=2.2, fig.cap="Compute the local average of the tweet counts, where the radius $R = 0.85$. The distances for each location are shown."}
+library("mvtnorm")
+suppressWarnings(library("plotrix"))
+
+set.seed(34)
+X = rmvnorm(10, mean = c(0,0), sigma = diag(c(1,1)))
+#par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+par(mgp = c(0, 0, 0), mar=c(0,0,0,0), cex=0.8)
+plot(X, ylim = c(-1.2,1.8), xlim = c(-1.8, 1.5), axes = FALSE, col=3)
+edist = function(x, y) {
+      return(sqrt(sum((x - y)^2)))
+}
+
+d = round(apply(X, 1, edist, c(0,0)), digits=1)
+draw.circle(0,0,radius = 0.70)
+for (a in 1:nrow(X)) {
+    segments(0,0,X[a,1],X[a,2], col=2)
+    text(X[a,1]*0.9, X[a,2]*0.9, d[a])
+}
+```
+
+
+### Computing the local average
+
+#### Problem
+
+```{r, echo=FALSE, fig.width=3.3, fig.height=2.2, fig.cap="Compute the local average of the tweet counts, where the radius $R = 1.2$. The distances for each location are shown."}
+library("mvtnorm")
+suppressWarnings(library("plotrix"))
+
+set.seed(23)
+X = rmvnorm(10, mean = c(0,0), sigma = diag(c(1,1)))
+#par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+par(mgp = c(0, 0, 0), mar=c(0,0,0,0), cex=0.8)
+plot(X, ylim = c(-1.2,1.8), xlim = c(-1.2, 1.2), axes = FALSE, col=3)
+edist = function(x, y) {
+      return(sqrt(sum((x - y)^2)))
+}
+
+d = round(apply(X, 1, edist, c(0,0)), digits=1)
+draw.circle(0,0,radius = 0.7)
+for (a in 1:nrow(X)) {
+    segments(0,0,X[a,1],X[a,2], col=2)
+    text(X[a,1]*0.9, X[a,2]*0.9, d[a])
+}
+```
 
 ### Weighted local average
 
+The local average includes all tweets within a given radius so all
+tweets have the same contribution to the average as long as they fall
+within the radius.
+
+Rather than including all tweets in a given radius we can \alert{weight} each
+tweet by its distance to the place of interest. So tweets further away
+have less influence on the mean.
+
+\pause
+
+To use a weighted local average, we change:
+$$\lambda_R(x,y) = \frac{1}{\pi R^2} \sum_i I(d_i(x,y) < R)$$
+to:
 $$\lambda_h(x,y) = \frac{1}{nh} \sum_i K(d_i(x,y)/h)$$
+where $K(s)$ is a Kernel function to convert distances to similarity (small
+distance has high similarity, large distance has small similarity),
+$n$ is the number of tweet locations, and $h$ is the chosen bandwidth.
 
-and $K$ is a _Gaussian Kernel_ and $h$ is a bandwidth.
+### Gaussian Kernel
 
+The \alert{Gaussian Kernel} is a commonly used Kernel function (having the same shape as the Normal distribution), that has the form:
 $$ K(s) = \frac{1}{2\pi} e^{-s^2/2}$$
 
-```{r echo=FALSE,dev="pdf", fig.width=2, fig.height=2, fig.cap=""}
-par(mar=c(4,0,0,0)+0.1)
-curve(dnorm(x), from=-3, to=3, axes=FALSE, xlab="distance")
+```{r echo=FALSE,dev="pdf", fig.width=3, fig.height=1.7, fig.cap="A Gaussian kernel with bandwidth $h = 1$."}
+par(mar=c(2,0,0,0)+0.1, mgp = c(1.25, 0.5, 0))
+curve(dnorm(x), from=-3, to=3, axes=TRUE, xlab="Distance", cex=0.7, cex.axis=0.7, cex.lab = 0.7)
 box()
 ```
+
+### Computing the weighted local average
+
+#### Example
+
+```{r, echo=FALSE, fig.width=3.3, fig.height=2.2, fig.cap="Compute the weighted local average of the tweet counts, using a bandwidth of $h = 1$. The distances for each location are shown."}
+library("mvtnorm")
+suppressWarnings(library("plotrix"))
+
+set.seed(34)
+X = rmvnorm(4, mean = c(0,0), sigma = diag(c(1,1)))
+#par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+par(mgp = c(0, 0, 0), mar=c(0,0,0,0), cex=0.8)
+plot(X, ylim = c(-1.2,1.8), xlim = c(-1.8, 1.5), axes = FALSE, col=3)
+edist = function(x, y) {
+      return(sqrt(sum((x - y)^2)))
+}
+
+d = round(apply(X, 1, edist, c(0,0)), digits=1)
+draw.circle(0,0,radius = 0.70)
+for (a in 1:nrow(X)) {
+    segments(0,0,X[a,1],X[a,2], col=2)
+    text(X[a,1]*0.9, X[a,2]*0.9, d[a])
+}
+```
+
+
+### Computing the weighted local average
+
+#### Problem
+
+```{r, echo=FALSE, fig.width=3.3, fig.height=2.2, fig.cap="Compute the weighted local average of the tweet counts, using a bandwidth of $h = 1$. The distances for each location are shown."}
+library("mvtnorm")
+suppressWarnings(library("plotrix"))
+
+set.seed(23)
+X = rmvnorm(4, mean = c(0,0), sigma = diag(c(1,1)))
+#par(mgp = c(1.5, 0.4, 0), mar=c(2.5,2.5,0.1,0.1), cex=0.8)
+par(mgp = c(0, 0, 0), mar=c(0,0,0,0), cex=0.8)
+plot(X, ylim = c(-1.2,1.8), xlim = c(-1.2, 1.2), axes = FALSE, col=3)
+edist = function(x, y) {
+      return(sqrt(sum((x - y)^2)))
+}
+
+d = round(apply(X, 1, edist, c(0,0)), digits=1)
+draw.circle(0,0,radius = 0.7)
+for (a in 1:nrow(X)) {
+    segments(0,0,X[a,1],X[a,2], col=2)
+    text(X[a,1]*0.9, X[a,2]*0.9, d[a])
+}
+```
+
 
 ### Tweets containing "flu"
 
@@ -216,14 +335,14 @@ In R we do this with a function called `density` and we need the `spatstat` pack
 
 First the lat and and long are converted to a spatstat _point process_
 ```{r results="hide", message=FALSE}
-require(spatstat)
+library(spatstat)
 ```
 ```{r tidy=FALSE}
 flu.pp = ppp(flu.pts$lng, flu.pts$lat, 
              xrange=c(-180,180), yrange=c(-90,90))
 ```
 
-Then we compute the density, specifying the bandwidth with `sigma`
+Then we compute the density, specifying the \alert{bandwidth with `sigma'}.
 ```{r eval=FALSE}
 den1 = density(flu.pp, sigma=5)
 plot(den1, ribbon=FALSE)
@@ -249,6 +368,10 @@ This data is __NOT__ normalised.  So there are possible problems.
 
 How can we normalise?
 
+\pause
+
+We need a control to identify the expected number of tweets per region.
+
 ### Tweets containing "the"
 
 We do not have access to total number of tweets, by geocode. We can only search.
@@ -260,7 +383,8 @@ Over a similar period, found 200,000+ tweets of which 3558 are geocoded.
 ### Tweets containing "the"
 
 ```{r echo=-1, dev="pdf", fig.width=5, fig.height=2.5, fig.cap="Tweets containing the"}
-par(mar=rep(0.1,4))
+par(mgp = c(0, 0, 0), mar=c(0,0,0,0), cex=0.8)
+#par(mar=rep(0.1,4))
 map('world')
 points(the.pts, pch=16, col=2)  ### use solid red circles
 ```
@@ -381,4 +505,6 @@ We looked at
 * The _Geography of Hate_
 * How to do similar things using Twitter, ScraperWiki and R.
 
+### Next Week
 
+Revision
