@@ -84,6 +84,23 @@ This means that
 * we need large datasets to get a reasonable sample of geocoded tweets.
 * we need to be certain that any bias is either irrelevant, or corrected for.
 
+
+### Imputation of geocodes
+
+
+Many tweets have missing geocode information, but we may be able to
+infer the tweeter's location from:
+
+- the content of their tweet (e.g. tweet text, timezone, language, [tweet metadata](http://online.wsj.com/public/resources/documents/TweetMetadata.pdf)). 
+- the content of their previous tweets
+- the geocodes of their friends tweets
+- the content of the their friends tweets
+- information on the Web linked from their tweets (e.g. links from
+  their tweets referring to local events)
+
+This is topic is a difficult task and is still ongoing research.
+
+
 # The DOLLY project
 
 ### The DOLLY project

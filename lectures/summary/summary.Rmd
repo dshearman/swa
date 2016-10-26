@@ -7,242 +7,238 @@ opts_chunk$set(fig.path='figure/summary-summary-')
 opts_chunk$set(dev = 'pdf', fig.cap="")
 ```
 
-# What have we learnt
 
-## What have we learnt
+# Updated exam questions
 
+### Changes to the Unit
 
-We will go though each week and outline the main topics and what you
-are expected to know for the exam.
 
-## Week 1 - Topics
+Over the years we have made changes to the unit, so some of the
+previous years exam questions may not be directly relevant to us.
 
-Introduction to the Social Web
+We will go a few previous exam questions and modify them to made them
+appropriate for this year.
+
+
+### Naive Bayes for Sentiment Analysis
+
+There was a previous exam question (2013 Q8) focused on Sentiment
+Analysis using Naive Bayes classification. Since the time of that
+exam, we have simplified the Naive Bayes process, so the existing
+solution is not what we have taught. We will now show to answer this
+question using the method taught this semester.
 
-- Social Networks
-- The Social Web
-- How can we analyse the Social Web?
-- Brief introduction to R
+### 2013 Question 8
 
-## Week 1 - What should we know?
+The Funfun toothpaste company wants to gauge the sentiment towards
+their toothpaste.  Given the following set of labelled tweets:
+
+\vspace{1em}
+\begin{columns}[t]
+\begin{column}{6cm}
+Positive tweets:
+\begin{itemize}
+\item My teeth shine \#funfun
+\item \#funfun love my fun teeth
+\item \#funfun is fun fun
+\end{itemize}
+\end{column}
+\begin{column}{6cm}
+Negative Tweets:
+\begin{itemize}
+\item No shine \#funfun
+\item No love fun fun
+\item Where is my teeth shine \#funfun
+\end{itemize}
+\end{column}
+\end{columns}
+
+\begin{enumerate} 
+\item Calculate and tabulate the word distribution for both positive and negative sentiment ($P(\text{term}\vert\text{sentiment})$).
+\item Calcuate the probability of the tweet ``fun teeth shine'' ($P(\text{tweet})$).
+\item Compute the log likelihood ratio of the tweet ``fun teeth shine'' being positive versus it being negative, using Naive Bayes classification ($\log(P(\text{sentiment} = \text{Pos}\vert \text{tweet})/P(\text{sentiment} = \text{Neg}\vert \text{tweet}))$).
+\item Determine if the tweet ``fun teeth shine'' has positive or negative sentiment, based on the log likelihood ratio.
+\end{enumerate}
+
+### 2013 Question 8 Answers
+
+- $P(\text{term}\vert\text{sentiment}) =$
+
+\begin{center}
+\begin{tabular}{rccccccccc}
+\toprule
+    & \#funfun & fun & is  & love & my  & no  & shine & teeth & where \\
+\midrule
+Pos & 1        & 2/3 & 1/3 & 1/3  & 2/3 & 0   & 1/3   & 2/3   & 0     \\
+Neg & 2/3      & 1/3 & 1/3 & 1/3  & 1/3 & 2/3 & 2/3   & 1/3   & 1/3   \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+```{r echo = FALSE}
+pSentPos = 0.5
+pSentNeg = 0.5
+
+# fun teeth shine
+pTweetP = 2/3*2/3*1/3
+pTweetN = 1/3*1/3*2/3
+
+# fun teeth shine
+#pTweet = (2/3*1/2 + 1/3*1/2)*(2/3*1/2+ 1/3*1/2)*(2/3*1/2 + 1/3*1/2)
+pTweet = pTweetP * pSentPos + pTweetN * pSentNeg
+
+
+pPTweet = pTweetP*pSentPos/pTweet
+pNTweet = pTweetN*pSentNeg/pTweet
+
+s = log(pPTweet/pNTweet)
+```
+
+- $P(\text{tweet}) = `r pTweet`$
+- $\log\left (\frac{P(\text{sentiment} = \text{Pos}\vert \text{tweet})}{P(\text{sentiment} = \text{Neg}\vert \text{tweet})}\right ) = `r s`$
+
+\pause
+Let's show how to get these answers.
+
+### Randomisation Distributions
+
+This sememester, we introduced hypothesis testing using randomisation
+distributions. So there are no previous exam questions that use
+randomisation distributions.
+
+Hypothesis testing using randomisation distributions appear in:
+
+\begin{center}
+\begin{tabular}{clc}
+\toprule
+Week & Test & Statistic \\
+\midrule
+3    & Exposure analysis: test for independence & $\chi^2$ \\
+10   & Trends test for independence & $\chi^2$ \\
+11   & Impact difference in means & $\mu_{\text{After}} - \mu_{\text{Before}}$ \\
+11   & Impact test for interaction & $\gamma$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+We can't ask you to compute a randomisation distribution without
+access to a computer. But we can ask you to describe the process and
+to analyse the results.
+
+
+### Example Randomisation Question
+
+```{r echo=FALSE}
+set.seed(56223)
+n = 5
+before = rpois(n, 200)
+after = rpois(n, 100)
+cbefore = rpois(n, 100) 
+cafter = rpois(n, 80)
+suppressWarnings(library(dae, quietly=TRUE))
+xs = c(cbefore, cafter, before, after)
+when = factor(c(rep("before", n), rep("after", n), rep("before", n),
+       rep("after", n)), levels = c("before", "after"))
+company = factor(c(rep("control", 2 * n), rep("impact", 2 * n)),
+	levels = c("control","impact"))
+
+m = aov(xs ~ when + company)
+f = predict(m)
+r = residuals(m)
+### permute residuals and replace
+R = 1000
+gSet = rep(0,R)
+for (m in 1:R) {
+    y = f + sample(r)
+    gSet[m] = yates.effects(aov(y ~ when * company))[3]
+}
+
+gVal = yates.effects(aov(xs ~ when * company))[3]
+pVal = mean(abs(gSet) > abs(gVal))
+
+```
+#### Question
+
+The number of tweets containing "#jumpy" were counted for five days
+before and after the Jumpy advertising campaign. A set of control
+tweets were also counted. The counts are listed below. We want to
+determine if the advertising campaign had an effect of the number of
+tweets containing "#jumpy".
+
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+& Control & Impact \\
+\midrule
+Before & `r paste(cbefore, collapse=", ")` & `r paste(before, collapse=", ")`  \\
+After  & `r paste(cafter, collapse=", ")` & `r paste(after, collapse=", ")`  \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+1. State the Null and alternative hypothesis of the test that needs to
+   be conducted.
+2. State which test statistic should be used for the test and provide
+   its equation.
+
+
+### Example Randomisation Question
+
+#### Question
+
+3. Describe the randomisation process to obtain the distribution of
+   the test statistic.
+4. Given the following randomisation distribution, what is the
+   conclusion of the test?
+
+```{r echo=FALSE, fig.width=4.2, fig.height=2.0, fig.cap="Distribution of sample interaction."}
+qplot(gSet,geom="histogram",binwidth=1) + theme_grey(base_size = 10) + theme(legend.position = "none") + xlab("Randomisation statistic")
+```
+
+### Document Models
+
+Document models are covered in the week 4 lecture.
+In previous years we taught the document models:
+
+- Vector Space Model: TF-IDF
+- Divergence from Randomness: Binomial Distribution
+
+This year we updated the document models to:
+
+- Vector Space Model: TF-IDF
+- Language Model using Dirichlet Smoothing
+
+If you see previous exam questions with "Divergence from Randomness"
+then adjust them to another model that we have learnt.
+
+
+# Revision
+
+### Revision Questions
+
+For the remainder of this lecture, we will work though a set of past
+exam questions.
+
+- Text Indexing: 2015, Q2: change "the Divergence from Randomness weight (using the
+  Binomial Distribution)" to "TF-IDF weight"
+- Graphs: 2014, Q1.
+- Visualisation: 2013, Q3.
+- Clustering: 2015, Q4.
+- Link Analysis: 2013, Q5.
+- Trends: 2014, Q8.
+- Sentiment: 2015, Q8.
+
+We may not get through all of these questions. If we don't, all of the
+solutions are available in vUWS and questions can be asked using the
+Unit email mailing list.
 
-- What is a social network?
-- Give examples of Web based social networks.
-- Why is social network analysis useful? Who is it useful for?
-
-## Week 2 - Topics
-
-Introduction to R and accessing Social Web data
-
-- Writing algorithms in R
-    + data types
-    + functions
-    + flow control (for, while)
-- Accessing information from the social web.
-    + scraping
-    + API
-    + API formats
-
-## Week 2 - What should we know?
-
-- Reading and writing algorithms in R
-- Accessing an API using a URL
-- Features and differences of API data formats
-
-## Week 3 - Topics
-
-Simple Exposure Analysis
-
-- Facebook Insights
-- Reach and Demographics
-- Key Metrics
-
-## Week 3 - What should we know?
-
-- Likes, Reach and Talking About definitions.
-- Useful demographics
-- What questions can we answer using demographics?
-- Confidence intervals and hypothesis testing of demographics.
-- Key Metric (daily reach, total reach, organic reach) definitions.
-
-## Week 4 - Topics
-
-Text Mining 1: Indexing and Querying Text
-
-- Why do we need text mining for social networks?
-- Document models
-- Word weight:
-    + Divergence from Randomness
-    + TF-IDF
-- Preprocessing text
-
-## Week 4 - What should we know?
-
-- Representing a document (tweet) as a vector.
-- Computing the similarity between documents (using Cosine similarity).
-- Weighting words using:
-    + Binomial Divergence from Randomness and
-    + TFIDF
-- Preprocessing text by:
-    + Removing stop words
-    + case folding and punctuation removal
-    + stemming
-
-## Week 5 - Topics
-
-Graphs 1: Introduction to graphs and their parameters
-
-- Defining a graph, types of graphs (undirected, directed, weighted)
-- Representing graphs
-- Graph structures
-- Graph parameters
-- Centrality
-- Random graphs
-
-
-## Week 5 - What should we know?
-
-- Convert a graph to an adjacency matrix and vice versa.
-- Extracting subgraphs (cliques, egocentric graphs)
-- Compute graph parameters (degree, degree distribution, density, diameter)
-- Compute centrality (degree, closeness, betweenness)
-- How to generate a:
-    + Erdos-Renyi random graph
-    + Barabasi-Albert random graph  
-
-## Week 6 - Topics
-
-Visualisation of Social Web Data
-
-- Word Clouds
-- Principal component analysis
-- Multidimensional scaling
-
-## Week 6 - What should we know?
-
-- Concepts behind creating a word cloud
-- Why is dimension reduction useful?
-- What are principal components?
-- Computing the distance between document vectors (tweets) using:
-    + Binary metric
-    + Cosine dissimilarity (1 - Cosine similarity)
-    + Euclidean distance
-- Concepts behind Multidimensional Scaling
-
-## Week 7 - Topics
-
-Text Mining 2: Clustering
-
-- What is clustering?
-- K-means clustering
-- Choosing the number of clusters
-- Hierarchical clustering
-
-## Week 7 - What should we know?
-
-- What makes a good clustering?
-- How to perform K-means clustering
-- Computing SST, SSW and SSB
-- The elbow method
-- Reading a cluster dendrogram
-- How to perform hierarchical clustering using:
-    + Single linkage clustering
-    + Complete linkage clustering
-    + Group average clustering
-
-## Week 8 - Topics
-
-Graphs 2: Link Analysis
-
-- Random walk on a graph
-- Random walk on a directed graph
-- PageRank
-
-## Week 8 - What should we know?
-
-- How to perform a random walk on a graph
-- Constructing the probability transition matrix
-- Computing the state distribution after $n$ steps
-- Computing the stationary distribution of an undirected graph
-- Verifying the stationary distribution of a directed graph
-- Identifying an ergodic graph
-- Constructing the Random Surfer probability transition matrix
-- Verifying the PageRank of a graph.
-
-## Week 10 - Topics
-
-Looking for Trends
-
-- Twitter trending topics
-- Issues with Twitter's method
-- Computing trends using Simple Linear Regression
-- Trend and Seasonality
-
-## Week 10 - What should we know?
-
-- How Twitter computes trending topics using the $\chi^2$ approximation.
-- Computing trends using a proportion test.
-- Square root transformation for counts
-- Computing the regression parameters $a$ and $b$ of the occurrence of a word, for an interval of tweets
-- Computing the trend parameter using moving averages (using even and odd windows)
-- Computing Seasonality of a trend.
-
-
-## Week 11 - Topics
-
-Testing for Impact
-
-- Comparing tweet rates
-- Comparing means using a $t$-test
-- Introducing a control
-- Analysis of BACI designs
-
-
-## Week 11 - What should we know?
-
-- What is impact?
-- Square root transformation
-- Performing a $t$-test for a difference in means
-- The importance of a control
-- Computing the $F$ statistic and degrees of freedom for a BACI design
-
-
-## Week 12 - Topics
-
-Sentiment Analysis
-
-- Sentiment Analysis
-- Naive Bayes classifier
-- K nearest neighbours classifier
-- Classifier evaluation
-
-## Week 12 - What should we know?
-
-- What is sentiment and sentiment analysis?
-- Curse of dimensionallity and its affect on text classification
-- Computing a Naive Bayes classifier and making class predictions
-- Predicting the class using K nearest neighbours
-- Computing the sensitivity and specificity of a set of predictions
-- Evaluation using the Receiver operating characteristic
-
-
-## Week 13 - Topics
-
-Spatial Analysis
-
-- Twitter Geocoding
-- Tracking Epidemics
-
-## Week 13 - What should we know?
-
-- How are geocodes stored?
-- Estimation of (unweighted/weighted) spatial intensity.
-- Computing relative risk of a location.
 
 
 # Your Future
 
-## Where to go next
+### Where to go next
 
 If you are in your final year, you should have a good idea of what you want to
 do next year.
@@ -252,7 +248,7 @@ The most likely choices are:
 - Get a job
 - Enrol in a higher degree.
 
-## Industry
+### Industry
 
 There are many business within Australia and overseas that have large
 amounts of data, but do not know how to analyse it (or are using very
@@ -267,7 +263,7 @@ Businesses with large customer databases are crying out for people with data
 mining skills.
 
 
-## Honours and PhD
+### Honours and PhD
 
 Honours and PhD degrees are research degrees. Research degrees have no
 lectures, but require the student to investigate and research a new
@@ -288,9 +284,26 @@ Current research can be found using Google Scholar:
 <http://scholar.google.com.au/>
 
 
+### Data Science Degree
+
+If this unit has interested you, and you are unsure if you want to go
+on to do research, you can extend your degree by \alert{one year} and
+obtain a Bachelor of Data Science along with your existing degree.
+
+
+If you are interested in completing a Bachelor of Data Science, speak
+to Laurence ot Glenn.
+
+Note that you must enrol in the additional degree \alert{before} you
+finish your existing degree. The Bachelor of Data Science cannot be
+completed alone.  So if this is your final year, you must enrol in the
+Bachelor of Data Science before you finish this semester.
+
+
+
 # Exam details
 
-## Date and Venue
+### Date and Venue
 
 The date and venue of the final exam are set by University Timetabling.
 
@@ -300,43 +313,41 @@ Don't rely on a friend giving you this information, look it up yourself!
 
 For more information: <http://uws.edu.au/uws_students>
 
-## Open Book Exam
+### Open Book Exam
 
 The exam is open book, meaning that you can bring material into the exam room.
 
-However, you are restricted to 10 double sided pages of information
-(10 pieces of paper with information on each side of the paper).
-
-Therefore, you can't print out the wikibook and bring it to the exam
-(unless you can reduce it to ten double sided pages).
-
-Use the information given in this lecture as a guide on what should be
-included in your 10 pages.
+However, be sensible. The more paper you bring in, the harder it is to find a piece of information.
 
 Note: no phones, computers or iPads are allowed in the exam room.
 
-## Duration and Questions
+### Duration and Questions
 
 The exam will last two hours.
 
-It contains eight questions, each worth eight marks.
+It contains \alert{seven} questions, each worth eight marks.
 
-When reading through the exam, each question will be labelled with the number of marks allocated to it.
-If there are sub questions, the break down of the marks will be shown.
+When reading through the exam, each question will be labelled with the
+number of marks allocated to it.  If there are sub questions, the
+break down of the marks will be shown.
 
-Two hours/eight questions = 15 minutes per question.
+Two hours/seven questions $\approx 17$ minutes per question.
 
-## Sample Exam
+### Sample Exam
 
-A sample exam and last years exam are available in vUWS.
+A sample exam and previous years exams are available in vUWS. There have
+been changes to the Unit content over the years, so some questions may
+not be relevant for us. The list of relevant questions is in the Exams
+section of vUWS.
 
-The solutions to the sample exam are available. The solutions to last years
-exam will be available next week.
+The solutions to the sample exam and previous years exams are
+available. The solutions to last years exam will be available next
+week.
 
 Don't waste these practice exams!
 
 
-## Thanks
+### Thanks
 
 Thank-you to all students. We had fun setting up and teaching this unit, we
 hope you all enjoyed learning about Social Web Analytics.
