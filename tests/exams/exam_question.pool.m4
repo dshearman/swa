@@ -2308,7 +2308,7 @@ m4_define(_link_analysis_q4,<[
   
   % begin.rcode echo=FALSE,results="hide"
   require("igraph")
-  require("xtable", quietly=TRUE)
+  suppressWarnings(require("xtable", quietly=TRUE))
 
   $@
 
