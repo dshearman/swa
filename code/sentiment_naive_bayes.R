@@ -72,7 +72,7 @@ printProblem = function(problem) {
     printDocuments(problem$documentsPos)
     cat("And the following ", NN, " negative sentiment tweets:\n", sep = "")
     printDocuments(problem$documentsNeg)
-    cat("Compute the sentiment of the tweet ", printDocument(problem$query), ".\nRun printSolution(solution) to see the solution.\n", sep = "")
+    cat("Compute the sentiment of the tweet ", printDocument(problem$query), " using Naive Bayes classification.\nRun printSolution(solution) to see the solution.\n", sep = "")
 }
 
 problem = generateProblem(
@@ -121,6 +121,8 @@ printSolution = function(solution) {
         "P(tweet|sent = Neg) = ", solution$tweet.given.negSent, "\n",
         "P(tweet) = ", solution$tweet, "\n",
         "Sentiment score = ", solution$score, "\n", sep = "")
+    if (solution$score >= 0) cat("The tweets is classified as positive.\n")
+    else cat("The tweets is classified as negative.\n")
 }
 
 
