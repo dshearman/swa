@@ -2862,7 +2862,7 @@ working for them is dependent on their nationality. They obtained the following 
   random $\chi^2$ when $H_0$ is true. By repeating this many times we
   obtain the randomisation distribution. \xmark{2}
   
-\item The critical value of the distribution is \rinline{quantile(rchisq, 0.95)} compare this to \rinline{chisqs} to draw a conclusion. \xmark{2}
+\item If the the test statistic could be sampled from the randomisation distribution, then we can't reject $H_0$. Otherwise, we reject $H_0$. \xmark{2}
 
 
 \end{enumerate}
@@ -3011,11 +3011,11 @@ m4_define(_graphs_q5,<[
           table(factor(degree(g), c(0,1,2,3,4,5)))
           % end.rcode 
         \end{minipage}
-        \xmark{1}
+        \xmark{2}
       \end{center}
       If the distribution is similar to Poisson, the graph is a
       Erdös-Renyi graph. If the distribution is similar to
-      Exponential, the graph is a Barabasi-Albert graph. \xmark{1}
+      Exponential, the graph is a Barabasi-Albert graph. \xmark{2}
 
     \item The closeness centrality score for each vertex is [\rinline{close}]. The most central vertex is vertex \rinline{names(which(close == max(close)))} with a score of \rinline{max(close)}. \xmark{2}
       
