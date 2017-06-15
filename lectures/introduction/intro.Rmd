@@ -37,13 +37,13 @@ The learning guide is found in vUWS > 300958 > Unit Information
 
 Unit Coordinator:
 
-- Laurence Park <lapark@scem.uws.edu.au>
+- Don Shearman <d.shearman@westernsydney.edu.au>
 
 Lecturers:
 
-- Laurence Park <lapark@scem.uws.edu.au>
-- Glenn Stone <g.stone@uws.edu.au>
-- Sangeeta Bhatia <17545059@student.uws.edu.au>,
+- Don Shearman <d.shearman@westernsydney.edu.au>
+- Jim Pettigrew <j.pettigrew@westernsydney.edu.au>
+- Gizem Intepe <g.intepe@westernsydney.edu.au.edu.au>,
 
 Lab demonstrators:
 
